@@ -1,0 +1,100 @@
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SettlersEditorUpdater
+{
+    internal class PatchHelpers
+    {
+        public static void WriteBytesToFile(ref FileStream Stream, long position, byte[] replacementBytes)
+        {
+            Stream.Position = position;
+            try
+            {
+                Stream.Write(replacementBytes, 0, replacementBytes.Length);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+        public static FileStream OpenFileStream(string filePath, char Identifier)
+        {
+            FileStream Stream;
+            try
+            {
+                Stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return null;
+            }
+
+            if (CheckExecVersion(ref Stream, Identifier) == false)
+            {
+                Stream.Close();
+                Stream.Dispose();
+                return null;
+            }
+
+            return Stream;
+        }
+        public static OpenFileDialog CreateOFDialog()
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                ShowHelp = false,
+                CheckPathExists = true,
+                DereferenceLinks = true,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                Multiselect = false,
+                ShowReadOnly = false,
+            };
+
+            return ofd;
+        }
+        public static bool CreateBackup(string Filepath)
+        {
+            string FileName = Path.GetFileNameWithoutExtension(Filepath);
+            string DirectoryPath = Path.GetDirectoryName(Filepath);
+            string FinalPath = Path.Combine(DirectoryPath, FileName + "_BACKUP.exe");
+
+            if (File.Exists(FinalPath) == false)
+            {
+                try
+                {
+                    File.Copy(Filepath, FinalPath, false);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool CheckExecVersion(ref FileStream Reader, char Identifier)
+        {
+            string ExpectedVersion = "1, 71, 4289, 0";
+            UInt32[] Mapping = {0x6ECADC, 0xF531A4, 0x6D06A8};
+            byte[] Result = new byte[30];
+
+            Reader.Position = Mapping[Identifier];
+            Reader.Read(Result, 0, 30);
+
+            string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
+            if (Version == ExpectedVersion)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Erwartet/Expected: " + ExpectedVersion + "\nGelesen/Read: " + Version, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+        }
+    }
+}
