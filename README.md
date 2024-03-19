@@ -2,7 +2,7 @@
 
 # Features
 
-Patch Original Game
+## Patch Original Game
 - Für die Originalversion (OV) mit neuestem Patch 1.71.
 ```
 - Der Debug-Mode wird aktiviert, der für die Funktion des LuaDebuggers Voraussetzung ist.
@@ -11,7 +11,7 @@ Patch Original Game
 - Das LAA (Large Address Aware) Flag kann gesetzt werden, um mehr adressierbaren Speicher zu haben.
 - Das maximale Zoomlevel kann gesetzt werden, um mehr Überblick über die Spielwelt zu haben.
 ```
-Patch History Edition
+## Patch History Edition
 - Für die History Edition von Ubisoft Connect, funktioniert nicht mit der HE von Steam.
 ```
 - Der Debug-Mode wird aktiviert, der für die Funktion des LuaDebuggers Voraussetzung ist.
@@ -19,7 +19,7 @@ Patch History Edition
 - Das LAA (Large Address Aware) Flag kann gesetzt werden, um mehr adressierbaren Speicher zu haben.
 - Das maximale Zoomlevel kann gesetzt werden, um mehr Überblick über die Spielwelt zu haben.
 ```
-Patch Editor (OV and HE)
+## Patch Editor (OV and HE)
 - Für alle Editoren, egal ob OV oder die beiden History Editions (Ubisoft Connect und Steam).
 ```
 - Hohe Texturauflösungen.
