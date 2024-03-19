@@ -1,0 +1,1 @@
+# SettlersEditorUpdater
