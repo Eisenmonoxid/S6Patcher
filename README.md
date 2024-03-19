@@ -3,7 +3,7 @@
 # Features
 
 Patch Original Game
-Für die Originalversion (OV) mit neuestem Patch 1.71.
+- Für die Originalversion (OV) mit neuestem Patch 1.71.
 ```
 - Der Debug-Mode wird aktiviert, der für die Funktion des LuaDebuggers Voraussetzung ist.
 - Der Grafik-Bug der OV, der bei Grafikkarten mit mehr als 2 GB VideoRam auftritt, wird beseitigt.
@@ -12,7 +12,7 @@ Für die Originalversion (OV) mit neuestem Patch 1.71.
 - Das maximale Zoomlevel kann gesetzt werden, um mehr Überblick über die Spielwelt zu haben.
 ```
 Patch History Edition
-Für die History Edition von Ubisoft Connect, funktioniert nicht mit der HE von Steam.
+- Für die History Edition von Ubisoft Connect, funktioniert nicht mit der HE von Steam.
 ```
 - Der Debug-Mode wird aktiviert, der für die Funktion des LuaDebuggers Voraussetzung ist.
 - Die Autosave-Funktion kann deaktiviert werden.
@@ -20,7 +20,7 @@ Für die History Edition von Ubisoft Connect, funktioniert nicht mit der HE von 
 - Das maximale Zoomlevel kann gesetzt werden, um mehr Überblick über die Spielwelt zu haben.
 ```
 Patch Editor (OV and HE)
-Für alle Editoren, egal ob OV oder die beiden History Editions (Ubisoft Connect und Steam).
+- Für alle Editoren, egal ob OV oder die beiden History Editions (Ubisoft Connect und Steam).
 ```
 - Hohe Texturauflösungen.
 - Unbeschränktes Skalieren der Entitätengröße.
