@@ -1,1 +1,1 @@
-# SettlersEditorUpdater
+# S6Patcher
