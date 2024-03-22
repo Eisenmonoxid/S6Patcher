@@ -1,23 +1,22 @@
-﻿using SettlersEditorUpdater.Properties;
+﻿using S6Patcher.Properties;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
-namespace SettlersEditorUpdater
+namespace S6Patcher
 {
+    public enum execID
+    {
+        OV = 0,
+        HE = 1,
+        Editor = 2,
+    }
     public partial class mainFrm : Form
     {
-        public enum execID
-        {
-            OV = 0,
-            HE = 1,
-            Editor = 2,
-        }
-
         private const string ErrorNoFile = "Keine Datei ausgewählt oder Datei existiert nicht!\n\nNo file chosen or file does not exist!\n\n";
         private const string ErrorBackup = "Fehler beim Erstellen der Backup-Datei! Abbrechen ...\n\nError when creating Backup-File! Aborting ...\n\n";
-        private const string FinishedSuccess = "Vorgang Erfolgreich!\n\nFinished successfully!";
+        private const string FinishedSuccess = "Vorgang Erfolgreich!\n\nFinished successfully!\n\n";
         private const string ErrorWrongVersion = "Executable hat die falsche Versionsnummer! Abbrechen ...\n\nExecutable has the wrong version number! Aborting ...\n\n";
         public mainFrm()
         {
@@ -51,13 +50,13 @@ namespace SettlersEditorUpdater
                     return;
                 }
 
-                FileStream Reader = PatchHelpers.OpenFileStream(ofd.FileName, (char)ID);
+                FileStream Reader = PatchHelpers.OpenFileStream(ofd.FileName, ID);
                 if (Reader == null) {
                     MessageBox.Show(ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                S6Patcher mainPatchingHandler = new S6Patcher((char)ID, ref Reader);
+                S6Patcher mainPatchingHandler = new S6Patcher(ID, ref Reader);
                 mainPatchingHandler.ShowDialog();
 
                 MessageBox.Show(FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

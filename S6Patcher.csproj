@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{679B03A7-AE44-4AEA-AA33-881B0945816B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>SettlersEditorUpdater</RootNamespace>
+    <RootNamespace>S6Patcher</RootNamespace>
     <AssemblyName>S6Patcher</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -68,11 +68,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="mainFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="mainFrm.Designer.cs">
+      <DependentUpon>mainFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="Mappings.cs" />
     <Compile Include="PatchHelpers.cs" />
@@ -84,8 +84,8 @@
     <Compile Include="UserInput.Designer.cs">
       <DependentUpon>UserInput.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="mainFrm.resx">
+      <DependentUpon>mainFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace SettlersEditorUpdater
+namespace S6Patcher
 {
     internal static class Program
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SettlersEditorUpdater
+namespace S6Patcher
 {
     internal class PatchHelpers
     {
@@ -19,7 +19,7 @@ namespace SettlersEditorUpdater
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-        public static FileStream OpenFileStream(string filePath, char Identifier)
+        public static FileStream OpenFileStream(string filePath, execID Identifier)
         {
             FileStream Stream;
             try
@@ -75,13 +75,13 @@ namespace SettlersEditorUpdater
             }
             return true;
         }
-        public static bool CheckExecVersion(ref FileStream Reader, char Identifier)
+        public static bool CheckExecVersion(ref FileStream Reader, execID Identifier)
         {
             string ExpectedVersion = "1, 71, 4289, 0";
             UInt32[] Mapping = {0x6ECADC, 0xF531A4, 0x6D06A8};
             byte[] Result = new byte[30];
 
-            Reader.Position = Mapping[Identifier];
+            Reader.Position = Mapping[(char)Identifier];
             Reader.Read(Result, 0, 30);
 
             string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);

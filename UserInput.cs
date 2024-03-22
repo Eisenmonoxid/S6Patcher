@@ -2,31 +2,31 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace SettlersEditorUpdater
+namespace S6Patcher
 {
     public partial class S6Patcher : Form
     {
         FileStream execStream = null;
-        char globalIdentifier = (char)99;
-        public S6Patcher(char Identifier, ref FileStream Stream)
+        execID globalIdentifier;
+        public S6Patcher(execID Identifier, ref FileStream Stream)
         {
             InitializeComponent();
             execStream = Stream;
             globalIdentifier = Identifier;
 
-            if (Identifier == (char)2) // Editor
+            if (Identifier == execID.Editor)
             {
                 cbZoom.Enabled = false;
             }
             else
             {
                 BinaryReader br = new BinaryReader(execStream);
-                if (Identifier == (char)0) // OV
+                if (Identifier == execID.OV)
                 {
                     br.BaseStream.Position = 0x545400;
                     txtZoom.Text = br.ReadDouble().ToString();
                 }
-                else // HE
+                else
                 {
                     br.BaseStream.Position = 0xC4EC4C;
                     txtZoom.Text = br.ReadSingle().ToString();
@@ -52,7 +52,7 @@ namespace SettlersEditorUpdater
         {
             switch (globalIdentifier)
             {
-                case (char)0:
+                case execID.OV:
                     foreach (var Element in Mappings.OVMapping)
                     {
                         PatchHelpers.WriteBytesToFile(ref execStream, Element.Key, Element.Value);
@@ -62,7 +62,7 @@ namespace SettlersEditorUpdater
                         SetZoomLevel();
                     }
                     break;
-                case (char)1:
+                case execID.HE:
                     foreach (var Element in Mappings.HEMapping)
                     {
                         PatchHelpers.WriteBytesToFile(ref execStream, Element.Key, Element.Value);
@@ -76,7 +76,7 @@ namespace SettlersEditorUpdater
                         PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0xEB});
                     }
                     break;
-                case (char)2:
+                case execID.Editor:
                     foreach (var Element in Mappings.EditorMapping)
                     {
                         PatchHelpers.WriteBytesToFile(ref execStream, Element.Key, Element.Value);
@@ -104,11 +104,11 @@ namespace SettlersEditorUpdater
         }
         private void SetZoomLevel()
         {
-            if (globalIdentifier == (char)0) // OV
+            if (globalIdentifier == execID.OV)
             {
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x545400, BitConverter.GetBytes(Convert.ToDouble(txtZoom.Text)));
             }
-            else // HE
+            else
             {
                 PatchHelpers.WriteBytesToFile(ref execStream, 0xC4EC4C, BitConverter.GetBytes(Convert.ToSingle(txtZoom.Text)));
             }       
