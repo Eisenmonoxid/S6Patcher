@@ -17,6 +17,7 @@ namespace S6Patcher
             if (Identifier == execID.Editor)
             {
                 cbZoom.Enabled = false;
+                cbAllEntities.Enabled = true;
             }
             else
             {
@@ -81,6 +82,11 @@ namespace S6Patcher
                     {
                         PatchHelpers.WriteBytesToFile(ref execStream, Element.Key, Element.Value);
                     }
+                    if (cbAllEntities.Checked)
+                    {   
+                        // Allows special entities in Entity Placing List /ShowInTree = false
+                        PatchHelpers.WriteBytesToFile(ref execStream, 0x20615, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90});
+                    }
                     break;
                 default:
                     break;
@@ -106,11 +112,29 @@ namespace S6Patcher
         {
             if (globalIdentifier == execID.OV)
             {
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x545400, BitConverter.GetBytes(Convert.ToDouble(txtZoom.Text)));
+                double zoomLevel;
+                try
+                {
+                    zoomLevel = Convert.ToDouble(txtZoom.Text);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x545400, BitConverter.GetBytes(zoomLevel));
             }
             else
             {
-                PatchHelpers.WriteBytesToFile(ref execStream, 0xC4EC4C, BitConverter.GetBytes(Convert.ToSingle(txtZoom.Text)));
+                float zoomLevel;
+                try
+                {
+                    zoomLevel = Convert.ToSingle(txtZoom.Text);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+                PatchHelpers.WriteBytesToFile(ref execStream, 0xC4EC4C, BitConverter.GetBytes(zoomLevel));
             }       
             // 0x545400 -> 7200 | 0x53f150 -> 1800 - OV
             // 0xC4EC4C -> 7200 | 0xC4E008 -> 1800 - HE

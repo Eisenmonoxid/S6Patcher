@@ -34,6 +34,7 @@
             this.btnPatch = new System.Windows.Forms.Button();
             this.lblZoomAngle = new System.Windows.Forms.Label();
             this.cbAutosave = new System.Windows.Forms.CheckBox();
+            this.cbAllEntities = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cbLAA
@@ -67,7 +68,7 @@
             // 
             // btnPatch
             // 
-            this.btnPatch.Location = new System.Drawing.Point(12, 109);
+            this.btnPatch.Location = new System.Drawing.Point(12, 131);
             this.btnPatch.Name = "btnPatch";
             this.btnPatch.Size = new System.Drawing.Size(365, 37);
             this.btnPatch.TabIndex = 3;
@@ -95,14 +96,26 @@
             this.cbAutosave.Text = "Deactivate Autosave";
             this.cbAutosave.UseVisualStyleBackColor = true;
             // 
+            // cbAllEntities
+            // 
+            this.cbAllEntities.AutoSize = true;
+            this.cbAllEntities.Enabled = false;
+            this.cbAllEntities.Location = new System.Drawing.Point(13, 91);
+            this.cbAllEntities.Name = "cbAllEntities";
+            this.cbAllEntities.Size = new System.Drawing.Size(177, 20);
+            this.cbAllEntities.TabIndex = 6;
+            this.cbAllEntities.Text = "Show All Entities in Editor";
+            this.cbAllEntities.UseVisualStyleBackColor = true;
+            // 
             // S6Patcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(385, 154);
+            this.ClientSize = new System.Drawing.Size(385, 180);
             this.ControlBox = false;
+            this.Controls.Add(this.cbAllEntities);
             this.Controls.Add(this.cbAutosave);
             this.Controls.Add(this.lblZoomAngle);
             this.Controls.Add(this.btnPatch);
@@ -111,9 +124,9 @@
             this.Controls.Add(this.cbLAA);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(403, 201);
+            this.MaximumSize = new System.Drawing.Size(403, 227);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(403, 201);
+            this.MinimumSize = new System.Drawing.Size(403, 227);
             this.Name = "S6Patcher";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -133,5 +146,6 @@
         private System.Windows.Forms.Button btnPatch;
         private System.Windows.Forms.Label lblZoomAngle;
         private System.Windows.Forms.CheckBox cbAutosave;
+        private System.Windows.Forms.CheckBox cbAllEntities;
     }
 }
