@@ -124,24 +124,32 @@
     <value>Änderungen:</value>
   </data>
   <data name="btnPatchHE_EnglishText" xml:space="preserve">
-    <value>- Activates the DEBUG - Mode (Necessary for the LuaDebugger to work).
+    <value>- Activates the Development - Mode (Necessary for the LuaDebugger to work).
 - Can disable the Autosave.
+- Can set the maximum zoom level in the game.
+- Can set the Large Address Aware Flag for more usable memory.
 -&gt; Does NOT work with the Steam-HE!</value>
   </data>
   <data name="btnPatchHE_GermanText" xml:space="preserve">
-    <value>- Aktiviert den DEBUG - Mode (Notwendig für die Funktion des LuaDebuggers).
+    <value>- Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
 - Kann den Autosave deaktivieren.
+- Kann den maximalen Zoomlevel setzen.
+- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 -&gt; Funktioniert NICHT in der Steam-HE!</value>
   </data>
   <data name="btnPatchOV_EnglishText" xml:space="preserve">
     <value>- Reactivates the texture-slider, so high textures can be choosen in the menu.
 - Enables high-quality ground textures.
-- Activates the DEBUG - Mode without Registry-Key.</value>
+- Can set the maximum zoom level in the game.
+- Activates the Development - Mode without Registry-Key.
+- Can set the Large Address Aware Flag for more usable memory.</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
     <value>- Reaktiviert den Textur-Slider, um hohe Texturen auswählen zu können.
 - Setzt die Qualität von Bodentexturen auf den höchsten Wert.
-- Aktiviert den DEBUG - Mode ohne Registry - Key.</value>
+- Kann den maximalen Zoomlevel setzen.
+- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
+- Aktiviert den Development - Mode ohne Registry - Key.</value>
   </data>
   <data name="btnPatch_EnglishText" xml:space="preserve">
     <value>- High resolution textures for Buildings/Entities/Ground.
@@ -149,9 +157,12 @@
 - Free placing and moving of entities, walls and wall gates.
 - Higher entity limit.
 - Move more entities at the same time (100 -&gt; 1055).
-- Map border can be used and is not deleted at map save.
+- Black map border area can be used and is not deleted at map save.
 - Activates the Development-Mode without Registry-Key.
-- Replaces "Validate Map" with Game Start (Lost Feature).</value>
+- Replaces "Validate Map" with Game Start (Lost Feature).
+- Enables walls and wall gates from all climate zones in all climate zones.
+- Can select and move all entities.
+- Can set the Large Address Aware Flag for more usable memory.</value>
   </data>
   <data name="btnPatch_GermanText" xml:space="preserve">
     <value>- Hohe Texturen für Gebäude/Entitäten/Boden.
@@ -161,6 +172,9 @@
 - Mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
 - Kartenrand wird beim Speichervorgang nicht gelöscht.
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
-- Ersetzt "Validate Map" mit Spielstart (Lost Feature).</value>
+- Ersetzt "Validate Map" mit Spielstart (Lost Feature).
+- Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
+- Alle Entitäten können selektiert und verschoben werden.
+- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.</value>
   </data>
 </root>

@@ -84,9 +84,11 @@ namespace S6Patcher.Properties {
         ///- Free placing and moving of entities, walls and wall gates.
         ///- Higher entity limit.
         ///- Move more entities at the same time (100 -&gt; 1055).
-        ///- Map border can be used and is not deleted at map save.
+        ///- Black map border area can be used and is not deleted at map save.
         ///- Activates the Development-Mode without Registry-Key.
-        ///- Replaces &quot;Validate Map&quot; with Game Start (Lost Feature)..
+        ///- Replaces &quot;Validate Map&quot; with Game Start (Lost Feature).
+        ///- Enables walls and wall gates from all climate zones in all climate zones.
+        ///- Can selec [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_EnglishText {
             get {
@@ -102,7 +104,8 @@ namespace S6Patcher.Properties {
         ///- Mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
         ///- Kartenrand wird beim Speichervorgang nicht gelöscht.
         ///- Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
-        ///- Ersetzt &quot;Validate Map&quot; mit Spielstart (Lost Feature)..
+        ///- Ersetzt &quot;Validate Map&quot; mit Spielstart (Lost Feature).
+        ///- Mauern und Mauertore aus allen Klimazonen können gesetzt werd [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_GermanText {
             get {
@@ -111,8 +114,10 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Activates the DEBUG - Mode (Necessary for the LuaDebugger to work).
+        ///   Looks up a localized string similar to - Activates the Development - Mode (Necessary for the LuaDebugger to work).
         ///- Can disable the Autosave.
+        ///- Can set the maximum zoom level in the game.
+        ///- Can set the Large Address Aware Flag for more usable memory.
         ///-&gt; Does NOT work with the Steam-HE!.
         /// </summary>
         internal static string btnPatchHE_EnglishText {
@@ -122,8 +127,10 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Aktiviert den DEBUG - Mode (Notwendig für die Funktion des LuaDebuggers).
+        ///   Looks up a localized string similar to - Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
         ///- Kann den Autosave deaktivieren.
+        ///- Kann den maximalen Zoomlevel setzen.
+        ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
         ///-&gt; Funktioniert NICHT in der Steam-HE!.
         /// </summary>
         internal static string btnPatchHE_GermanText {
@@ -135,7 +142,9 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to - Reactivates the texture-slider, so high textures can be choosen in the menu.
         ///- Enables high-quality ground textures.
-        ///- Activates the DEBUG - Mode without Registry-Key..
+        ///- Can set the maximum zoom level in the game.
+        ///- Activates the Development - Mode without Registry-Key.
+        ///- Can set the Large Address Aware Flag for more usable memory..
         /// </summary>
         internal static string btnPatchOV_EnglishText {
             get {
@@ -146,7 +155,9 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to - Reaktiviert den Textur-Slider, um hohe Texturen auswählen zu können.
         ///- Setzt die Qualität von Bodentexturen auf den höchsten Wert.
-        ///- Aktiviert den DEBUG - Mode ohne Registry - Key..
+        ///- Kann den maximalen Zoomlevel setzen.
+        ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
+        ///- Aktiviert den Development - Mode ohne Registry - Key..
         /// </summary>
         internal static string btnPatchOV_GermanText {
             get {

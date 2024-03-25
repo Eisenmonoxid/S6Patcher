@@ -8,6 +8,7 @@ namespace S6Patcher
     {
         FileStream execStream = null;
         execID globalIdentifier;
+
         public S6Patcher(execID Identifier, ref FileStream Stream)
         {
             InitializeComponent();
@@ -84,8 +85,8 @@ namespace S6Patcher
                     }
                     if (cbAllEntities.Checked)
                     {   
-                        // Allows special entities in Entity Placing List /ShowInTree = false
                         PatchHelpers.WriteBytesToFile(ref execStream, 0x20615, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90});
+                        PatchHelpers.WriteBytesToFile(ref execStream, 0x20629, new byte[] {0xEB, 0x10});
                     }
                     break;
                 default:
@@ -99,11 +100,9 @@ namespace S6Patcher
         private void btnPatch_Click(object sender, EventArgs e)
         {
             mainPatcher();
-            if (execStream != null)
-            {
-                execStream.Close();
-                execStream.Dispose();
-            }
+
+            execStream.Close();
+            execStream.Dispose();
 
             Close();
             Dispose();

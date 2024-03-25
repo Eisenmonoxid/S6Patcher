@@ -78,11 +78,11 @@
     <Compile Include="PatchHelpers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserInput.cs">
+    <Compile Include="mainPatcher.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInput.Designer.cs">
-      <DependentUpon>UserInput.cs</DependentUpon>
+    <Compile Include="mainPatcher.Designer.cs">
+      <DependentUpon>mainPatcher.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="mainFrm.resx">
       <DependentUpon>mainFrm.cs</DependentUpon>
@@ -97,8 +97,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UserInput.resx">
-      <DependentUpon>UserInput.cs</DependentUpon>
+    <EmbeddedResource Include="mainPatcher.resx">
+      <DependentUpon>mainPatcher.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
