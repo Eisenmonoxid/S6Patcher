@@ -62,6 +62,7 @@
             // 
             // txtZoom
             // 
+            this.txtZoom.Enabled = false;
             this.txtZoom.Location = new System.Drawing.Point(186, 37);
             this.txtZoom.MaxLength = 8;
             this.txtZoom.Name = "txtZoom";

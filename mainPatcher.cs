@@ -37,11 +37,8 @@ namespace S6Patcher
                     txtAutosave.Text = ((br.ReadDouble() / 60) / 1000).ToString();
 
                     cbAutosave.Enabled = true;
-                    txtAutosave.Enabled = true;
                 }
             }
-
-            txtZoom.Enabled = false;
         }
         private void mainPatcher()
         {
