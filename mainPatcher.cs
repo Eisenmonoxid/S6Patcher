@@ -33,7 +33,11 @@ namespace S6Patcher
                     br.BaseStream.Position = 0xC4EC4C;
                     txtZoom.Text = br.ReadSingle().ToString();
 
+                    br.BaseStream.Position = 0xEB83C0;
+                    txtAutosave.Text = ((br.ReadDouble() / 60) / 1000).ToString();
+
                     cbAutosave.Enabled = true;
+                    txtAutosave.Enabled = true;
                 }
             }
 
@@ -75,7 +79,7 @@ namespace S6Patcher
                     }
                     if (cbAutosave.Checked)
                     {
-                        PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0xEB});
+                        SetAutosaveTimer();
                     }
                     break;
                 case execID.Editor:
@@ -107,20 +111,48 @@ namespace S6Patcher
             Close();
             Dispose();
         }
+        private void SetAutosaveTimer()
+        {
+            double autosaveTimer;
+            try
+            {
+                autosaveTimer = Convert.ToDouble(txtAutosave.Text);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            if (autosaveTimer == (double)0)
+            {
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0xEB});
+                return;
+            }
+
+            autosaveTimer = autosaveTimer * 1000 * 60;
+            PatchHelpers.WriteBytesToFile(ref execStream, 0xEB83C0, BitConverter.GetBytes(autosaveTimer));
+            PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0x76});
+        }
         private void SetZoomLevel()
         {
+            float Offset = 4800;
             if (globalIdentifier == execID.OV)
             {
                 double zoomLevel;
+                float clutterFarDistance;
                 try
                 {
                     zoomLevel = Convert.ToDouble(txtZoom.Text);
+                    clutterFarDistance = Convert.ToSingle(txtZoom.Text);
                 }
                 catch (Exception)
                 {
                     return;
                 }
+
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x545400, BitConverter.GetBytes(zoomLevel));
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2E4B01, new byte[] {0xC7, 0x05, 0x08, 0x74, 0xA9, 0x00});
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2E4B07, BitConverter.GetBytes(clutterFarDistance + Offset));
             }
             else
             {
@@ -133,8 +165,11 @@ namespace S6Patcher
                 {
                     return;
                 }
+
                 PatchHelpers.WriteBytesToFile(ref execStream, 0xC4EC4C, BitConverter.GetBytes(zoomLevel));
-            }       
+                PatchHelpers.WriteBytesToFile(ref execStream, 0xEB9364, BitConverter.GetBytes(zoomLevel + Offset));
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2C8F99, new byte[] {0x68});
+            }
             // 0x545400 -> 7200 | 0x53f150 -> 1800 - OV
             // 0xC4EC4C -> 7200 | 0xC4E008 -> 1800 - HE
         }

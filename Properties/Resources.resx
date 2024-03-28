@@ -125,23 +125,23 @@
   </data>
   <data name="btnPatchHE_EnglishText" xml:space="preserve">
     <value>- Activates the Development - Mode (Necessary for the LuaDebugger to work).
-- Can disable the Autosave.
+- Can disable the autosave or set an custom interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
--&gt; Does NOT work with the Steam-HE!</value>
+-&gt; Does NOT work with the Steam - HE!</value>
   </data>
   <data name="btnPatchHE_GermanText" xml:space="preserve">
     <value>- Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
-- Kann den Autosave deaktivieren.
+- Kann den Autosave deaktivieren oder den Intervall setzen.
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
--&gt; Funktioniert NICHT in der Steam-HE!</value>
+-&gt; Funktioniert NICHT in der Steam - HE!</value>
   </data>
   <data name="btnPatchOV_EnglishText" xml:space="preserve">
     <value>- Reactivates the texture-slider, so high textures can be choosen in the menu.
 - Enables high-quality ground textures.
 - Can set the maximum zoom level in the game.
-- Activates the Development - Mode without Registry-Key.
+- Activates the Development - Mode without Registry - Key.
 - Can set the Large Address Aware Flag for more usable memory.</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
@@ -161,7 +161,7 @@
 - Activates the Development-Mode without Registry-Key.
 - Replaces "Validate Map" with Game Start (Lost Feature).
 - Enables walls and wall gates from all climate zones in all climate zones.
-- Can select and move all entities.
+- Can place, select and move all entity types (Careful, some may crash).
 - Can set the Large Address Aware Flag for more usable memory.</value>
   </data>
   <data name="btnPatch_GermanText" xml:space="preserve">
@@ -174,7 +174,7 @@
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
 - Ersetzt "Validate Map" mit Spielstart (Lost Feature).
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
-- Alle Entitäten können selektiert und verschoben werden.
+- Alle Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.</value>
   </data>
 </root>

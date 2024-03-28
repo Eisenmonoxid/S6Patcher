@@ -49,7 +49,7 @@ namespace S6Patcher
             {0x1F2AD, new byte[] {0x90, 0x90}},
             {0x45474, new byte[] {0xEB, 0x07}}, 
             {0x2AE72, new byte[] {0xEB, 0x23}},
-            //{0x31B5C, new byte[] {0xEB}}, // -> Works, but useless (All Clutter)
+            //{0x31B5C, new byte[] {0xEB}}, // -> Works, but useless (All Clutter in Editor Dialog)
         };
     }
 }

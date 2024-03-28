@@ -35,6 +35,8 @@
             this.lblZoomAngle = new System.Windows.Forms.Label();
             this.cbAutosave = new System.Windows.Forms.CheckBox();
             this.cbAllEntities = new System.Windows.Forms.CheckBox();
+            this.txtAutosave = new System.Windows.Forms.TextBox();
+            this.lblAutosave = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // cbLAA
@@ -91,9 +93,9 @@
             this.cbAutosave.Enabled = false;
             this.cbAutosave.Location = new System.Drawing.Point(13, 65);
             this.cbAutosave.Name = "cbAutosave";
-            this.cbAutosave.Size = new System.Drawing.Size(154, 20);
+            this.cbAutosave.Size = new System.Drawing.Size(155, 20);
             this.cbAutosave.TabIndex = 5;
-            this.cbAutosave.Text = "Deactivate Autosave";
+            this.cbAutosave.Text = "Autosave Time (min):";
             this.cbAutosave.UseVisualStyleBackColor = true;
             // 
             // cbAllEntities
@@ -107,6 +109,24 @@
             this.cbAllEntities.Text = "Show All Entities in Editor";
             this.cbAllEntities.UseVisualStyleBackColor = true;
             // 
+            // txtAutosave
+            // 
+            this.txtAutosave.Enabled = false;
+            this.txtAutosave.Location = new System.Drawing.Point(186, 65);
+            this.txtAutosave.MaxLength = 5;
+            this.txtAutosave.Name = "txtAutosave";
+            this.txtAutosave.Size = new System.Drawing.Size(100, 22);
+            this.txtAutosave.TabIndex = 7;
+            // 
+            // lblAutosave
+            // 
+            this.lblAutosave.AutoSize = true;
+            this.lblAutosave.Location = new System.Drawing.Point(292, 69);
+            this.lblAutosave.Name = "lblAutosave";
+            this.lblAutosave.Size = new System.Drawing.Size(71, 16);
+            this.lblAutosave.TabIndex = 8;
+            this.lblAutosave.Text = "Normal: 15";
+            // 
             // S6Patcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -115,6 +135,8 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(385, 180);
             this.ControlBox = false;
+            this.Controls.Add(this.lblAutosave);
+            this.Controls.Add(this.txtAutosave);
             this.Controls.Add(this.cbAllEntities);
             this.Controls.Add(this.cbAutosave);
             this.Controls.Add(this.lblZoomAngle);
@@ -147,5 +169,7 @@
         private System.Windows.Forms.Label lblZoomAngle;
         private System.Windows.Forms.CheckBox cbAutosave;
         private System.Windows.Forms.CheckBox cbAllEntities;
+        private System.Windows.Forms.TextBox txtAutosave;
+        private System.Windows.Forms.Label lblAutosave;
     }
 }
