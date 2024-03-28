@@ -43,17 +43,6 @@ namespace S6Patcher
 
             txtZoom.Enabled = false;
         }
-        private void cbZoom_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbZoom.Checked)
-            {
-                txtZoom.Enabled = true;
-            }
-            else
-            {
-                txtZoom.Enabled = false;
-            }
-        }
         private void mainPatcher()
         {
             switch (globalIdentifier)
@@ -195,6 +184,28 @@ namespace S6Patcher
             if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
             {
                 PatchHelpers.WriteBytesToFile(ref execStream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
+            }
+        }
+        private void cbZoom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbZoom.Checked)
+            {
+                txtZoom.Enabled = true;
+            }
+            else
+            {
+                txtZoom.Enabled = false;
+            }
+        }
+        private void cbAutosave_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbAutosave.Checked)
+            {
+                txtAutosave.Enabled = true;
+            }
+            else
+            {
+                txtAutosave.Enabled = false;
             }
         }
     }

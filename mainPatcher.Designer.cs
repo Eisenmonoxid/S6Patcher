@@ -97,6 +97,7 @@
             this.cbAutosave.TabIndex = 5;
             this.cbAutosave.Text = "Autosave Time (min):";
             this.cbAutosave.UseVisualStyleBackColor = true;
+            this.cbAutosave.CheckedChanged += new System.EventHandler(this.cbAutosave_CheckedChanged);
             // 
             // cbAllEntities
             // 
