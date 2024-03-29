@@ -122,6 +122,7 @@ namespace S6Patcher
         private void SetZoomLevel()
         {
             float Offset = 4800;
+            float TransitionFactor = 3700;
             if (globalIdentifier == execID.OV)
             {
                 double zoomLevel;
@@ -137,8 +138,11 @@ namespace S6Patcher
                 }
 
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x545400, BitConverter.GetBytes(zoomLevel));
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2E4B01, new byte[] {0xC7, 0x05, 0x08, 0x74, 0xA9, 0x00});
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2E4B07, BitConverter.GetBytes(clutterFarDistance + Offset));
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2B334E, new byte[] {0xC7, 0x45, 0x64});
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2B3351, BitConverter.GetBytes(clutterFarDistance + Offset));
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2B3355, new byte[] {0xC7, 0x45, 0x6C});
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2B3358, BitConverter.GetBytes(TransitionFactor));
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2B335C, new byte[] {0x90, 0x90});
             }
             else
             {
@@ -153,11 +157,13 @@ namespace S6Patcher
                 }
 
                 PatchHelpers.WriteBytesToFile(ref execStream, 0xC4EC4C, BitConverter.GetBytes(zoomLevel));
-                PatchHelpers.WriteBytesToFile(ref execStream, 0xEB9364, BitConverter.GetBytes(zoomLevel + Offset));
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2C8F99, new byte[] {0x68});
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x270311, new byte[] {0xC7, 0x45, 0xF0});
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x270314, BitConverter.GetBytes(zoomLevel + Offset));
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x270318, new byte[] {0xC7, 0x45, 0xF4});
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x27031B, BitConverter.GetBytes(TransitionFactor));
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x27031F, new byte[] {0x90});
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x270325, new byte[] {0x90, 0x90, 0x90});
             }
-            // 0x545400 -> 7200 | 0x53f150 -> 1800 - OV
-            // 0xC4EC4C -> 7200 | 0xC4E008 -> 1800 - HE
         }
         private void SetLargeAddressAwareFlag()
         {
