@@ -103,7 +103,7 @@
             this.Name = "mainFrm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "S6Patcher - 1.8 - Eisenmonoxid";
+            this.Text = "S6Patcher - 1.9 - Eisenmonoxid";
             this.TopMost = true;
             this.ResumeLayout(false);
 

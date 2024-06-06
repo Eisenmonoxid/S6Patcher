@@ -128,6 +128,7 @@
 - Can disable the autosave or set an custom interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
+- Fixes the "Meldungsstau" - Bug in the game.
 -&gt; Does NOT work with the Steam - HE!</value>
   </data>
   <data name="btnPatchHE_GermanText" xml:space="preserve">
@@ -135,6 +136,7 @@
 - Kann den Autosave deaktivieren oder den Intervall setzen.
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
+- Fixt den Meldungsstau - Bug im Spiel.
 -&gt; Funktioniert NICHT in der Steam - HE!</value>
   </data>
   <data name="btnPatchOV_EnglishText" xml:space="preserve">
@@ -176,5 +178,9 @@
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
 - Alle Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="LocalMainMapScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LocalMainMapScript.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

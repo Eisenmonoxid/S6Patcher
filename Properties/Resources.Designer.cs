@@ -118,6 +118,7 @@ namespace S6Patcher.Properties {
         ///- Can disable the autosave or set an custom interval.
         ///- Can set the maximum zoom level in the game.
         ///- Can set the Large Address Aware Flag for more usable memory.
+        ///- Fixes the &quot;Meldungsstau&quot; - Bug in the game.
         ///-&gt; Does NOT work with the Steam - HE!.
         /// </summary>
         internal static string btnPatchHE_EnglishText {
@@ -131,6 +132,7 @@ namespace S6Patcher.Properties {
         ///- Kann den Autosave deaktivieren oder den Intervall setzen.
         ///- Kann den maximalen Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
+        ///- Fixt den Meldungsstau - Bug im Spiel.
         ///-&gt; Funktioniert NICHT in der Steam - HE!.
         /// </summary>
         internal static string btnPatchHE_GermanText {
@@ -162,6 +164,16 @@ namespace S6Patcher.Properties {
         internal static string btnPatchOV_GermanText {
             get {
                 return ResourceManager.GetString("btnPatchOV_GermanText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] LocalMainMapScript {
+            get {
+                object obj = ResourceManager.GetObject("LocalMainMapScript", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

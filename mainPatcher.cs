@@ -1,4 +1,5 @@
-﻿using System;
+﻿using S6Patcher.Properties;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -6,6 +7,8 @@ namespace S6Patcher
 {
     public partial class S6Patcher : Form
     {
+        private const string ErrorMeldungsstauFix = "Meldungsstaufix: Datei konnte nicht gefunden werden. Fix nicht angewandt!\n" +
+            "\nMeldungsstaufix: File could not be found. Fix not applied!\n\n";
         FileStream execStream = null;
         execID globalIdentifier;
 
@@ -14,6 +17,8 @@ namespace S6Patcher
             InitializeComponent();
             execStream = Stream;
             globalIdentifier = Identifier;
+
+            SetMeldungsstauFix();
 
             if (Identifier == execID.Editor)
             {
@@ -67,6 +72,7 @@ namespace S6Patcher
                     {
                         SetAutosaveTimer();
                     }
+                    SetMeldungsstauFix();
                     break;
                 case execID.Editor:
                     foreach (var Element in Mappings.EditorMapping)
@@ -187,6 +193,26 @@ namespace S6Patcher
             if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
             {
                 PatchHelpers.WriteBytesToFile(ref execStream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
+            }
+        }
+        private void SetMeldungsstauFix()
+        {
+            string LocalScriptFilePath = "shr\\Script\\Local\\MainMapScript\\LocalMainMapScript.lua";
+            string FinalPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(execStream.Name)).FullName, LocalScriptFilePath);
+
+            if (!File.Exists(FinalPath))
+            {
+                MessageBox.Show(ErrorMeldungsstauFix, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                File.WriteAllBytes(FinalPath, Resources.LocalMainMapScript);
+            }
+            catch (Exception)
+            {
+                return;
             }
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
