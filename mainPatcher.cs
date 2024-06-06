@@ -18,8 +18,6 @@ namespace S6Patcher
             execStream = Stream;
             globalIdentifier = Identifier;
 
-            SetMeldungsstauFix();
-
             if (Identifier == execID.Editor)
             {
                 cbZoom.Enabled = false;
