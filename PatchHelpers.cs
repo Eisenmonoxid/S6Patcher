@@ -7,9 +7,18 @@ namespace S6Patcher
 {
     internal class PatchHelpers
     {
+        public static bool ApplyOffset = false;
         public static void WriteBytesToFile(ref FileStream Stream, long position, byte[] replacementBytes)
         {
-            Stream.Position = position;
+            if (ApplyOffset == false)
+            {
+                Stream.Position = position;
+            }
+            else
+            {
+                Stream.Position = (position - 0x3F0000);
+            }
+            
             try
             {
                 Stream.Write(replacementBytes, 0, replacementBytes.Length);
@@ -75,19 +84,41 @@ namespace S6Patcher
             }
             return true;
         }
-        public static bool CheckExecVersion(ref FileStream Reader, execID Identifier)
+        public static bool CheckExecVersion(ref FileStream Reader, execID Identifier, bool UseOffset = false)
         {
             string ExpectedVersion = "1, 71, 4289, 0";
             UInt32[] Mapping = {0x6ECADC, 0xF531A4, 0x6D06A8};
             byte[] Result = new byte[30];
 
-            Reader.Position = Mapping[(char)Identifier];
+            if (UseOffset == true)
+            {
+                UInt32 Offset = 0x3F0000;
+                UInt32 ShiftedPosition = (Mapping[(char)Identifier] - Offset);
+                Reader.Position = ShiftedPosition;
+            }
+            else
+            {
+                Reader.Position = Mapping[(char)Identifier];
+            }
+
             Reader.Read(Result, 0, 30);
 
             string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
             if (Version == ExpectedVersion)
             {
                 return true;
+            }
+            else if (UseOffset == false && Identifier == execID.OV) // Try again with offset applied
+            {
+                if (CheckExecVersion(ref Reader, Identifier, true) == true)
+                {
+                    ApplyOffset = true;
+                    return true;
+                }
+                else
+                { 
+                    return false; 
+                }
             }
             else
             {
