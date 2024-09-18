@@ -1,5 +1,8 @@
 # S6Patcher
-
+## Usage
+- Select the game executable that you wish to patch (Settlers6.exe or Settlers6R.exe). Look in your installation folder.
+- Wähle die ausführbare Datei des Spiels (Settlers6.exe oder Settlers6R.exe) aus, welche sich im Installationsordner befindet.
+  
 ## Features
 
 ### Patch Original Game
@@ -17,7 +20,7 @@ German:
 English:
 ```
 - Reactivates the texture-slider, so high textures can be choosen in the menu.
-- Enables high-quality ground textures.
+- Enables highest-quality ground textures.
 - Can set the maximum zoom level in the game.
 - Activates the Development - Mode without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
@@ -29,14 +32,14 @@ English:
 German:
 ```
 - Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
-- Kann den Autosave deaktivieren.
+- Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall festlegen.
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 ```
 English:
 ```
 - Activates the Development - Mode (Necessary for the LuaDebugger to work).
-- Can disable the Autosave.
+- Can disable the autosave or set an custom interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
 ```
@@ -48,14 +51,14 @@ German:
 ```
 - Hohe Texturen für Gebäude/Entitäten/Boden.
 - Unbegrenztes Skalieren der Größe von Entitäten.
-- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren.
-- Erhöhen des Entitätenlimits.
+- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren (jegliches Blocking wird ignoriert).
+- Höheres Entitätenlimit.
 - Mehr Entitäten gleichzeitig Bewegen (100 -> 1055).
-- Kartenrand wird beim Speichervorgang nicht gelöscht.
+- Kartenrand wird beim Speichervorgang nicht gelöscht und kann bebaut werden.
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
 - Ersetzt "Validate Map" mit Spielstart (Lost Feature).
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
-- Alle Entitäten können selektiert und verschoben werden.
+- Alle möglichen Entitäten (auch im Editor deaktivierte) können wahlweise platziert, selektiert und verschoben werden.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 ```
 English:
@@ -69,6 +72,6 @@ English:
 - Activates the Development-Mode without Registry-Key.
 - Replaces "Validate Map" with Game Start (Lost Feature).
 - Enables walls and wall gates from all climate zones in all climate zones.
-- Can select and move all entities.
+- Can select and move all entities, even the ones that were previously unavailable in the editor.
 - Can set the Large Address Aware Flag for more usable memory.
 ```
