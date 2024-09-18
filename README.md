@@ -34,6 +34,7 @@ German:
 - Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
 - Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall festlegen.
 - Kann den maximalen Zoomlevel setzen.
+- Fixt den als "Meldungsstau" bekannten Bug, bei welchem keine Nachrichten im Spiel mehr angezeigt wurden.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 ```
 English:
@@ -41,6 +42,7 @@ English:
 - Activates the Development - Mode (Necessary for the LuaDebugger to work).
 - Can disable the autosave or set an custom interval.
 - Can set the maximum zoom level in the game.
+- Fixes the "Meldungsstau" - Bug, which was responsible for missing messages and stuck message queue in the game.
 - Can set the Large Address Aware Flag for more usable memory.
 ```
 ### Patch Editor (OV and HE)
