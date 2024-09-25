@@ -1,13 +1,13 @@
 # S6Patcher
 ## Usage
-- Select the game executable that you wish to patch (Settlers6.exe or Settlers6R.exe). Look in your installation folder.
-- Wähle die ausführbare Datei des Spiels (Settlers6.exe oder Settlers6R.exe) aus, welche sich im Installationsordner befindet.
+- Select the game executable(s) that you wish to patch (Settlers6.exe or Settlers6R.exe or S6MapEditor.exe or S6MapEditorR.exe). Look in your installation folder.
+- Wähle die ausführbare(n) Datei(en), die gepatcht werden soll(en) (Settlers6.exe oder Settlers6R.exe oder S6MapEditor.exe oder S6MapEditorR.exe) aus, welche sich im Installationsordner befindet/n.
   
 ## Features
 
 ### Patch Original Game
-- Für die Originalversion (OV) mit neuestem Patch 1.71.
-- For the original game (OV) with newest Patch 1.71.
+- Für die Originalversion (OV) mit neuestem Patch 1.7.1.
+- For the original game (OV) with newest Patch 1.7.1.
 
 German:
 ```
@@ -15,14 +15,14 @@ German:
 - Setzt die Qualität von Bodentexturen auf den höchsten Wert.
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Aktiviert den Development - Mode ohne Registry - Key.
+- Aktiviert den Development-Mode ohne Registry-Key. Um den Development-Mode zu nutzen, starte das Spiel mit dem Kommandozeilenparameter "-DevM".
 ```
 English:
 ```
-- Reactivates the texture-slider, so high textures can be choosen in the menu.
+- Reactivates the texture-slider in the settings menu, so high-res textures are available.
 - Enables highest-quality ground textures.
 - Can set the maximum zoom level in the game.
-- Activates the Development - Mode without Registry-Key.
+- Activates the Development-Mode without Registry-Key. To use the Development-Mode, launch the game with command line argument "-DevM".
 - Can set the Large Address Aware Flag for more usable memory.
 ```
 ### Patch History Edition
@@ -31,7 +31,7 @@ English:
 
 German:
 ```
-- Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
+- Aktiviert den Development-Mode (Notwendig für die Funktion des LuaDebuggers).
 - Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall festlegen.
 - Kann den maximalen Zoomlevel setzen.
 - Fixt den als "Meldungsstau" bekannten Bug, bei welchem keine Nachrichten im Spiel mehr angezeigt wurden.
@@ -39,7 +39,7 @@ German:
 ```
 English:
 ```
-- Activates the Development - Mode (Necessary for the LuaDebugger to work).
+- Activates the Development-Mode (Necessary for the LuaDebugger to work).
 - Can disable the autosave or set an custom interval.
 - Can set the maximum zoom level in the game.
 - Fixes the "Meldungsstau" - Bug, which was responsible for missing messages and stuck message queue in the game.
