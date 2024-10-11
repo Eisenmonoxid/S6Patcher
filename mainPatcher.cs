@@ -48,7 +48,7 @@ namespace S6Patcher
                 {
                     for (short it = 0; it != gbHE.Controls.Count; it++)
                     {
-                        gbEditor.Controls[it].Enabled = true;
+                        gbHE.Controls[it].Enabled = true;
                     }
 
                     br.BaseStream.Position = 0xC4EC4C;
@@ -179,9 +179,8 @@ namespace S6Patcher
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x2B3355, new byte[] {0xC7, 0x45, 0x6C});
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x2B3358, BitConverter.GetBytes(TransitionFactor));
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x2B335C, new byte[] {0x90, 0x90});
-                // Restriction -5000
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x4BA2BB, new byte[] {0x00, 0x40, 0x9C, 0xC5}); // Override INT3 with new float
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x27AC99, new byte[] {0x50, 0xA1, 0xBB, 0xA2, 0x8B, 0x00, 0x89, 0x81,
+                // Restriction -5000.0
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00});
             }
             else
@@ -203,9 +202,8 @@ namespace S6Patcher
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x27031B, BitConverter.GetBytes(TransitionFactor));
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x27031F, new byte[] {0x90});
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x270325, new byte[] {0x90, 0x90, 0x90});
-                // Restriction -5000
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x588305, new byte[] {0x00, 0x40, 0x9C, 0xC5}); // Override INT3 with new float
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2532F7, new byte[] {0x50, 0xA1, 0x05, 0x8F, 0x98, 0x00, 0x89, 0x81,
+                // Restriction -5000.0
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2532F7, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90});
             }
         }
