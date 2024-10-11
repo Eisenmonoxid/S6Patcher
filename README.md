@@ -11,18 +11,18 @@
 
 German:
 ```
-- Reaktiviert den Textur-Slider, um hohe Texturen auswählen zu können.
-- Setzt die Qualität von Bodentexturen auf den höchsten Wert.
+- Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
+- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
 - Kann den maximalen Zoomlevel setzen.
-- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Aktiviert den Development-Mode ohne Registry-Key. Um den Development-Mode zu nutzen, starte das Spiel mit dem Kommandozeilenparameter "-DevM".
+- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
+- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
 ```
 English:
 ```
-- Reactivates the texture-slider in the settings menu, so high-res textures are available.
-- Enables highest-quality ground textures.
+- Can restore the texture slider in the main menu, so high textures can be choosen.
+- Can enable highest quality ground textures.
 - Can set the maximum zoom level in the game.
-- Activates the Development-Mode without Registry-Key. To use the Development-Mode, launch the game with command line argument "-DevM".
+- Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
 ```
 ### Patch History Edition
@@ -31,19 +31,23 @@ English:
 
 German:
 ```
-- Aktiviert den Development-Mode (Notwendig für die Funktion des LuaDebuggers).
-- Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall festlegen.
+- Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
+- Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
 - Kann den maximalen Zoomlevel setzen.
-- Fixt den als "Meldungsstau" bekannten Bug, bei welchem keine Nachrichten im Spiel mehr angezeigt wurden.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
+- Kann den Meldungsstau - Bug im Spiel fixen.
+- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
+-> Funktioniert NICHT in der History Edition von Steam!
 ```
 English:
 ```
-- Activates the Development-Mode (Necessary for the LuaDebugger to work).
-- Can disable the autosave or set an custom interval.
+- Can activate the Development-Mode (Necessary for the LuaDebugger to work).
+- Can disable the autosave or set an custom timer interval.
 - Can set the maximum zoom level in the game.
-- Fixes the "Meldungsstau" - Bug, which was responsible for missing messages and stuck message queue in the game.
 - Can set the Large Address Aware Flag for more usable memory.
+- Can fix the "Meldungsstau" - Bug in the game.
+- Can set the highest quality ground textures.
+-> Does NOT work with the History Edition from Steam!
 ```
 ### Patch Editor (OV and HE)
 - Für alle Editoren, egal ob OV oder die beiden History Editions (Ubisoft Connect und Steam).
@@ -53,14 +57,13 @@ German:
 ```
 - Hohe Texturen für Gebäude/Entitäten/Boden.
 - Unbegrenztes Skalieren der Größe von Entitäten.
-- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren (jegliches Blocking wird ignoriert).
-- Höheres Entitätenlimit.
+- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren.
+- Erhöhen des Entitätenlimits.
 - Mehr Entitäten gleichzeitig Bewegen (100 -> 1055).
-- Kartenrand wird beim Speichervorgang nicht gelöscht und kann bebaut werden.
+- Kartenrand wird beim Speichervorgang nicht gelöscht.
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
-- Ersetzt "Validate Map" mit Spielstart (Lost Feature).
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
-- Alle möglichen Entitäten (auch im Editor deaktivierte) können wahlweise platziert, selektiert und verschoben werden.
+- Alle Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 ```
 English:
@@ -72,8 +75,7 @@ English:
 - Move more entities at the same time (100 -> 1055).
 - Black map border area can be used and is not deleted at map save.
 - Activates the Development-Mode without Registry-Key.
-- Replaces "Validate Map" with Game Start (Lost Feature).
 - Enables walls and wall gates from all climate zones in all climate zones.
-- Can select and move all entities, even the ones that were previously unavailable in the editor.
+- Can place, select and move all entity types (Careful, some may crash).
 - Can set the Large Address Aware Flag for more usable memory.
 ```
