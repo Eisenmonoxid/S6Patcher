@@ -57,6 +57,7 @@ namespace S6Patcher
                     br.BaseStream.Position = 0xEB83C0;
                     txtAutosave.Text = ((br.ReadDouble() / 60) / 1000).ToString();
 
+                    gbHE.Enabled = true;
                     gbEditor.Enabled = false;
                 }
             }
