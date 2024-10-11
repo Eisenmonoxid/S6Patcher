@@ -14,10 +14,6 @@ namespace S6Patcher
     }
     public partial class mainFrm : Form
     {
-        private const string ErrorNoFile = "Keine Datei ausgewählt oder Datei existiert nicht!\n\nNo file chosen or file does not exist!\n\n";
-        private const string ErrorBackup = "Fehler beim Erstellen der Backup-Datei! Abbrechen ...\n\nError when creating Backup-File! Aborting ...\n\n";
-        private const string FinishedSuccess = "Vorgang Erfolgreich!\n\nFinished successfully!\n\n";
-        private const string ErrorWrongVersion = "Executable hat die falsche Versionsnummer! Abbrechen ...\n\nExecutable has the wrong version number! Aborting ...\n\n";
         public mainFrm()
         {
             InitializeComponent();
@@ -44,26 +40,36 @@ namespace S6Patcher
             OpenFileDialog ofd = PatchHelpers.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
             {
-                if (PatchHelpers.CreateBackup(ofd.FileName) == false) 
+                if (PatchHelpers.CreateBackup(ofd.FileName) == false)
                 {
-                    MessageBox.Show(ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
                 FileStream Reader = PatchHelpers.OpenFileStream(ofd.FileName, ID);
                 if (Reader == null) {
-                    MessageBox.Show(ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
                 S6Patcher mainPatchingHandler = new S6Patcher(ID, ref Reader);
                 mainPatchingHandler.ShowDialog();
 
-                MessageBox.Show(FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Reader.Close();
+                Reader.Dispose();
+
+                if (mainPatchingHandler.DialogResult == DialogResult.OK)
+                {
+                    MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (mainPatchingHandler.DialogResult == DialogResult.Cancel)
+                {
+                    MessageBox.Show(Resources.ErrorBackupFail, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             else
             {
-                MessageBox.Show(ErrorNoFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.ErrorNoFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             ofd.Dispose();
@@ -71,9 +77,9 @@ namespace S6Patcher
         private void SetTooltipSystemLanguage()
         {
             string Language = CultureInfo.InstalledUICulture.TwoLetterISOLanguageName;
-            ToolTip btnPatchTooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 10, ReshowDelay = 10, AutoPopDelay = 32000},
-            btnPatchOVTooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 10, ReshowDelay = 10, AutoPopDelay = 32000},
-            btnPatchHETooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 10, ReshowDelay = 10, AutoPopDelay = 32000};
+            ToolTip btnPatchTooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 50, ReshowDelay = 100, AutoPopDelay = 32000},
+            btnPatchOVTooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 50, ReshowDelay = 100, AutoPopDelay = 32000},
+            btnPatchHETooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 50, ReshowDelay = 100, AutoPopDelay = 32000};
 
             if (Language == "de") // German
             {

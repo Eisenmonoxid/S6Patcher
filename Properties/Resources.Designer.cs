@@ -86,9 +86,8 @@ namespace S6Patcher.Properties {
         ///- Move more entities at the same time (100 -&gt; 1055).
         ///- Black map border area can be used and is not deleted at map save.
         ///- Activates the Development-Mode without Registry-Key.
-        ///- Replaces &quot;Validate Map&quot; with Game Start (Lost Feature).
         ///- Enables walls and wall gates from all climate zones in all climate zones.
-        ///- Can place [rest of string was truncated]&quot;;.
+        ///- Can place, select and move all entity types (Careful, some may crash [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_EnglishText {
             get {
@@ -104,8 +103,8 @@ namespace S6Patcher.Properties {
         ///- Mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
         ///- Kartenrand wird beim Speichervorgang nicht gelöscht.
         ///- Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
-        ///- Ersetzt &quot;Validate Map&quot; mit Spielstart (Lost Feature).
-        ///- Mauern und Mauertore aus allen Klimazonen können gesetzt werd [rest of string was truncated]&quot;;.
+        ///- Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
+        ///- Alle Entitäten können platziert, selektiert und ve [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_GermanText {
             get {
@@ -114,12 +113,13 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Activates the Development - Mode (Necessary for the LuaDebugger to work).
-        ///- Can disable the autosave or set an custom interval.
+        ///   Looks up a localized string similar to - Can activate the Development-Mode (Necessary for the LuaDebugger to work).
+        ///- Can disable the autosave or set an custom timer interval.
         ///- Can set the maximum zoom level in the game.
         ///- Can set the Large Address Aware Flag for more usable memory.
-        ///- Fixes the &quot;Meldungsstau&quot; - Bug in the game.
-        ///-&gt; Does NOT work with the Steam - HE!.
+        ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game.
+        ///- Can set the highest quality ground textures.
+        ///-&gt; Does NOT work with the History Edition from Steam!.
         /// </summary>
         internal static string btnPatchHE_EnglishText {
             get {
@@ -128,12 +128,13 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
-        ///- Kann den Autosave deaktivieren oder den Intervall setzen.
+        ///   Looks up a localized string similar to - Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
+        ///- Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
         ///- Kann den maximalen Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-        ///- Fixt den Meldungsstau - Bug im Spiel.
-        ///-&gt; Funktioniert NICHT in der Steam - HE!.
+        ///- Kann den Meldungsstau - Bug im Spiel fixen.
+        ///- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
+        ///-&gt; Funktioniert NICHT in der History Edition von Steam!.
         /// </summary>
         internal static string btnPatchHE_GermanText {
             get {
@@ -142,10 +143,10 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Reactivates the texture-slider, so high textures can be choosen in the menu.
-        ///- Enables high-quality ground textures.
+        ///   Looks up a localized string similar to - Can restore the texture slider in the main menu, so high textures can be choosen.
+        ///- Can enable highest quality ground textures.
         ///- Can set the maximum zoom level in the game.
-        ///- Activates the Development - Mode without Registry - Key.
+        ///- Can activate the Development-Mode permanently without Registry-Key.
         ///- Can set the Large Address Aware Flag for more usable memory..
         /// </summary>
         internal static string btnPatchOV_EnglishText {
@@ -155,15 +156,75 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - Reaktiviert den Textur-Slider, um hohe Texturen auswählen zu können.
-        ///- Setzt die Qualität von Bodentexturen auf den höchsten Wert.
+        ///   Looks up a localized string similar to - Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
+        ///- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
         ///- Kann den maximalen Zoomlevel setzen.
-        ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-        ///- Aktiviert den Development - Mode ohne Registry - Key..
+        ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
+        ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren..
         /// </summary>
         internal static string btnPatchOV_GermanText {
             get {
                 return ResourceManager.GetString("btnPatchOV_GermanText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fehler beim Erstellen der Backup-Datei! Abbrechen ...
+        ///Error when creating Backup-File! Aborting ....
+        /// </summary>
+        internal static string ErrorBackup {
+            get {
+                return ResourceManager.GetString("ErrorBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup konnte nicht wiederhergestellt werden!
+        ///Backup could not be restored!.
+        /// </summary>
+        internal static string ErrorBackupFail {
+            get {
+                return ResourceManager.GetString("ErrorBackupFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meldungsstaufix: Datei konnte nicht gefunden werden. Fix nicht angewandt!
+        ///Meldungsstaufix: File could not be found. Fix not applied!.
+        /// </summary>
+        internal static string ErrorMeldungsstauFix {
+            get {
+                return ResourceManager.GetString("ErrorMeldungsstauFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keine Datei ausgewählt oder Datei existiert nicht!
+        ///No file chosen or file does not exist!.
+        /// </summary>
+        internal static string ErrorNoFile {
+            get {
+                return ResourceManager.GetString("ErrorNoFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ungültige Ausführungsdatei gewählt! Abbrechen ...
+        ///Invalid executable has been choosen! Aborting ....
+        /// </summary>
+        internal static string ErrorWrongVersion {
+            get {
+                return ResourceManager.GetString("ErrorWrongVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vorgang Erfolgreich!
+        ///Finished successfully!.
+        /// </summary>
+        internal static string FinishedSuccess {
+            get {
+                return ResourceManager.GetString("FinishedSuccess", resourceCulture);
             }
         }
         

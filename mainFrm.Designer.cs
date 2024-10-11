@@ -85,8 +85,7 @@
             // mainFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.PapayaWhip;
             this.ClientSize = new System.Drawing.Size(610, 89);
             this.ControlBox = false;
@@ -103,7 +102,7 @@
             this.Name = "mainFrm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "S6Patcher - 1.9 - Eisenmonoxid";
+            this.Text = "S6Patcher - 2.0 - Eisenmonoxid";
             this.TopMost = true;
             this.ResumeLayout(false);
 

@@ -92,9 +92,7 @@ namespace S6Patcher
 
             if (UseOffset == true)
             {
-                UInt32 Offset = 0x3F0000;
-                UInt32 ShiftedPosition = (Mapping[(char)Identifier] - Offset);
-                Reader.Position = ShiftedPosition;
+                Reader.Position = (Mapping[(char)Identifier] - 0x3F0000);
             }
             else
             {
@@ -116,7 +114,8 @@ namespace S6Patcher
                     return true;
                 }
                 else
-                { 
+                {
+                    ApplyOffset = false;
                     return false; 
                 }
             }
@@ -126,6 +125,28 @@ namespace S6Patcher
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
+        }
+        public static bool RestoreBackup(string filePath)
+        {
+            string FileName = Path.GetFileNameWithoutExtension(filePath);
+            string DirectoryPath = Path.GetDirectoryName(filePath);
+            string FinalPath = Path.Combine(DirectoryPath, FileName + "_BACKUP.exe");
+
+            if (File.Exists(FinalPath) == false)
+            {
+                return false;
+            }
+
+            try
+            {
+                File.Replace(FinalPath, filePath, null);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
+            return true;
         }
     }
 }

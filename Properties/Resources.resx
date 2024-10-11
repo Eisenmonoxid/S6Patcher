@@ -124,34 +124,36 @@
     <value>Änderungen:</value>
   </data>
   <data name="btnPatchHE_EnglishText" xml:space="preserve">
-    <value>- Activates the Development - Mode (Necessary for the LuaDebugger to work).
-- Can disable the autosave or set an custom interval.
+    <value>- Can activate the Development-Mode (Necessary for the LuaDebugger to work).
+- Can disable the autosave or set an custom timer interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
-- Fixes the "Meldungsstau" - Bug in the game.
--&gt; Does NOT work with the Steam - HE!</value>
+- Can fix the "Meldungsstau" - Bug in the game.
+- Can set the highest quality ground textures.
+-&gt; Does NOT work with the History Edition from Steam!</value>
   </data>
   <data name="btnPatchHE_GermanText" xml:space="preserve">
-    <value>- Aktiviert den Development - Mode (Notwendig für die Funktion des LuaDebuggers).
-- Kann den Autosave deaktivieren oder den Intervall setzen.
+    <value>- Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
+- Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Fixt den Meldungsstau - Bug im Spiel.
--&gt; Funktioniert NICHT in der Steam - HE!</value>
+- Kann den Meldungsstau - Bug im Spiel fixen.
+- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
+-&gt; Funktioniert NICHT in der History Edition von Steam!</value>
   </data>
   <data name="btnPatchOV_EnglishText" xml:space="preserve">
-    <value>- Reactivates the texture-slider, so high textures can be choosen in the menu.
-- Enables high-quality ground textures.
+    <value>- Can restore the texture slider in the main menu, so high textures can be choosen.
+- Can enable highest quality ground textures.
 - Can set the maximum zoom level in the game.
-- Activates the Development - Mode without Registry - Key.
+- Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
-    <value>- Reaktiviert den Textur-Slider, um hohe Texturen auswählen zu können.
-- Setzt die Qualität von Bodentexturen auf den höchsten Wert.
+    <value>- Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
+- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
 - Kann den maximalen Zoomlevel setzen.
-- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Aktiviert den Development - Mode ohne Registry - Key.</value>
+- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
+- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.</value>
   </data>
   <data name="btnPatch_EnglishText" xml:space="preserve">
     <value>- High resolution textures for Buildings/Entities/Ground.
@@ -161,7 +163,6 @@
 - Move more entities at the same time (100 -&gt; 1055).
 - Black map border area can be used and is not deleted at map save.
 - Activates the Development-Mode without Registry-Key.
-- Replaces "Validate Map" with Game Start (Lost Feature).
 - Enables walls and wall gates from all climate zones in all climate zones.
 - Can place, select and move all entity types (Careful, some may crash).
 - Can set the Large Address Aware Flag for more usable memory.</value>
@@ -174,10 +175,33 @@
 - Mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
 - Kartenrand wird beim Speichervorgang nicht gelöscht.
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
-- Ersetzt "Validate Map" mit Spielstart (Lost Feature).
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
 - Alle Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.</value>
+  </data>
+  <data name="ErrorBackup" xml:space="preserve">
+    <value>Fehler beim Erstellen der Backup-Datei! Abbrechen ...
+Error when creating Backup-File! Aborting ...</value>
+  </data>
+  <data name="ErrorBackupFail" xml:space="preserve">
+    <value>Backup konnte nicht wiederhergestellt werden!
+Backup could not be restored!</value>
+  </data>
+  <data name="ErrorMeldungsstauFix" xml:space="preserve">
+    <value>Meldungsstaufix: Datei konnte nicht gefunden werden. Fix nicht angewandt!
+Meldungsstaufix: File could not be found. Fix not applied!</value>
+  </data>
+  <data name="ErrorNoFile" xml:space="preserve">
+    <value>Keine Datei ausgewählt oder Datei existiert nicht!
+No file chosen or file does not exist!</value>
+  </data>
+  <data name="ErrorWrongVersion" xml:space="preserve">
+    <value>Ungültige Ausführungsdatei gewählt! Abbrechen ...
+Invalid executable has been choosen! Aborting ...</value>
+  </data>
+  <data name="FinishedSuccess" xml:space="preserve">
+    <value>Vorgang Erfolgreich!
+Finished successfully!</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="LocalMainMapScript" type="System.Resources.ResXFileRef, System.Windows.Forms">

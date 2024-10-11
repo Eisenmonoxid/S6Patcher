@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbLAA = new System.Windows.Forms.CheckBox();
+            this.cbLAAFlag = new System.Windows.Forms.CheckBox();
             this.cbZoom = new System.Windows.Forms.CheckBox();
             this.txtZoom = new System.Windows.Forms.TextBox();
             this.btnPatch = new System.Windows.Forms.Button();
@@ -37,22 +37,36 @@
             this.cbAllEntities = new System.Windows.Forms.CheckBox();
             this.txtAutosave = new System.Windows.Forms.TextBox();
             this.lblAutosave = new System.Windows.Forms.Label();
+            this.cbDevMode = new System.Windows.Forms.CheckBox();
+            this.btnAbort = new System.Windows.Forms.Button();
+            this.cbMeldungsstauFix = new System.Windows.Forms.CheckBox();
+            this.cbHighTextures = new System.Windows.Forms.CheckBox();
+            this.cbEntityLimits = new System.Windows.Forms.CheckBox();
+            this.cbScalingPlacing = new System.Windows.Forms.CheckBox();
+            this.cbMapBorder = new System.Windows.Forms.CheckBox();
+            this.gbEditor = new System.Windows.Forms.GroupBox();
+            this.gbHE = new System.Windows.Forms.GroupBox();
+            this.gbAll = new System.Windows.Forms.GroupBox();
+            this.btnBackup = new System.Windows.Forms.Button();
+            this.gbEditor.SuspendLayout();
+            this.gbHE.SuspendLayout();
+            this.gbAll.SuspendLayout();
             this.SuspendLayout();
             // 
-            // cbLAA
+            // cbLAAFlag
             // 
-            this.cbLAA.AutoSize = true;
-            this.cbLAA.Location = new System.Drawing.Point(13, 13);
-            this.cbLAA.Name = "cbLAA";
-            this.cbLAA.Size = new System.Drawing.Size(91, 20);
-            this.cbLAA.TabIndex = 0;
-            this.cbLAA.Text = "LAA - Flag";
-            this.cbLAA.UseVisualStyleBackColor = true;
+            this.cbLAAFlag.AutoSize = true;
+            this.cbLAAFlag.Location = new System.Drawing.Point(5, 47);
+            this.cbLAAFlag.Name = "cbLAAFlag";
+            this.cbLAAFlag.Size = new System.Drawing.Size(142, 20);
+            this.cbLAAFlag.TabIndex = 0;
+            this.cbLAAFlag.Text = "Activate LAA - Flag";
+            this.cbLAAFlag.UseVisualStyleBackColor = true;
             // 
             // cbZoom
             // 
             this.cbZoom.AutoSize = true;
-            this.cbZoom.Location = new System.Drawing.Point(13, 39);
+            this.cbZoom.Location = new System.Drawing.Point(5, 74);
             this.cbZoom.Name = "cbZoom";
             this.cbZoom.Size = new System.Drawing.Size(134, 20);
             this.cbZoom.TabIndex = 1;
@@ -63,17 +77,17 @@
             // txtZoom
             // 
             this.txtZoom.Enabled = false;
-            this.txtZoom.Location = new System.Drawing.Point(186, 37);
+            this.txtZoom.Location = new System.Drawing.Point(158, 72);
             this.txtZoom.MaxLength = 8;
             this.txtZoom.Name = "txtZoom";
-            this.txtZoom.Size = new System.Drawing.Size(100, 22);
+            this.txtZoom.Size = new System.Drawing.Size(158, 22);
             this.txtZoom.TabIndex = 2;
             // 
             // btnPatch
             // 
-            this.btnPatch.Location = new System.Drawing.Point(12, 131);
+            this.btnPatch.Location = new System.Drawing.Point(11, 367);
             this.btnPatch.Name = "btnPatch";
-            this.btnPatch.Size = new System.Drawing.Size(365, 37);
+            this.btnPatch.Size = new System.Drawing.Size(449, 37);
             this.btnPatch.TabIndex = 3;
             this.btnPatch.Text = "Patch";
             this.btnPatch.UseVisualStyleBackColor = true;
@@ -82,17 +96,17 @@
             // lblZoomAngle
             // 
             this.lblZoomAngle.AutoSize = true;
-            this.lblZoomAngle.Location = new System.Drawing.Point(292, 40);
+            this.lblZoomAngle.Location = new System.Drawing.Point(322, 75);
             this.lblZoomAngle.Name = "lblZoomAngle";
-            this.lblZoomAngle.Size = new System.Drawing.Size(85, 16);
+            this.lblZoomAngle.Size = new System.Drawing.Size(96, 16);
             this.lblZoomAngle.TabIndex = 4;
-            this.lblZoomAngle.Text = "Normal: 7200";
+            this.lblZoomAngle.Text = "Standard: 7200";
             // 
             // cbAutosave
             // 
             this.cbAutosave.AutoSize = true;
             this.cbAutosave.Enabled = false;
-            this.cbAutosave.Location = new System.Drawing.Point(13, 65);
+            this.cbAutosave.Location = new System.Drawing.Point(6, 47);
             this.cbAutosave.Name = "cbAutosave";
             this.cbAutosave.Size = new System.Drawing.Size(155, 20);
             this.cbAutosave.TabIndex = 5;
@@ -104,7 +118,7 @@
             // 
             this.cbAllEntities.AutoSize = true;
             this.cbAllEntities.Enabled = false;
-            this.cbAllEntities.Location = new System.Drawing.Point(13, 91);
+            this.cbAllEntities.Location = new System.Drawing.Point(6, 99);
             this.cbAllEntities.Name = "cbAllEntities";
             this.cbAllEntities.Size = new System.Drawing.Size(177, 20);
             this.cbAllEntities.TabIndex = 6;
@@ -114,57 +128,183 @@
             // txtAutosave
             // 
             this.txtAutosave.Enabled = false;
-            this.txtAutosave.Location = new System.Drawing.Point(186, 65);
+            this.txtAutosave.Location = new System.Drawing.Point(181, 45);
             this.txtAutosave.MaxLength = 5;
             this.txtAutosave.Name = "txtAutosave";
-            this.txtAutosave.Size = new System.Drawing.Size(100, 22);
+            this.txtAutosave.Size = new System.Drawing.Size(135, 22);
             this.txtAutosave.TabIndex = 7;
             // 
             // lblAutosave
             // 
             this.lblAutosave.AutoSize = true;
-            this.lblAutosave.Location = new System.Drawing.Point(292, 69);
+            this.lblAutosave.Location = new System.Drawing.Point(322, 48);
             this.lblAutosave.Name = "lblAutosave";
-            this.lblAutosave.Size = new System.Drawing.Size(71, 16);
+            this.lblAutosave.Size = new System.Drawing.Size(82, 16);
             this.lblAutosave.TabIndex = 8;
-            this.lblAutosave.Text = "Normal: 15";
+            this.lblAutosave.Text = "Standard: 15";
+            // 
+            // cbDevMode
+            // 
+            this.cbDevMode.AutoSize = true;
+            this.cbDevMode.Location = new System.Drawing.Point(5, 100);
+            this.cbDevMode.Name = "cbDevMode";
+            this.cbDevMode.Size = new System.Drawing.Size(278, 20);
+            this.cbDevMode.TabIndex = 9;
+            this.cbDevMode.Text = "Activate Development-Mode Permanently";
+            this.cbDevMode.UseVisualStyleBackColor = true;
+            // 
+            // btnAbort
+            // 
+            this.btnAbort.Location = new System.Drawing.Point(10, 453);
+            this.btnAbort.Name = "btnAbort";
+            this.btnAbort.Size = new System.Drawing.Size(449, 37);
+            this.btnAbort.TabIndex = 10;
+            this.btnAbort.Text = "Abort";
+            this.btnAbort.UseVisualStyleBackColor = true;
+            this.btnAbort.Click += new System.EventHandler(this.btnAbort_Click);
+            // 
+            // cbMeldungsstauFix
+            // 
+            this.cbMeldungsstauFix.AutoSize = true;
+            this.cbMeldungsstauFix.Enabled = false;
+            this.cbMeldungsstauFix.Location = new System.Drawing.Point(6, 21);
+            this.cbMeldungsstauFix.Name = "cbMeldungsstauFix";
+            this.cbMeldungsstauFix.Size = new System.Drawing.Size(195, 20);
+            this.cbMeldungsstauFix.TabIndex = 11;
+            this.cbMeldungsstauFix.Text = "Activate \"Meldungsstau\"-Fix";
+            this.cbMeldungsstauFix.UseVisualStyleBackColor = true;
+            // 
+            // cbHighTextures
+            // 
+            this.cbHighTextures.AutoSize = true;
+            this.cbHighTextures.Location = new System.Drawing.Point(6, 21);
+            this.cbHighTextures.Name = "cbHighTextures";
+            this.cbHighTextures.Size = new System.Drawing.Size(186, 20);
+            this.cbHighTextures.TabIndex = 12;
+            this.cbHighTextures.Tag = "";
+            this.cbHighTextures.Text = "High - Resolution Textures";
+            this.cbHighTextures.UseVisualStyleBackColor = true;
+            // 
+            // cbEntityLimits
+            // 
+            this.cbEntityLimits.AutoSize = true;
+            this.cbEntityLimits.Enabled = false;
+            this.cbEntityLimits.Location = new System.Drawing.Point(6, 73);
+            this.cbEntityLimits.Name = "cbEntityLimits";
+            this.cbEntityLimits.Size = new System.Drawing.Size(148, 20);
+            this.cbEntityLimits.TabIndex = 13;
+            this.cbEntityLimits.Text = "Higher Entity - Limits";
+            this.cbEntityLimits.UseVisualStyleBackColor = true;
+            // 
+            // cbScalingPlacing
+            // 
+            this.cbScalingPlacing.AutoSize = true;
+            this.cbScalingPlacing.Enabled = false;
+            this.cbScalingPlacing.Location = new System.Drawing.Point(6, 47);
+            this.cbScalingPlacing.Name = "cbScalingPlacing";
+            this.cbScalingPlacing.Size = new System.Drawing.Size(239, 20);
+            this.cbScalingPlacing.TabIndex = 14;
+            this.cbScalingPlacing.Text = "Free Scaling and Placing of Entities";
+            this.cbScalingPlacing.UseVisualStyleBackColor = true;
+            // 
+            // cbMapBorder
+            // 
+            this.cbMapBorder.AutoSize = true;
+            this.cbMapBorder.Enabled = false;
+            this.cbMapBorder.Location = new System.Drawing.Point(6, 21);
+            this.cbMapBorder.Name = "cbMapBorder";
+            this.cbMapBorder.Size = new System.Drawing.Size(184, 20);
+            this.cbMapBorder.TabIndex = 15;
+            this.cbMapBorder.Text = "Usable Black Map Border";
+            this.cbMapBorder.UseVisualStyleBackColor = true;
+            // 
+            // gbEditor
+            // 
+            this.gbEditor.Controls.Add(this.cbMapBorder);
+            this.gbEditor.Controls.Add(this.cbEntityLimits);
+            this.gbEditor.Controls.Add(this.cbScalingPlacing);
+            this.gbEditor.Controls.Add(this.cbAllEntities);
+            this.gbEditor.Location = new System.Drawing.Point(11, 232);
+            this.gbEditor.Name = "gbEditor";
+            this.gbEditor.Size = new System.Drawing.Size(448, 129);
+            this.gbEditor.TabIndex = 16;
+            this.gbEditor.TabStop = false;
+            this.gbEditor.Text = "Mapeditor";
+            // 
+            // gbHE
+            // 
+            this.gbHE.Controls.Add(this.cbMeldungsstauFix);
+            this.gbHE.Controls.Add(this.cbAutosave);
+            this.gbHE.Controls.Add(this.txtAutosave);
+            this.gbHE.Controls.Add(this.lblAutosave);
+            this.gbHE.Location = new System.Drawing.Point(12, 147);
+            this.gbHE.Name = "gbHE";
+            this.gbHE.Size = new System.Drawing.Size(448, 79);
+            this.gbHE.TabIndex = 17;
+            this.gbHE.TabStop = false;
+            this.gbHE.Text = "History Edition";
+            // 
+            // gbAll
+            // 
+            this.gbAll.Controls.Add(this.cbHighTextures);
+            this.gbAll.Controls.Add(this.cbLAAFlag);
+            this.gbAll.Controls.Add(this.cbZoom);
+            this.gbAll.Controls.Add(this.txtZoom);
+            this.gbAll.Controls.Add(this.cbDevMode);
+            this.gbAll.Controls.Add(this.lblZoomAngle);
+            this.gbAll.Location = new System.Drawing.Point(12, 12);
+            this.gbAll.Name = "gbAll";
+            this.gbAll.Size = new System.Drawing.Size(447, 129);
+            this.gbAll.TabIndex = 18;
+            this.gbAll.TabStop = false;
+            this.gbAll.Text = "General Options";
+            // 
+            // btnBackup
+            // 
+            this.btnBackup.Location = new System.Drawing.Point(11, 410);
+            this.btnBackup.Name = "btnBackup";
+            this.btnBackup.Size = new System.Drawing.Size(449, 37);
+            this.btnBackup.TabIndex = 19;
+            this.btnBackup.Text = "Restore Backup";
+            this.btnBackup.UseVisualStyleBackColor = true;
+            this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
             // 
             // S6Patcher
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(385, 180);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScroll = true;
+            this.BackColor = System.Drawing.Color.PapayaWhip;
+            this.ClientSize = new System.Drawing.Size(469, 501);
             this.ControlBox = false;
-            this.Controls.Add(this.lblAutosave);
-            this.Controls.Add(this.txtAutosave);
-            this.Controls.Add(this.cbAllEntities);
-            this.Controls.Add(this.cbAutosave);
-            this.Controls.Add(this.lblZoomAngle);
+            this.Controls.Add(this.btnBackup);
+            this.Controls.Add(this.gbAll);
+            this.Controls.Add(this.gbHE);
+            this.Controls.Add(this.gbEditor);
+            this.Controls.Add(this.btnAbort);
             this.Controls.Add(this.btnPatch);
-            this.Controls.Add(this.txtZoom);
-            this.Controls.Add(this.cbZoom);
-            this.Controls.Add(this.cbLAA);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(403, 227);
+            this.MaximumSize = new System.Drawing.Size(487, 548);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(403, 227);
+            this.MinimumSize = new System.Drawing.Size(487, 548);
             this.Name = "S6Patcher";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "S6Patcher";
+            this.Text = "S6Patcher - 2.0 - Eisenmonoxid";
             this.TopMost = true;
+            this.gbEditor.ResumeLayout(false);
+            this.gbEditor.PerformLayout();
+            this.gbHE.ResumeLayout(false);
+            this.gbHE.PerformLayout();
+            this.gbAll.ResumeLayout(false);
+            this.gbAll.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.CheckBox cbLAA;
+        private System.Windows.Forms.CheckBox cbLAAFlag;
         private System.Windows.Forms.CheckBox cbZoom;
         private System.Windows.Forms.TextBox txtZoom;
         private System.Windows.Forms.Button btnPatch;
@@ -173,5 +313,16 @@
         private System.Windows.Forms.CheckBox cbAllEntities;
         private System.Windows.Forms.TextBox txtAutosave;
         private System.Windows.Forms.Label lblAutosave;
+        private System.Windows.Forms.CheckBox cbDevMode;
+        private System.Windows.Forms.Button btnAbort;
+        private System.Windows.Forms.CheckBox cbMeldungsstauFix;
+        private System.Windows.Forms.CheckBox cbHighTextures;
+        private System.Windows.Forms.CheckBox cbEntityLimits;
+        private System.Windows.Forms.CheckBox cbScalingPlacing;
+        private System.Windows.Forms.CheckBox cbMapBorder;
+        private System.Windows.Forms.GroupBox gbEditor;
+        private System.Windows.Forms.GroupBox gbHE;
+        private System.Windows.Forms.GroupBox gbAll;
+        private System.Windows.Forms.Button btnBackup;
     }
 }

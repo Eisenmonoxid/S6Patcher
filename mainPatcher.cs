@@ -1,67 +1,112 @@
 ﻿using S6Patcher.Properties;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace S6Patcher
 {
     public partial class S6Patcher : Form
     {
-        private const string ErrorMeldungsstauFix = "Meldungsstaufix: Datei konnte nicht gefunden werden. Fix nicht angewandt!\n" +
-            "\nMeldungsstaufix: File could not be found. Fix not applied!\n\n";
-        FileStream execStream = null;
-        execID globalIdentifier;
+        private FileStream execStream = null;
+        private execID globalIdentifier;
 
         public S6Patcher(execID Identifier, ref FileStream Stream)
         {
-            InitializeComponent();
             execStream = Stream;
             globalIdentifier = Identifier;
 
-            if (Identifier == execID.Editor)
+            InitializeComponent();
+            InitializeControls();
+        }
+        private void InitializeControls()
+        {
+            if (globalIdentifier == execID.Editor)
             {
+                for (short it = 0; it != gbEditor.Controls.Count; it++)
+                {
+                    gbEditor.Controls[it].Enabled = true;
+                }
+
                 cbZoom.Enabled = false;
-                cbAllEntities.Enabled = true;
+                lblZoomAngle.Enabled = false;
+                gbHE.Enabled = false;
             }
             else
             {
                 BinaryReader br = new BinaryReader(execStream);
-                if (Identifier == execID.OV)
+                if (globalIdentifier == execID.OV)
                 {
                     br.BaseStream.Position = 0x545400;
                     txtZoom.Text = br.ReadDouble().ToString();
+
+                    gbHE.Enabled = false;
+                    gbEditor.Enabled = false;
                 }
                 else
                 {
+                    for (short it = 0; it != gbHE.Controls.Count; it++)
+                    {
+                        gbEditor.Controls[it].Enabled = true;
+                    }
+
                     br.BaseStream.Position = 0xC4EC4C;
                     txtZoom.Text = br.ReadSingle().ToString();
 
                     br.BaseStream.Position = 0xEB83C0;
                     txtAutosave.Text = ((br.ReadDouble() / 60) / 1000).ToString();
 
-                    cbAutosave.Enabled = true;
+                    gbEditor.Enabled = false;
                 }
             }
         }
-        private void mainPatcher()
+        private void mainPatcher(execID ID, GroupBox Controls)
+        {
+            Mappings currentMapping = new Mappings();
+            var Entries = currentMapping.InitializeMappings(ID);
+
+            CheckBox curControl;
+            for (short it = 0; it != Controls.Controls.Count; it++)
+            {
+                try
+                {
+                    curControl = (CheckBox)Controls.Controls[it];
+                }
+                catch
+                {
+                    continue;
+                }
+                
+                if (curControl.Checked)
+                {
+                    foreach (var curElement in Entries)
+                    {
+                        if (curControl.Text == curElement.Name)
+                        {
+                            foreach (var DictEntry in curElement.AddressMapping)
+                            {
+                                PatchHelpers.WriteBytesToFile(ref execStream, DictEntry.Key, DictEntry.Value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private void selectPatchVersion()
         {
             switch (globalIdentifier)
             {
                 case execID.OV:
-                    foreach (var Element in Mappings.OVMapping)
-                    {
-                        PatchHelpers.WriteBytesToFile(ref execStream, Element.Key, Element.Value);
-                    }
+                    mainPatcher(execID.OV, gbAll);
                     if (cbZoom.Checked)
                     {
                         SetZoomLevel();
                     }
                     break;
                 case execID.HE:
-                    foreach (var Element in Mappings.HEMapping)
-                    {
-                        PatchHelpers.WriteBytesToFile(ref execStream, Element.Key, Element.Value);
-                    }
+                    mainPatcher(execID.HE, gbAll);
+                    mainPatcher(execID.HE, gbHE);
                     if (cbZoom.Checked)
                     {
                         SetZoomLevel();
@@ -70,36 +115,22 @@ namespace S6Patcher
                     {
                         SetAutosaveTimer();
                     }
-                    SetMeldungsstauFix();
+                    if (cbMeldungsstauFix.Checked)
+                    {
+                        SetMeldungsstauFix();
+                    }
                     break;
                 case execID.Editor:
-                    foreach (var Element in Mappings.EditorMapping)
-                    {
-                        PatchHelpers.WriteBytesToFile(ref execStream, Element.Key, Element.Value);
-                    }
-                    if (cbAllEntities.Checked)
-                    {   
-                        PatchHelpers.WriteBytesToFile(ref execStream, 0x20615, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90});
-                        PatchHelpers.WriteBytesToFile(ref execStream, 0x20629, new byte[] {0xEB, 0x10});
-                    }
+                    mainPatcher(execID.Editor, gbAll);
+                    mainPatcher(execID.Editor, gbEditor);
                     break;
                 default:
                     break;
             }
-            if (cbLAA.Checked) 
+            if (cbLAAFlag.Checked) 
             {
                 SetLargeAddressAwareFlag();
             }
-        }
-        private void btnPatch_Click(object sender, EventArgs e)
-        {
-            mainPatcher();
-
-            execStream.Close();
-            execStream.Dispose();
-
-            Close();
-            Dispose();
         }
         private void SetAutosaveTimer()
         {
@@ -119,7 +150,7 @@ namespace S6Patcher
                 return;
             }
 
-            autosaveTimer = autosaveTimer * 1000 * 60;
+            autosaveTimer = (autosaveTimer * 1000 * 60);
             PatchHelpers.WriteBytesToFile(ref execStream, 0xEB83C0, BitConverter.GetBytes(autosaveTimer));
             PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0x76});
         }
@@ -147,6 +178,10 @@ namespace S6Patcher
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x2B3355, new byte[] {0xC7, 0x45, 0x6C});
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x2B3358, BitConverter.GetBytes(TransitionFactor));
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x2B335C, new byte[] {0x90, 0x90});
+                // Restriction -5000
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x4BA2BB, new byte[] {0x00, 0x40, 0x9C, 0xC5}); // Override INT3 with new float
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x27AC99, new byte[] {0x50, 0xA1, 0xBB, 0xA2, 0x8B, 0x00, 0x89, 0x81,
+                        0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00});
             }
             else
             {
@@ -167,6 +202,10 @@ namespace S6Patcher
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x27031B, BitConverter.GetBytes(TransitionFactor));
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x27031F, new byte[] {0x90});
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x270325, new byte[] {0x90, 0x90, 0x90});
+                // Restriction -5000
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x588305, new byte[] {0x00, 0x40, 0x9C, 0xC5}); // Override INT3 with new float
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2532F7, new byte[] {0x50, 0xA1, 0x05, 0x8F, 0x98, 0x00, 0x89, 0x81,
+                        0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90});
             }
         }
         private void SetLargeAddressAwareFlag()
@@ -200,7 +239,7 @@ namespace S6Patcher
 
             if (!File.Exists(FinalPath))
             {
-                MessageBox.Show(ErrorMeldungsstauFix, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.ErrorMeldungsstauFix, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -234,6 +273,39 @@ namespace S6Patcher
             {
                 txtAutosave.Enabled = false;
             }
+        }
+        private void btnPatch_Click(object sender, EventArgs e)
+        {
+            selectPatchVersion();
+            DialogResult = DialogResult.OK;
+
+            Close();
+            Dispose();
+        }
+        private void btnAbort_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Abort;
+            Close();
+            Dispose();
+        }
+        private void btnBackup_Click(object sender, EventArgs e)
+        {
+            string Path = execStream.Name;
+            execStream.Close();
+            execStream.Dispose();
+
+            bool Result = PatchHelpers.RestoreBackup(Path);
+            if (Result == false)
+            {
+                DialogResult = DialogResult.Cancel;
+            }
+            else
+            {
+                DialogResult = DialogResult.Abort;
+            }
+
+            Close();
+            Dispose();
         }
     }
 }
