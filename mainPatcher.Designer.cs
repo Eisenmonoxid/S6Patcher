@@ -47,6 +47,8 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtResolution = new System.Windows.Forms.TextBox();
             this.btnBackup = new System.Windows.Forms.Button();
             this.gbEditor.SuspendLayout();
             this.gbHE.SuspendLayout();
@@ -58,7 +60,7 @@
             this.cbLAAFlag.AutoSize = true;
             this.cbLAAFlag.Location = new System.Drawing.Point(5, 47);
             this.cbLAAFlag.Name = "cbLAAFlag";
-            this.cbLAAFlag.Size = new System.Drawing.Size(142, 20);
+            this.cbLAAFlag.Size = new System.Drawing.Size(117, 17);
             this.cbLAAFlag.TabIndex = 0;
             this.cbLAAFlag.Text = "Activate LAA - Flag";
             this.cbLAAFlag.UseVisualStyleBackColor = true;
@@ -68,7 +70,7 @@
             this.cbZoom.AutoSize = true;
             this.cbZoom.Location = new System.Drawing.Point(5, 74);
             this.cbZoom.Name = "cbZoom";
-            this.cbZoom.Size = new System.Drawing.Size(134, 20);
+            this.cbZoom.Size = new System.Drawing.Size(111, 17);
             this.cbZoom.TabIndex = 1;
             this.cbZoom.Text = "Max. Zoom Level:";
             this.cbZoom.UseVisualStyleBackColor = true;
@@ -80,7 +82,7 @@
             this.txtZoom.Location = new System.Drawing.Point(158, 72);
             this.txtZoom.MaxLength = 8;
             this.txtZoom.Name = "txtZoom";
-            this.txtZoom.Size = new System.Drawing.Size(158, 22);
+            this.txtZoom.Size = new System.Drawing.Size(158, 20);
             this.txtZoom.TabIndex = 2;
             // 
             // btnPatch
@@ -98,7 +100,7 @@
             this.lblZoomAngle.AutoSize = true;
             this.lblZoomAngle.Location = new System.Drawing.Point(322, 75);
             this.lblZoomAngle.Name = "lblZoomAngle";
-            this.lblZoomAngle.Size = new System.Drawing.Size(96, 16);
+            this.lblZoomAngle.Size = new System.Drawing.Size(80, 13);
             this.lblZoomAngle.TabIndex = 4;
             this.lblZoomAngle.Text = "Standard: 7200";
             // 
@@ -108,7 +110,7 @@
             this.cbAutosave.Enabled = false;
             this.cbAutosave.Location = new System.Drawing.Point(6, 47);
             this.cbAutosave.Name = "cbAutosave";
-            this.cbAutosave.Size = new System.Drawing.Size(155, 20);
+            this.cbAutosave.Size = new System.Drawing.Size(125, 17);
             this.cbAutosave.TabIndex = 5;
             this.cbAutosave.Text = "Autosave Time (min):";
             this.cbAutosave.UseVisualStyleBackColor = true;
@@ -120,7 +122,7 @@
             this.cbAllEntities.Enabled = false;
             this.cbAllEntities.Location = new System.Drawing.Point(6, 99);
             this.cbAllEntities.Name = "cbAllEntities";
-            this.cbAllEntities.Size = new System.Drawing.Size(177, 20);
+            this.cbAllEntities.Size = new System.Drawing.Size(145, 17);
             this.cbAllEntities.TabIndex = 6;
             this.cbAllEntities.Text = "Show All Entities in Editor";
             this.cbAllEntities.UseVisualStyleBackColor = true;
@@ -131,7 +133,7 @@
             this.txtAutosave.Location = new System.Drawing.Point(181, 45);
             this.txtAutosave.MaxLength = 5;
             this.txtAutosave.Name = "txtAutosave";
-            this.txtAutosave.Size = new System.Drawing.Size(135, 22);
+            this.txtAutosave.Size = new System.Drawing.Size(135, 20);
             this.txtAutosave.TabIndex = 7;
             // 
             // lblAutosave
@@ -139,7 +141,7 @@
             this.lblAutosave.AutoSize = true;
             this.lblAutosave.Location = new System.Drawing.Point(322, 48);
             this.lblAutosave.Name = "lblAutosave";
-            this.lblAutosave.Size = new System.Drawing.Size(82, 16);
+            this.lblAutosave.Size = new System.Drawing.Size(68, 13);
             this.lblAutosave.TabIndex = 8;
             this.lblAutosave.Text = "Standard: 15";
             // 
@@ -148,7 +150,7 @@
             this.cbDevMode.AutoSize = true;
             this.cbDevMode.Location = new System.Drawing.Point(5, 100);
             this.cbDevMode.Name = "cbDevMode";
-            this.cbDevMode.Size = new System.Drawing.Size(278, 20);
+            this.cbDevMode.Size = new System.Drawing.Size(222, 17);
             this.cbDevMode.TabIndex = 9;
             this.cbDevMode.Text = "Activate Development-Mode Permanently";
             this.cbDevMode.UseVisualStyleBackColor = true;
@@ -169,7 +171,7 @@
             this.cbMeldungsstauFix.Enabled = false;
             this.cbMeldungsstauFix.Location = new System.Drawing.Point(6, 21);
             this.cbMeldungsstauFix.Name = "cbMeldungsstauFix";
-            this.cbMeldungsstauFix.Size = new System.Drawing.Size(195, 20);
+            this.cbMeldungsstauFix.Size = new System.Drawing.Size(160, 17);
             this.cbMeldungsstauFix.TabIndex = 11;
             this.cbMeldungsstauFix.Text = "Activate \"Meldungsstau\"-Fix";
             this.cbMeldungsstauFix.UseVisualStyleBackColor = true;
@@ -179,11 +181,12 @@
             this.cbHighTextures.AutoSize = true;
             this.cbHighTextures.Location = new System.Drawing.Point(6, 21);
             this.cbHighTextures.Name = "cbHighTextures";
-            this.cbHighTextures.Size = new System.Drawing.Size(186, 20);
+            this.cbHighTextures.Size = new System.Drawing.Size(154, 17);
             this.cbHighTextures.TabIndex = 12;
             this.cbHighTextures.Tag = "";
-            this.cbHighTextures.Text = "High - Resolution Textures";
+            this.cbHighTextures.Text = "High - Resolution Textures:";
             this.cbHighTextures.UseVisualStyleBackColor = true;
+            this.cbHighTextures.CheckedChanged += new System.EventHandler(this.cbHighTextures_CheckedChanged);
             // 
             // cbEntityLimits
             // 
@@ -191,7 +194,7 @@
             this.cbEntityLimits.Enabled = false;
             this.cbEntityLimits.Location = new System.Drawing.Point(6, 73);
             this.cbEntityLimits.Name = "cbEntityLimits";
-            this.cbEntityLimits.Size = new System.Drawing.Size(148, 20);
+            this.cbEntityLimits.Size = new System.Drawing.Size(121, 17);
             this.cbEntityLimits.TabIndex = 13;
             this.cbEntityLimits.Text = "Higher Entity - Limits";
             this.cbEntityLimits.UseVisualStyleBackColor = true;
@@ -202,7 +205,7 @@
             this.cbScalingPlacing.Enabled = false;
             this.cbScalingPlacing.Location = new System.Drawing.Point(6, 47);
             this.cbScalingPlacing.Name = "cbScalingPlacing";
-            this.cbScalingPlacing.Size = new System.Drawing.Size(239, 20);
+            this.cbScalingPlacing.Size = new System.Drawing.Size(193, 17);
             this.cbScalingPlacing.TabIndex = 14;
             this.cbScalingPlacing.Text = "Free Scaling and Placing of Entities";
             this.cbScalingPlacing.UseVisualStyleBackColor = true;
@@ -213,7 +216,7 @@
             this.cbMapBorder.Enabled = false;
             this.cbMapBorder.Location = new System.Drawing.Point(6, 21);
             this.cbMapBorder.Name = "cbMapBorder";
-            this.cbMapBorder.Size = new System.Drawing.Size(184, 20);
+            this.cbMapBorder.Size = new System.Drawing.Size(147, 17);
             this.cbMapBorder.TabIndex = 15;
             this.cbMapBorder.Text = "Usable Black Map Border";
             this.cbMapBorder.UseVisualStyleBackColor = true;
@@ -246,6 +249,8 @@
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.label1);
+            this.gbAll.Controls.Add(this.txtResolution);
             this.gbAll.Controls.Add(this.cbHighTextures);
             this.gbAll.Controls.Add(this.cbLAAFlag);
             this.gbAll.Controls.Add(this.cbZoom);
@@ -258,6 +263,26 @@
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(345, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Standard: 512";
+            // 
+            // txtResolution
+            // 
+            this.txtResolution.Enabled = false;
+            this.txtResolution.Location = new System.Drawing.Point(181, 19);
+            this.txtResolution.MaxLength = 5;
+            this.txtResolution.Name = "txtResolution";
+            this.txtResolution.Size = new System.Drawing.Size(158, 20);
+            this.txtResolution.TabIndex = 13;
+            this.txtResolution.Text = "2048";
+            this.txtResolution.TextChanged += new System.EventHandler(this.txtResolution_TextChanged);
             // 
             // btnBackup
             // 
@@ -274,7 +299,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.PapayaWhip;
-            this.ClientSize = new System.Drawing.Size(469, 501);
+            this.ClientSize = new System.Drawing.Size(471, 509);
             this.ControlBox = false;
             this.Controls.Add(this.btnBackup);
             this.Controls.Add(this.gbAll);
@@ -324,5 +349,7 @@
         private System.Windows.Forms.GroupBox gbHE;
         private System.Windows.Forms.GroupBox gbAll;
         private System.Windows.Forms.Button btnBackup;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtResolution;
     }
 }

@@ -59,6 +59,7 @@ namespace S6Patcher
 
                     gbHE.Enabled = true;
                     gbEditor.Enabled = false;
+                    txtAutosave.Enabled = false;
                 }
             }
         }
@@ -273,6 +274,17 @@ namespace S6Patcher
                 txtAutosave.Enabled = false;
             }
         }
+        private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbHighTextures.Checked)
+            {
+                txtResolution.Enabled = true;
+            }
+            else
+            {
+                txtResolution.Enabled = false;
+            }
+        }
         private void btnPatch_Click(object sender, EventArgs e)
         {
             selectPatchVersion();
@@ -305,6 +317,11 @@ namespace S6Patcher
 
             Close();
             Dispose();
+        }
+
+        private void txtResolution_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
