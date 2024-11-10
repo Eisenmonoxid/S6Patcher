@@ -14,7 +14,7 @@ namespace S6Patcher
             Entries.Clear();
             Entries.Add(new PatchEntry
             {
-                Name = "High - Resolution Textures",
+                Name = "High - Resolution Textures:",
                 AddressMapping = new Dictionary<long, byte[]>()
                 {
                     {0x288ADF, new byte[] {0xE9, 0x1D, 0xD2, 0x26, 0x00, 0x90, 0x90, 0x90}}, // High entity resolution
@@ -52,7 +52,7 @@ namespace S6Patcher
             });
             /*Entries.Add(new PatchEntry
             {
-                Name = "High - Resolution Textures",
+                Name = "High - Resolution Textures:",
                 AddressMapping = new Dictionary<long, byte[]>()
                 {
                     {0x2D4188, new byte[] {0x00, 0x08, 0x00, 0x00}}, // Ground texture resolution -> Can now be choosen freely!
@@ -68,7 +68,7 @@ namespace S6Patcher
             Entries.Clear();
             Entries.Add(new PatchEntry
             {
-                Name = "High - Resolution Textures",
+                Name = "High - Resolution Textures:",
                 AddressMapping = new Dictionary<long, byte[]>()
                 {
                     {0x27A7AD, new byte[] {0xEB, 0x00}}, // Set ground texture resolution
