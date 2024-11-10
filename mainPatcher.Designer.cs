@@ -39,7 +39,6 @@
             this.lblAutosave = new System.Windows.Forms.Label();
             this.cbDevMode = new System.Windows.Forms.CheckBox();
             this.btnAbort = new System.Windows.Forms.Button();
-            this.cbMeldungsstauFix = new System.Windows.Forms.CheckBox();
             this.cbHighTextures = new System.Windows.Forms.CheckBox();
             this.cbEntityLimits = new System.Windows.Forms.CheckBox();
             this.cbScalingPlacing = new System.Windows.Forms.CheckBox();
@@ -47,6 +46,7 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.cbMeldungsstauFix = new System.Windows.Forms.CheckBox();
             this.lblTextureRes = new System.Windows.Forms.Label();
             this.txtResolution = new System.Windows.Forms.TextBox();
             this.btnBackup = new System.Windows.Forms.Button();
@@ -79,10 +79,10 @@
             // txtZoom
             // 
             this.txtZoom.Enabled = false;
-            this.txtZoom.Location = new System.Drawing.Point(158, 72);
+            this.txtZoom.Location = new System.Drawing.Point(164, 72);
             this.txtZoom.MaxLength = 8;
             this.txtZoom.Name = "txtZoom";
-            this.txtZoom.Size = new System.Drawing.Size(158, 20);
+            this.txtZoom.Size = new System.Drawing.Size(152, 20);
             this.txtZoom.TabIndex = 2;
             // 
             // btnPatch
@@ -108,7 +108,7 @@
             // 
             this.cbAutosave.AutoSize = true;
             this.cbAutosave.Enabled = false;
-            this.cbAutosave.Location = new System.Drawing.Point(6, 47);
+            this.cbAutosave.Location = new System.Drawing.Point(5, 22);
             this.cbAutosave.Name = "cbAutosave";
             this.cbAutosave.Size = new System.Drawing.Size(125, 17);
             this.cbAutosave.TabIndex = 5;
@@ -130,7 +130,7 @@
             // txtAutosave
             // 
             this.txtAutosave.Enabled = false;
-            this.txtAutosave.Location = new System.Drawing.Point(181, 45);
+            this.txtAutosave.Location = new System.Drawing.Point(181, 20);
             this.txtAutosave.MaxLength = 5;
             this.txtAutosave.Name = "txtAutosave";
             this.txtAutosave.Size = new System.Drawing.Size(135, 20);
@@ -139,7 +139,7 @@
             // lblAutosave
             // 
             this.lblAutosave.AutoSize = true;
-            this.lblAutosave.Location = new System.Drawing.Point(322, 48);
+            this.lblAutosave.Location = new System.Drawing.Point(322, 23);
             this.lblAutosave.Name = "lblAutosave";
             this.lblAutosave.Size = new System.Drawing.Size(68, 13);
             this.lblAutosave.TabIndex = 8;
@@ -164,17 +164,6 @@
             this.btnAbort.Text = "Abort";
             this.btnAbort.UseVisualStyleBackColor = true;
             this.btnAbort.Click += new System.EventHandler(this.btnAbort_Click);
-            // 
-            // cbMeldungsstauFix
-            // 
-            this.cbMeldungsstauFix.AutoSize = true;
-            this.cbMeldungsstauFix.Enabled = false;
-            this.cbMeldungsstauFix.Location = new System.Drawing.Point(6, 21);
-            this.cbMeldungsstauFix.Name = "cbMeldungsstauFix";
-            this.cbMeldungsstauFix.Size = new System.Drawing.Size(160, 17);
-            this.cbMeldungsstauFix.TabIndex = 11;
-            this.cbMeldungsstauFix.Text = "Activate \"Meldungsstau\"-Fix";
-            this.cbMeldungsstauFix.UseVisualStyleBackColor = true;
             // 
             // cbHighTextures
             // 
@@ -227,28 +216,28 @@
             this.gbEditor.Controls.Add(this.cbEntityLimits);
             this.gbEditor.Controls.Add(this.cbScalingPlacing);
             this.gbEditor.Controls.Add(this.cbAllEntities);
-            this.gbEditor.Location = new System.Drawing.Point(11, 232);
+            this.gbEditor.Location = new System.Drawing.Point(11, 223);
             this.gbEditor.Name = "gbEditor";
-            this.gbEditor.Size = new System.Drawing.Size(448, 129);
+            this.gbEditor.Size = new System.Drawing.Size(448, 125);
             this.gbEditor.TabIndex = 16;
             this.gbEditor.TabStop = false;
             this.gbEditor.Text = "Mapeditor";
             // 
             // gbHE
             // 
-            this.gbHE.Controls.Add(this.cbMeldungsstauFix);
             this.gbHE.Controls.Add(this.cbAutosave);
             this.gbHE.Controls.Add(this.txtAutosave);
             this.gbHE.Controls.Add(this.lblAutosave);
-            this.gbHE.Location = new System.Drawing.Point(12, 147);
+            this.gbHE.Location = new System.Drawing.Point(12, 168);
             this.gbHE.Name = "gbHE";
-            this.gbHE.Size = new System.Drawing.Size(448, 79);
+            this.gbHE.Size = new System.Drawing.Size(448, 49);
             this.gbHE.TabIndex = 17;
             this.gbHE.TabStop = false;
             this.gbHE.Text = "History Edition";
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.cbMeldungsstauFix);
             this.gbAll.Controls.Add(this.lblTextureRes);
             this.gbAll.Controls.Add(this.txtResolution);
             this.gbAll.Controls.Add(this.cbHighTextures);
@@ -259,10 +248,20 @@
             this.gbAll.Controls.Add(this.lblZoomAngle);
             this.gbAll.Location = new System.Drawing.Point(12, 12);
             this.gbAll.Name = "gbAll";
-            this.gbAll.Size = new System.Drawing.Size(447, 129);
+            this.gbAll.Size = new System.Drawing.Size(447, 150);
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
+            // 
+            // cbMeldungsstauFix
+            // 
+            this.cbMeldungsstauFix.AutoSize = true;
+            this.cbMeldungsstauFix.Location = new System.Drawing.Point(5, 127);
+            this.cbMeldungsstauFix.Name = "cbMeldungsstauFix";
+            this.cbMeldungsstauFix.Size = new System.Drawing.Size(160, 17);
+            this.cbMeldungsstauFix.TabIndex = 15;
+            this.cbMeldungsstauFix.Text = "Activate \"Meldungsstau\"-Fix";
+            this.cbMeldungsstauFix.UseVisualStyleBackColor = true;
             // 
             // lblTextureRes
             // 
@@ -276,10 +275,10 @@
             // txtResolution
             // 
             this.txtResolution.Enabled = false;
-            this.txtResolution.Location = new System.Drawing.Point(181, 19);
+            this.txtResolution.Location = new System.Drawing.Point(197, 19);
             this.txtResolution.MaxLength = 4;
             this.txtResolution.Name = "txtResolution";
-            this.txtResolution.Size = new System.Drawing.Size(158, 20);
+            this.txtResolution.Size = new System.Drawing.Size(142, 20);
             this.txtResolution.TabIndex = 13;
             // 
             // btnBackup
@@ -338,7 +337,6 @@
         private System.Windows.Forms.Label lblAutosave;
         private System.Windows.Forms.CheckBox cbDevMode;
         private System.Windows.Forms.Button btnAbort;
-        private System.Windows.Forms.CheckBox cbMeldungsstauFix;
         private System.Windows.Forms.CheckBox cbHighTextures;
         private System.Windows.Forms.CheckBox cbEntityLimits;
         private System.Windows.Forms.CheckBox cbScalingPlacing;
@@ -349,5 +347,6 @@
         private System.Windows.Forms.Button btnBackup;
         private System.Windows.Forms.Label lblTextureRes;
         private System.Windows.Forms.TextBox txtResolution;
+        private System.Windows.Forms.CheckBox cbMeldungsstauFix;
     }
 }

@@ -133,10 +133,6 @@ namespace S6Patcher
                     {
                         SetAutosaveTimer();
                     }
-                    if (cbMeldungsstauFix.Checked)
-                    {
-                        SetMeldungsstauFix();
-                    }
                     break;
                 case execID.Editor:
                     mainPatcher(execID.Editor, gbAll);
@@ -148,6 +144,10 @@ namespace S6Patcher
             if (cbLAAFlag.Checked) 
             {
                 SetLargeAddressAwareFlag();
+            }
+            if (cbMeldungsstauFix.Checked)
+            {
+                SetMeldungsstauFix();
             }
         }
         private void SetHighResolutionTextures()
@@ -279,21 +279,41 @@ namespace S6Patcher
         }
         private void SetMeldungsstauFix()
         {
-            string LocalScriptFilePath = "shr\\Script\\Local\\MainMapScript\\LocalMainMapScript.lua";
-            string FinalPath = Path.Combine(Directory.GetParent(Path.GetDirectoryName(execStream.Name)).FullName, LocalScriptFilePath);
+            // <Documents>/Settlers/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
+            // Maybe this information is interesting for you to know that ;)
+            string LocalScriptFilePath = "Script\\UserScriptLocal.lua";
+            string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            if (!File.Exists(FinalPath))
+            bool FoundFolder = false;
+            foreach (string Element in Directory.GetDirectories(DocumentPath))
             {
-                MessageBox.Show(Resources.ErrorMeldungsstauFix, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
+                {
+                    DocumentPath = Path.Combine(DocumentPath, Element);
+                    FoundFolder = true;
+                    break;
+                }
+            }
+
+            if (!FoundFolder)
+            {
                 return;
             }
 
+            string FinalPath = Path.Combine(DocumentPath, LocalScriptFilePath);
             try
             {
-                File.WriteAllBytes(FinalPath, Resources.LocalMainMapScript);
+                string ScriptPath = Path.Combine(DocumentPath, "Script");
+                if (!Directory.Exists(ScriptPath))
+                {
+                    Directory.CreateDirectory(ScriptPath);
+                }
+
+                File.WriteAllBytes(FinalPath, Resources.UserScriptLocal);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(Resources.ErrorMeldungsstauFix + "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }

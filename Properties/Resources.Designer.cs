@@ -148,6 +148,7 @@ namespace S6Patcher.Properties {
         ///- Can set the maximum zoom level in the game.
         ///- Can activate the Development-Mode permanently without Registry-Key.
         ///- Can set the Large Address Aware Flag for more usable memory.
+        ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game.
         ///-&gt; Original versions from Steam will need to be extracted with Steamless first!.
         /// </summary>
         internal static string btnPatchOV_EnglishText {
@@ -162,6 +163,7 @@ namespace S6Patcher.Properties {
         ///- Kann den maximalen Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
         ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
+        ///- Kann den Meldungsstau - Bug im Spiel fixen.
         ///-&gt; Originalversionen von Steam müssen zuerst mit Steamless entpackt werden!.
         /// </summary>
         internal static string btnPatchOV_GermanText {
@@ -191,8 +193,8 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Meldungsstaufix: Datei konnte nicht gefunden werden. Fix nicht angewandt!
-        ///Meldungsstaufix: File could not be found. Fix not applied!.
+        ///   Looks up a localized string similar to Meldungsstaufix: Datei konnte nicht geschrieben werden!
+        ///Meldungsstaufix: File could not be written!.
         /// </summary>
         internal static string ErrorMeldungsstauFix {
             get {
@@ -233,9 +235,9 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] LocalMainMapScript {
+        internal static byte[] UserScriptLocal {
             get {
-                object obj = ResourceManager.GetObject("LocalMainMapScript", resourceCulture);
+                object obj = ResourceManager.GetObject("UserScriptLocal", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -147,6 +147,7 @@
 - Can set the maximum zoom level in the game.
 - Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
+- Can fix the "Meldungsstau" - Bug in the game.
 -&gt; Original versions from Steam will need to be extracted with Steamless first!</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
@@ -155,6 +156,7 @@
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
+- Kann den Meldungsstau - Bug im Spiel fixen.
 -&gt; Originalversionen von Steam müssen zuerst mit Steamless entpackt werden!</value>
   </data>
   <data name="btnPatch_EnglishText" xml:space="preserve">
@@ -190,8 +192,8 @@ Error when creating Backup-File! Aborting ...</value>
 Backup could not be restored!</value>
   </data>
   <data name="ErrorMeldungsstauFix" xml:space="preserve">
-    <value>Meldungsstaufix: Datei konnte nicht gefunden werden. Fix nicht angewandt!
-Meldungsstaufix: File could not be found. Fix not applied!</value>
+    <value>Meldungsstaufix: Datei konnte nicht geschrieben werden!
+Meldungsstaufix: File could not be written!</value>
   </data>
   <data name="ErrorNoFile" xml:space="preserve">
     <value>Keine Datei ausgewählt oder Datei existiert nicht!
@@ -206,7 +208,7 @@ Invalid executable has been choosen! Aborting ...</value>
 Finished successfully!</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="LocalMainMapScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LocalMainMapScript.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="UserScriptLocal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UserScriptLocal.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
