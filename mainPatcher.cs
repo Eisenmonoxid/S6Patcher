@@ -33,6 +33,7 @@ namespace S6Patcher
                 lblZoomAngle.Enabled = false;
                 gbHE.Enabled = false;
                 txtResolution.Enabled = false;
+                lblTextureRes.Enabled = false;
             }
             else
             {
@@ -41,6 +42,9 @@ namespace S6Patcher
                 {
                     br.BaseStream.Position = 0x545400;
                     txtZoom.Text = br.ReadDouble().ToString();
+
+                    br.BaseStream.Position = 0x2BE177;
+                    txtResolution.Text = br.ReadUInt32().ToString();
 
                     gbHE.Enabled = false;
                     gbEditor.Enabled = false;
@@ -54,6 +58,9 @@ namespace S6Patcher
 
                     br.BaseStream.Position = 0xC4EC4C;
                     txtZoom.Text = br.ReadSingle().ToString();
+
+                    br.BaseStream.Position = 0x2D4188;
+                    txtResolution.Text = br.ReadUInt32().ToString();
 
                     br.BaseStream.Position = 0xEB83C0;
                     txtAutosave.Text = ((br.ReadDouble() / 60) / 1000).ToString();
@@ -314,7 +321,7 @@ namespace S6Patcher
         }
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbHighTextures.Checked)
+            if (cbHighTextures.Checked && globalIdentifier != execID.Editor)
             {
                 txtResolution.Enabled = true;
             }

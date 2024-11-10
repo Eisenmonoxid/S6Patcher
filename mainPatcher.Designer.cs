@@ -281,7 +281,6 @@
             this.txtResolution.Name = "txtResolution";
             this.txtResolution.Size = new System.Drawing.Size(158, 20);
             this.txtResolution.TabIndex = 13;
-            this.txtResolution.Text = "2048";
             // 
             // btnBackup
             // 
