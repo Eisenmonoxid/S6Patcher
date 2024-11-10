@@ -19,6 +19,8 @@ namespace S6Patcher
 
             InitializeComponent();
             InitializeControls();
+
+            this.Text = "S6Patcher - V" + Application.ProductVersion + " - Eisenmonoxid - \"https://github.com/Eisenmonoxid/S6Patcher\"";
         }
         private void InitializeControls()
         {
@@ -157,8 +159,9 @@ namespace S6Patcher
             {
                 Resolution = Convert.ToUInt32(txtResolution.Text);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -186,8 +189,9 @@ namespace S6Patcher
             {
                 autosaveTimer = Convert.ToDouble(txtAutosave.Text);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -214,8 +218,9 @@ namespace S6Patcher
                     zoomLevel = Convert.ToDouble(txtZoom.Text);
                     clutterFarDistance = Convert.ToSingle(txtZoom.Text);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -236,8 +241,9 @@ namespace S6Patcher
                 {
                     zoomLevel = Convert.ToSingle(txtZoom.Text);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 

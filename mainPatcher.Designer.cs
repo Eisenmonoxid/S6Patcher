@@ -312,7 +312,7 @@
             this.Name = "S6Patcher";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "S6Patcher - 2.1 - Eisenmonoxid";
+            this.Text = "-";
             this.TopMost = true;
             this.gbEditor.ResumeLayout(false);
             this.gbEditor.PerformLayout();

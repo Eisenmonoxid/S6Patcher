@@ -77,8 +77,9 @@ namespace S6Patcher
                 {
                     File.Copy(Filepath, FinalPath, false);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -116,7 +117,7 @@ namespace S6Patcher
                 }
                 else
                 {
-                    return false; 
+                    return false;
                 }
             }
             else
@@ -141,11 +142,12 @@ namespace S6Patcher
             {
                 File.Replace(FinalPath, filePath, null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-            
+
             return true;
         }
     }
