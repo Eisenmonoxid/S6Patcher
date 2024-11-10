@@ -20,9 +20,9 @@ namespace S6Patcher
                     {0x288ADF, new byte[] {0xE9, 0x1D, 0xD2, 0x26, 0x00, 0x90, 0x90, 0x90}}, // High entity resolution
                     {0x4F5D01, new byte[] {0xE8, 0x87, 0x3D, 0xD9, 0xFF, 0xC7, 0x46, 0x40, 0x00,
                         0x70, 0x9B, 0x3C, 0xE9, 0xD5, 0x2D, 0xD9, 0xFF, 0x90}}, // High entity resolution
-                    {0x2BE177, new byte[] {0x00, 0x08, 0x00, 0x00}}, // Ground texture resolution
-                    {0x2BE17E, new byte[] {0x00, 0x04, 0x00, 0x00}}, // Ground texture resolution
-                    {0x2BE185, new byte[] {0x00, 0x02, 0x00, 0x00}}, // Ground texture resolution
+                    // {0x2BE177, new byte[] {0x00, 0x08, 0x00, 0x00}}, // Ground texture resolution -> Can now be choosen freely!
+                    // {0x2BE17E, new byte[] {0x00, 0x04, 0x00, 0x00}}, // Ground texture resolution -> Can now be choosen freely!
+                    // {0x2BE185, new byte[] {0x00, 0x02, 0x00, 0x00}}, // Ground texture resolution -> Can now be choosen freely!
                 }
             });
             Entries.Add(new PatchEntry
@@ -50,16 +50,16 @@ namespace S6Patcher
                     {0x204B5D, new byte[] {0x01}}, // Set global DevMachine to 1
                 }
             });
-            Entries.Add(new PatchEntry
+            /*Entries.Add(new PatchEntry
             {
                 Name = "High - Resolution Textures",
                 AddressMapping = new Dictionary<long, byte[]>()
                 {
-                    {0x2D4188, new byte[] {0x00, 0x08, 0x00, 0x00}}, // Ground texture resolution
-                    {0x2D418F, new byte[] {0x00, 0x04, 0x00, 0x00}}, // Ground texture resolution
-                    {0x2D4196, new byte[] {0x00, 0x02, 0x00, 0x00}}, // Ground texture resolution
+                    {0x2D4188, new byte[] {0x00, 0x08, 0x00, 0x00}}, // Ground texture resolution -> Can now be choosen freely!
+                    {0x2D418F, new byte[] {0x00, 0x04, 0x00, 0x00}}, // Ground texture resolution -> Can now be choosen freely!
+                    {0x2D4196, new byte[] {0x00, 0x02, 0x00, 0x00}}, // Ground texture resolution -> Can now be choosen freely!
                 }
-            });
+            });*/
 
             return Entries;
         }

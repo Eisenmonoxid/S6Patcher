@@ -47,7 +47,7 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblTextureRes = new System.Windows.Forms.Label();
             this.txtResolution = new System.Windows.Forms.TextBox();
             this.btnBackup = new System.Windows.Forms.Button();
             this.gbEditor.SuspendLayout();
@@ -249,7 +249,7 @@
             // 
             // gbAll
             // 
-            this.gbAll.Controls.Add(this.label1);
+            this.gbAll.Controls.Add(this.lblTextureRes);
             this.gbAll.Controls.Add(this.txtResolution);
             this.gbAll.Controls.Add(this.cbHighTextures);
             this.gbAll.Controls.Add(this.cbLAAFlag);
@@ -264,25 +264,24 @@
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
             // 
-            // label1
+            // lblTextureRes
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(345, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(74, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Standard: 512";
+            this.lblTextureRes.AutoSize = true;
+            this.lblTextureRes.Location = new System.Drawing.Point(345, 22);
+            this.lblTextureRes.Name = "lblTextureRes";
+            this.lblTextureRes.Size = new System.Drawing.Size(74, 13);
+            this.lblTextureRes.TabIndex = 14;
+            this.lblTextureRes.Text = "Standard: 512";
             // 
             // txtResolution
             // 
             this.txtResolution.Enabled = false;
             this.txtResolution.Location = new System.Drawing.Point(181, 19);
-            this.txtResolution.MaxLength = 5;
+            this.txtResolution.MaxLength = 4;
             this.txtResolution.Name = "txtResolution";
             this.txtResolution.Size = new System.Drawing.Size(158, 20);
             this.txtResolution.TabIndex = 13;
             this.txtResolution.Text = "2048";
-            this.txtResolution.TextChanged += new System.EventHandler(this.txtResolution_TextChanged);
             // 
             // btnBackup
             // 
@@ -315,7 +314,7 @@
             this.Name = "S6Patcher";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "S6Patcher - 2.0 - Eisenmonoxid";
+            this.Text = "S6Patcher - 2.1 - Eisenmonoxid";
             this.TopMost = true;
             this.gbEditor.ResumeLayout(false);
             this.gbEditor.PerformLayout();
@@ -349,7 +348,7 @@
         private System.Windows.Forms.GroupBox gbHE;
         private System.Windows.Forms.GroupBox gbAll;
         private System.Windows.Forms.Button btnBackup;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblTextureRes;
         private System.Windows.Forms.TextBox txtResolution;
     }
 }

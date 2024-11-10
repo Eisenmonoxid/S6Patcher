@@ -32,6 +32,7 @@ namespace S6Patcher
                 cbZoom.Enabled = false;
                 lblZoomAngle.Enabled = false;
                 gbHE.Enabled = false;
+                txtResolution.Enabled = false;
             }
             else
             {
@@ -105,6 +106,10 @@ namespace S6Patcher
                     {
                         SetZoomLevel();
                     }
+                    if (cbHighTextures.Checked)
+                    {
+                        SetHighResolutionTextures();
+                    }
                     break;
                 case execID.HE:
                     mainPatcher(execID.HE, gbAll);
@@ -112,6 +117,10 @@ namespace S6Patcher
                     if (cbZoom.Checked)
                     {
                         SetZoomLevel();
+                    }
+                    if (cbHighTextures.Checked)
+                    {
+                        SetHighResolutionTextures();
                     }
                     if (cbAutosave.Checked)
                     {
@@ -132,6 +141,35 @@ namespace S6Patcher
             if (cbLAAFlag.Checked) 
             {
                 SetLargeAddressAwareFlag();
+            }
+        }
+        private void SetHighResolutionTextures()
+        {
+            uint Resolution;
+            try
+            {
+                Resolution = Convert.ToUInt32(txtResolution.Text);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            byte[] HighResolution = BitConverter.GetBytes(Resolution);
+            byte[] MediumResolution = BitConverter.GetBytes(Resolution / 2);
+            byte[] LowResolution = BitConverter.GetBytes(Resolution / 4);
+
+            if (globalIdentifier == execID.OV)
+            {
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2BE177, HighResolution);
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2BE17E, MediumResolution);
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2BE185, LowResolution);
+            }
+            else // HE
+            {
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2D4188, HighResolution);
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2D418F, MediumResolution);
+                PatchHelpers.WriteBytesToFile(ref execStream, 0x2D4196, LowResolution);
             }
         }
         private void SetAutosaveTimer()
@@ -317,11 +355,6 @@ namespace S6Patcher
 
             Close();
             Dispose();
-        }
-
-        private void txtResolution_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

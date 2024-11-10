@@ -104,6 +104,7 @@ namespace S6Patcher
             string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
             if (Version == ExpectedVersion)
             {
+                ApplyOffset = false;
                 return true;
             }
             else if (UseOffset == false && Identifier == execID.OV) // Try again with offset applied
@@ -115,7 +116,6 @@ namespace S6Patcher
                 }
                 else
                 {
-                    ApplyOffset = false;
                     return false; 
                 }
             }
