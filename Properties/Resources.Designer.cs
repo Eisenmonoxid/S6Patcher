@@ -119,7 +119,7 @@ namespace S6Patcher.Properties {
         ///- Can set the Large Address Aware Flag for more usable memory.
         ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game.
         ///- Can set the highest quality ground textures.
-        ///-&gt; Does NOT work with the History Edition from Steam!.
+        ///-&gt; History Editions from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
         /// </summary>
         internal static string btnPatchHE_EnglishText {
             get {
@@ -134,7 +134,7 @@ namespace S6Patcher.Properties {
         ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
         ///- Kann den Meldungsstau - Bug im Spiel fixen.
         ///- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
-        ///-&gt; Funktioniert NICHT in der History Edition von Steam!.
+        ///-&gt; History Editions von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; entpackt werden!.
         /// </summary>
         internal static string btnPatchHE_GermanText {
             get {
@@ -149,7 +149,7 @@ namespace S6Patcher.Properties {
         ///- Can activate the Development-Mode permanently without Registry-Key.
         ///- Can set the Large Address Aware Flag for more usable memory.
         ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game.
-        ///-&gt; Original versions from Steam will need to be extracted with Steamless first!.
+        ///-&gt; Original versions from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
         /// </summary>
         internal static string btnPatchOV_EnglishText {
             get {
@@ -164,7 +164,7 @@ namespace S6Patcher.Properties {
         ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
         ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
         ///- Kann den Meldungsstau - Bug im Spiel fixen.
-        ///-&gt; Originalversionen von Steam müssen zuerst mit Steamless entpackt werden!.
+        ///-&gt; Originalversionen von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; entpackt werden!.
         /// </summary>
         internal static string btnPatchOV_GermanText {
             get {

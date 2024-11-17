@@ -20,7 +20,7 @@ namespace S6Patcher
             InitializeComponent();
             InitializeControls();
 
-            this.Text = "S6Patcher - V" + Application.ProductVersion + " - Eisenmonoxid - \"https://github.com/Eisenmonoxid/S6Patcher\"";
+            this.Text = "S6Patcher - V" + Application.ProductVersion + " - \"https://github.com/Eisenmonoxid/S6Patcher\"";
         }
         private void InitializeControls()
         {
@@ -197,13 +197,13 @@ namespace S6Patcher
 
             if (autosaveTimer == (double)0)
             {
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0xEB});
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x1C6045 : 0x1C5F2A), new byte[] {0xEB});
                 return;
             }
 
             autosaveTimer = (autosaveTimer * 60000);
-            PatchHelpers.WriteBytesToFile(ref execStream, 0xEB83C0, BitConverter.GetBytes(autosaveTimer));
-            PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0x76});
+            PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0xEB95C0 : 0xEB83C0), BitConverter.GetBytes(autosaveTimer));
+            PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x1C6045 : 0x1C5F2A), new byte[] {0x76});
         }
         private void SetZoomLevel()
         {
@@ -234,7 +234,7 @@ namespace S6Patcher
                 PatchHelpers.WriteBytesToFile(ref execStream, 0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00});
             }
-            else
+            else // HE
             {
                 float zoomLevel;
                 try
@@ -247,15 +247,15 @@ namespace S6Patcher
                     return;
                 }
 
-                PatchHelpers.WriteBytesToFile(ref execStream, 0xC4EC4C, BitConverter.GetBytes(zoomLevel));
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x270311, new byte[] {0xC7, 0x45, 0xF0});
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x270314, BitConverter.GetBytes(zoomLevel + Offset));
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x270318, new byte[] {0xC7, 0x45, 0xF4});
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x27031B, BitConverter.GetBytes(TransitionFactor));
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x27031F, new byte[] {0x90});
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x270325, new byte[] {0x90, 0x90, 0x90});
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0xC4F9EC : 0xC4EC4C), BitConverter.GetBytes(zoomLevel));
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x270E73 : 0x270311), new byte[] {0xC7, 0x45, 0xF0});
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x270E76 : 0x270314), BitConverter.GetBytes(zoomLevel + Offset));
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x270E7A : 0x270318), new byte[] {0xC7, 0x45, 0xF4});
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x270E7D : 0x27031B), BitConverter.GetBytes(TransitionFactor));
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x270E81 : 0x27031F), new byte[] {0x90});
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x270E87 : 0x270325), new byte[] {0x90, 0x90, 0x90});
                 // Restriction -5000.0
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2532F7, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x2540B8 : 0x2532F7), new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90});
             }
         }

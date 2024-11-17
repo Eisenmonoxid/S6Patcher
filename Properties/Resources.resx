@@ -130,7 +130,7 @@
 - Can set the Large Address Aware Flag for more usable memory.
 - Can fix the "Meldungsstau" - Bug in the game.
 - Can set the highest quality ground textures.
--&gt; Does NOT work with the History Edition from Steam!</value>
+-&gt; History Editions from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
   <data name="btnPatchHE_GermanText" xml:space="preserve">
     <value>- Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
@@ -139,7 +139,7 @@
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 - Kann den Meldungsstau - Bug im Spiel fixen.
 - Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
--&gt; Funktioniert NICHT in der History Edition von Steam!</value>
+-&gt; History Editions von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
   <data name="btnPatchOV_EnglishText" xml:space="preserve">
     <value>- Can restore the texture slider in the main menu, so high textures can be choosen.
@@ -148,7 +148,7 @@
 - Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
 - Can fix the "Meldungsstau" - Bug in the game.
--&gt; Original versions from Steam will need to be extracted with Steamless first!</value>
+-&gt; Original versions from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
     <value>- Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
@@ -157,7 +157,7 @@
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
 - Kann den Meldungsstau - Bug im Spiel fixen.
--&gt; Originalversionen von Steam müssen zuerst mit Steamless entpackt werden!</value>
+-&gt; Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
   <data name="btnPatch_EnglishText" xml:space="preserve">
     <value>- High resolution textures for Buildings/Entities/Ground.

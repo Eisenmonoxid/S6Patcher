@@ -19,7 +19,7 @@ namespace S6Patcher
             InitializeComponent();
             SetTooltipSystemLanguage();
 
-            this.Text = "S6Patcher - V" + Application.ProductVersion + " - Eisenmonoxid - \"https://github.com/Eisenmonoxid/S6Patcher\"";
+            this.Text = "S6Patcher - V" + Application.ProductVersion + " - \"https://github.com/Eisenmonoxid/S6Patcher\"";
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
