@@ -58,14 +58,14 @@ namespace S6Patcher
                         gbHE.Controls[it].Enabled = true;
                     }
 
-                    br.BaseStream.Position = 0xC4EC4C;
+                    br.BaseStream.Position = (PatchHelpers.IsSteamHE) ? 0xC4F9EC : 0xC4EC4C;
                     txtZoom.Text = br.ReadSingle().ToString();
 
-                    br.BaseStream.Position = 0x2D4188;
+                    br.BaseStream.Position = (PatchHelpers.IsSteamHE) ? 0x2D4D74 : 0x2D4188;
                     txtResolution.Text = br.ReadUInt32().ToString();
 
-                    br.BaseStream.Position = 0xEB83C0;
-                    txtAutosave.Text = ((br.ReadDouble() / 60) / 1000).ToString();
+                    br.BaseStream.Position = (PatchHelpers.IsSteamHE) ? 0xEB95C0 : 0xEB83C0;
+                    txtAutosave.Text = (br.ReadDouble() / 60000).ToString();
 
                     gbHE.Enabled = true;
                     gbEditor.Enabled = false;
@@ -177,9 +177,9 @@ namespace S6Patcher
             }
             else // HE
             {
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2D4188, HighResolution);
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2D418F, MediumResolution);
-                PatchHelpers.WriteBytesToFile(ref execStream, 0x2D4196, LowResolution);
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x2D4D74 : 0x2D4188), HighResolution);
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x2D4D7B : 0x2D418F), MediumResolution);
+                PatchHelpers.WriteBytesToFile(ref execStream, ((PatchHelpers.IsSteamHE) ? 0x2D4D82 : 0x2D4196), LowResolution);
             }
         }
         private void SetAutosaveTimer()
@@ -201,7 +201,7 @@ namespace S6Patcher
                 return;
             }
 
-            autosaveTimer = (autosaveTimer * 1000 * 60);
+            autosaveTimer = (autosaveTimer * 60000);
             PatchHelpers.WriteBytesToFile(ref execStream, 0xEB83C0, BitConverter.GetBytes(autosaveTimer));
             PatchHelpers.WriteBytesToFile(ref execStream, 0x1C5F2A, new byte[] {0x76});
         }
