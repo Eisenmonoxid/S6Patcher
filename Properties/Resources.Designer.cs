@@ -193,12 +193,12 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Meldungsstaufix: Datei konnte nicht geschrieben werden!
-        ///Meldungsstaufix: File could not be written!.
+        ///   Looks up a localized string similar to Lua-Fixes: Datei konnte nicht geschrieben werden!
+        ///Lua-Fixes: File could not be written!.
         /// </summary>
-        internal static string ErrorMeldungsstauFix {
+        internal static string ErrorLuaScriptFixes {
             get {
-                return ResourceManager.GetString("ErrorMeldungsstauFix", resourceCulture);
+                return ResourceManager.GetString("ErrorLuaScriptFixes", resourceCulture);
             }
         }
         

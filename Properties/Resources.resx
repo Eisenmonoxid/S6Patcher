@@ -191,9 +191,9 @@ Error when creating Backup-File! Aborting ...</value>
     <value>Backup konnte nicht wiederhergestellt werden!
 Backup could not be restored!</value>
   </data>
-  <data name="ErrorMeldungsstauFix" xml:space="preserve">
-    <value>Meldungsstaufix: Datei konnte nicht geschrieben werden!
-Meldungsstaufix: File could not be written!</value>
+  <data name="ErrorLuaScriptFixes" xml:space="preserve">
+    <value>Lua-Fixes: Datei konnte nicht geschrieben werden!
+Lua-Fixes: File could not be written!</value>
   </data>
   <data name="ErrorNoFile" xml:space="preserve">
     <value>Keine Datei ausgewählt oder Datei existiert nicht!

@@ -46,7 +46,7 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
-            this.cbMeldungsstauFix = new System.Windows.Forms.CheckBox();
+            this.cbScriptBugFixes = new System.Windows.Forms.CheckBox();
             this.lblTextureRes = new System.Windows.Forms.Label();
             this.txtResolution = new System.Windows.Forms.TextBox();
             this.btnBackup = new System.Windows.Forms.Button();
@@ -237,7 +237,7 @@
             // 
             // gbAll
             // 
-            this.gbAll.Controls.Add(this.cbMeldungsstauFix);
+            this.gbAll.Controls.Add(this.cbScriptBugFixes);
             this.gbAll.Controls.Add(this.lblTextureRes);
             this.gbAll.Controls.Add(this.txtResolution);
             this.gbAll.Controls.Add(this.cbHighTextures);
@@ -253,15 +253,15 @@
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
             // 
-            // cbMeldungsstauFix
+            // cbScriptBugFixes
             // 
-            this.cbMeldungsstauFix.AutoSize = true;
-            this.cbMeldungsstauFix.Location = new System.Drawing.Point(5, 127);
-            this.cbMeldungsstauFix.Name = "cbMeldungsstauFix";
-            this.cbMeldungsstauFix.Size = new System.Drawing.Size(160, 17);
-            this.cbMeldungsstauFix.TabIndex = 15;
-            this.cbMeldungsstauFix.Text = "Activate \"Meldungsstau\"-Fix";
-            this.cbMeldungsstauFix.UseVisualStyleBackColor = true;
+            this.cbScriptBugFixes.AutoSize = true;
+            this.cbScriptBugFixes.Location = new System.Drawing.Point(5, 127);
+            this.cbScriptBugFixes.Name = "cbScriptBugFixes";
+            this.cbScriptBugFixes.Size = new System.Drawing.Size(168, 17);
+            this.cbScriptBugFixes.TabIndex = 15;
+            this.cbScriptBugFixes.Text = "Activate LUA - Script Bugfixes";
+            this.cbScriptBugFixes.UseVisualStyleBackColor = true;
             // 
             // lblTextureRes
             // 
@@ -347,6 +347,6 @@
         private System.Windows.Forms.Button btnBackup;
         private System.Windows.Forms.Label lblTextureRes;
         private System.Windows.Forms.TextBox txtResolution;
-        private System.Windows.Forms.CheckBox cbMeldungsstauFix;
+        private System.Windows.Forms.CheckBox cbScriptBugFixes;
     }
 }

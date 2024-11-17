@@ -143,13 +143,13 @@ namespace S6Patcher
                 default:
                     break;
             }
-            if (cbLAAFlag.Checked) 
+            if (cbLAAFlag.Checked)
             {
                 SetLargeAddressAwareFlag();
             }
-            if (cbMeldungsstauFix.Checked)
+            if (cbScriptBugFixes.Checked)
             {
-                SetMeldungsstauFix();
+                SetLuaScriptBugFixes();
             }
         }
         private void SetHighResolutionTextures()
@@ -283,7 +283,7 @@ namespace S6Patcher
                 PatchHelpers.WriteBytesToFile(ref execStream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
             }
         }
-        private void SetMeldungsstauFix()
+        private void SetLuaScriptBugFixes()
         {
             // <Documents>/Settlers/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
             // Maybe it is interesting for you to know that ;)
@@ -319,7 +319,7 @@ namespace S6Patcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Resources.ErrorMeldungsstauFix + "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.ErrorLuaScriptFixes + "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
