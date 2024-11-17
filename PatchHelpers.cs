@@ -7,10 +7,11 @@ namespace S6Patcher
 {
     internal class PatchHelpers
     {
-        public static bool ApplyOffset = false;
+        public static bool IsSteamOV = false;
+        public static bool IsSteamHE = false;
         public static void WriteBytesToFile(ref FileStream Stream, long position, byte[] replacementBytes)
         {
-            if (ApplyOffset == false)
+            if (IsSteamOV == false)
             {
                 Stream.Position = position;
             }
@@ -85,34 +86,39 @@ namespace S6Patcher
             }
             return true;
         }
-        public static bool CheckExecVersion(ref FileStream Reader, execID Identifier, bool UseOffset = false)
+        public static bool CheckExecVersion(ref FileStream Reader, execID Identifier, Int64 Offset = 0x0)
         {
             string ExpectedVersion = "1, 71, 4289, 0";
             UInt32[] Mapping = {0x6ECADC, 0xF531A4, 0x6D06A8};
             byte[] Result = new byte[30];
 
-            if (UseOffset == true)
-            {
-                Reader.Position = (Mapping[(char)Identifier] - 0x3F0000);
-            }
-            else
-            {
-                Reader.Position = Mapping[(char)Identifier];
-            }
-
+            Reader.Position = (Mapping[(char)Identifier] - Offset);
             Reader.Read(Result, 0, 30);
 
             string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
             if (Version == ExpectedVersion)
             {
-                ApplyOffset = false;
+                IsSteamOV = false;
+                IsSteamHE = false;
                 return true;
             }
-            else if (UseOffset == false && Identifier == execID.OV) // Try again with offset applied
+            else if (Offset == 0x0 && Identifier == execID.OV) // Try again with offset applied
             {
-                if (CheckExecVersion(ref Reader, Identifier, true) == true)
+                if (CheckExecVersion(ref Reader, Identifier, 0x3F0000) == true)
                 {
-                    ApplyOffset = true;
+                    IsSteamOV = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (Offset == 0x0 && Identifier == execID.HE) // Check for Steam HE
+            {
+                if (CheckExecVersion(ref Reader, Identifier, -0x1400) == true)
+                {
+                    IsSteamHE = true;
                     return true;
                 }
                 else
@@ -122,7 +128,7 @@ namespace S6Patcher
             }
             else
             {
-                MessageBox.Show("Erwartet/Expected: " + ExpectedVersion + "\nGelesen/Read: " + Version, "Error",
+                MessageBox.Show("Erwartet/Expected: " + ExpectedVersion + "\nGelesen/Read: " + Version.ToString(), "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
