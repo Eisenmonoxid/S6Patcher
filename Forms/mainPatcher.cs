@@ -106,7 +106,7 @@ namespace S6Patcher
             {
                 Patcher.SetZoomLevel(ID, ref Stream, txtZoom.Text);
             }
-            if (cbHighTextures.Checked)
+            if (cbHighTextures.Checked && ID != execID.Editor) // Editor has no custom texture resolution
             {
                 Patcher.SetHighResolutionTextures(ID, ref Stream, txtResolution.Text);
             }
