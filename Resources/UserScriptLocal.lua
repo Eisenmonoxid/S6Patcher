@@ -19,4 +19,37 @@ FeedbackSpeechEndTimeFixCustom = function()
 		end
     end
 end
+
+-- Fix "Build Walls from Fence Button"
+if S6Patcher.ContinueWallUpdate == nil then
+	S6Patcher.ContinueWallUpdate = GUI_BuildingButtons.ContinueWallUpdate;
+end
+GUI_BuildingButtons.ContinueWallUpdate = function()
+	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID()
+	local EntityType = Logic.GetEntityType(GUI.GetSelectedEntity());
+	if EntityType == Entities.B_FenceTurret then
+		XGUIEng.ShowWidget(CurrentWidgetID, 0);
+		return;
+	else
+		S6Patcher.ContinueWallUpdate();
+	end
+end
+
+-- Fix "B_Cathedral_Big"
+if S6Patcher.BuildingNameUpdate == nil then
+	S6Patcher.BuildingNameUpdate = GUI_BuildingInfo.BuildingNameUpdate;
+end
+GUI_BuildingInfo.BuildingNameUpdate = function()
+	S6Patcher.BuildingNameUpdate()
+
+	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID()
+	if XGUIEng.GetText(CurrentWidgetID) == "{center}B_Cathedral_Big" then
+		local Language = Network.GetDesiredLanguage()
+		if Language == "de" then
+			XGUIEng.SetText(CurrentWidgetID, "{center}Kathedrale");
+		elseif Language == "en" then
+			XGUIEng.SetText(CurrentWidgetID, "{center}Cathedral");
+		end
+	end
+end
 -- #EOF

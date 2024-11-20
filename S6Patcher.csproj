@@ -109,8 +109,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\LocalMainMapScript.lua" />
-    <None Include="Resources\UserScriptLocal.lua" />
+    <EmbeddedResource Include="Resources\UserScriptLocal.lua" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

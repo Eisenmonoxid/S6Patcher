@@ -10,7 +10,7 @@ namespace S6Patcher
     public partial class S6Patcher : Form
     {
         private FileStream execStream = null;
-        private execID globalIdentifier;
+        private readonly execID globalIdentifier;
 
         public S6Patcher(execID Identifier, ref FileStream Stream)
         {
