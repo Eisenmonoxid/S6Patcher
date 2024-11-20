@@ -39,32 +39,32 @@ namespace S6Patcher
         }
         private void StartPatching(execID ID)
         {
-            OpenFileDialog ofd = PatchHelpers.CreateOFDialog();
+            OpenFileDialog ofd = Helpers.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
             {
-                if (PatchHelpers.CreateBackup(ofd.FileName) == false)
+                if (Helpers.CreateBackup(ofd.FileName) == false)
                 {
                     MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                FileStream Reader = PatchHelpers.OpenFileStream(ofd.FileName, ID);
+                FileStream Reader = Helpers.OpenFileStream(ofd.FileName, ID);
                 if (Reader == null) {
                     MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                S6Patcher mainPatchingHandler = new S6Patcher(ID, ref Reader);
-                mainPatchingHandler.ShowDialog();
+                mainPatcher PatchHandler = new mainPatcher(ID, ref Reader);
+                PatchHandler.ShowDialog();
 
                 Reader.Close();
                 Reader.Dispose();
 
-                if (mainPatchingHandler.DialogResult == DialogResult.OK)
+                if (PatchHandler.DialogResult == DialogResult.OK)
                 {
                     MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else if (mainPatchingHandler.DialogResult == DialogResult.Cancel)
+                else if (PatchHandler.DialogResult == DialogResult.Cancel)
                 {
                     MessageBox.Show(Resources.ErrorBackupFail, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

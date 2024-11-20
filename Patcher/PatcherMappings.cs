@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 namespace S6Patcher
 {
-    internal class Mappings
+    internal partial class Patcher
     {
         private List<PatchEntry> Entries = new List<PatchEntry>();
-        public struct PatchEntry
+        private struct PatchEntry
         {
             public string Name;
             public Dictionary<long, byte[]> AddressMapping;
@@ -37,7 +37,7 @@ namespace S6Patcher
         private List<PatchEntry> GetHEMappings()
         {
             Entries.Clear();
-            if (!PatchHelpers.IsSteamHE)
+            if (!Helpers.IsSteamHE)
             {
                 Entries.Add(new PatchEntry
                 {
@@ -144,7 +144,7 @@ namespace S6Patcher
 
             return Entries;
         }
-        public List<PatchEntry> InitializeMappings(execID ID)
+        private List<PatchEntry> GetMappingsByExecID(execID ID)
         {
             if (ID == execID.OV)
             {
@@ -154,11 +154,10 @@ namespace S6Patcher
             {
                 return GetHEMappings();
             }
-            else if (ID == execID.Editor)
+            else
             {
                 return GetEDMappings();
             }
-            return null;
         }
     }
 }

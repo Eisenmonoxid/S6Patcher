@@ -1,6 +1,6 @@
 ﻿namespace S6Patcher
 {
-    partial class S6Patcher
+    partial class mainPatcher
     {
         /// <summary>
         /// Required designer variable.

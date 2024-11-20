@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace S6Patcher
 {
-    internal class PatchHelpers
+    internal class Helpers
     {
         public static bool IsSteamOV = false;
         public static bool IsSteamHE = false;
-        public static void WriteBytesToFile(ref FileStream Stream, long position, byte[] replacementBytes)
+        public static void WriteBytes(ref FileStream Stream, long position, byte[] replacementBytes)
         {
             if (IsSteamOV == false)
             {
@@ -29,7 +29,7 @@ namespace S6Patcher
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-        public static FileStream OpenFileStream(string filePath, execID Identifier)
+        public static FileStream OpenFileStream(string filePath, execID ID)
         {
             FileStream Stream;
             try
@@ -42,7 +42,7 @@ namespace S6Patcher
                 return null;
             }
 
-            if (CheckExecVersion(ref Stream, Identifier) == false)
+            if (CheckExecVersion(ref Stream, ID) == false)
             {
                 Stream.Close();
                 Stream.Dispose();
