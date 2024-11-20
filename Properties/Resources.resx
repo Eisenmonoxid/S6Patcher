@@ -128,7 +128,7 @@
 - Can disable the autosave or set an custom timer interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game.
+- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
 - Can set the highest quality ground textures.
 -&gt; History Editions from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
@@ -137,7 +137,7 @@
 - Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Kann den Meldungsstau - Bug im Spiel fixen.
+- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
 - Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
 -&gt; History Editions von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
@@ -147,7 +147,7 @@
 - Can set the maximum zoom level in the game.
 - Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game.
+- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
 -&gt; Original versions from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
@@ -156,7 +156,7 @@
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-- Kann den Meldungsstau - Bug im Spiel fixen.
+- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
 -&gt; Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
   <data name="btnPatch_EnglishText" xml:space="preserve">
@@ -169,6 +169,7 @@
 - Activates the Development-Mode without Registry-Key.
 - Enables walls and wall gates from all climate zones in all climate zones.
 - Can place, select and move all entity types (Careful, some may crash).
+- Can open map files that have been protected with the "S6Tools".
 - Can set the Large Address Aware Flag for more usable memory.</value>
   </data>
   <data name="btnPatch_GermanText" xml:space="preserve">
@@ -181,6 +182,7 @@
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
 - Alle Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
+- Kann Mapdateien öffnen, welche zuvor mit den "S6Tools" geschützt wurden.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.</value>
   </data>
   <data name="ErrorBackup" xml:space="preserve">

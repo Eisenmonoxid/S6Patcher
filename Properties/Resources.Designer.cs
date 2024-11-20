@@ -117,7 +117,7 @@ namespace S6Patcher.Properties {
         ///- Can disable the autosave or set an custom timer interval.
         ///- Can set the maximum zoom level in the game.
         ///- Can set the Large Address Aware Flag for more usable memory.
-        ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game.
+        ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game (and other bugs in the Lua-Script).
         ///- Can set the highest quality ground textures.
         ///-&gt; History Editions from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
         /// </summary>
@@ -132,9 +132,9 @@ namespace S6Patcher.Properties {
         ///- Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
         ///- Kann den maximalen Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-        ///- Kann den Meldungsstau - Bug im Spiel fixen.
+        ///- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
         ///- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
-        ///-&gt; History Editions von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; entpackt werden!.
+        ///-&gt; History Editions von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; en [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchHE_GermanText {
             get {
@@ -148,7 +148,7 @@ namespace S6Patcher.Properties {
         ///- Can set the maximum zoom level in the game.
         ///- Can activate the Development-Mode permanently without Registry-Key.
         ///- Can set the Large Address Aware Flag for more usable memory.
-        ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game.
+        ///- Can fix the &quot;Meldungsstau&quot; - Bug in the game (and other bugs in the Lua-Script).
         ///-&gt; Original versions from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
         /// </summary>
         internal static string btnPatchOV_EnglishText {
@@ -163,8 +163,8 @@ namespace S6Patcher.Properties {
         ///- Kann den maximalen Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
         ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-        ///- Kann den Meldungsstau - Bug im Spiel fixen.
-        ///-&gt; Originalversionen von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; entpackt werden!.
+        ///- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
+        ///-&gt; Originalversionen von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; entpackt wer [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchOV_GermanText {
             get {

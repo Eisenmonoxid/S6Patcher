@@ -159,8 +159,6 @@ namespace S6Patcher
         public void SetLuaScriptBugFixes()
         {
             // <Documents>/Settlers/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
-            // Maybe it is interesting for you to know that ;)
-
             string LocalScriptFile = "UserScriptLocal.lua";
             string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 

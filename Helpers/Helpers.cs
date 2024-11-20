@@ -7,34 +7,26 @@ namespace S6Patcher
 {
     internal class Helpers
     {
-        public static bool IsSteamOV = false;
+        public static bool IsSteamOV = false; // This does not actually refer to the OV from Steam
         public static bool IsSteamHE = false;
-        public static void WriteBytes(ref FileStream Stream, long position, byte[] replacementBytes)
+        public static void WriteBytes(ref FileStream Stream, long Position, byte[] Bytes)
         {
-            if (IsSteamOV == false)
-            {
-                Stream.Position = position;
-            }
-            else
-            {
-                Stream.Position = (position - 0x3F0000);
-            }
-            
+            Stream.Position = ((!IsSteamOV) ?  Position :  Position - 0x3F0000);
             try
             {
-                Stream.Write(replacementBytes, 0, replacementBytes.Length);
+                Stream.Write(Bytes, 0, Bytes.Length);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("WriteToFileStream:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-        public static FileStream OpenFileStream(string filePath, execID ID)
+        public static FileStream OpenFileStream(string Path, execID ID)
         {
             FileStream Stream;
             try
             {
-                Stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                Stream = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
             }
             catch (Exception ex)
             {

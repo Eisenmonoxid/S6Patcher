@@ -71,7 +71,7 @@ namespace S6Patcher
                 }
             }
         }
-        private Patcher getPatcherForControls(execID ID, ref FileStream Stream, List<GroupBox> Controls)
+        private Patcher GetPatcherForControls(execID ID, ref FileStream Stream, List<GroupBox> Controls)
         {
             List<string> CheckedFeatures = new List<string>();
             CheckBox curControl;
@@ -99,9 +99,9 @@ namespace S6Patcher
             Patcher Patcher = new Patcher(ID, ref Stream, ref CheckedFeatures);
             return Patcher;
         }
-        private void selectPatchVersion(execID ID, ref FileStream Stream)
+        private void SelectPatchVersion(execID ID, ref FileStream Stream)
         {
-            Patcher Patcher = getPatcherForControls(ID, ref Stream, new List<GroupBox> {gbAll, gbHE, gbEditor});
+            Patcher Patcher = GetPatcherForControls(ID, ref Stream, new List<GroupBox> {gbAll, gbHE, gbEditor});
             if (cbZoom.Checked)
             {
                 Patcher.SetZoomLevel(ID, ref Stream, txtZoom.Text);
@@ -158,7 +158,7 @@ namespace S6Patcher
         }
         private void btnPatch_Click(object sender, EventArgs e)
         {
-            selectPatchVersion(GlobalID, ref GlobalStream);
+            SelectPatchVersion(GlobalID, ref GlobalStream);
             DialogResult = DialogResult.OK;
 
             Close();

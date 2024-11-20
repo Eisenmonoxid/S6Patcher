@@ -130,7 +130,7 @@ namespace S6Patcher
                     {0xCC36, new byte[] {0x74, 0x7A}}, // Validate Map -> Lost Feature
                     {0x4C5A9, new byte[] {0xEB, 0x1C}}, // Remove lag when using windows in map editor (ThreadSleep 250 ms)
                     {0x2AE72, new byte[] {0xEB, 0x23}}, // Internal Window override
-                    {0x2199F3, new byte[] {0xEB}}, // Override XML parsing error, enables "Protected" maps to be loaded in the editor
+                    {0x2199F3, new byte[] {0xEB}}, // Override XML parsing error, enables "protected" maps to be loaded in the editor
                 }
             });
             Entries.Add(new PatchEntry
