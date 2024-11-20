@@ -10,7 +10,7 @@ namespace S6Patcher
     public partial class S6Patcher : Form
     {
         private FileStream execStream = null;
-        private readonly execID globalIdentifier;
+        private execID globalIdentifier;
 
         public S6Patcher(execID Identifier, ref FileStream Stream)
         {
@@ -287,40 +287,34 @@ namespace S6Patcher
         {
             // <Documents>/Settlers/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
             // Maybe it is interesting for you to know that ;)
-            string LocalScriptFilePath = "Script\\UserScriptLocal.lua";
+            string LocalScriptFile = "UserScriptLocal.lua";
             string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            bool FoundFolder = false;
+            List<string> Directories = new List<string>();
             foreach (string Element in Directory.GetDirectories(DocumentPath))
             {
                 if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 {
-                    DocumentPath = Path.Combine(DocumentPath, Element);
-                    FoundFolder = true;
-                    break;
+                    Directories.Add(Path.Combine(DocumentPath, Element));
                 }
             }
 
-            if (!FoundFolder)
-            {
-                return;
-            }
-
-            string FinalPath = Path.Combine(DocumentPath, LocalScriptFilePath);
             try
             {
-                string ScriptPath = Path.Combine(DocumentPath, "Script");
-                if (!Directory.Exists(ScriptPath))
+                string ScriptPath = String.Empty;
+                foreach (string Element in Directories)
                 {
-                    Directory.CreateDirectory(ScriptPath);
+                    ScriptPath = Path.Combine(Element, "Script");
+                    if (!Directory.Exists(ScriptPath))
+                    {
+                        Directory.CreateDirectory(ScriptPath);
+                    }
+                    File.WriteAllBytes(Path.Combine(ScriptPath, LocalScriptFile), Resources.UserScriptLocal);
                 }
-
-                File.WriteAllBytes(FinalPath, Resources.UserScriptLocal);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(Resources.ErrorLuaScriptFixes + "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
