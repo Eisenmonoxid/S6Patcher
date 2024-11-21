@@ -5,19 +5,21 @@ S6Patcher = S6Patcher or {}
 -- Fix "Meldungsstau"
 if (S6Patcher.g_FeedbackSpeechFix == nil) or (not Trigger.IsTriggerEnabled(S6Patcher.g_FeedbackSpeechFix)) then
 	S6Patcher.g_FeedbackSpeechFix = Trigger.RequestTrigger(Events.LOGIC_EVENT_EVERY_SECOND, "", "FeedbackSpeechEndTimeFixCustom", 1);
-	Framework.WriteToLog("S6Patcher: Meldungsstaufix is enabled!");
+	if Framework.WriteToLog ~= nil then
+		Framework.WriteToLog("S6Patcher: Meldungsstaufix is enabled!");
+	end
 end
 FeedbackSpeechEndTimeFixCustom = function()
 	local Time = Framework.GetTimeMs();
 	
-    if (g_FeedbackSpeech ~= nil) and (g_FeedbackSpeech.LastSpeechEndTime ~= nil) and ((Time + 6000) < g_FeedbackSpeech.LastSpeechEndTime) then
-        g_FeedbackSpeech.LastSpeechEndTime = nil;
-        XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomRight/MapFrame/FeedbackSpeechText", 0);
-		
-		if Framework ~= nil and Framework.WriteToLog ~= nil then
+	if (g_FeedbackSpeech ~= nil) and (g_FeedbackSpeech.LastSpeechEndTime ~= nil) and ((Time + 6000) < g_FeedbackSpeech.LastSpeechEndTime) then
+		g_FeedbackSpeech.LastSpeechEndTime = nil;
+		XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomRight/MapFrame/FeedbackSpeechText", 0);
+	
+		if Framework.WriteToLog ~= nil then
 			Framework.WriteToLog("S6Patcher: Caught Meldungsstau at " .. tostring(Time));
 		end
-    end
+	end
 end
 
 -- Fix "Build Walls from Fence Button"
@@ -42,13 +44,13 @@ end
 GUI_BuildingInfo.BuildingNameUpdate = function()
 	S6Patcher.BuildingNameUpdate()
 
-	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID()
-	if XGUIEng.GetText(CurrentWidgetID) == "{center}B_Cathedral_Big" then
-		local Language = Network.GetDesiredLanguage()
+	local WidgetID = XGUIEng.GetCurrentWidgetID();
+	if XGUIEng.GetText(WidgetID) == "{center}B_Cathedral_Big" then
+		local Language = Network.GetDesiredLanguage();
 		if Language == "de" then
-			XGUIEng.SetText(CurrentWidgetID, "{center}Kathedrale");
+			XGUIEng.SetText(WidgetID, "{center}Kathedrale");
 		elseif Language == "en" then
-			XGUIEng.SetText(CurrentWidgetID, "{center}Cathedral");
+			XGUIEng.SetText(WidgetID, "{center}Cathedral");
 		end
 	end
 end

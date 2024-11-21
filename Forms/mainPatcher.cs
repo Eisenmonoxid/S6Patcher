@@ -18,7 +18,7 @@ namespace S6Patcher
             GlobalStream = Stream;
             GlobalID = ID;
 
-            this.Text = "S6Patcher - V" + Application.ProductVersion + " - \"https://github.com/Eisenmonoxid/S6Patcher\"";
+            this.Text = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"https://github.com/Eisenmonoxid/S6Patcher\"";
         }
         private void InitializeControls(execID ID, ref FileStream Stream)
         {

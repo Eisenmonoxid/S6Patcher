@@ -6,52 +6,52 @@
 ## Features
 
 ### Patch Original Game
-- Für die Originalversion (OV) mit neuestem Patch 1.7.1.
-- For the original game (OV) with newest Patch 1.7.1.
+- Für die Originalversion (OV) mit neuestem Patch 1.71.
+- For the original game (OV) with newest Patch 1.71.
 
 German:
 ```
 - Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
-- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
-- Kann das maximale Zoomlevel setzen.
+- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
+- Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-- Kann den Meldungsstau - Bug im Spiel fixen.
--> Originalversionen von Steam müssen zuerst mit Steamless entpackt werden!
+- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
+-> Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!
 ```
 English:
 ```
 - Can restore the texture slider in the main menu, so high textures can be choosen.
-- Can enable highest quality ground textures or set a custom value.
+- Can enable highest quality ground textures.
 - Can set the maximum zoom level in the game.
 - Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game.
--> Original versions from Steam will need to be extracted with Steamless first!
+- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
+-> Original versions from Steam will need to be extracted with the tool "Steamless" first!
 ```
 ### Patch History Edition
-- Für die History Edition von Ubisoft Connect, funktioniert nicht mit der von Steam.
-- For the History Edition from Ubisoft Connect, does not work with the one from Steam.
+- Für die History Edition von Ubisoft Connect und Steam.
+- For the History Edition from Ubisoft Connect and Steam.
 
 German:
 ```
 - Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
 - Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
-- Kann das maximale Zoomlevel setzen.
+- Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Kann den Meldungsstau - Bug im Spiel fixen.
-- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
--> Funktioniert NICHT in der History Edition von Steam!
+- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
+- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
+-> History Editions von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!
 ```
 English:
 ```
 - Can activate the Development-Mode (Necessary for the LuaDebugger to work).
-- Can disable the autosave or set an custom interval.
+- Can disable the autosave or set an custom timer interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game.
-- Can enable highest quality ground textures or set a custom value.
--> Does NOT work with the History Edition from Steam!
+- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
+- Can set the highest quality ground textures.
+-> History Editions from Steam will need to be extracted with the tool "Steamless" first!
 ```
 ### Patch Editor (OV and HE)
 - Für alle Editoren, egal ob OV oder die beiden History Editions (Ubisoft Connect und Steam).
@@ -68,6 +68,7 @@ German:
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
 - Alle Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
+- Kann Mapdateien öffnen, welche zuvor mit den "S6Tools" geschützt wurden.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 ```
 English:
@@ -81,5 +82,6 @@ English:
 - Activates the Development-Mode without Registry-Key.
 - Enables walls and wall gates from all climate zones in all climate zones.
 - Can place, select and move all entity types (Careful, some may crash).
+- Can open map files that have been protected with the "S6Tools".
 - Can set the Large Address Aware Flag for more usable memory.
 ```
