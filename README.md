@@ -12,8 +12,8 @@
 German:
 ```
 - Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
-- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
-- Kann den maximalen Zoomlevel setzen.
+- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
+- Kann das maximale Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
 - Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
@@ -22,7 +22,7 @@ German:
 English:
 ```
 - Can restore the texture slider in the main menu, so high textures can be choosen.
-- Can enable highest quality ground textures.
+- Can enable highest quality ground textures or set a custom value.
 - Can set the maximum zoom level in the game.
 - Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
@@ -37,10 +37,10 @@ German:
 ```
 - Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
 - Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
-- Kann den maximalen Zoomlevel setzen.
+- Kann das maximale Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 - Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
-- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
+- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
 -> History Editions von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!
 ```
 English:
@@ -50,7 +50,7 @@ English:
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
 - Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
-- Can set the highest quality ground textures.
+- Can enable highest quality ground textures or set a custom value.
 -> History Editions from Steam will need to be extracted with the tool "Steamless" first!
 ```
 ### Patch Editor (OV and HE)
