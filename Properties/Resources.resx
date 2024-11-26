@@ -128,7 +128,7 @@
 - Can disable the autosave or set an custom timer interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
+- Can fix Bugs in Script&amp;Code (e.g. "Meldungsstau", "Entertainercrash").
 - Can set the highest quality ground textures.
 -&gt; History Editions from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
@@ -137,7 +137,7 @@
 - Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
+- Kann Script&amp;Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash").
 - Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
 -&gt; History Editions von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
@@ -147,7 +147,7 @@
 - Can set the maximum zoom level in the game.
 - Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
+- Can fix Bugs in Script&amp;Code (e.g. "Meldungsstau", "Entertainercrash").
 -&gt; Original versions from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
@@ -156,7 +156,7 @@
 - Kann den maximalen Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
+- Kann Script&amp;Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash").
 -&gt; Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
   <data name="btnPatch_EnglishText" xml:space="preserve">

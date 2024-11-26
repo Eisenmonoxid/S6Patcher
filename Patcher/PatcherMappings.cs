@@ -31,6 +31,14 @@ namespace S6Patcher
                     {0xBE11, new byte[] {0x66, 0x90}}, // Enable Development-Mode without command line argument -DevM
                 }
             });
+            Entries.Add(new PatchEntry
+            {
+                Name = "Activate Script and Code Bugfixes",
+                AddressMapping = new Dictionary<long, byte[]>()
+                {
+                    {0x1B5E36, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
+                }
+            });
 
             return Entries;
         }
@@ -43,11 +51,19 @@ namespace S6Patcher
                 {
                     Name = "Activate Development-Mode Permanently",
                     AddressMapping = new Dictionary<long, byte[]>()
+                    {
+                        {0x1E0837, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
+                        {0x204B57, new byte[] {0xC6, 0x05}}, // Set global DevMachine to 1
+                        {0x204B5D, new byte[] {0x01}}, // Set global DevMachine to 1
+                    }
+                });
+                Entries.Add(new PatchEntry
                 {
-                    {0x1E0837, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
-                    {0x204B57, new byte[] {0xC6, 0x05}}, // Set global DevMachine to 1
-                    {0x204B5D, new byte[] {0x01}}, // Set global DevMachine to 1
-                }
+                    Name = "Activate Script and Code Bugfixes",
+                    AddressMapping = new Dictionary<long, byte[]>()
+                    {
+                        {0x33C533, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
+                    }
                 });
             }
             else
@@ -56,11 +72,19 @@ namespace S6Patcher
                 {
                     Name = "Activate Development-Mode Permanently",
                     AddressMapping = new Dictionary<long, byte[]>()
+                    {
+                        {0x1E0C94, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
+                        {0x205250, new byte[] {0xC6, 0x05}}, // Set global DevMachine to 1
+                        {0x205256, new byte[] {0x01}}, // Set global DevMachine to 1
+                    }
+                });
+                Entries.Add(new PatchEntry
                 {
-                    {0x1E0C94, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
-                    {0x205250, new byte[] {0xC6, 0x05}}, // Set global DevMachine to 1
-                    {0x205256, new byte[] {0x01}}, // Set global DevMachine to 1
-                }
+                    Name = "Activate Script and Code Bugfixes",
+                    AddressMapping = new Dictionary<long, byte[]>()
+                    {
+                        {0x33D6D7, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
+                    }
                 });
             }
 

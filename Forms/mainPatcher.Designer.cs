@@ -258,9 +258,9 @@
             this.cbScriptBugFixes.AutoSize = true;
             this.cbScriptBugFixes.Location = new System.Drawing.Point(5, 127);
             this.cbScriptBugFixes.Name = "cbScriptBugFixes";
-            this.cbScriptBugFixes.Size = new System.Drawing.Size(168, 17);
+            this.cbScriptBugFixes.Size = new System.Drawing.Size(163, 17);
             this.cbScriptBugFixes.TabIndex = 15;
-            this.cbScriptBugFixes.Text = "Activate LUA - Script Bugfixes";
+            this.cbScriptBugFixes.Text = "Activate Script and Code Bugfixes";
             this.cbScriptBugFixes.UseVisualStyleBackColor = true;
             // 
             // lblTextureRes
@@ -291,7 +291,7 @@
             this.btnBackup.UseVisualStyleBackColor = true;
             this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
             // 
-            // S6Patcher
+            // mainPatcher
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
@@ -309,7 +309,7 @@
             this.MaximumSize = new System.Drawing.Size(487, 548);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(487, 548);
-            this.Name = "S6Patcher";
+            this.Name = "mainPatcher";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "-";
