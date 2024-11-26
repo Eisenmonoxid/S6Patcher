@@ -99,11 +99,11 @@ namespace S6Patcher
                 }
 
                 Helpers.WriteBytes(ref Stream, 0x545400, BitConverter.GetBytes(zoomLevel));
-                Helpers.WriteBytes(ref Stream, 0x2B334E, new byte[] { 0xC7, 0x45, 0x64 });
+                Helpers.WriteBytes(ref Stream, 0x2B334E, new byte[] {0xC7, 0x45, 0x64});
                 Helpers.WriteBytes(ref Stream, 0x2B3351, BitConverter.GetBytes(clutterFarDistance + Offset));
-                Helpers.WriteBytes(ref Stream, 0x2B3355, new byte[] { 0xC7, 0x45, 0x6C });
+                Helpers.WriteBytes(ref Stream, 0x2B3355, new byte[] {0xC7, 0x45, 0x6C});
                 Helpers.WriteBytes(ref Stream, 0x2B3358, BitConverter.GetBytes(TransitionFactor));
-                Helpers.WriteBytes(ref Stream, 0x2B335C, new byte[] { 0x90, 0x90 });
+                Helpers.WriteBytes(ref Stream, 0x2B335C, new byte[] {0x90, 0x90});
                 Helpers.WriteBytes(ref Stream, 0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00}); // Restriction -5000.0
             }
@@ -121,12 +121,12 @@ namespace S6Patcher
                 }
 
                 Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0xC4F9EC : 0xC4EC4C), BitConverter.GetBytes(zoomLevel));
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E73 : 0x270311), new byte[] { 0xC7, 0x45, 0xF0 });
+                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E73 : 0x270311), new byte[] {0xC7, 0x45, 0xF0});
                 Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E76 : 0x270314), BitConverter.GetBytes(zoomLevel + Offset));
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E7A : 0x270318), new byte[] { 0xC7, 0x45, 0xF4 });
+                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E7A : 0x270318), new byte[] {0xC7, 0x45, 0xF4});
                 Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E7D : 0x27031B), BitConverter.GetBytes(TransitionFactor));
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E81 : 0x27031F), new byte[] { 0x90 });
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E87 : 0x270325), new byte[] { 0x90, 0x90, 0x90 });
+                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E81 : 0x27031F), new byte[] {0x90});
+                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E87 : 0x270325), new byte[] {0x90, 0x90, 0x90});
                 Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x2540B8 : 0x2532F7), new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}); // Restriction -5000.0
             }
