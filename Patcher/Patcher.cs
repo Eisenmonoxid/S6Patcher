@@ -158,18 +158,8 @@ namespace S6Patcher
         }
         public void SetLuaScriptBugFixes()
         {
-            // <Documents>/Settlers/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
             string LocalScriptFile = "UserScriptLocal.lua";
-            string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            List<string> Directories = new List<string>();
-            foreach (string Element in Directory.GetDirectories(DocumentPath))
-            {
-                if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
-                {
-                    Directories.Add(Path.Combine(DocumentPath, Element));
-                }
-            }
+            List<string> Directories = Helpers.GetUserScriptDirectories();
 
             try
             {

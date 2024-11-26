@@ -7,7 +7,7 @@
 
 ### Patch Original Game
 - Für die Originalversion (OV) mit neuestem Patch 1.71.
-- For the original game (OV) with newest Patch 1.71.
+- For the original game (OV) with latest Patch 1.71.
 
 German:
 ```
@@ -16,7 +16,7 @@ German:
 - Kann das maximale Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
+- Kann Script&Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash").
 -> Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!
 ```
 English:
@@ -26,12 +26,12 @@ English:
 - Can set the maximum zoom level in the game.
 - Can activate the Development-Mode permanently without Registry-Key.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
+- Can fix Bugs in Script&Code (e.g. "Meldungsstau", "Entertainercrash").
 -> Original versions from Steam will need to be extracted with the tool "Steamless" first!
 ```
 ### Patch History Edition
-- Für die History Edition von Ubisoft Connect und Steam.
-- For the History Edition from Ubisoft Connect and Steam.
+- Für alle History Editions.
+- For all History Editions.
 
 German:
 ```
@@ -39,7 +39,7 @@ German:
 - Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
 - Kann das maximale Zoomlevel setzen.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Kann den Meldungsstau - Bug im Spiel fixen (und andere Bugs im Lua-Script).
+- Kann Script&Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash").
 - Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
 -> History Editions von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!
 ```
@@ -49,13 +49,13 @@ English:
 - Can disable the autosave or set an custom timer interval.
 - Can set the maximum zoom level in the game.
 - Can set the Large Address Aware Flag for more usable memory.
-- Can fix the "Meldungsstau" - Bug in the game (and other bugs in the Lua-Script).
+- Can fix Bugs in Script&Code (e.g. "Meldungsstau", "Entertainercrash").
 - Can enable highest quality ground textures or set a custom value.
 -> History Editions from Steam will need to be extracted with the tool "Steamless" first!
 ```
 ### Patch Editor (OV and HE)
-- Für alle Editoren, egal ob OV oder die beiden History Editions (Ubisoft Connect und Steam).
-- For every Editor version, no matter if from the original game or from one of the History Editions.
+- Für alle Editoren.
+- For all Editors.
 
 German:
 ```

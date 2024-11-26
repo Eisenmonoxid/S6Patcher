@@ -1,5 +1,8 @@
-﻿using System;
+﻿using S6Patcher.Properties;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -125,8 +128,49 @@ namespace S6Patcher
                 return false;
             }
         }
+        public static List<string> GetUserScriptDirectories()
+        {
+            // <Documents>/Settlers/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
+            string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            List<string> Directories = new List<string>();
+            foreach (string Element in Directory.GetDirectories(DocumentPath))
+            {
+                if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
+                {
+                    Directories.Add(Path.Combine(DocumentPath, Element));
+                }
+            }
+
+            return Directories;
+        }
+        public static void RestoreUserScriptFiles()
+        {
+            string LocalScriptFile = "UserScriptLocal.lua";
+            List<string> Directories = GetUserScriptDirectories();
+
+            string ScriptPath = String.Empty;
+            foreach (string Element in Directories)
+            {
+                ScriptPath = Path.Combine(Element, "Script");
+                if (!Directory.Exists(ScriptPath))
+                {
+                    continue;
+                }
+                try
+                {
+                    File.Delete(Path.Combine(ScriptPath, LocalScriptFile));
+                }
+                catch (Exception) // Errors here do not matter
+                {
+                    continue;
+                }
+            }
+        }
         public static bool RestoreBackup(string filePath)
         {
+            RestoreUserScriptFiles(); // Delete Userscript from Folders
+
             string FileName = Path.GetFileNameWithoutExtension(filePath);
             string DirectoryPath = Path.GetDirectoryName(filePath);
             string FinalPath = Path.Combine(DirectoryPath, FileName + "_BACKUP.exe");
