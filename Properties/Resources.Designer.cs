@@ -82,12 +82,11 @@ namespace S6Patcher.Properties {
         ///   Looks up a localized string similar to - High resolution textures for Buildings/Entities/Ground.
         ///- Unlimited scaling of the entity size.
         ///- Free placing and moving of entities, walls and wall gates.
-        ///- Higher entity limit.
-        ///- Move more entities at the same time (100 -&gt; 1055).
+        ///- Higher general entity limit and move more entities at the same time (100 -&gt; 1055).
         ///- Black map border area can be used and is not deleted at map save.
         ///- Activates the Development-Mode without Registry-Key.
         ///- Enables walls and wall gates from all climate zones in all climate zones.
-        ///- Can place, select and move all entity types (Careful, some may crash [rest of string was truncated]&quot;;.
+        ///- Can place, select and move all entity types (Careful, some m [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_EnglishText {
             get {
@@ -99,12 +98,11 @@ namespace S6Patcher.Properties {
         ///   Looks up a localized string similar to - Hohe Texturen für Gebäude/Entitäten/Boden.
         ///- Unbegrenztes Skalieren der Größe von Entitäten.
         ///- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren.
-        ///- Erhöhen des Entitätenlimits.
-        ///- Mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
+        ///- Erhöhen des allgemeinen Entitätenlimits und mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
         ///- Kartenrand wird beim Speichervorgang nicht gelöscht.
         ///- Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
         ///- Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
-        ///- Alle Entitäten können platziert, selektiert und ve [rest of string was truncated]&quot;;.
+        ///- Alle Entitäten können platziert, selek [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_GermanText {
             get {

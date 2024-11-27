@@ -71,12 +71,14 @@ namespace S6Patcher
             if (autosaveTimer == (double)0)
             {
                 Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x1C6045 : 0x1C5F2A), new byte[] {0xEB});
-                return;
+            }
+            else
+            {
+                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x1C6045 : 0x1C5F2A), new byte[] {0x76});
             }
 
             autosaveTimer = (autosaveTimer * 60000);
-            Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0xEB95C0 : 0xEB83C0), BitConverter.GetBytes(autosaveTimer));
-            Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x1C6045 : 0x1C5F2A), new byte[] {0x76});
+            Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0xEB95C0 : 0xEB83C0), BitConverter.GetBytes(autosaveTimer));     
         }
         public void SetZoomLevel(execID ID, ref FileStream Stream, string ZoomText)
         {

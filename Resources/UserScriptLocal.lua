@@ -27,10 +27,9 @@ if S6Patcher.ContinueWallUpdate == nil then
 	S6Patcher.ContinueWallUpdate = GUI_BuildingButtons.ContinueWallUpdate;
 end
 GUI_BuildingButtons.ContinueWallUpdate = function()
-	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID()
 	local EntityType = Logic.GetEntityType(GUI.GetSelectedEntity());
 	if EntityType == Entities.B_FenceTurret then
-		XGUIEng.ShowWidget(CurrentWidgetID, 0);
+		XGUIEng.ShowWidget(XGUIEng.GetCurrentWidgetID(), 0);
 		return;
 	else
 		S6Patcher.ContinueWallUpdate();
