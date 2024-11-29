@@ -208,6 +208,9 @@ Invalid executable has been choosen! Aborting ...</value>
 Finished successfully!</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="MainMenuUserScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MainMenuUserScript.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="UserScriptLocal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\UserScriptLocal.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
