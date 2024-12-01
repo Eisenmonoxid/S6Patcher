@@ -130,8 +130,8 @@ namespace S6Patcher
         {
             // <Documents>/Settlers/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
             string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
             List<string> Directories = new List<string>();
+
             foreach (string Element in Directory.GetDirectories(DocumentPath))
             {
                 if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
@@ -142,7 +142,7 @@ namespace S6Patcher
 
             return Directories;
         }
-        public static void RestoreUserScriptFiles()
+        public static void RemoveUserScriptFiles()
         {
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = GetUserScriptDirectories();
@@ -168,7 +168,7 @@ namespace S6Patcher
         }
         public static bool RestoreBackup(string filePath)
         {
-            RestoreUserScriptFiles(); // Delete Userscript from Folders
+            RemoveUserScriptFiles(); // Delete Userscript from Folders
 
             string FileName = Path.GetFileNameWithoutExtension(filePath);
             string DirectoryPath = Path.GetDirectoryName(filePath);
