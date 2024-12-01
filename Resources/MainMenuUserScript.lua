@@ -2,30 +2,13 @@
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {}
 
-CustomGame.KnightTypes = { -- Use all knights in Extra1
-    "U_KnightSaraya",
-    "U_KnightTrading",
-    "U_KnightChivalry",
-    "U_KnightWisdom",
-	"U_KnightHealing",
-	"U_KnightPlunder",
-	"U_KnightSong",
-};
-g_MapAndHeroPreview.KnightTypes = CustomGame.KnightTypes
-MPDefaultKnightNames = CustomGame.KnightTypes
-
-RemapKnightID = function(_ID)
-    --local Mapping = {[0] = 0, [1] = 1, [2] = 2, [3] = 3, [4] = 4};
-    return _ID;
-end
-
 if S6Patcher.g_MainMenu_UpdateBackground == nil then
 	S6Patcher.g_MainMenu_UpdateBackground = g_MainMenu.UpdateBackground;
 end
 g_MainMenu.UpdateBackground = function()
 	S6Patcher.g_MainMenu_UpdateBackground();
 
-	XGUIEng.SetMaterialTexture( "/InGame/Background/BG", 0, "MainMenu/limitedBG.png")
+	XGUIEng.SetMaterialTexture("/InGame/Background/BG", 0, "MainMenu/limitedBG.png")
 	XGUIEng.ShowWidget("/InGame/Background/Bars/Limited", 0)
 	XGUIEng.ShowWidget("/InGame/Background/Bars/BottomBarLimited", 0)
 	XGUIEng.ShowWidget("/InGame/Background/Bars/BottomBar", 1)
@@ -36,7 +19,7 @@ if S6Patcher.GetProgramVersion == nil then
 end
 Framework.GetProgramVersion = function()
 	local String = S6Patcher.GetProgramVersion();
-	return String .. " - S6Patcher v2.3";
+	return String .. " - S6Patcher v2.4";
 end
 
 g_VideoOptions.InitResolutions = function()
@@ -64,9 +47,8 @@ g_VideoOptions.InitResolutions = function()
 		ReturnState, Name = DisplayOptions.GetResolutionNames(Index)
 	end
 
-	if Network.IsNATReady == nil then -- OV
+	if Network.IsNATReady == nil then
 		local AdditionalResolutions = {tostring(2560 .. " x " .. 1440 .. " (" .. 32 .." bit)"), tostring(3840 .. " x " .. 2160 .. " (" .. 32 .." bit)")};
-		-- Push two higher resolutions
 		XGUIEng.ListBoxPushItem(ResolutionListBoxID, AdditionalResolutions[1]);
 		XGUIEng.ListBoxPushItem(ResolutionListBoxID, AdditionalResolutions[2]);
 		

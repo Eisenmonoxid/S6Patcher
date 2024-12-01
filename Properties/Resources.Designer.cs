@@ -171,6 +171,16 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] EMXBinData {
+            get {
+                object obj = ResourceManager.GetObject("EMXBinData", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fehler beim Erstellen der Backup-Datei! Abbrechen ...
         ///Error when creating Backup-File! Aborting ....
         /// </summary>

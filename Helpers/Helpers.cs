@@ -146,7 +146,7 @@ namespace S6Patcher
         }
         public static void RestoreUserScriptFiles()
         {
-            string LocalScriptFile = "UserScriptLocal.lua";
+            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = GetUserScriptDirectories();
 
             string ScriptPath = String.Empty;
@@ -159,7 +159,8 @@ namespace S6Patcher
                 }
                 try
                 {
-                    File.Delete(Path.Combine(ScriptPath, LocalScriptFile));
+                    File.Delete(Path.Combine(ScriptPath, ScriptFiles[0]));
+                    File.Delete(Path.Combine(ScriptPath, ScriptFiles[1]));
                 }
                 catch (Exception) // Errors here do not matter
                 {

@@ -160,7 +160,7 @@ namespace S6Patcher
         }
         public void SetLuaScriptBugFixes()
         {
-            string LocalScriptFile = "UserScriptLocal.lua";
+            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.GetUserScriptDirectories();
 
             try
@@ -173,7 +173,9 @@ namespace S6Patcher
                     {
                         Directory.CreateDirectory(ScriptPath);
                     }
-                    File.WriteAllBytes(Path.Combine(ScriptPath, LocalScriptFile), Resources.UserScriptLocal);
+
+                    File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[0]), Resources.UserScriptLocal);
+                    File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[1]), Resources.EMXBinData);
                 }
             }
             catch (Exception ex)
