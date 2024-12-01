@@ -137,7 +137,6 @@ namespace S6Patcher
         {
             // Partially adapted from:
             // https://stackoverflow.com/questions/9054469/how-to-check-if-exe-is-set-as-largeaddressaware
-
             const int IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
             BinaryReader br = new BinaryReader(Stream);
 

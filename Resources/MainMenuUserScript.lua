@@ -38,10 +38,10 @@ g_VideoOptions.InitResolutions = function()
 	IndexOfCurrentResolution = 0
 
 	while ReturnState == 1 do
-        if Name == CurrentResolutionName then
-            IndexOfCurrentResolution = Index;
-        end
-		
+		if Name == CurrentResolutionName then
+			IndexOfCurrentResolution = Index;
+		end
+
 		Index = Index + 1
 		XGUIEng.ListBoxPushItem(ResolutionListBoxID, Name)
 		ReturnState, Name = DisplayOptions.GetResolutionNames(Index)
@@ -64,22 +64,22 @@ g_VideoOptions.InitResolutions = function()
 end
 
 g_GameOptions.OnShow = function()
-    if Game ~= nil then
-        XGUIEng.ShowWidget("/InGame/GameOptionsMain/Backdrop", 1);
-    else
-        XGUIEng.ShowWidget("/InGame/GameOptionsMain/Backdrop", 0);
-    end
+	if Game ~= nil then
+		XGUIEng.ShowWidget("/InGame/GameOptionsMain/Backdrop", 1);
+	else
+		XGUIEng.ShowWidget("/InGame/GameOptionsMain/Backdrop", 0);
+	end
     
-    g_MainMenuOptions:ShowHelper();
-    -- Border scrolling
-    do
-        local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox")                     
-        if (Camera.RTS_GetBorderScrollSize() > 0) then
-            XGUIEng.CheckBoxSetIsChecked(WidgetID, true)
-        else
-            XGUIEng.CheckBoxSetIsChecked(WidgetID, false)
-        end
-    end
+	g_MainMenuOptions:ShowHelper();
+	-- Border scrolling
+	do
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox")                     
+		if (Camera.RTS_GetBorderScrollSize() > 0) then
+			XGUIEng.CheckBoxSetIsChecked(WidgetID, true)
+		else
+			XGUIEng.CheckBoxSetIsChecked(WidgetID, false)
+		end
+	end
 	-- Mouse scroll speed
 	do
 		local Value = Options.GetFloatValue("Game", "ZoomSpeed", Camera.RTS_GetZoomWheelSpeed());
@@ -97,7 +97,7 @@ g_GameOptions.OnShow = function()
 		XGUIEng.SliderSetValueAbs(WidgetID, Value / 100)
 	end
 
-    g_GameOptions.HasChanged = false;
-    g_GameOptions.RefreshLeftContainer();
+	g_GameOptions.HasChanged = false;
+	g_GameOptions.RefreshLeftContainer();
 end
 -- #EOF
