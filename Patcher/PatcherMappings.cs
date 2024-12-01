@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 namespace S6Patcher
 {
     internal partial class Patcher
@@ -37,6 +38,8 @@ namespace S6Patcher
                 AddressMapping = new Dictionary<long, byte[]>()
                 {
                     {0x1B5E36, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
+                    {0x4FD5A9, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
+                    {0x4FD5BD, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                 }
             });
 
@@ -63,6 +66,8 @@ namespace S6Patcher
                     AddressMapping = new Dictionary<long, byte[]>()
                     {
                         {0x33C533, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
+                        {0xC3E661, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
+                        {0xC3E675, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                     }
                 });
             }
@@ -84,6 +89,8 @@ namespace S6Patcher
                     AddressMapping = new Dictionary<long, byte[]>()
                     {
                         {0x33D6D7, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
+                        {0xC3F081, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
+                        {0xC3F095, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                     }
                 });
             }
