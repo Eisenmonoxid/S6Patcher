@@ -11,7 +11,7 @@ namespace S6Patcher
     internal class Helpers
     {
         public static bool IsSteamOV = false; // This does not actually refer to the OV from Steam
-        public static bool IsSteamHE = false; // This does
+        public static bool IsSteamHE = false; // This however, does
         public static void WriteBytes(ref FileStream Stream, long Position, byte[] Bytes)
         {
             Stream.Position = ((!IsSteamOV) ?  Position :  Position - 0x3F0000);
