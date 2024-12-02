@@ -122,9 +122,9 @@
             this.cbAllEntities.Enabled = false;
             this.cbAllEntities.Location = new System.Drawing.Point(6, 99);
             this.cbAllEntities.Name = "cbAllEntities";
-            this.cbAllEntities.Size = new System.Drawing.Size(145, 17);
+            this.cbAllEntities.Size = new System.Drawing.Size(210, 17);
             this.cbAllEntities.TabIndex = 6;
-            this.cbAllEntities.Text = "Show All Entities in Editor";
+            this.cbAllEntities.Text = "Show All Entities and Textures in Editor";
             this.cbAllEntities.UseVisualStyleBackColor = true;
             // 
             // txtAutosave
@@ -258,7 +258,7 @@
             this.cbScriptBugFixes.AutoSize = true;
             this.cbScriptBugFixes.Location = new System.Drawing.Point(5, 127);
             this.cbScriptBugFixes.Name = "cbScriptBugFixes";
-            this.cbScriptBugFixes.Size = new System.Drawing.Size(163, 17);
+            this.cbScriptBugFixes.Size = new System.Drawing.Size(187, 17);
             this.cbScriptBugFixes.TabIndex = 15;
             this.cbScriptBugFixes.Text = "Activate Script and Code Bugfixes";
             this.cbScriptBugFixes.UseVisualStyleBackColor = true;

@@ -166,11 +166,13 @@ namespace S6Patcher
             });
             Entries.Add(new PatchEntry
             {
-                Name = "Show All Entities in Editor",
+                Name = "Show All Entities and Textures in Editor",
                 AddressMapping = new Dictionary<long, byte[]>()
                 {
                     {0x20615, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Entities in editor placement window
                     {0x20629, new byte[] {0xEB, 0x10}}, // Show all Entities in editor placement window
+                    {0x24EEE, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Textures in the texture placement window
+                    {0x24F05, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Textures in the texture placement window
                 }
             });
 
