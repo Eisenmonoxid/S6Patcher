@@ -19,7 +19,7 @@ if S6Patcher.GetProgramVersion == nil then
 end
 Framework.GetProgramVersion = function()
 	local String = S6Patcher.GetProgramVersion();
-	return String .. " - S6Patcher v2.4";
+	return String .. " - S6Patcher v2.5";
 end
 
 g_VideoOptions.InitResolutions = function()
@@ -73,7 +73,7 @@ g_GameOptions.OnShow = function()
 	g_MainMenuOptions:ShowHelper();
 	-- Border scrolling
 	do
-		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox")                     
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox");   
 		if (Camera.RTS_GetBorderScrollSize() > 0) then
 			XGUIEng.CheckBoxSetIsChecked(WidgetID, true)
 		else
@@ -98,6 +98,81 @@ g_GameOptions.OnShow = function()
 	end
 
 	g_GameOptions.HasChanged = false;
-	g_GameOptions.RefreshLeftContainer();
+	g_GameOptions.RefreshLeftContainer();	
+	S6Patcher.ExtendedGameOptions();
+end
+
+g_GameOptions.OnBack = function()
+	XGUIEng.ShowWidget("/InGame/TempStuff/StandardDialog/DemoCheckBox", 0);
+	XGUIEng.PopPage();
+end
+
+S6Patcher.GameOptionsRestoreDefaults = g_GameOptions.RestoreDefaults;
+g_GameOptions.RestoreDefaults = function()
+	S6Patcher.GameOptionsRestoreDefaults();
+	XGUIEng.CheckBoxSetIsChecked("/InGame/TempStuff/StandardDialog/DemoCheckBox/CheckBox", false);
+end
+
+g_GameOptions.OnOK = function()
+	do
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/TempStuff/StandardDialog/DemoCheckBox/CheckBox");    
+		if (XGUIEng.CheckBoxIsChecked(WidgetID) == true) then
+			Options.SetIntValue("Display", "Windowed", 1);
+		else
+			Options.SetIntValue("Display", "Windowed", 0);
+		end
+	end
+	do
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox");
+		if (XGUIEng.CheckBoxIsChecked(WidgetID) == true) then
+			Camera.RTS_SetBorderScrollSize(g_DefaultBorderScrollSize);
+		else        
+			Camera.RTS_SetBorderScrollSize(0);
+		end      
+		Options.SetFloatValue("Game", "BorderScrolling", Camera.RTS_GetBorderScrollSize());
+	end
+	do
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/KeyboardScrollSlider");
+		Camera.RTS_SetZoomWheelSpeed(XGUIEng.SliderGetValueAbs(WidgetID));
+		Options.SetFloatValue("Game", "ZoomSpeed", Camera.RTS_GetZoomWheelSpeed());  
+	end        
+	do
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/MouseScrollSlider");    
+		Camera.RTS_SetScrollSpeed(XGUIEng.SliderGetValueAbs(WidgetID) * 100);
+		Options.SetFloatValue("Game", "ScrollSpeed", Camera.RTS_GetScrollSpeed());
+	end
+
+	g_MainMenuOptions:HideHelper();
+	g_GameOptions:Back();
+end
+
+S6Patcher.ExtendedGameOptions = function()
+	local RootPath = "/InGame/TempStuff/StandardDialog/DemoCheckBox";
+	local Width, Height = XGUIEng.GetWidgetScreenSize("/InGame/Background/WholeScreen");
+	local posX, posY = XGUIEng.GetWidgetScreenPosition("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox");
+	local Text = S6Patcher.GetLocalizedText({de = "Fenstermodus", en = "Windowed"});
+	
+	XGUIEng.SetWidgetScreenPosition(RootPath, posX, posY - ((Height/1080) * 50));
+	XGUIEng.SetText(RootPath .. "/TextCheckbox", Text);
+	XGUIEng.SetActionFunction(RootPath .. "/CheckBox", "Sound.FXPlay2DSound('ui\\menu_click');g_GameOptions:OnChange()");
+
+	XGUIEng.ShowWidget(RootPath, 1);
+	XGUIEng.PushPage(RootPath, false);
+	
+	local Windowed = Options.GetIntValue("Display", "Windowed", 0);
+	if (Windowed == 1) then
+		XGUIEng.CheckBoxSetIsChecked(RootPath .. "/CheckBox", true)
+	else
+		XGUIEng.CheckBoxSetIsChecked(RootPath .. "/CheckBox", false)
+	end
+end
+
+S6Patcher.GetLocalizedText = function(_text)
+	local Language = Network.GetDesiredLanguage();
+	if Language == "de" then
+		return _text.de;
+	else
+		return _text.en;
+	end
 end
 -- #EOF
