@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using static S6Patcher.Helpers;
 
 namespace S6Patcher
 {
@@ -22,7 +23,7 @@ namespace S6Patcher
         }
         private void InitializeControls(execID ID, ref FileStream Stream)
         {
-            if (ID == execID.Editor)
+            if (ID == execID.ED)
             {
                 for (ushort it = 0; it != gbEditor.Controls.Count; it++)
                 {
@@ -106,7 +107,7 @@ namespace S6Patcher
             {
                 Patcher.SetZoomLevel(ID, ref Stream, txtZoom.Text);
             }
-            if (cbHighTextures.Checked && ID != execID.Editor) // Editor has no custom texture resolution
+            if (cbHighTextures.Checked && ID != execID.ED) // Editor has no custom texture resolution
             {
                 Patcher.SetHighResolutionTextures(ID, ref Stream, txtResolution.Text);
             }
@@ -147,7 +148,7 @@ namespace S6Patcher
         }
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbHighTextures.Checked && GlobalID != execID.Editor)
+            if (cbHighTextures.Checked && GlobalID != execID.ED)
             {
                 txtResolution.Enabled = true;
             }

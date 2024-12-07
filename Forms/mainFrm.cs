@@ -3,15 +3,10 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using static S6Patcher.Helpers;
 
 namespace S6Patcher
 {
-    public enum execID
-    {
-        OV = 0,
-        HE = 1,
-        Editor = 2,
-    }
     public partial class mainFrm : Form
     {
         public mainFrm()
@@ -27,7 +22,7 @@ namespace S6Patcher
         }
         private void btnPatch_Click(object sender, EventArgs e)
         {
-            StartPatching(execID.Editor);
+            StartPatching(execID.ED);
         }
         private void btnPatchHE_Click(object sender, EventArgs e)
         {
