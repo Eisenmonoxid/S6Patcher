@@ -42,7 +42,7 @@
             this.btnPatch.Size = new System.Drawing.Size(120, 72);
             this.btnPatch.TabIndex = 0;
             this.btnPatch.TabStop = false;
-            this.btnPatch.Text = "Patch Editor (OV and HE)";
+            this.btnPatch.Text = "Patch Mapeditor";
             this.btnPatch.UseVisualStyleBackColor = true;
             this.btnPatch.Click += new System.EventHandler(this.btnPatch_Click);
             // 
@@ -78,7 +78,7 @@
             this.btnPatchOV.Size = new System.Drawing.Size(124, 73);
             this.btnPatchOV.TabIndex = 0;
             this.btnPatchOV.TabStop = false;
-            this.btnPatchOV.Text = "Patch Original Game";
+            this.btnPatchOV.Text = "Patch Original Release";
             this.btnPatchOV.UseVisualStyleBackColor = true;
             this.btnPatchOV.Click += new System.EventHandler(this.btnPatchOV_Click);
             // 

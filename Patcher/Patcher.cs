@@ -160,6 +160,7 @@ namespace S6Patcher
         }
         public void SetLuaScriptBugFixes()
         {
+            // EMXBinData.s6patcher is the minified and compiled main menu script
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.GetUserScriptDirectories();
 

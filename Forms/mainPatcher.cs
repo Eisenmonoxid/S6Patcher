@@ -8,9 +8,8 @@ namespace S6Patcher
 {
     public partial class mainPatcher : Form
     {
-        private FileStream GlobalStream = null;
-        private execID GlobalID;
-
+        private FileStream GlobalStream;
+        private readonly execID GlobalID;
         public mainPatcher(execID ID, ref FileStream Stream)
         {
             InitializeComponent();
