@@ -61,6 +61,16 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vorgang wurde abgebrochen ...
+        ///Process was aborted ....
+        /// </summary>
+        internal static string AbortedMessage {
+            get {
+                return ResourceManager.GetString("AbortedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes:.
         /// </summary>
         internal static string btnEnglishTitle {
@@ -227,6 +237,16 @@ namespace S6Patcher.Properties {
         internal static string ErrorWrongVersion {
             get {
                 return ResourceManager.GetString("ErrorWrongVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup wurde erfolgreich wiederhergestellt!
+        ///Backup has been successfully restored!.
+        /// </summary>
+        internal static string FinishedBackup {
+            get {
+                return ResourceManager.GetString("FinishedBackup", resourceCulture);
             }
         }
         

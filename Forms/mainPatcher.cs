@@ -159,14 +159,14 @@ namespace S6Patcher
         private void btnPatch_Click(object sender, EventArgs e)
         {
             SelectPatchVersion(GlobalID, ref GlobalStream);
-            DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK; // Patching successfull
 
             Close();
             Dispose();
         }
         private void btnAbort_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Abort;
+            DialogResult = DialogResult.Abort; // Abort
 
             Close();
             Dispose();
@@ -180,11 +180,11 @@ namespace S6Patcher
             bool Result = Helpers.RestoreBackup(Path);
             if (Result == false)
             {
-                DialogResult = DialogResult.Cancel;
+                DialogResult = DialogResult.Cancel; // Backup failed
             }
             else
             {
-                DialogResult = DialogResult.Abort;
+                DialogResult = DialogResult.Retry; // Backup successfull
             }
 
             Close();

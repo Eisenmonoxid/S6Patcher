@@ -43,26 +43,22 @@ namespace S6Patcher
                     return;
                 }
 
-                FileStream Reader = Helpers.OpenFileStream(ofd.FileName, ID);
-                if (Reader == null) {
+                FileStream Stream = Helpers.OpenFileStream(ofd.FileName, ID);
+                if (Stream == null) {
                     MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                mainPatcher PatchHandler = new mainPatcher(ID, ref Reader);
+                mainPatcher PatchHandler = new mainPatcher(ID, ref Stream);
                 PatchHandler.ShowDialog();
 
-                Reader.Close();
-                Reader.Dispose();
+                if (Stream.CanRead == true) // Was Stream already closed?
+                {
+                    Stream.Close();
+                    Stream.Dispose();
+                }
 
-                if (PatchHandler.DialogResult == DialogResult.OK)
-                {
-                    MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else if (PatchHandler.DialogResult == DialogResult.Cancel)
-                {
-                    MessageBox.Show(Resources.ErrorBackupFail, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                HandlePatcherReturnValue(PatchHandler.DialogResult);
             }
             else
             {
@@ -70,6 +66,25 @@ namespace S6Patcher
             }
 
             ofd.Dispose();
+        }
+        private void HandlePatcherReturnValue(DialogResult Result)
+        {
+            if (Result == DialogResult.OK)
+            {
+                MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (Result == DialogResult.Cancel)
+            {
+                MessageBox.Show(Resources.ErrorBackupFail, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (Result == DialogResult.Retry)
+            {
+                MessageBox.Show(Resources.FinishedBackup, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (Result == DialogResult.Abort)
+            {
+                MessageBox.Show(Resources.AbortedMessage, "Abort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
         private void SetTooltipSystemLanguage()
         {

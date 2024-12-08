@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AbortedMessage" xml:space="preserve">
+    <value>Vorgang wurde abgebrochen ...
+Process was aborted ...</value>
+  </data>
   <data name="btnEnglishTitle" xml:space="preserve">
     <value>Changes:</value>
   </data>
@@ -168,6 +172,7 @@
 - Activates the Development-Mode without Registry-Key.
 - Enables walls and wall gates from all climate zones in all climate zones.
 - Can place, select and move all entity types (Careful, some may crash).
+- Can apply all texture types from all climate zones (and some hidden too).
 - Can open map files that have been protected with the "S6Tools".
 - Can set the Large Address Aware Flag for more usable memory.</value>
   </data>
@@ -180,6 +185,7 @@
 - Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
 - Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
 - Alle Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
+- Alle Texturtypen von allen Klimazonen können aufgetragen werden (Auch einige Versteckte).
 - Kann Mapdateien öffnen, welche zuvor mit den "S6Tools" geschützt wurden.
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.</value>
   </data>
@@ -206,6 +212,10 @@ No file chosen or file does not exist!</value>
   <data name="ErrorWrongVersion" xml:space="preserve">
     <value>Ungültige Ausführungsdatei gewählt! Abbrechen ...
 Invalid executable has been choosen! Aborting ...</value>
+  </data>
+  <data name="FinishedBackup" xml:space="preserve">
+    <value>Backup wurde erfolgreich wiederhergestellt!
+Backup has been successfully restored!</value>
   </data>
   <data name="FinishedSuccess" xml:space="preserve">
     <value>Vorgang Erfolgreich!
