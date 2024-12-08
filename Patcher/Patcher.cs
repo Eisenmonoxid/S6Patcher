@@ -161,7 +161,7 @@ namespace S6Patcher
         public void SetLuaScriptBugFixes()
         {
             // EMXBinData.s6patcher is the minified and compiled main menu script
-            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
+            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher", "UserScriptGlobal.lua"};
             List<string> Directories = Helpers.GetUserScriptDirectories();
 
             try
@@ -177,6 +177,7 @@ namespace S6Patcher
 
                     File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[0]), Resources.UserScriptLocal);
                     File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[1]), Resources.EMXBinData);
+                    File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[2]), Resources.UserScriptGlobal);
                 }
             }
             catch (Exception ex)

@@ -113,6 +113,7 @@
     <EmbeddedResource Include="Resources\UserScriptLocal.lua" />
     <EmbeddedResource Include="Resources\EMXBinData.s6patcher" />
     <EmbeddedResource Include="Resources\MainMenuUserScript.lua" />
+    <EmbeddedResource Include="Resources\UserScriptGlobal.lua" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

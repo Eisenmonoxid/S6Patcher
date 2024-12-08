@@ -273,6 +273,16 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] UserScriptGlobal {
+            get {
+                object obj = ResourceManager.GetObject("UserScriptGlobal", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] UserScriptLocal {
             get {
                 object obj = ResourceManager.GetObject("UserScriptLocal", resourceCulture);
