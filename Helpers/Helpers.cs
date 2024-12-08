@@ -146,7 +146,7 @@ namespace S6Patcher
         }
         public static void RemoveUserScriptFiles()
         {
-            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher", "UserScriptGlobal.lua"};
+            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = GetUserScriptDirectories();
 
             string ScriptPath = String.Empty;

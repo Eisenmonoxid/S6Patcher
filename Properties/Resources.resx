@@ -224,9 +224,6 @@ Finished successfully!</value>
   <data name="MainMenuUserScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MainMenuUserScript.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="UserScriptGlobal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UserScriptGlobal.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="UserScriptLocal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\UserScriptLocal.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
