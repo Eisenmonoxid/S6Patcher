@@ -96,7 +96,7 @@ namespace S6Patcher.Properties {
         ///- Black map border area can be used and is not deleted at map save.
         ///- Activates the Development-Mode without Registry-Key.
         ///- Enables walls and wall gates from all climate zones in all climate zones.
-        ///- Can place, select and move all entity types (Careful, some m [rest of string was truncated]&quot;;.
+        ///- Can place, select and move all possible entity types (Carefu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_EnglishText {
             get {
@@ -109,10 +109,10 @@ namespace S6Patcher.Properties {
         ///- Unbegrenztes Skalieren der Größe von Entitäten.
         ///- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren.
         ///- Erhöhen des allgemeinen Entitätenlimits und mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
-        ///- Kartenrand wird beim Speichervorgang nicht gelöscht.
+        ///- Schwarzer Kartenrand wird beim Speichervorgang nicht gelöscht und kann verwendet werden.
         ///- Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
         ///- Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
-        ///- Alle Entitäten können platziert, selek [rest of string was truncated]&quot;;.
+        ///- Al [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatch_GermanText {
             get {
@@ -126,8 +126,9 @@ namespace S6Patcher.Properties {
         ///- Can set the maximum zoom level in the game.
         ///- Can set the Large Address Aware Flag for more usable memory.
         ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
+        ///- Can enable all base game knights in the &quot;Eastern Realm&quot; expansion pack.
         ///- Can set the highest quality ground textures.
-        ///-&gt; History Editions from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
+        ///-&gt; History Editions from Steam will need to be extracted with the [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchHE_EnglishText {
             get {
@@ -137,12 +138,12 @@ namespace S6Patcher.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to - Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
-        ///- Kann den Autosave deaktivieren oder einen benutzerdefinierten Intervall setzen.
-        ///- Kann den maximalen Zoomlevel setzen.
+        ///- Kann den Autosave deaktivieren oder ein benutzerdefiniertes Intervall setzen.
+        ///- Kann das maximale Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
         ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
-        ///- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
-        ///-&gt; History Editions von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; entpack [rest of string was truncated]&quot;;.
+        ///- Kann die Auswahl aller Grundspielritter im &quot;Reich des Ostens&quot; - Addon ermöglichen.
+        ///- Kann Bodentexturen auf die höchste Qualitätsstufe se [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchHE_GermanText {
             get {
@@ -157,7 +158,8 @@ namespace S6Patcher.Properties {
         ///- Can activate the Development-Mode permanently without Registry-Key.
         ///- Can set the Large Address Aware Flag for more usable memory.
         ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Resolution&quot;).
-        ///-&gt; Original releases from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
+        ///- Can enable all base game knights in the &quot;Eastern Realm&quot; expansion pack.
+        ///-&gt; Original releases from [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchOV_EnglishText {
             get {
@@ -168,11 +170,11 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to - Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
         ///- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
-        ///- Kann den maximalen Zoomlevel setzen.
+        ///- Kann das maximale Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
         ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
         ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Auflösung&quot;).
-        ///-&gt; Originalversionen von Steam müssen zuerst mit dem Tool &quot;Steam [rest of string was truncated]&quot;;.
+        ///- Kann die Auswahl aller Grundspielritter im &quot;Reich des Ostens&quot; - [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchOV_GermanText {
             get {
