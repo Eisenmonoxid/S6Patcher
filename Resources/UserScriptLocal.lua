@@ -62,6 +62,10 @@ end
 S6Patcher.GlobalScriptOverridden = false;
 S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
 S6Patcher.OverrideGlobalScript = function()
+	if S6Patcher.SelectedKnight == nil then
+		return;
+	end
+
 	local Knight = Entities[S6Patcher.DefaultKnightNames[S6Patcher.SelectedKnight]];
 	Framework.SetOnGameStartLuaCommand(""); -- free memory
 	

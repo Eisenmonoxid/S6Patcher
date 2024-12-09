@@ -37,7 +37,7 @@ namespace S6Patcher
             OpenFileDialog ofd = Helpers.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
             {
-                if (Helpers.CreateBackup(ofd.FileName) == false)
+                if (Backup.Instance.CreateBackup(ofd.FileName) == false)
                 {
                     MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;

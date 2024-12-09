@@ -61,26 +61,6 @@ namespace S6Patcher
 
             return ofd;
         }
-        public static bool CreateBackup(string Filepath)
-        {
-            string FileName = Path.GetFileNameWithoutExtension(Filepath);
-            string DirectoryPath = Path.GetDirectoryName(Filepath);
-            string FinalPath = Path.Combine(DirectoryPath, FileName + "_BACKUP.exe");
-
-            if (File.Exists(FinalPath) == false)
-            {
-                try
-                {
-                    File.Copy(Filepath, FinalPath, false);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
-                }
-            }
-            return true;
-        }
         public static bool CheckExecVersion(ref FileStream Reader, execID Identifier, Int64 Offset = 0x0)
         {
             string ExpectedVersion = "1, 71, 4289, 0";
@@ -143,57 +123,6 @@ namespace S6Patcher
             }
 
             return Directories;
-        }
-        public static void RemoveUserScriptFiles()
-        {
-            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
-            List<string> Directories = GetUserScriptDirectories();
-
-            string ScriptPath = String.Empty;
-            foreach (string Element in Directories)
-            {
-                ScriptPath = Path.Combine(Element, "Script");
-                if (!Directory.Exists(ScriptPath))
-                {
-                    continue;
-                }
-                try
-                {
-                    foreach (string Entry in ScriptFiles)
-                    {
-                        File.Delete(Path.Combine(ScriptPath, Entry));
-                    }
-                }
-                catch (Exception) // Errors here do not matter
-                {
-                    continue;
-                }
-            }
-        }
-        public static bool RestoreBackup(string filePath)
-        {
-            RemoveUserScriptFiles(); // Delete Userscript from Folders
-
-            string FileName = Path.GetFileNameWithoutExtension(filePath);
-            string DirectoryPath = Path.GetDirectoryName(filePath);
-            string FinalPath = Path.Combine(DirectoryPath, FileName + "_BACKUP.exe");
-
-            if (File.Exists(FinalPath) == false)
-            {
-                return false;
-            }
-
-            try
-            {
-                File.Replace(FinalPath, filePath, null);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            return true;
         }
     }
 }

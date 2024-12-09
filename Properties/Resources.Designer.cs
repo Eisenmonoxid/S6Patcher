@@ -156,8 +156,8 @@ namespace S6Patcher.Properties {
         ///- Can set the maximum zoom level in the game.
         ///- Can activate the Development-Mode permanently without Registry-Key.
         ///- Can set the Large Address Aware Flag for more usable memory.
-        ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
-        ///-&gt; Original versions from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
+        ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Resolution&quot;).
+        ///-&gt; Original releases from Steam will need to be extracted with the tool &quot;Steamless&quot; first!.
         /// </summary>
         internal static string btnPatchOV_EnglishText {
             get {
@@ -171,8 +171,8 @@ namespace S6Patcher.Properties {
         ///- Kann den maximalen Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
         ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-        ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
-        ///-&gt; Originalversionen von Steam müssen zuerst mit dem Tool &quot;Steamless&quot; entpackt werden!.
+        ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Auflösung&quot;).
+        ///-&gt; Originalversionen von Steam müssen zuerst mit dem Tool &quot;Steam [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchOV_GermanText {
             get {

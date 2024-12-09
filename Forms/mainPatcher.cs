@@ -159,32 +159,26 @@ namespace S6Patcher
         private void btnPatch_Click(object sender, EventArgs e)
         {
             SelectPatchVersion(GlobalID, ref GlobalStream);
-            DialogResult = DialogResult.OK; // Patching successfull
-
+            DialogResult = DialogResult.OK; // Patching successful
             Close();
             Dispose();
         }
         private void btnAbort_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Abort; // Abort
-
             Close();
             Dispose();
         }
         private void btnBackup_Click(object sender, EventArgs e)
         {
-            string Path = GlobalStream.Name;
-            GlobalStream.Close();
-            GlobalStream.Dispose();
-
-            bool Result = Helpers.RestoreBackup(Path);
+            bool Result = Backup.Instance.RestoreBackup(ref GlobalStream);
             if (Result == false)
             {
                 DialogResult = DialogResult.Cancel; // Backup failed
             }
             else
             {
-                DialogResult = DialogResult.Retry; // Backup successfull
+                DialogResult = DialogResult.Retry; // Backup successful
             }
 
             Close();
