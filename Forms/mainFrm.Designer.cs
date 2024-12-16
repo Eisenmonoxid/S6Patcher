@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainFrm));
             this.btnPatch = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnPatchHE = new System.Windows.Forms.Button();
@@ -88,19 +89,18 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.PapayaWhip;
             this.ClientSize = new System.Drawing.Size(612, 97);
-            this.ControlBox = false;
             this.Controls.Add(this.btnPatchOV);
             this.Controls.Add(this.btnPatchHE);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnPatch);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(628, 136);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(628, 136);
             this.Name = "mainFrm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "-";
             this.TopMost = true;

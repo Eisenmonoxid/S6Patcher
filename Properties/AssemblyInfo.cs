@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("S6Patcher")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Eisenmonoxid")]
-[assembly: AssemblyProduct("https://github.com/Eisenmonoxid/S6Patcher")]
+[assembly: AssemblyProduct("github.com/Eisenmonoxid/S6Patcher")]
 [assembly: AssemblyCopyright("Eisenmonoxid")]
 [assembly: AssemblyTrademark("S6Patcher")]
 [assembly: AssemblyCulture("")]

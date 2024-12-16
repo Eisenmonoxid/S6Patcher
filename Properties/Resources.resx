@@ -217,6 +217,9 @@ No file chosen or file does not exist!</value>
     <value>Ungültige Ausführungsdatei gewählt! Abbrechen ...
 Invalid executable has been choosen! Aborting ...</value>
   </data>
+  <data name="favicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="FinishedBackup" xml:space="preserve">
     <value>Backup wurde erfolgreich wiederhergestellt!
 Backup has been successfully restored!</value>
