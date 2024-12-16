@@ -61,12 +61,9 @@ end
 S6Patcher.GlobalScriptOverridden = false;
 S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
 S6Patcher.OverrideGlobalScript = function()
-	Framework.SetOnGameStartLuaCommand(""); -- free memory
-	if S6Patcher.SelectedKnight == nil then
-		return;
-	end
-
+	Framework.SetOnGameStartLuaCommand("return;"); -- free memory
 	local Knight = Entities[S6Patcher.DefaultKnightNames[S6Patcher.SelectedKnight]];
+
 	GUI.SendScriptCommand([[
 		S6Patcher = S6Patcher or {}
 		S6Patcher.UpdateKnight = function()
@@ -98,9 +95,28 @@ S6Patcher.OverrideGlobalScript = function()
 		Logic.ExecuteInLuaLocalState('LocalSetKnightPicture();');
 	]]);
 end
-if (Framework.GetGameExtraNo() >= 1) and (not Framework.IsNetworkGame()) and (not S6Patcher.GlobalScriptOverridden) then
-	S6Patcher.OverrideGlobalScript();
 
+S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
+	local Name = Framework.GetCurrentMapName();
+    local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
+	
+	if Type == 0 or Type == 3 then -- Singleplayer and Usermap
+		local Names = {Framework.GetValidKnightNames(Name, Type)};
+		if #Names == 0 then -- No custom ValidKnightNames in info.xml
+			return true;
+		end
+	end
+
+	return false;
+end
+
+if (Framework.GetGameExtraNo() >= 1) 
+	and (not Framework.IsNetworkGame())
+	and (not S6Patcher.GlobalScriptOverridden)
+	and (S6Patcher.SelectedKnight ~= nil)
+	and (S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true) then
+	
+	S6Patcher.OverrideGlobalScript();
 	if S6Patcher.RestartMap == nil then
 		S6Patcher.RestartMap = Framework.RestartMap;
 	end

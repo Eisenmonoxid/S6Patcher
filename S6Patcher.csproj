@@ -74,7 +74,7 @@
     <Compile Include="Forms\mainFrm.Designer.cs">
       <DependentUpon>mainFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Backup.cs" />
+    <Compile Include="Helpers\IOFileHandler.cs" />
     <Compile Include="Patcher\PatcherMappings.cs" />
     <Compile Include="Patcher\Patcher.cs" />
     <Compile Include="Helpers\Helpers.cs" />

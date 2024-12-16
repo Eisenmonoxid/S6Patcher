@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using static S6Patcher.Helpers;
 
@@ -34,17 +35,25 @@ namespace S6Patcher
         }
         private void StartPatching(execID ID)
         {
-            OpenFileDialog ofd = Helpers.CreateOFDialog();
+            OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
             {
-                if (Backup.Instance.CreateBackup(ofd.FileName) == false)
+                if (IOFileHandler.Instance.CreateBackup(ofd.FileName) == false)
                 {
                     MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                FileStream Stream = Helpers.OpenFileStream(ofd.FileName, ID);
+                FileStream Stream = IOFileHandler.Instance.OpenFileStream(ofd.FileName, ID);
                 if (Stream == null) {
+                    MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                if (IsValidExecutable(ref Stream, ID) == false)
+                {
+                    Stream.Close();
+                    Stream.Dispose();
                     MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
@@ -64,8 +73,6 @@ namespace S6Patcher
             {
                 MessageBox.Show(Resources.ErrorNoFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            ofd.Dispose();
         }
         private void HandlePatcherReturnValue(DialogResult Result)
         {
@@ -84,6 +91,53 @@ namespace S6Patcher
             else if (Result == DialogResult.Abort)
             {
                 MessageBox.Show(Resources.AbortedMessage, "Abort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        public bool IsValidExecutable(ref FileStream Reader, execID Identifier, Int64 Offset = 0x0)
+        {
+            string ExpectedVersion = "1, 71, 4289, 0";
+            UInt32[] Mapping = {0x6ECADC, 0xF531A4, 0x6D06A8};
+            byte[] Result = new byte[30];
+
+            Reader.Position = (Mapping[(char)Identifier] - Offset);
+            Reader.Read(Result, 0, 30);
+
+            string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
+            if (Version == ExpectedVersion)
+            {
+                IsSteamOV = false;
+                IsSteamHE = false;
+                return true;
+            }
+            else if (Offset == 0x0 && Identifier == execID.OV) // Try again with offset applied
+            {
+                if (IsValidExecutable(ref Reader, Identifier, 0x3F0000) == true)
+                {
+                    IsSteamOV = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (Offset == 0x0 && Identifier == execID.HE) // Check for Steam HE
+            {
+                if (IsValidExecutable(ref Reader, Identifier, -0x1400) == true)
+                {
+                    IsSteamHE = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Erwartet/Expected: " + ExpectedVersion + "\nGelesen/Read: " + Version.ToString(), "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
             }
         }
         private void SetTooltipSystemLanguage()

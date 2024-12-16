@@ -171,7 +171,7 @@ namespace S6Patcher
         }
         private void btnBackup_Click(object sender, EventArgs e)
         {
-            bool Result = Backup.Instance.RestoreBackup(ref GlobalStream);
+            bool Result = IOFileHandler.Instance.RestoreBackup(ref GlobalStream);
             if (Result == false)
             {
                 DialogResult = DialogResult.Cancel; // Backup failed

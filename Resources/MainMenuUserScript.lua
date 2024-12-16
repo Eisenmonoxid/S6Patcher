@@ -1,29 +1,82 @@
 -- MainMenuUserScript by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {}
+S6Patcher.KnightSelection = S6Patcher.KnightSelection or {}
 -- ************************************************************************************************************************************************************* --
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
-if Framework.GetGameExtraNo() >= 1 then
-	S6Patcher.SavedOriginalKnightTypes = CustomGame.KnightTypes;
-	CustomGame.KnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
-	CustomGame.CurrentKnightList = CustomGame.KnightTypes;
-	g_MapAndHeroPreview.KnightTypes = CustomGame.KnightTypes;
-	
-	if S6Patcher.StartMapCallback2 == nil then
-		S6Patcher.StartMapCallback2 = CustomGame_StartMapCallback2;
+S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
+	if S6Patcher.KnightSelection.StartMapCallback2 == nil then
+		S6Patcher.KnightSelection.StartMapCallback2 = CustomGame_StartMapCallback2;
 	end
-	CustomGame_StartMapCallback2 = function()
-		local Knight = (DisplayOptions.SkirmishGetKnight(1) + 1);
+	if S6Patcher.KnightSelection.RemapKnightID == nil then
+		S6Patcher.KnightSelection.RemapKnightID = RemapKnightID;
+	end
+	if S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick == nil then
+		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick = CustomGameDialog_CloseOnLeftClick;
+	end
+	CustomGameDialog_CloseOnLeftClick = function()
+		S6Patcher.KnightSelection.SetOrResetKnightSelection(false);
+		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick();
+	end
+	if S6Patcher.KnightSelection.OpenCustomGameDialog == nil then
+		S6Patcher.KnightSelection.OpenCustomGameDialog = OpenCustomGameDialog;
+	end
+	OpenCustomGameDialog = function()
+		S6Patcher.KnightSelection.SetOrResetKnightSelection(true);
+		S6Patcher.KnightSelection.OpenCustomGameDialog();
+	end
+end
+S6Patcher.KnightSelection.SetOrResetKnightSelection = function(_showKnights)
+	if _showKnights == true then
+		RemapKnightID = S6Patcher.KnightSelection.OverrideRemapKnightID;
+		CustomGame.KnightTypes = S6Patcher.KnightSelection.NewKnightTypes;
+		CustomGame.CurrentKnightList = S6Patcher.KnightSelection.NewKnightTypes;
+		g_MapAndHeroPreview.KnightTypes = S6Patcher.KnightSelection.NewKnightTypes;
+		CustomGame_StartMapCallback2 = S6Patcher.KnightSelection.CustomGame_StartMapCallback2;
+	else
+		RemapKnightID = S6Patcher.KnightSelection.RemapKnightID;
+		CustomGame.KnightTypes = S6Patcher.KnightSelection.SavedOriginalKnightTypes;
+		CustomGame.CurrentKnightList = S6Patcher.KnightSelection.SavedOriginalKnightTypes;
+		g_MapAndHeroPreview.KnightTypes = S6Patcher.KnightSelection.SavedOriginalKnightTypes;
+		CustomGame_StartMapCallback2 = S6Patcher.KnightSelection.StartMapCallback2;
+	end
+end
+S6Patcher.KnightSelection.OverrideRemapKnightID = function(_ID)
+	return ((_ID == 1) and 7) or (_ID - 1);
+end
+S6Patcher.KnightSelection.TranslateKnightIndexToOldFormat = function(_currentIndex)
+	for Key, Value in ipairs(S6Patcher.KnightSelection.SavedOriginalKnightTypes) do
+		if Value == CustomGame.KnightTypes[_currentIndex + 1] then
+			return Key - 1;
+		end
+	end
+end
+S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _selectedMapType)
+	local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};	
+	if (_selectedMapType == 0 or _selectedMapType == 3) and #Names == 0 then
+		return true;
+	else
+		return false;
+	end
+end
+S6Patcher.KnightSelection.CustomGame_StartMapCallback2 = function()
+	local CurrentKnight = DisplayOptions.SkirmishGetKnight(1);
+	if S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.StartMap, CustomGame.StartMapType) == true then
+		local Knight = (CurrentKnight + 1);
 		Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(Knight) .. ";");
-		S6Patcher.StartMapCallback2();
+	else
+		local OldIndex = S6Patcher.KnightSelection.TranslateKnightIndexToOldFormat(CurrentKnight);
+		DisplayOptions.SkirmishSetKnight(1, OldIndex);
+		Framework.SetOnGameStartLuaCommand("return;");
 	end
-	if S6Patcher.RemapKnightID == nil then
-		S6Patcher.RemapKnightID = RemapKnightID;
-	end
-	RemapKnightID = function(_ID)
-		return ((_ID == 1) and 7) or (_ID - 1);
-	end
+
+	S6Patcher.KnightSelection.StartMapCallback2();
+end
+if Framework.GetGameExtraNo() >= 1 then
+	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
+	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
+	S6Patcher.KnightSelection.OverrideGlobalKnightSelection();
 end
 -- ************************************************************************************************************************************************************* --
 -- Change the mainmenu background, show current S6Patcher version																			 					 --
@@ -44,7 +97,7 @@ if S6Patcher.GetProgramVersion == nil then
 end
 Framework.GetProgramVersion = function()
 	local String = S6Patcher.GetProgramVersion();
-	return String .. " - S6Patcher v2.5";
+	return String .. " - S6Patcher v2.6";
 end
 -- ************************************************************************************************************************************************************* --
 -- Make 2K (2560x1440) and 4K (3840x2160) resolutions available in the original release																			 --
@@ -179,9 +232,9 @@ S6Patcher.ExtendedGameOptions = function()
 	local posX, posY = XGUIEng.GetWidgetScreenPosition("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox");
 	local Text = S6Patcher.GetLocalizedText({de = "Fenstermodus", en = "Windowed"});
 	
-	XGUIEng.SetWidgetScreenPosition(RootPath, posX, posY - ((Height/1080) * 50));
+	XGUIEng.SetWidgetScreenPosition(RootPath, posX, posY - ((Height/1080)*50));
 	XGUIEng.SetText(RootPath .. "/TextCheckbox", Text);
-	XGUIEng.SetActionFunction(RootPath .. "/CheckBox", "Sound.FXPlay2DSound('ui\\menu_click');g_GameOptions:OnChange()");
+	XGUIEng.SetActionFunction(RootPath .. "/CheckBox", "Sound.FXPlay2DSound('ui\\menu_click');g_GameOptions:OnChange();");
 
 	XGUIEng.ShowWidget(RootPath, 1);
 	XGUIEng.PushPage(RootPath, false);

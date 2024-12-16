@@ -6,16 +6,46 @@ using static S6Patcher.Helpers;
 
 namespace S6Patcher
 {
-    public sealed class Backup
+    public sealed class IOFileHandler
     {
-        private static readonly Backup _instance = new Backup();
-        private Backup() {}
-        public static Backup Instance
+        private static readonly IOFileHandler _instance = new IOFileHandler();
+        private IOFileHandler() {}
+        public static IOFileHandler Instance
         {
             get
             {
                 return _instance;
             }
+        }
+        public FileStream OpenFileStream(string Path, execID ID)
+        {
+            FileStream Stream;
+            try
+            {
+                Stream = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return null;
+            }
+
+            return Stream;
+        }
+        public OpenFileDialog CreateOFDialog()
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                ShowHelp = false,
+                CheckPathExists = true,
+                DereferenceLinks = true,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                Multiselect = false,
+                ShowReadOnly = false,
+            };
+
+            return ofd;
         }
         public bool CreateBackup(string Filepath)
         {
