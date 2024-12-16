@@ -5,23 +5,24 @@ S6Patcher = S6Patcher or {}
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
 if Framework.GetGameExtraNo() >= 1 then
+	S6Patcher.SavedOriginalKnightTypes = CustomGame.KnightTypes;
 	CustomGame.KnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
 	CustomGame.CurrentKnightList = CustomGame.KnightTypes;
 	g_MapAndHeroPreview.KnightTypes = CustomGame.KnightTypes;
-end
-if S6Patcher.StartMapCallback2 == nil then
-	S6Patcher.StartMapCallback2 = CustomGame_StartMapCallback2;
-end
-CustomGame_StartMapCallback2 = function()	
-	local Knight = (DisplayOptions.SkirmishGetKnight(1) + 1);
-	Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(Knight));
-	S6Patcher.StartMapCallback2();
-end
-RemapKnightID = function(_ID)
-	if Framework.GetGameExtraNo() >= 1 then
+	
+	if S6Patcher.StartMapCallback2 == nil then
+		S6Patcher.StartMapCallback2 = CustomGame_StartMapCallback2;
+	end
+	CustomGame_StartMapCallback2 = function()
+		local Knight = (DisplayOptions.SkirmishGetKnight(1) + 1);
+		Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(Knight) .. ";");
+		S6Patcher.StartMapCallback2();
+	end
+	if S6Patcher.RemapKnightID == nil then
+		S6Patcher.RemapKnightID = RemapKnightID;
+	end
+	RemapKnightID = function(_ID)
 		return ((_ID == 1) and 7) or (_ID - 1);
-	else
-		return _ID;
 	end
 end
 -- ************************************************************************************************************************************************************* --
@@ -133,7 +134,9 @@ g_GameOptions.OnBack = function()
 	XGUIEng.ShowWidget("/InGame/TempStuff/StandardDialog/DemoCheckBox", 0);
 	XGUIEng.PopPage();
 end
-S6Patcher.GameOptionsRestoreDefaults = g_GameOptions.RestoreDefaults;
+if S6Patcher.GameOptionsRestoreDefaults == nil then
+	S6Patcher.GameOptionsRestoreDefaults = g_GameOptions.RestoreDefaults;
+end
 g_GameOptions.RestoreDefaults = function()
 	S6Patcher.GameOptionsRestoreDefaults();
 	XGUIEng.CheckBoxSetIsChecked("/InGame/TempStuff/StandardDialog/DemoCheckBox/CheckBox", false);

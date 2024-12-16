@@ -39,7 +39,7 @@ namespace S6Patcher
         }
         public void RemoveUserScriptFiles()
         {
-            string[] ScriptFiles = { "UserScriptLocal.lua", "EMXBinData.s6patcher" };
+            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = GetUserScriptDirectories();
             foreach (string Element in Directories)
             {

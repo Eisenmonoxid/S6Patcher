@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace S6Patcher
 {
+    public enum execID {OV = 0, HE = 1, ED = 2}; // Identify the current game release version
     public class Helpers
     {
-        public enum execID {OV = 0, HE = 1, ED = 2}; // Identify the current game release version
         public static bool IsSteamOV = false; // This does not actually refer to the OV from Steam
         public static bool IsSteamHE = false; // This however, does
 

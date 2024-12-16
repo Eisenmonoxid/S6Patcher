@@ -11,8 +11,7 @@ if (S6Patcher.g_FeedbackSpeechFix == nil) or (not Trigger.IsTriggerEnabled(S6Pat
 	end
 end
 FeedbackSpeechEndTimeFixCustom = function()
-	local Time = Framework.GetTimeMs();
-	
+	local Time = Framework.GetTimeMs();	
 	if (g_FeedbackSpeech ~= nil) and (g_FeedbackSpeech.LastSpeechEndTime ~= nil) and ((Time + 6000) < g_FeedbackSpeech.LastSpeechEndTime) then
 		g_FeedbackSpeech.LastSpeechEndTime = nil;
 		XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomRight/MapFrame/FeedbackSpeechText", 0);
@@ -62,24 +61,20 @@ end
 S6Patcher.GlobalScriptOverridden = false;
 S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
 S6Patcher.OverrideGlobalScript = function()
+	Framework.SetOnGameStartLuaCommand(""); -- free memory
 	if S6Patcher.SelectedKnight == nil then
 		return;
 	end
 
 	local Knight = Entities[S6Patcher.DefaultKnightNames[S6Patcher.SelectedKnight]];
-	Framework.SetOnGameStartLuaCommand(""); -- free memory
-	
 	GUI.SendScriptCommand([[
 		S6Patcher = S6Patcher or {}
 		S6Patcher.UpdateKnight = function()
-			local PlayerID = ]]..tostring(GUI.GetPlayerID())..[[;
-			local MapType, CampaignName = Framework.GetCurrentMapTypeAndCampaignName();
-			local MapName = Framework.GetCurrentMapName();
-			local KnightNames = {Framework.GetValidKnightNames(MapName, MapType)};
+			local PlayerID = ]] .. tostring(GUI.GetPlayerID()) .. [[;
 			local KnightID = Logic.GetKnightID(PlayerID);
 	
-			if (#KnightNames == 0) and (KnightID ~= 0) then
-				S6Patcher.ReplaceKnight(KnightID, ]]..tostring(Knight)..[[);
+			if (KnightID ~= 0) then
+				S6Patcher.ReplaceKnight(KnightID, ]] .. tostring(Knight) .. [[);
 			end
 		end
 		
@@ -96,15 +91,16 @@ S6Patcher.OverrideGlobalScript = function()
 			Logic.DestroyEntity(_knightID);
 			local ID = Logic.CreateEntity(_newType, posX, posY, Orientation, PlayerID);
 			Logic.SetEntityName(ID, ScriptName);
+			Logic.SetPrimaryKnightID(PlayerID, ID);
 		end
 
 		S6Patcher.UpdateKnight();
 		Logic.ExecuteInLuaLocalState('LocalSetKnightPicture();');
 	]]);
 end
-if Framework.GetGameExtraNo() >= 1 and not S6Patcher.GlobalScriptOverridden then
+if (Framework.GetGameExtraNo() >= 1) and (not Framework.IsNetworkGame()) and (not S6Patcher.GlobalScriptOverridden) then
 	S6Patcher.OverrideGlobalScript();
-	
+
 	if S6Patcher.RestartMap == nil then
 		S6Patcher.RestartMap = Framework.RestartMap;
 	end
@@ -112,7 +108,7 @@ if Framework.GetGameExtraNo() >= 1 and not S6Patcher.GlobalScriptOverridden then
 		local TypeName = Logic.GetEntityTypeName(_knightType);
 		for i = 1, #S6Patcher.DefaultKnightNames do
 			if S6Patcher.DefaultKnightNames[i] == TypeName then
-				Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(i));
+				Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(i) .. ";");
 				break;
 			end
 		end
