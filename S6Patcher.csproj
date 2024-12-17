@@ -75,7 +75,7 @@
       <DependentUpon>mainFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IOFileHandler.cs" />
-    <Compile Include="Patcher\PatcherMappings.cs" />
+    <Compile Include="Patcher\Mappings.cs" />
     <Compile Include="Patcher\Patcher.cs" />
     <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Program.cs" />
@@ -123,10 +123,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\favicon.ico" />
+    <EmbeddedResource Include="Resources\favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

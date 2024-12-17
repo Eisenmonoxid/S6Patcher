@@ -98,8 +98,8 @@ end
 
 S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	local Name = Framework.GetCurrentMapName();
-    local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
-	
+	local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
+
 	if Type == 0 or Type == 3 then -- Singleplayer and Usermap
 		local Names = {Framework.GetValidKnightNames(Name, Type)};
 		if #Names == 0 then -- No custom ValidKnightNames in info.xml
