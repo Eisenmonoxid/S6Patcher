@@ -89,6 +89,7 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.PapayaWhip;
             this.ClientSize = new System.Drawing.Size(612, 97);
+            this.ControlBox = false;
             this.Controls.Add(this.btnPatchOV);
             this.Controls.Add(this.btnPatchHE);
             this.Controls.Add(this.btnClose);
@@ -101,6 +102,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(628, 136);
             this.Name = "mainFrm";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "-";
             this.TopMost = true;

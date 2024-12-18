@@ -9,6 +9,31 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 	if S6Patcher.KnightSelection.StartMapCallback2 == nil then
 		S6Patcher.KnightSelection.StartMapCallback2 = CustomGame_StartMapCallback2;
 	end
+	CustomGame_StartMapCallback2 = function()
+		local CurrentKnight = DisplayOptions.SkirmishGetKnight(1);
+		if S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.StartMap, CustomGame.StartMapType) then
+			Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(CurrentKnight + 1) .. ";");
+		else
+			if S6Patcher.KnightSelection.SavedKnightID ~= -1 then
+				DisplayOptions.SkirmishSetKnight(1, S6Patcher.KnightSelection.SavedKnightID);
+			end
+			Framework.SetOnGameStartLuaCommand("return;");
+		end
+
+		S6Patcher.KnightSelection.StartMapCallback2();
+	end
+	if S6Patcher.KnightSelection.CustomGame_StartOnLeftClick == nil then
+		S6Patcher.KnightSelection.CustomGame_StartOnLeftClick = CustomGame_StartOnLeftClick;
+	end
+	CustomGame_StartOnLeftClick = function()
+		local HeroComboBoxID = XGUIEng.GetWidgetID(CustomGame.Widget.KnightsList);
+		local Index = XGUIEng.ListBoxGetSelectedIndex(HeroComboBoxID);
+		if not S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.SelectedMap, CustomGame.SelectedMapType) then
+			S6Patcher.KnightSelection.SavedKnightID = Index;
+		end
+		
+		S6Patcher.KnightSelection.CustomGame_StartOnLeftClick();
+	end
 	if S6Patcher.KnightSelection.RemapKnightID == nil then
 		S6Patcher.KnightSelection.RemapKnightID = RemapKnightID;
 	end
@@ -16,66 +41,36 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick = CustomGameDialog_CloseOnLeftClick;
 	end
 	CustomGameDialog_CloseOnLeftClick = function()
-		S6Patcher.KnightSelection.SetOrResetKnightSelection(false);
+		S6Patcher.KnightSelection.SetKnightSelection(false);
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick();
 	end
 	if S6Patcher.KnightSelection.OpenCustomGameDialog == nil then
 		S6Patcher.KnightSelection.OpenCustomGameDialog = OpenCustomGameDialog;
 	end
 	OpenCustomGameDialog = function()
-		S6Patcher.KnightSelection.SetOrResetKnightSelection(true);
+		S6Patcher.KnightSelection.SetKnightSelection(true);
 		S6Patcher.KnightSelection.OpenCustomGameDialog();
 	end
 end
-S6Patcher.KnightSelection.SetOrResetKnightSelection = function(_showKnights)
-	if _showKnights == true then
-		RemapKnightID = S6Patcher.KnightSelection.OverrideRemapKnightID;
-		CustomGame.KnightTypes = S6Patcher.KnightSelection.NewKnightTypes;
-		CustomGame.CurrentKnightList = S6Patcher.KnightSelection.NewKnightTypes;
-		g_MapAndHeroPreview.KnightTypes = S6Patcher.KnightSelection.NewKnightTypes;
-		CustomGame_StartMapCallback2 = S6Patcher.KnightSelection.CustomGame_StartMapCallback2;
-	else
-		RemapKnightID = S6Patcher.KnightSelection.RemapKnightID;
-		CustomGame.KnightTypes = S6Patcher.KnightSelection.SavedOriginalKnightTypes;
-		CustomGame.CurrentKnightList = S6Patcher.KnightSelection.SavedOriginalKnightTypes;
-		g_MapAndHeroPreview.KnightTypes = S6Patcher.KnightSelection.SavedOriginalKnightTypes;
-		CustomGame_StartMapCallback2 = S6Patcher.KnightSelection.StartMapCallback2;
-	end
+S6Patcher.KnightSelection.SetKnightSelection = function(_showKnights)
+	local Context = S6Patcher.KnightSelection;
+	CustomGame.KnightTypes = (_showKnights == true) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	CustomGame.CurrentKnightList = (_showKnights == true) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	g_MapAndHeroPreview.KnightTypes = (_showKnights == true) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	RemapKnightID = (_showKnights == true) and Context.OverrideRemapKnightID or Context.RemapKnightID;
 end
 S6Patcher.KnightSelection.OverrideRemapKnightID = function(_ID)
 	return ((_ID == 1) and 7) or (_ID - 1);
 end
-S6Patcher.KnightSelection.TranslateKnightIndexToOldFormat = function(_currentIndex)
-	for Key, Value in ipairs(S6Patcher.KnightSelection.SavedOriginalKnightTypes) do
-		if Value == CustomGame.KnightTypes[_currentIndex + 1] then
-			return Key - 1;
-		end
-	end
-end
 S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _selectedMapType)
 	local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};	
-	if (_selectedMapType == 0 or _selectedMapType == 3) and #Names == 0 then
-		return true;
-	else
-		return false;
-	end
-end
-S6Patcher.KnightSelection.CustomGame_StartMapCallback2 = function()
-	local CurrentKnight = DisplayOptions.SkirmishGetKnight(1);
-	if S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.StartMap, CustomGame.StartMapType) == true then
-		local Knight = (CurrentKnight + 1);
-		Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(Knight) .. ";");
-	else
-		local OldIndex = S6Patcher.KnightSelection.TranslateKnightIndexToOldFormat(CurrentKnight);
-		DisplayOptions.SkirmishSetKnight(1, OldIndex);
-		Framework.SetOnGameStartLuaCommand("return;");
-	end
-
-	S6Patcher.KnightSelection.StartMapCallback2();
+	return ((_selectedMapType == 0 or _selectedMapType == 3) and #Names == 0);
 end
 if Framework.GetGameExtraNo() >= 1 then
+	S6Patcher.KnightSelection.SavedKnightID = -1;
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
-	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
+	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", 
+												"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
 	S6Patcher.KnightSelection.OverrideGlobalKnightSelection();
 end
 -- ************************************************************************************************************************************************************* --
