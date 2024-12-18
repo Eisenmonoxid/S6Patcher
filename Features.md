@@ -1,5 +1,5 @@
 # Key Features
-This excerpt should explain the key features of the S6Patcher.
+This excerpt should highlight some of the key features of the S6Patcher. For a full feature list, take a look at the [ReadME](https://github.com/Eisenmonoxid/S6Patcher/blob/master/README.md).
 
 ## All Versions: Higher Zoomlevel
 - Standard value is 7200. Compared to "solutions" purely utilising the lua script, the angle of the RTS camera is maintained. Other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures show a comparison of standard (7200) and 14000 zoom levels. Every value is possible, but it is recommended to not go higher than 20000.
