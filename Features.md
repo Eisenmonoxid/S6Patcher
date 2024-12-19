@@ -2,7 +2,7 @@
 This excerpt should highlight some of the key features of the S6Patcher. For a full feature list, take a look at the [ReadME](https://github.com/Eisenmonoxid/S6Patcher/blob/master/README.md).
 
 ## All Versions: Higher Zoomlevel
-- Standard value is 7200. Compared to "solutions" purely utilising the lua script, the angle of the RTS camera is maintained. Other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures show a comparison of standard (7200) and 14000 zoom levels. Every value is possible, but it is recommended to not go higher than 20000.
+- The games' standard zoom limit value is 7200. Compared to "solutions" purely utilising the lua script, the angle of the RTS camera is maintained and other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures below show a comparison of standard 7200 and 14000 zoom levels. Every value is possible, but it is recommended to not go higher than 20000.
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Zoom_High_Final.png" width="40%" height="40%" alt="Zoom_High"/>
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Zoom_Normal_Final.png" width="40%" height="40%" alt="Zoom_Normal"/>
 
@@ -37,11 +37,11 @@ This excerpt should highlight some of the key features of the S6Patcher. For a f
 
 # Recommendation: DXVK
 Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 
-This wrapper will translate the Direct3D 9.0c commands to Vulkan, which is much more modern graphics API. In the [configuration file](https://github.com/doitsujin/dxvk/blob/master/dxvk.conf), i personally use the following flags:
+This wrapper will translate the Direct3D 9.0c commands to Vulkan, which is a much more modern graphics API. In the [configuration file](https://github.com/doitsujin/dxvk/blob/master/dxvk.conf), i recommend to use the following flags:
 ```
 dxgi.syncInterval = 1
 d3d9.presentInterval = 1
 d3d9.samplerAnisotropy = 16
 d3d9.forceSwapchainMSAA = 8
 ```
-The first two set VSync, second the anisotropic filtering and the last one Multi-Sample Anti-Aliasing. This requires a strong PC, of course.
+The first two set VSync (without it, the game runs with an unlimited framerate), the second one the anisotropic filtering and the last one Multi-Sample Anti-Aliasing. This requires a strong PC, of course.
