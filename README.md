@@ -4,7 +4,7 @@
 - Wähle die ausführbare(n) Datei(en), die gepatcht werden soll(en) (Settlers6.exe/Settlers6R.exe oder S6MapEditor.exe/S6MapEditorR.exe) aus, welche sich im Installationsordner befindet/n.
   
 ## Features
-For images of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) file.
+- For images of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) file.
 
 ### Patch Original Release
 - Für die Originalversion (OV) mit neuestem Patch 1.71.
