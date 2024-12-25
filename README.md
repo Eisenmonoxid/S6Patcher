@@ -1,10 +1,15 @@
 # S6Patcher
+## Download
+- Find the latest release of the application [HERE](https://github.com/Eisenmonoxid/S6Patcher/releases/latest). Other download sources could potentially offer outdated versions.
+- Die neueste Version des Programmes findet sich [HIER](https://github.com/Eisenmonoxid/S6Patcher/releases/latest) zum Download. Andere Downloadquellen könnten unter Umständen veraltete Versionen anbieten.
+
 ## Usage
 - Select the game executable(s) that you wish to patch (Settlers6.exe/Settlers6R.exe or S6MapEditor.exe/S6MapEditorR.exe). Look in your installation folder.
 - Wähle die ausführbare(n) Datei(en), die gepatcht werden soll(en) (Settlers6.exe/Settlers6R.exe oder S6MapEditor.exe/S6MapEditorR.exe) aus, welche sich im Installationsordner befindet/n.
   
 ## Features
-- For images of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) file.
+- For illustrated descriptions of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) file.
+- Eine bebilderte Beschreibung einiger der Hauptfeatures des Programmes findet sich in der [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) Datei.
 
 ### Patch Original Release
 - Für die Originalversion (OV) mit neuestem Patch 1.71.

@@ -44,4 +44,4 @@ d3d9.presentInterval = 1
 d3d9.samplerAnisotropy = 16
 d3d9.forceSwapchainMSAA = 8
 ```
-The first two set VSync (without it, the game runs with an unlimited framerate), the second one the anisotropic filtering and the last one Multi-Sample Anti-Aliasing. This requires a strong PC, of course.
+The first two set VSync (without it, the game runs with an unlimited framerate), the second one sets the anisotropic filtering and the last one sets Multi-Sample Anti-Aliasing. This requires a strong PC, of course.
