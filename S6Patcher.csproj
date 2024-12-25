@@ -68,25 +68,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\mainFrm.cs">
+    <Compile Include="Source\Forms\mainFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\mainFrm.Designer.cs">
+    <Compile Include="Source\Forms\mainFrm.Designer.cs">
       <DependentUpon>mainFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\IOFileHandler.cs" />
-    <Compile Include="Patcher\Mappings.cs" />
-    <Compile Include="Patcher\Patcher.cs" />
-    <Compile Include="Helpers\Helpers.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Source\Helpers\IOFileHandler.cs" />
+    <Compile Include="Source\Patcher\Mappings.cs" />
+    <Compile Include="Source\Patcher\Patcher.cs" />
+    <Compile Include="Source\Helpers\Helpers.cs" />
+    <Compile Include="Source\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Forms\mainPatcher.cs">
+    <Compile Include="Source\Forms\mainPatcher.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\mainPatcher.Designer.cs">
+    <Compile Include="Source\Forms\mainPatcher.Designer.cs">
       <DependentUpon>mainPatcher.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\mainFrm.resx">
+    <EmbeddedResource Include="Source\Forms\mainFrm.resx">
       <DependentUpon>mainFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -99,7 +99,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Forms\mainPatcher.resx">
+    <EmbeddedResource Include="Source\Forms\mainPatcher.resx">
       <DependentUpon>mainPatcher.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
