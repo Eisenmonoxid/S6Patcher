@@ -84,7 +84,7 @@ namespace S6Patcher
                 Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x25D4D5, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
-                    {0x25D4DB, new byte[] {0x90, 0x90}}, // Override JNZ, always set Special Edition to 1
+                    {0x25D4DB, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
                 }
             });
 
@@ -119,7 +119,7 @@ namespace S6Patcher
                 Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x25C6FA, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
-                    {0x25C700, new byte[] {0x90, 0x90}}, // Override JNZ, always set Special Edition to 1
+                    {0x25C700, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
                 }
             });
 
