@@ -14,11 +14,10 @@ namespace S6Patcher
         {
             InitializeComponent();
             InitializeControls(ID, ref Stream);
+            this.Text = FormTitleText;
 
             GlobalStream = Stream;
             GlobalID = ID;
-
-            this.Text = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"https://github.com/Eisenmonoxid/S6Patcher\"";
         }
         private void InitializeControls(execID ID, ref FileStream Stream)
         {
@@ -71,7 +70,7 @@ namespace S6Patcher
                 }
             }
         }
-        private Patcher GetPatcherForControls(execID ID, ref FileStream Stream, List<GroupBox> Controls)
+        private Patcher GetPatchFeaturesByControls(execID ID, ref FileStream Stream, List<GroupBox> Controls)
         {
             List<string> CheckedFeatures = new List<string>();
             CheckBox curControl;
@@ -99,9 +98,9 @@ namespace S6Patcher
             Patcher Patcher = new Patcher(ID, ref Stream, ref CheckedFeatures);
             return Patcher;
         }
-        private void SelectPatchVersion(execID ID, ref FileStream Stream)
+        private void SelectPatchFeatures(execID ID, ref FileStream Stream)
         {
-            Patcher Patcher = GetPatcherForControls(ID, ref Stream, new List<GroupBox> {gbAll, gbHE, gbEditor});
+            Patcher Patcher = GetPatchFeaturesByControls(ID, ref Stream, new List<GroupBox> {gbAll, gbHE, gbEditor});
             if (cbZoom.Checked)
             {
                 Patcher.SetZoomLevel(ID, ref Stream, txtZoom.Text);
@@ -122,6 +121,7 @@ namespace S6Patcher
             {
                 Patcher.SetLuaScriptBugFixes();
             }
+            Patcher.SetKnightSelection(cbKnightSelection.Checked);
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
@@ -158,7 +158,7 @@ namespace S6Patcher
         }
         private void btnPatch_Click(object sender, EventArgs e)
         {
-            SelectPatchVersion(GlobalID, ref GlobalStream);
+            SelectPatchFeatures(GlobalID, ref GlobalStream);
             DialogResult = DialogResult.OK; // Patching successful
             Close();
             Dispose();

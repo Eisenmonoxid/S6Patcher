@@ -66,11 +66,11 @@ S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _se
 	local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};	
 	return ((_selectedMapType == 0 or _selectedMapType == 3) and #Names == 0);
 end
-if Framework.GetGameExtraNo() >= 1 then
+if Framework.GetGameExtraNo() >= 1 and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedKnightID = -1;
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
 	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", 
-												"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
+													"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
 	S6Patcher.KnightSelection.OverrideGlobalKnightSelection();
 end
 -- ************************************************************************************************************************************************************* --
@@ -92,7 +92,7 @@ if S6Patcher.GetProgramVersion == nil then
 end
 Framework.GetProgramVersion = function()
 	local String = S6Patcher.GetProgramVersion();
-	return String .. " - S6Patcher v2.6";
+	return String .. " - S6Patcher v2.7";
 end
 -- ************************************************************************************************************************************************************* --
 -- Make 2K (2560x1440) and 4K (3840x2160) resolutions available in the original release																			 --

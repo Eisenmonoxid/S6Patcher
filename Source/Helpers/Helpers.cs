@@ -8,6 +8,7 @@ namespace S6Patcher
     public enum execID {OV = 0, HE = 1, ED = 2}; // Identify the current game release version
     public class Helpers
     {
+        public static string FormTitleText = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"github.com/Eisenmonoxid/S6Patcher\"";
         public static bool IsSteamOV = false; // This does not actually refer to the OV from Steam, but rather a special release
         public static bool IsSteamHE = false; // This however, does
 

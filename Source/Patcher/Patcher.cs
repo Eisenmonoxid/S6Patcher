@@ -18,7 +18,7 @@ namespace S6Patcher
                 {
                     if (Element == Entry.Name)
                     {
-                        foreach (var DictEntry in Entry.AddressMapping)
+                        foreach (var DictEntry in Entry.Mapping)
                         {
                             Helpers.WriteBytes(ref Stream, DictEntry.Key, DictEntry.Value);
                         }
@@ -163,7 +163,6 @@ namespace S6Patcher
             // EMXBinData.s6patcher is the minified and compiled main menu script
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.GetUserScriptDirectories();
-
             try
             {
                 string ScriptPath = String.Empty;
@@ -183,6 +182,10 @@ namespace S6Patcher
             {
                 MessageBox.Show(Resources.ErrorLuaScriptFixes + "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        public void SetKnightSelection(bool Checked)
+        {
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("S6Patcher", "ExtendedKnightSelection", Checked);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace S6Patcher
             InitializeComponent();
             SetTooltipSystemLanguage();
 
-            this.Text = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"https://github.com/Eisenmonoxid/S6Patcher\"";
+            this.Text = FormTitleText;
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
@@ -44,7 +44,7 @@ namespace S6Patcher
                     return;
                 }
 
-                FileStream Stream = IOFileHandler.Instance.OpenFileStream(ofd.FileName, ID);
+                FileStream Stream = IOFileHandler.Instance.OpenFileStream(ofd.FileName);
                 if (Stream == null) {
                     MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
@@ -93,7 +93,7 @@ namespace S6Patcher
                 MessageBox.Show(Resources.AbortedMessage, "Abort", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        public bool IsValidExecutable(ref FileStream Reader, execID Identifier, Int64 Offset = 0x0)
+        private bool IsValidExecutable(ref FileStream Reader, execID Identifier, Int64 Offset = 0x0)
         {
             string ExpectedVersion = "1, 71, 4289, 0";
             UInt32[] Mapping = {0x6ECADC, 0xF531A4, 0x6D06A8};

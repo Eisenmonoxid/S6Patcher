@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainFrm));
             this.btnPatch = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnPatchHE = new System.Windows.Forms.Button();
@@ -85,7 +84,7 @@
             // 
             // mainFrm
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.PapayaWhip;
             this.ClientSize = new System.Drawing.Size(612, 97);
@@ -95,8 +94,6 @@
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnPatch);
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(628, 136);
             this.MinimizeBox = false;

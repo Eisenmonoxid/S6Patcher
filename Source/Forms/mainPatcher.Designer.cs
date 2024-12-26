@@ -46,6 +46,8 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.cbLimitedEdition = new System.Windows.Forms.CheckBox();
+            this.cbKnightSelection = new System.Windows.Forms.CheckBox();
             this.cbScriptBugFixes = new System.Windows.Forms.CheckBox();
             this.lblTextureRes = new System.Windows.Forms.Label();
             this.txtResolution = new System.Windows.Forms.TextBox();
@@ -87,9 +89,9 @@
             // 
             // btnPatch
             // 
-            this.btnPatch.Location = new System.Drawing.Point(11, 367);
+            this.btnPatch.Location = new System.Drawing.Point(11, 406);
             this.btnPatch.Name = "btnPatch";
-            this.btnPatch.Size = new System.Drawing.Size(449, 37);
+            this.btnPatch.Size = new System.Drawing.Size(451, 37);
             this.btnPatch.TabIndex = 3;
             this.btnPatch.Text = "Patch";
             this.btnPatch.UseVisualStyleBackColor = true;
@@ -157,9 +159,9 @@
             // 
             // btnAbort
             // 
-            this.btnAbort.Location = new System.Drawing.Point(10, 453);
+            this.btnAbort.Location = new System.Drawing.Point(11, 492);
             this.btnAbort.Name = "btnAbort";
-            this.btnAbort.Size = new System.Drawing.Size(449, 37);
+            this.btnAbort.Size = new System.Drawing.Size(451, 37);
             this.btnAbort.TabIndex = 10;
             this.btnAbort.Text = "Abort";
             this.btnAbort.UseVisualStyleBackColor = true;
@@ -216,9 +218,9 @@
             this.gbEditor.Controls.Add(this.cbEntityLimits);
             this.gbEditor.Controls.Add(this.cbScalingPlacing);
             this.gbEditor.Controls.Add(this.cbAllEntities);
-            this.gbEditor.Location = new System.Drawing.Point(11, 223);
+            this.gbEditor.Location = new System.Drawing.Point(11, 275);
             this.gbEditor.Name = "gbEditor";
-            this.gbEditor.Size = new System.Drawing.Size(448, 125);
+            this.gbEditor.Size = new System.Drawing.Size(451, 125);
             this.gbEditor.TabIndex = 16;
             this.gbEditor.TabStop = false;
             this.gbEditor.Text = "Mapeditor";
@@ -228,7 +230,7 @@
             this.gbHE.Controls.Add(this.cbAutosave);
             this.gbHE.Controls.Add(this.txtAutosave);
             this.gbHE.Controls.Add(this.lblAutosave);
-            this.gbHE.Location = new System.Drawing.Point(12, 168);
+            this.gbHE.Location = new System.Drawing.Point(11, 220);
             this.gbHE.Name = "gbHE";
             this.gbHE.Size = new System.Drawing.Size(448, 49);
             this.gbHE.TabIndex = 17;
@@ -237,6 +239,8 @@
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.cbLimitedEdition);
+            this.gbAll.Controls.Add(this.cbKnightSelection);
             this.gbAll.Controls.Add(this.cbScriptBugFixes);
             this.gbAll.Controls.Add(this.lblTextureRes);
             this.gbAll.Controls.Add(this.txtResolution);
@@ -248,10 +252,30 @@
             this.gbAll.Controls.Add(this.lblZoomAngle);
             this.gbAll.Location = new System.Drawing.Point(12, 12);
             this.gbAll.Name = "gbAll";
-            this.gbAll.Size = new System.Drawing.Size(447, 150);
+            this.gbAll.Size = new System.Drawing.Size(447, 202);
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
+            // 
+            // cbLimitedEdition
+            // 
+            this.cbLimitedEdition.AutoSize = true;
+            this.cbLimitedEdition.Location = new System.Drawing.Point(5, 180);
+            this.cbLimitedEdition.Name = "cbLimitedEdition";
+            this.cbLimitedEdition.Size = new System.Drawing.Size(176, 17);
+            this.cbLimitedEdition.TabIndex = 17;
+            this.cbLimitedEdition.Text = "Activate Limited/Special Edition";
+            this.cbLimitedEdition.UseVisualStyleBackColor = true;
+            // 
+            // cbKnightSelection
+            // 
+            this.cbKnightSelection.AutoSize = true;
+            this.cbKnightSelection.Location = new System.Drawing.Point(5, 154);
+            this.cbKnightSelection.Name = "cbKnightSelection";
+            this.cbKnightSelection.Size = new System.Drawing.Size(233, 17);
+            this.cbKnightSelection.TabIndex = 16;
+            this.cbKnightSelection.Text = "Enable Basegame Knights in Eastern Realm";
+            this.cbKnightSelection.UseVisualStyleBackColor = true;
             // 
             // cbScriptBugFixes
             // 
@@ -283,9 +307,9 @@
             // 
             // btnBackup
             // 
-            this.btnBackup.Location = new System.Drawing.Point(11, 410);
+            this.btnBackup.Location = new System.Drawing.Point(11, 449);
             this.btnBackup.Name = "btnBackup";
-            this.btnBackup.Size = new System.Drawing.Size(449, 37);
+            this.btnBackup.Size = new System.Drawing.Size(451, 37);
             this.btnBackup.TabIndex = 19;
             this.btnBackup.Text = "Restore Backup";
             this.btnBackup.UseVisualStyleBackColor = true;
@@ -293,10 +317,10 @@
             // 
             // mainPatcher
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.PapayaWhip;
-            this.ClientSize = new System.Drawing.Size(471, 509);
+            this.ClientSize = new System.Drawing.Size(471, 540);
             this.ControlBox = false;
             this.Controls.Add(this.btnBackup);
             this.Controls.Add(this.gbAll);
@@ -304,11 +328,11 @@
             this.Controls.Add(this.gbEditor);
             this.Controls.Add(this.btnAbort);
             this.Controls.Add(this.btnPatch);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.DoubleBuffered = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(487, 548);
+            this.MaximumSize = new System.Drawing.Size(487, 579);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(487, 548);
+            this.MinimumSize = new System.Drawing.Size(487, 579);
             this.Name = "mainPatcher";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -348,5 +372,7 @@
         private System.Windows.Forms.Label lblTextureRes;
         private System.Windows.Forms.TextBox txtResolution;
         private System.Windows.Forms.CheckBox cbScriptBugFixes;
+        private System.Windows.Forms.CheckBox cbLimitedEdition;
+        private System.Windows.Forms.CheckBox cbKnightSelection;
     }
 }
