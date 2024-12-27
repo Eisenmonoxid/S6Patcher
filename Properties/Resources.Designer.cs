@@ -243,16 +243,6 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon favicon {
-            get {
-                object obj = ResourceManager.GetObject("favicon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Backup wurde erfolgreich wiederhergestellt!
         ///Backup has been successfully restored!.
         /// </summary>
@@ -269,16 +259,6 @@ namespace S6Patcher.Properties {
         internal static string FinishedSuccess {
             get {
                 return ResourceManager.GetString("FinishedSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] MainMenuUserScript {
-            get {
-                object obj = ResourceManager.GetObject("MainMenuUserScript", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

@@ -24,6 +24,7 @@ namespace S6Patcher
         private static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         private static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
+
         public FileStream OpenFileStream(string Path)
         {
             FileStream Stream;

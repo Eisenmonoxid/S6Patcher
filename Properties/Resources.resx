@@ -195,7 +195,7 @@ Process was aborted ...</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="EMXBinData" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EMXBinData.s6patcher;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Source\Resources\EMXBinData.s6patcher;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ErrorBackup" xml:space="preserve">
     <value>Fehler beim Erstellen der Backup-Datei! Abbrechen ...
@@ -217,9 +217,6 @@ No file chosen or file does not exist!</value>
     <value>Ungültige Ausführungsdatei gewählt! Abbrechen ...
 Invalid executable has been choosen! Aborting ...</value>
   </data>
-  <data name="favicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\favicon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="FinishedBackup" xml:space="preserve">
     <value>Backup wurde erfolgreich wiederhergestellt!
 Backup has been successfully restored!</value>
@@ -228,10 +225,7 @@ Backup has been successfully restored!</value>
     <value>Vorgang Erfolgreich!
 Finished successfully!</value>
   </data>
-  <data name="MainMenuUserScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\MainMenuUserScript.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="UserScriptLocal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UserScriptLocal.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Source\Resources\UserScriptLocal.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
