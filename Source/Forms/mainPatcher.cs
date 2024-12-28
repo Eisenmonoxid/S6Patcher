@@ -156,6 +156,18 @@ namespace S6Patcher
                 txtResolution.Enabled = false;
             }
         }
+        private void cbScriptBugFixes_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbScriptBugFixes.Checked)
+            {
+                cbKnightSelection.Enabled = true;
+            }
+            else
+            {
+                cbKnightSelection.Checked = false;
+                cbKnightSelection.Enabled = false;
+            }
+        }
         private void btnPatch_Click(object sender, EventArgs e)
         {
             SelectPatchFeatures(GlobalID, ref GlobalStream);

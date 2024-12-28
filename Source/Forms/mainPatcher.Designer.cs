@@ -270,6 +270,7 @@
             // cbKnightSelection
             // 
             this.cbKnightSelection.AutoSize = true;
+            this.cbKnightSelection.Enabled = false;
             this.cbKnightSelection.Location = new System.Drawing.Point(5, 154);
             this.cbKnightSelection.Name = "cbKnightSelection";
             this.cbKnightSelection.Size = new System.Drawing.Size(233, 17);
@@ -286,6 +287,7 @@
             this.cbScriptBugFixes.TabIndex = 15;
             this.cbScriptBugFixes.Text = "Activate Script and Code Bugfixes";
             this.cbScriptBugFixes.UseVisualStyleBackColor = true;
+            this.cbScriptBugFixes.CheckedChanged += new System.EventHandler(this.cbScriptBugFixes_CheckedChanged);
             // 
             // lblTextureRes
             // 
