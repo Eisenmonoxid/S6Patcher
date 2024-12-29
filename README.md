@@ -1,7 +1,7 @@
 # S6Patcher
 ## Download
-- Find the latest release of the application [HERE](https://github.com/Eisenmonoxid/S6Patcher/releases/latest). Other download sources could potentially offer outdated versions.
-- Die neueste Version des Programmes findet sich [HIER](https://github.com/Eisenmonoxid/S6Patcher/releases/latest) zum Download. Andere Downloadquellen könnten unter Umständen veraltete Versionen anbieten.
+- Find the latest release of the application [here](https://github.com/Eisenmonoxid/S6Patcher/releases/latest). Other download sources could potentially offer outdated versions.
+- Die neueste Version des Programmes findet sich [hier](https://github.com/Eisenmonoxid/S6Patcher/releases/latest) zum Download. Andere Downloadquellen könnten unter Umständen veraltete Versionen anbieten.
 
 ## Usage
 - Select the game executable(s) that you wish to patch (Settlers6.exe/Settlers6R.exe or S6MapEditor.exe/S6MapEditorR.exe). Look in your installation folder.
@@ -18,12 +18,13 @@
 German:
 ```
 - Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
-- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
+- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
 - Kann das maximale Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
 - Kann Script&Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash", "2K & 4K - Auflösung").
 - Kann die Auswahl aller Grundspielritter im "Reich des Ostens" - Addon ermöglichen.
+- Kann die Limited/Special Edition aktivieren (zB Zierobjekte im Grundspiel).
 -> Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!
 ```
 English:
@@ -35,6 +36,7 @@ English:
 - Can set the Large Address Aware Flag for more usable memory.
 - Can fix Bugs in Script&Code (e.g. "Meldungsstau", "Entertainercrash", "2K & 4K - Resolution").
 - Can enable all base game knights in the "Eastern Realm" expansion pack.
+- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
 -> Original releases from Steam will need to be extracted with the tool "Steamless" first!
 ```
 ### Patch History Edition
@@ -50,6 +52,7 @@ German:
 - Kann Script&Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash").
 - Kann die Auswahl aller Grundspielritter im "Reich des Ostens" - Addon ermöglichen.
 - Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
+- Kann die Limited/Special Edition aktivieren (zB Zierobjekte im Grundspiel).
 -> History Editionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!
 ```
 English:
@@ -61,6 +64,7 @@ English:
 - Can fix Bugs in Script&Code (e.g. "Meldungsstau", "Entertainercrash").
 - Can enable all base game knights in the "Eastern Realm" expansion pack.
 - Can set the highest quality ground textures.
+- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
 -> History Editions from Steam will need to be extracted with the tool "Steamless" first!
 ```
 ### Patch Mapeditor

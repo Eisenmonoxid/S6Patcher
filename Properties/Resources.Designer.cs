@@ -127,8 +127,8 @@ namespace S6Patcher.Properties {
         ///- Can set the Large Address Aware Flag for more usable memory.
         ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
         ///- Can enable all base game knights in the &quot;Eastern Realm&quot; expansion pack.
-        ///- Can set the highest quality ground textures.
-        ///-&gt; History Editions from Steam will need to be extracted with the [rest of string was truncated]&quot;;.
+        ///- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
+        ///- Can set the highest quali [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchHE_EnglishText {
             get {
@@ -143,7 +143,7 @@ namespace S6Patcher.Properties {
         ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
         ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
         ///- Kann die Auswahl aller Grundspielritter im &quot;Reich des Ostens&quot; - Addon ermöglichen.
-        ///- Kann Bodentexturen auf die höchste Qualitätsstufe se [rest of string was truncated]&quot;;.
+        ///- Kann die Limited/Special Edition aktivieren (zB Zier [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchHE_GermanText {
             get {
@@ -159,7 +159,7 @@ namespace S6Patcher.Properties {
         ///- Can set the Large Address Aware Flag for more usable memory.
         ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Resolution&quot;).
         ///- Can enable all base game knights in the &quot;Eastern Realm&quot; expansion pack.
-        ///-&gt; Original releases from [rest of string was truncated]&quot;;.
+        ///- Can enable the Limited/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchOV_EnglishText {
             get {
@@ -169,12 +169,12 @@ namespace S6Patcher.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to - Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
-        ///- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
+        ///- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
         ///- Kann das maximale Zoomlevel setzen.
         ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
         ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
         ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Auflösung&quot;).
-        ///- Kann die Auswahl aller Grundspielritter im &quot;Reich des Ostens&quot; - [rest of string was truncated]&quot;;.
+        ///- Kann die Auswahl aller Grundspielritter im &quot;Reich  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string btnPatchOV_GermanText {
             get {

@@ -134,6 +134,7 @@ Process was aborted ...</value>
 - Can set the Large Address Aware Flag for more usable memory.
 - Can fix Bugs in Script&amp;Code (e.g. "Meldungsstau", "Entertainercrash").
 - Can enable all base game knights in the "Eastern Realm" expansion pack.
+- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
 - Can set the highest quality ground textures.
 -&gt; History Editions from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
@@ -144,6 +145,7 @@ Process was aborted ...</value>
 - Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
 - Kann Script&amp;Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash").
 - Kann die Auswahl aller Grundspielritter im "Reich des Ostens" - Addon ermöglichen.
+- Kann die Limited/Special Edition aktivieren (zB Zierobjekte im Grundspiel).
 - Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
 -&gt; History Editionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
@@ -155,16 +157,18 @@ Process was aborted ...</value>
 - Can set the Large Address Aware Flag for more usable memory.
 - Can fix Bugs in Script&amp;Code (e.g. "Meldungsstau", "Entertainercrash", "2K &amp; 4K - Resolution").
 - Can enable all base game knights in the "Eastern Realm" expansion pack.
+- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
 -&gt; Original releases from Steam will need to be extracted with the tool "Steamless" first!</value>
   </data>
   <data name="btnPatchOV_GermanText" xml:space="preserve">
     <value>- Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
-- Kann die Qualität von Bodentexturen auf den höchsten Wert setzen.
+- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
 - Kann das maximale Zoomlevel setzen.
 - Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
 - Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
 - Kann Script&amp;Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash", "2K &amp; 4K - Auflösung").
 - Kann die Auswahl aller Grundspielritter im "Reich des Ostens" - Addon ermöglichen.
+- Kann die Limited/Special Edition aktivieren (zB Zierobjekte im Grundspiel).
 -&gt; Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
   </data>
   <data name="btnPatch_EnglishText" xml:space="preserve">
