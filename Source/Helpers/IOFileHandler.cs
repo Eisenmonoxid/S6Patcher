@@ -120,7 +120,7 @@ namespace S6Patcher
             {
                 WritePrivateProfileString("S6Patcher", null, null, CurrentPath);
             }
-            catch (Exception)
+            catch (Exception) // Errors here do not matter
             {
                 return;
             }

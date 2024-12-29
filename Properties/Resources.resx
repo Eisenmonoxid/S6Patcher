@@ -225,6 +225,9 @@ Backup has been successfully restored!</value>
     <value>Vorgang Erfolgreich!
 Finished successfully!</value>
   </data>
+  <data name="MainMenuUserScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Source\Resources\MainMenuUserScript.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="UserScriptLocal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Source\Resources\UserScriptLocal.lua;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

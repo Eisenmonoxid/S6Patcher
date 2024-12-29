@@ -12,12 +12,12 @@ namespace S6Patcher
         private readonly execID GlobalID;
         public mainPatcher(execID ID, ref FileStream Stream)
         {
+            GlobalStream = Stream;
+            GlobalID = ID;
+
             InitializeComponent();
             InitializeControls(ID, ref Stream);
             this.Text = FormTitleText;
-
-            GlobalStream = Stream;
-            GlobalID = ID;
         }
         private void InitializeControls(execID ID, ref FileStream Stream)
         {
@@ -120,8 +120,8 @@ namespace S6Patcher
             if (cbScriptBugFixes.Checked)
             {
                 Patcher.SetLuaScriptBugFixes();
+                Patcher.SetKnightSelection(cbKnightSelection.Checked);
             }
-            Patcher.SetKnightSelection(cbKnightSelection.Checked);
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
