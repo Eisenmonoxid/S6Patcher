@@ -6,6 +6,8 @@
 ## Usage
 - Select the game executable(s) that you wish to patch (Settlers6.exe/Settlers6R.exe or S6MapEditor.exe/S6MapEditorR.exe). Look in your installation folder.
 - Wähle die ausführbare(n) Datei(en), die gepatcht werden soll(en) (Settlers6.exe/Settlers6R.exe oder S6MapEditor.exe/S6MapEditorR.exe) aus, welche sich im Installationsordner befindet/n.
+- **Should you have any questions, errors or feature requests: [Discord](https://discord.gg/7SGkQtAAET).**
+- **Sollte es Fragen, Fehler oder Featurewünsche geben: [Discord](https://discord.gg/7SGkQtAAET).**
   
 ## Features
 - For illustrated descriptions of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) file.
