@@ -5,7 +5,7 @@ namespace S6Patcher
 {
     internal partial class Patcher
     {
-        private List<PatchEntry> Entries = new List<PatchEntry>();
+        private readonly List<PatchEntry> Entries = new List<PatchEntry>();
         private struct PatchEntry
         {
             public string Name;
@@ -206,23 +206,22 @@ namespace S6Patcher
 
             return Entries;
         }
-        private List<PatchEntry> GetMappingsByExecID(execID ID)
+        private List<PatchEntry> GetMappingsByID(execID ID)
         {
-            if (ID == execID.OV)
+            switch (ID)
             {
-                return GetOVMappings();
-            }
-            else if (ID == execID.HE && Helpers.IsSteamHE)
-            {
-                return GetSteamHEMappings();
-            }
-            else if (ID == execID.HE)
-            {
-                return GetUbiHEMappings();
-            }
-            else
-            {
-                return GetEDMappings();
+                case execID.OV:
+                    return GetOVMappings();
+                case execID.OV_OFFSET:
+                    return GetOVMappings();
+                case execID.HE_UBISOFT:
+                    return GetUbiHEMappings();
+                case execID.HE_STEAM:
+                    return GetSteamHEMappings();
+                case execID.ED:
+                    return GetEDMappings();
+                default:
+                    return null;
             }
         }
     }

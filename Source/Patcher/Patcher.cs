@@ -3,20 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using static S6Patcher.Helpers;
 
 namespace S6Patcher
 {
     internal partial class Patcher
     {
-        public Patcher(execID ID, ref FileStream Stream, ref List<string> PatchNames)
+        public Patcher(execID ID, ref FileStream Stream, ref List<string> Names)
         {
-            List<PatchEntry> Entries = GetMappingsByExecID(ID);
-            foreach (PatchEntry Entry in Entries)
+            List<PatchEntry> Entries = GetMappingsByID(ID);
+            if (Entries == null)
             {
-                foreach (string Element in PatchNames)
+                return;
+            }
+
+            foreach (var Entry in Entries)
+            {
+                foreach (string Name in Names)
                 {
-                    if (Element == Entry.Name)
+                    if (Name == Entry.Name)
                     {
                         foreach (var DictEntry in Entry.Mapping)
                         {
@@ -43,25 +47,31 @@ namespace S6Patcher
             byte[] MediumResolution = BitConverter.GetBytes(Resolution / 2);
             byte[] LowResolution = BitConverter.GetBytes(Resolution / 4);
 
-            if (ID == execID.OV)
+            if (ID == execID.OV || ID == execID.OV_OFFSET)
             {
                 Helpers.WriteBytes(ref Stream, 0x2BE177, HighResolution);
                 Helpers.WriteBytes(ref Stream, 0x2BE17E, MediumResolution);
                 Helpers.WriteBytes(ref Stream, 0x2BE185, LowResolution);
             }
-            else // HE
+            else if (ID == execID.HE_UBISOFT)
             {
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x2D4D74 : 0x2D4188), HighResolution);
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x2D4D7B : 0x2D418F), MediumResolution);
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x2D4D82 : 0x2D4196), LowResolution);
+                Helpers.WriteBytes(ref Stream, 0x2D4188, HighResolution);
+                Helpers.WriteBytes(ref Stream, 0x2D418F, MediumResolution);
+                Helpers.WriteBytes(ref Stream, 0x2D4196, LowResolution);
+            }
+            else if (ID == execID.HE_STEAM)
+            {
+                Helpers.WriteBytes(ref Stream, 0x2D4D74, HighResolution);
+                Helpers.WriteBytes(ref Stream, 0x2D4D7B, MediumResolution);
+                Helpers.WriteBytes(ref Stream, 0x2D4D82, LowResolution);
             }
         }
-        public void SetAutosaveTimer(ref FileStream Stream, string AutosaveText)
+        public void SetAutosaveTimer(execID ID, ref FileStream Stream, string AutosaveText)
         {
-            double autosaveTimer;
+            double Timer;
             try
             {
-                autosaveTimer = Convert.ToDouble(AutosaveText);
+                Timer = Convert.ToDouble(AutosaveText);
             }
             catch (Exception ex)
             {
@@ -69,27 +79,31 @@ namespace S6Patcher
                 return;
             }
 
-            if (autosaveTimer == (double)0)
+            byte[] Interval = BitConverter.GetBytes(Timer * 60000);
+            switch (ID)
             {
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x1C6045 : 0x1C5F2A), new byte[] {0xEB});
+                case execID.HE_STEAM:
+                    Helpers.WriteBytes(ref Stream, 0x1C6045, (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
+                    Helpers.WriteBytes(ref Stream, 0xEB95C0, Interval);
+                    break;
+                case execID.HE_UBISOFT:
+                    Helpers.WriteBytes(ref Stream, 0x1C5F2A, (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
+                    Helpers.WriteBytes(ref Stream, 0xEB83C0, Interval);
+                    break;
+                default:
+                    return;
             }
-            else
-            {
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x1C6045 : 0x1C5F2A), new byte[] {0x76});
-            }
-
-            autosaveTimer = (autosaveTimer * 60000);
-            Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0xEB95C0 : 0xEB83C0), BitConverter.GetBytes(autosaveTimer));     
         }
         public void SetZoomLevel(execID ID, ref FileStream Stream, string ZoomText)
         {
             float Offset = 4800;
             float TransitionFactor = 3700;
 
-            if (ID == execID.OV)
+            if (ID == execID.OV || ID == execID.OV_OFFSET)
             {
                 double zoomLevel;
                 float clutterFarDistance;
+
                 try
                 {
                     zoomLevel = Convert.ToDouble(ZoomText);
@@ -110,9 +124,10 @@ namespace S6Patcher
                 Helpers.WriteBytes(ref Stream, 0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00}); // Restriction -5000.0
             }
-            else // HE
+            else
             {
                 float zoomLevel;
+
                 try
                 {
                     zoomLevel = Convert.ToSingle(ZoomText);
@@ -123,14 +138,14 @@ namespace S6Patcher
                     return;
                 }
 
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0xC4F9EC : 0xC4EC4C), BitConverter.GetBytes(zoomLevel));
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E73 : 0x270311), new byte[] {0xC7, 0x45, 0xF0});
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E76 : 0x270314), BitConverter.GetBytes(zoomLevel + Offset));
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E7A : 0x270318), new byte[] {0xC7, 0x45, 0xF4});
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E7D : 0x27031B), BitConverter.GetBytes(TransitionFactor));
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E81 : 0x27031F), new byte[] {0x90});
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x270E87 : 0x270325), new byte[] {0x90, 0x90, 0x90});
-                Helpers.WriteBytes(ref Stream, ((Helpers.IsSteamHE) ? 0x2540B8 : 0x2532F7), new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0xC4F9EC : 0xC4EC4C, BitConverter.GetBytes(zoomLevel));
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0x270E73 : 0x270311, new byte[] {0xC7, 0x45, 0xF0});
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0x270E76 : 0x270314, BitConverter.GetBytes(zoomLevel + Offset));
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0x270E7A : 0x270318, new byte[] {0xC7, 0x45, 0xF4});
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0x270E7D : 0x27031B, BitConverter.GetBytes(TransitionFactor));
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0x270E81 : 0x27031F, new byte[] {0x90});
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0x270E87 : 0x270325, new byte[] {0x90, 0x90, 0x90});
+                Helpers.WriteBytes(ref Stream, (ID == execID.HE_STEAM) ? 0x2540B8 : 0x2532F7, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}); // Restriction -5000.0
             }
         }
@@ -139,20 +154,20 @@ namespace S6Patcher
             // Partially adapted from:
             // https://stackoverflow.com/questions/9054469/how-to-check-if-exe-is-set-as-largeaddressaware
             const int IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
-            BinaryReader br = new BinaryReader(Stream);
+            BinaryReader Reader = new BinaryReader(Stream);
 
-            br.BaseStream.Position = 0x3C;
-            br.BaseStream.Position = br.ReadInt32();
+            Reader.BaseStream.Position = 0x3C;
+            Reader.BaseStream.Position = Reader.ReadInt32();
 
-            if (br.ReadInt32() != 0x4550)
+            if (Reader.ReadInt32() != 0x4550)
             {
                 return;
             }
 
-            br.BaseStream.Position += 0x12;
-            long CurrentPosition = br.BaseStream.Position;
+            Reader.BaseStream.Position += 0x12;
+            long CurrentPosition = Reader.BaseStream.Position;
 
-            Int16 Flag = br.ReadInt16();
+            Int16 Flag = Reader.ReadInt16();
             if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
             {
                 Helpers.WriteBytes(ref Stream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
@@ -163,6 +178,7 @@ namespace S6Patcher
             // EMXBinData.s6patcher is the minified and compiled main menu script
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.GetUserScriptDirectories();
+
             try
             {
                 string ScriptPath = String.Empty;

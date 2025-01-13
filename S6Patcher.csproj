@@ -73,11 +73,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Source\Forms\mainFrm.cs">
+    <Compile Include="Source\Forms\mainFrm.EventHandler.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Source\Forms\mainFrm.Designer.cs">
-      <DependentUpon>mainFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
     <Compile Include="Source\Patcher\Mappings.cs" />
@@ -85,22 +82,19 @@
     <Compile Include="Source\Helpers\Helpers.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\Forms\mainPatcher.cs">
+    <Compile Include="Source\Forms\mainFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Source\Forms\mainPatcher.Designer.cs">
-      <DependentUpon>mainPatcher.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Source\Forms\mainFrm.resx">
+    <Compile Include="Source\Forms\mainFrm.Designer.cs">
       <DependentUpon>mainFrm.cs</DependentUpon>
-    </EmbeddedResource>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Forms\mainPatcher.resx">
-      <DependentUpon>mainPatcher.cs</DependentUpon>
+    <EmbeddedResource Include="Source\Forms\mainFrm.resx">
+      <DependentUpon>mainFrm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

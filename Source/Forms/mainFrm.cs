@@ -1,175 +1,130 @@
-﻿using S6Patcher.Properties;
-using System;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using static S6Patcher.Helpers;
 
 namespace S6Patcher
 {
     public partial class mainFrm : Form
     {
+        private FileStream GlobalStream = null;
         public mainFrm()
         {
             InitializeComponent();
-            SetTooltipSystemLanguage();
-
-            this.Text = FormTitleText;
+            this.Text = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"github.com/Eisenmonoxid/S6Patcher\"";
         }
-        private void btnClose_Click(object sender, EventArgs e)
+        private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {
-            Environment.Exit(0);
-        }
-        private void btnPatch_Click(object sender, EventArgs e)
-        {
-            StartPatching(execID.ED);
-        }
-        private void btnPatchHE_Click(object sender, EventArgs e)
-        {
-            StartPatching(execID.HE);
-        }
-        private void btnPatchOV_Click(object sender, EventArgs e)
-        {
-            StartPatching(execID.OV);
-        }
-        private void StartPatching(execID ID)
-        {
-            OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog();
-            if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
+            Reader.BaseStream.Position = Position;
+            if (Control == txtResolution)
             {
-                if (IOFileHandler.Instance.CreateBackup(ofd.FileName) == false)
-                {
-                    MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtResolution.Text = Reader.ReadUInt32().ToString();
+            }
+            else if (Control == txtZoom)
+            {
+                txtZoom.Text = Reader.ReadDouble().ToString();
+            }
+            else if (Control == txtAutosave)
+            {
+                txtAutosave.Text = (Reader.ReadDouble() / 60000).ToString();
+            }
+        }
+        private void InitializeControls(execID ID, ref FileStream Stream)
+        {
+            BinaryReader Reader = new BinaryReader(Stream);
+            switch (ID)
+            {
+                case execID.OV:
+                    SetControlValueFromStream(ref Reader, 0x545400, txtZoom);
+                    SetControlValueFromStream(ref Reader, 0x2BE177, txtResolution);
+                    break;
+                case execID.OV_OFFSET:
+                    SetControlValueFromStream(ref Reader, 0x545400 - Helpers.GlobalOffset, txtZoom);
+                    SetControlValueFromStream(ref Reader, 0x2BE177 - Helpers.GlobalOffset, txtResolution);
+                    break;
+                case execID.HE_UBISOFT:
+                    SetControlValueFromStream(ref Reader, 0xC4EC4C, txtZoom);
+                    SetControlValueFromStream(ref Reader, 0x2D4188, txtResolution);
+                    SetControlValueFromStream(ref Reader, 0xEB83C0, txtAutosave);
+                    gbHE.Enabled = true;
+                    break;
+                case execID.HE_STEAM:
+                    SetControlValueFromStream(ref Reader, 0xC4F9EC, txtZoom);
+                    SetControlValueFromStream(ref Reader, 0x2D4D74, txtResolution);
+                    SetControlValueFromStream(ref Reader, 0xEB95C0, txtAutosave);
+                    gbHE.Enabled = true;
+                    break;
+                case execID.ED:
+                    gbEditor.Enabled = true;
+                    cbZoom.Enabled = false;
+                    lblZoomAngle.Enabled = false;
+                    lblTextureRes.Enabled = false;
+                    break;
+                case execID.NONE:
                     return;
-                }
-
-                FileStream Stream = IOFileHandler.Instance.OpenFileStream(ofd.FileName);
-                if (Stream == null) {
-                    MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                if (IsValidExecutable(ref Stream, ID) == false)
-                {
-                    Stream.Close();
-                    Stream.Dispose();
-                    MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                mainPatcher PatchHandler = new mainPatcher(ID, ref Stream);
-                PatchHandler.ShowDialog();
-
-                if (Stream.CanRead == true) // Was Stream already closed?
-                {
-                    Stream.Close();
-                    Stream.Dispose();
-                }
-
-                HandlePatcherReturnValue(PatchHandler.DialogResult);
+                default:
+                    return; 
             }
-            else
-            {
-                MessageBox.Show(Resources.ErrorNoFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+            gbAll.Enabled = true;
+            txtResolution.Enabled = false;
+            txtZoom.Enabled = false;
+            txtAutosave.Enabled = false;
+
+            btnPatch.Enabled = true;
+            btnBackup.Enabled = true;
         }
-        private void HandlePatcherReturnValue(DialogResult Result)
+        private Patcher GetPatchFeaturesByControls(execID ID, ref FileStream Stream, List<GroupBox> Controls)
         {
-            if (Result == DialogResult.OK)
+            List<string> CheckedFeatures = new List<string>();
+            CheckBox curControl;
+
+            foreach (GroupBox Box in Controls)
             {
-                MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                for (ushort it = 0; it != Box.Controls.Count; it++)
+                {
+                    try
+                    {
+                        curControl = (CheckBox)Box.Controls[it];
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+
+                    if (curControl.Checked)
+                    {
+                        CheckedFeatures.Add(curControl.Text);
+                    }
+                }
             }
-            else if (Result == DialogResult.Cancel)
-            {
-                MessageBox.Show(Resources.ErrorBackupFail, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else if (Result == DialogResult.Retry)
-            {
-                MessageBox.Show(Resources.FinishedBackup, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else if (Result == DialogResult.Abort)
-            {
-                MessageBox.Show(Resources.AbortedMessage, "Abort", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+
+            Patcher Patcher = new Patcher(ID, ref Stream, ref CheckedFeatures);
+            return Patcher;
         }
-        private bool IsValidExecutable(ref FileStream Reader, execID Identifier, Int64 Offset = 0x0)
+        private void SelectPatchFeatures(execID ID, ref FileStream Stream)
         {
-            string ExpectedVersion = "1, 71, 4289, 0";
-            UInt32[] Mapping = {0x6ECADC, 0xF531A4, 0x6D06A8};
-            byte[] Result = new byte[30];
-
-            Reader.Position = (Mapping[(char)Identifier] - Offset);
-            Reader.Read(Result, 0, 30);
-
-            string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
-            if (Version == ExpectedVersion)
+            Patcher Patcher = GetPatchFeaturesByControls(ID, ref Stream, new List<GroupBox> {gbAll, gbHE, gbEditor});
+            if (cbZoom.Checked)
             {
-                IsSteamOV = false;
-                IsSteamHE = false;
-                return true;
+                Patcher.SetZoomLevel(ID, ref Stream, txtZoom.Text);
             }
-            else if (Offset == 0x0 && Identifier == execID.OV) // Try again with offset applied
+            if (cbHighTextures.Checked && ID != execID.ED) // Editor has no custom texture resolution
             {
-                if (IsValidExecutable(ref Reader, Identifier, 0x3F0000) == true)
-                {
-                    IsSteamOV = true;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                Patcher.SetHighResolutionTextures(ID, ref Stream, txtResolution.Text);
             }
-            else if (Offset == 0x0 && Identifier == execID.HE) // Check for Steam HE
+            if (cbAutosave.Checked)
             {
-                if (IsValidExecutable(ref Reader, Identifier, -0x1400) == true)
-                {
-                    IsSteamHE = true;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                Patcher.SetAutosaveTimer(ID, ref Stream, txtAutosave.Text);
             }
-            else
+            if (cbLAAFlag.Checked)
             {
-                MessageBox.Show("Erwartet/Expected: " + ExpectedVersion + "\nGelesen/Read: " + Version.ToString(), "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
+                Patcher.SetLargeAddressAwareFlag(ref Stream);
             }
-        }
-        private void SetTooltipSystemLanguage()
-        {
-            string Language = CultureInfo.InstalledUICulture.TwoLetterISOLanguageName;
-            ToolTip btnPatchTooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 50, ReshowDelay = 100, AutoPopDelay = 32000},
-            btnPatchOVTooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 50, ReshowDelay = 100, AutoPopDelay = 32000},
-            btnPatchHETooltip = new ToolTip{ShowAlways = true, ToolTipIcon = ToolTipIcon.None, InitialDelay = 50, ReshowDelay = 100, AutoPopDelay = 32000};
-
-            if (Language == "de") // German
+            if (cbScriptBugFixes.Checked)
             {
-                btnPatchTooltip.SetToolTip(btnPatch, Resources.btnPatch_GermanText);
-                btnPatchHETooltip.SetToolTip(btnPatchHE, Resources.btnPatchHE_GermanText);
-                btnPatchOVTooltip.SetToolTip(btnPatchOV, Resources.btnPatchOV_GermanText);
-
-                btnPatchTooltip.ToolTipTitle = Resources.btnGermanTitle;
-                btnPatchHETooltip.ToolTipTitle = Resources.btnGermanTitle;
-                btnPatchOVTooltip.ToolTipTitle= Resources.btnGermanTitle;
-
-                btnClose.Text = "Beenden";
-            }
-            else // English
-            {
-                btnPatchTooltip.SetToolTip(btnPatch, Resources.btnPatch_EnglishText);
-                btnPatchHETooltip.SetToolTip(btnPatchHE, Resources.btnPatchHE_EnglishText);
-                btnPatchOVTooltip.SetToolTip(btnPatchOV, Resources.btnPatchOV_EnglishText);
-
-                btnPatchTooltip.ToolTipTitle = Resources.btnEnglishTitle;
-                btnPatchHETooltip.ToolTipTitle = Resources.btnEnglishTitle;
-                btnPatchOVTooltip.ToolTipTitle = Resources.btnEnglishTitle;
-
-                btnClose.Text = "Exit";
+                Patcher.SetLuaScriptBugFixes();
+                Patcher.SetKnightSelection(cbKnightSelection.Checked);
             }
         }
     }

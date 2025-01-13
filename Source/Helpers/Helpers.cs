@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace S6Patcher
 {
-    public enum execID {OV = 0, HE = 1, ED = 2}; // Identify the current game release version
-    public class Helpers
+    public enum execID
     {
-        public static string FormTitleText = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"github.com/Eisenmonoxid/S6Patcher\"";
-        public static bool IsSteamOV = false; // This does not actually refer to the OV from Steam, but rather a special release
-        public static bool IsSteamHE = false; // This however, does
-
+        NONE = 0,
+        OV = 1,
+        OV_OFFSET = 2,
+        HE_UBISOFT = 3,
+        HE_STEAM = 4,
+        ED = 5
+    };
+    public static class Helpers
+    {
+        public static UInt32 GlobalOffset = 0x3F0000;
+        public static execID CurrentID = execID.NONE;
         public static void WriteBytes(ref FileStream Stream, long Position, byte[] Bytes)
         {
-            Stream.Position = (IsSteamOV == false) ?  Position :  Position - 0x3F0000;
+            Stream.Position = (CurrentID == execID.OV_OFFSET) ? Position - GlobalOffset : Position;
             try
             {
                 Stream.Write(Bytes, 0, Bytes.Length);
@@ -30,6 +37,7 @@ namespace S6Patcher
             // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
             string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             List<string> Directories = new List<string>();
+
             foreach (string Element in Directory.GetDirectories(DocumentPath))
             {
                 if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
@@ -39,6 +47,35 @@ namespace S6Patcher
             }
 
             return Directories;
+        }
+        public static bool GetCurrentExecutableID(ref FileStream Stream)
+        {
+            string ExpectedVersion = "1, 71, 4289, 0";
+            byte[] Result = new byte[30];
+
+            Dictionary<UInt32, execID> Mapping = new Dictionary<UInt32, execID>()
+            {
+                {0x6ECADC, execID.OV},
+                {0x2FCADC, execID.OV_OFFSET},
+                {0xF531A4, execID.HE_UBISOFT},
+                {0xF545A4, execID.HE_STEAM},
+                {0x6D06A8, execID.ED},
+            };
+
+            foreach (var Element in Mapping)
+            {
+                Stream.Position = Element.Key;
+                Stream.Read(Result, 0, Result.Length);
+                string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
+
+                if (Version == ExpectedVersion)
+                {
+                    CurrentID = Element.Value;
+                    return true;
+                };
+            }
+
+            return false;
         }
     }
 }
