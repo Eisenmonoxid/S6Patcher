@@ -6,14 +6,15 @@
 ## Usage
 - Select the game executable(s) that you wish to patch (Settlers6.exe/Settlers6R.exe or S6MapEditor.exe/S6MapEditorR.exe). Look in your installation folder.
 - Wähle die ausführbare(n) Datei(en), die gepatcht werden soll(en) (Settlers6.exe/Settlers6R.exe oder S6MapEditor.exe/S6MapEditorR.exe) aus, welche sich im Installationsordner befindet/n.
-- **Should you have any questions, errors or feature requests: [Discord](https://discord.gg/7SGkQtAAET).**
-- **Sollte es Fragen, Fehler oder Featurewünsche geben: [Discord](https://discord.gg/7SGkQtAAET).**
+
+- Should you have any questions, errors or feature requests: [Discord](https://discord.gg/7SGkQtAAET).
+- Sollte es Fragen, Fehler oder Featurewünsche geben: [Discord](https://discord.gg/7SGkQtAAET).
   
 ## Features
-- For illustrated descriptions of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) file.
-- Eine bebilderte Beschreibung einiger der Hauptfeatures des Programmes findet sich in der [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features.md) Datei.
+- For illustrated descriptions of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
+- Eine bebilderte Beschreibung einiger der Hauptfeatures des Programmes findet sich in der [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) Datei.
 
-### Patch Original Release
+### Original Release
 - Für die Originalversion (OV) mit neuestem Patch 1.71.
 - For the original release (OV) with latest Patch 1.71.
 
@@ -41,7 +42,7 @@ English:
 - Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
 -> Original releases from Steam will need to be extracted with the tool "Steamless" first!
 ```
-### Patch History Edition
+### History Edition
 - Für alle History Editionen.
 - For all History Editions.
 
@@ -69,7 +70,7 @@ English:
 - Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
 -> History Editions from Steam will need to be extracted with the tool "Steamless" first!
 ```
-### Patch Mapeditor
+### Mapeditor
 - Für alle Mapeditorversionen.
 - For all Mapeditor releases.
 
