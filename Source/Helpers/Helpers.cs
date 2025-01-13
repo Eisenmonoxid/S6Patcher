@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 
@@ -76,6 +77,27 @@ namespace S6Patcher
             }
 
             return false;
+        }
+        public static void CheckForUpdates()
+        {
+            string CurrentVersion = String.Empty;
+            string UpdateFile = "https://github.com/Eisenmonoxid/S6Patcher/blob/master/Version.txt";
+            using (WebClient Client = new WebClient())
+            {
+                try
+                {
+                    CurrentVersion = Client.DownloadString(UpdateFile);
+                }
+                catch (Exception)
+                {
+                    return; // Does not matter if nothing was found
+                }
+            }
+
+            if (Application.ProductVersion != CurrentVersion)
+            {
+                MessageBox.Show("A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + CurrentVersion, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

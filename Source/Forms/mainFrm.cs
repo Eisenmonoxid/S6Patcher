@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -12,6 +11,8 @@ namespace S6Patcher
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"github.com/Eisenmonoxid/S6Patcher\"";
+
+            Helpers.CheckForUpdates();
         }
         private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {
@@ -29,10 +30,10 @@ namespace S6Patcher
                 txtAutosave.Text = (Reader.ReadDouble() / 60000).ToString();
             }
         }
-        private void InitializeControls(execID ID, ref FileStream Stream)
+        private void InitializeControls()
         {
-            BinaryReader Reader = new BinaryReader(Stream);
-            switch (ID)
+            BinaryReader Reader = new BinaryReader(GlobalStream);
+            switch (Helpers.CurrentID)
             {
                 case execID.OV:
                     SetControlValueFromStream(ref Reader, 0x545400, txtZoom);
@@ -74,7 +75,7 @@ namespace S6Patcher
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
         }
-        private Patcher GetPatchFeaturesByControls(execID ID, ref FileStream Stream, List<GroupBox> Controls)
+        private Patcher GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
             List<string> CheckedFeatures = new List<string>();
             CheckBox curControl;
@@ -99,27 +100,27 @@ namespace S6Patcher
                 }
             }
 
-            Patcher Patcher = new Patcher(ID, ref Stream, ref CheckedFeatures);
+            Patcher Patcher = new Patcher(Helpers.CurrentID, ref GlobalStream, ref CheckedFeatures);
             return Patcher;
         }
-        private void SelectPatchFeatures(execID ID, ref FileStream Stream)
+        private void SelectPatchFeatures()
         {
-            Patcher Patcher = GetPatchFeaturesByControls(ID, ref Stream, new List<GroupBox> {gbAll, gbHE, gbEditor});
+            Patcher Patcher = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbHE, gbEditor});
             if (cbZoom.Checked)
             {
-                Patcher.SetZoomLevel(ID, ref Stream, txtZoom.Text);
+                Patcher.SetZoomLevel(Helpers.CurrentID, ref GlobalStream, txtZoom.Text);
             }
-            if (cbHighTextures.Checked && ID != execID.ED) // Editor has no custom texture resolution
+            if (cbHighTextures.Checked && Helpers.CurrentID != execID.ED) // Editor has no custom texture resolution
             {
-                Patcher.SetHighResolutionTextures(ID, ref Stream, txtResolution.Text);
+                Patcher.SetHighResolutionTextures(Helpers.CurrentID, ref GlobalStream, txtResolution.Text);
             }
             if (cbAutosave.Checked)
             {
-                Patcher.SetAutosaveTimer(ID, ref Stream, txtAutosave.Text);
+                Patcher.SetAutosaveTimer(Helpers.CurrentID, ref GlobalStream, txtAutosave.Text);
             }
             if (cbLAAFlag.Checked)
             {
-                Patcher.SetLargeAddressAwareFlag(ref Stream);
+                Patcher.SetLargeAddressAwareFlag(ref GlobalStream);
             }
             if (cbScriptBugFixes.Checked)
             {

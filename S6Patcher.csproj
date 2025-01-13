@@ -119,5 +119,8 @@
   <ItemGroup>
     <None Include="Source\Resources\favicon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Version.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

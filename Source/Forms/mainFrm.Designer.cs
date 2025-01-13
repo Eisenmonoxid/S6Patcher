@@ -377,6 +377,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(681, 643);
             this.Name = "mainFrm";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "-";
             this.TopMost = true;

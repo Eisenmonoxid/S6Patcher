@@ -62,7 +62,7 @@ namespace S6Patcher
         }
         private void btnPatch_Click(object sender, EventArgs e)
         {
-            SelectPatchFeatures(Helpers.CurrentID, ref GlobalStream);
+            SelectPatchFeatures();
         }
         private void btnAbort_Click(object sender, EventArgs e)
         {
@@ -114,7 +114,7 @@ namespace S6Patcher
                 }
 
                 // File is valid
-                InitializeControls(Helpers.CurrentID, ref GlobalStream);
+                InitializeControls();
             }
             else
             {
