@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -7,12 +8,25 @@ namespace S6Patcher
     public partial class mainFrm : Form
     {
         private FileStream GlobalStream = null;
-        public mainFrm()
+        public mainFrm(string[] args)
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"github.com/Eisenmonoxid/S6Patcher\"";
 
-            Helpers.CheckForUpdates();
+            bool UseUpdate = true;
+            foreach (string Element in args)
+            {
+                if (Element.Contains("-NOUPDATE"))
+                {
+                    UseUpdate = false;
+                    break;
+                }
+            }
+
+            if (UseUpdate == true)
+            {
+                Helpers.CheckForUpdates();
+            }
         }
         private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {
@@ -127,6 +141,25 @@ namespace S6Patcher
                 Patcher.SetLuaScriptBugFixes();
                 Patcher.SetKnightSelection(cbKnightSelection.Checked);
             }
+        }
+        private void CloseFileStream()
+        {
+            if (GlobalStream != null && GlobalStream.CanRead == true) // Close Filestream if not already done
+            {
+                GlobalStream.Close();
+                GlobalStream.Dispose();
+            }
+        }
+        private void ResetForm()
+        {
+            CloseFileStream();
+
+            gbAll.Enabled = false;
+            gbEditor.Enabled = false;
+            gbHE.Enabled = false;
+            btnPatch.Enabled = false;
+            btnBackup.Enabled = false;
+            txtExecutablePath.Text = String.Empty;
         }
     }
 }

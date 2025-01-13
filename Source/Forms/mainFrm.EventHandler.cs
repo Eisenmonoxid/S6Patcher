@@ -9,11 +9,7 @@ namespace S6Patcher
     {
         private void mainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (GlobalStream.CanRead == true) // Close Filestream if not already done
-            {
-                GlobalStream.Close();
-                GlobalStream.Dispose();
-            }
+            CloseFileStream();
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
@@ -63,6 +59,8 @@ namespace S6Patcher
         private void btnPatch_Click(object sender, EventArgs e)
         {
             SelectPatchFeatures();
+            MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ResetForm();
         }
         private void btnAbort_Click(object sender, EventArgs e)
         {
@@ -79,14 +77,12 @@ namespace S6Patcher
             {
                 MessageBox.Show(Resources.FinishedBackup, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
+            ResetForm();
         }
         private void btnChooseFile_Click(object sender, EventArgs e)
         {
-            gbAll.Enabled = false;
-            gbEditor.Enabled = false;
-            gbHE.Enabled = false;
-            btnPatch.Enabled = false;
-            btnBackup.Enabled = false;
+            ResetForm();
 
             OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
@@ -114,6 +110,7 @@ namespace S6Patcher
                 }
 
                 // File is valid
+                txtExecutablePath.Text = GlobalStream.Name;
                 InitializeControls();
             }
             else

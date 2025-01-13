@@ -185,7 +185,7 @@ namespace S6Patcher
                 foreach (string Element in Directories)
                 {
                     ScriptPath = Path.Combine(Element, "Script");
-                    if (!Directory.Exists(ScriptPath))
+                    if (Directory.Exists(ScriptPath) == false)
                     {
                         Directory.CreateDirectory(ScriptPath);
                     }

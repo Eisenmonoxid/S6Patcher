@@ -81,9 +81,13 @@ namespace S6Patcher
         public static void CheckForUpdates()
         {
             string CurrentVersion = String.Empty;
-            string UpdateFile = "https://github.com/Eisenmonoxid/S6Patcher/blob/master/Version.txt";
+            string UpdateFile = "https://raw.githubusercontent.com/Eisenmonoxid/S6Patcher/refs/heads/master/Version.txt";
+
             using (WebClient Client = new WebClient())
             {
+                Client.Encoding = Encoding.UTF8;
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+
                 try
                 {
                     CurrentVersion = Client.DownloadString(UpdateFile);

@@ -350,9 +350,9 @@
             this.lblSelectFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSelectFile.Location = new System.Drawing.Point(12, 11);
             this.lblSelectFile.Name = "lblSelectFile";
-            this.lblSelectFile.Size = new System.Drawing.Size(118, 16);
+            this.lblSelectFile.Size = new System.Drawing.Size(117, 16);
             this.lblSelectFile.TabIndex = 22;
-            this.lblSelectFile.Text = "Select Executable:";
+            this.lblSelectFile.Text = "Select executable:";
             // 
             // mainFrm
             // 
