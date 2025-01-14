@@ -327,10 +327,10 @@
             // 
             // btnChooseFile
             // 
-            this.btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChooseFile.Location = new System.Drawing.Point(548, 8);
+            this.btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChooseFile.Location = new System.Drawing.Point(548, 6);
             this.btnChooseFile.Name = "btnChooseFile";
-            this.btnChooseFile.Size = new System.Drawing.Size(105, 23);
+            this.btnChooseFile.Size = new System.Drawing.Size(105, 26);
             this.btnChooseFile.TabIndex = 20;
             this.btnChooseFile.Text = "Choose File ...";
             this.btnChooseFile.UseVisualStyleBackColor = true;
@@ -359,7 +359,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.PapayaWhip;
             this.ClientSize = new System.Drawing.Size(665, 604);
             this.ControlBox = false;
             this.Controls.Add(this.lblSelectFile);

@@ -154,9 +154,29 @@ namespace S6Patcher
         {
             CloseFileStream();
 
-            gbAll.Enabled = false;
-            gbEditor.Enabled = false;
-            gbHE.Enabled = false;
+            foreach (var Control in new List<GroupBox> {gbAll, gbHE, gbEditor})
+            {
+                Control.Enabled = false;
+
+                CheckBox curCheckBox;
+                TextBox curTextBox;
+                foreach (var Element in Control.Controls)
+                {
+                    try
+                    {
+                        curCheckBox = (CheckBox)Element;
+                        curCheckBox.Checked = false;
+                    }
+                    catch {};
+                    try
+                    {
+                        curTextBox = (TextBox)Element;
+                        curTextBox.Text = String.Empty;
+                    }
+                    catch {};
+                }
+            }
+
             btnPatch.Enabled = false;
             btnBackup.Enabled = false;
             txtExecutablePath.Text = String.Empty;
