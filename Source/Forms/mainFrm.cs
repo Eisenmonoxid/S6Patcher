@@ -11,22 +11,7 @@ namespace S6Patcher
         public mainFrm(string[] args)
         {
             InitializeComponent();
-            this.Text = "S6Patcher - v" + Application.ProductVersion.Substring(0, 3) + " - \"github.com/Eisenmonoxid/S6Patcher\"";
-
-            bool UseUpdate = true;
-            foreach (string Element in args)
-            {
-                if (Element.Contains("-NOUPDATE"))
-                {
-                    UseUpdate = false;
-                    break;
-                }
-            }
-
-            if (UseUpdate == true)
-            {
-                Helpers.CheckForUpdates();
-            }
+            this.Text = "S6Patcher - v" + Application.ProductVersion;
         }
         private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {
@@ -81,6 +66,7 @@ namespace S6Patcher
                     cbZoom.Enabled = false;
                     lblZoomAngle.Enabled = false;
                     lblTextureRes.Enabled = false;
+					cbLimitedEdition.Enabled = false;
                     break;
                 case execID.NONE:
                     return;
@@ -160,7 +146,6 @@ namespace S6Patcher
         private void ResetForm()
         {
             CloseFileStream();
-
             foreach (var Control in new List<GroupBox> {gbAll, gbHE, gbEditor})
             {
                 Control.Enabled = false;

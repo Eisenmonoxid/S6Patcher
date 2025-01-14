@@ -96,7 +96,7 @@
             this.btnPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPatch.Location = new System.Drawing.Point(12, 441);
             this.btnPatch.Name = "btnPatch";
-            this.btnPatch.Size = new System.Drawing.Size(641, 47);
+            this.btnPatch.Size = new System.Drawing.Size(642, 47);
             this.btnPatch.TabIndex = 3;
             this.btnPatch.Text = "Patch File";
             this.btnPatch.UseVisualStyleBackColor = true;
@@ -165,7 +165,7 @@
             this.btnAbort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAbort.Location = new System.Drawing.Point(12, 547);
             this.btnAbort.Name = "btnAbort";
-            this.btnAbort.Size = new System.Drawing.Size(641, 47);
+            this.btnAbort.Size = new System.Drawing.Size(642, 47);
             this.btnAbort.TabIndex = 10;
             this.btnAbort.Text = "Exit";
             this.btnAbort.UseVisualStyleBackColor = true;
@@ -221,9 +221,9 @@
             this.gbEditor.Controls.Add(this.cbAllEntities);
             this.gbEditor.Enabled = false;
             this.gbEditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbEditor.Location = new System.Drawing.Point(15, 310);
+            this.gbEditor.Location = new System.Drawing.Point(12, 310);
             this.gbEditor.Name = "gbEditor";
-            this.gbEditor.Size = new System.Drawing.Size(638, 125);
+            this.gbEditor.Size = new System.Drawing.Size(642, 125);
             this.gbEditor.TabIndex = 16;
             this.gbEditor.TabStop = false;
             this.gbEditor.Text = "Mapeditor";
@@ -235,9 +235,9 @@
             this.gbHE.Controls.Add(this.lblAutosave);
             this.gbHE.Enabled = false;
             this.gbHE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbHE.Location = new System.Drawing.Point(15, 255);
+            this.gbHE.Location = new System.Drawing.Point(12, 255);
             this.gbHE.Name = "gbHE";
-            this.gbHE.Size = new System.Drawing.Size(638, 49);
+            this.gbHE.Size = new System.Drawing.Size(642, 49);
             this.gbHE.TabIndex = 17;
             this.gbHE.TabStop = false;
             this.gbHE.Text = "History Edition";
@@ -257,9 +257,9 @@
             this.gbAll.Controls.Add(this.lblZoomAngle);
             this.gbAll.Enabled = false;
             this.gbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbAll.Location = new System.Drawing.Point(15, 42);
+            this.gbAll.Location = new System.Drawing.Point(12, 42);
             this.gbAll.Name = "gbAll";
-            this.gbAll.Size = new System.Drawing.Size(638, 207);
+            this.gbAll.Size = new System.Drawing.Size(642, 207);
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
@@ -319,7 +319,7 @@
             this.btnBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBackup.Location = new System.Drawing.Point(12, 494);
             this.btnBackup.Name = "btnBackup";
-            this.btnBackup.Size = new System.Drawing.Size(641, 47);
+            this.btnBackup.Size = new System.Drawing.Size(642, 47);
             this.btnBackup.TabIndex = 19;
             this.btnBackup.Text = "Restore Backup";
             this.btnBackup.UseVisualStyleBackColor = true;
@@ -330,7 +330,7 @@
             this.btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnChooseFile.Location = new System.Drawing.Point(548, 6);
             this.btnChooseFile.Name = "btnChooseFile";
-            this.btnChooseFile.Size = new System.Drawing.Size(105, 26);
+            this.btnChooseFile.Size = new System.Drawing.Size(106, 28);
             this.btnChooseFile.TabIndex = 20;
             this.btnChooseFile.Text = "Choose File ...";
             this.btnChooseFile.UseVisualStyleBackColor = true;
@@ -356,11 +356,9 @@
             // 
             // mainFrm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(665, 604);
-            this.ControlBox = false;
             this.Controls.Add(this.lblSelectFile);
             this.Controls.Add(this.txtExecutablePath);
             this.Controls.Add(this.btnChooseFile);
@@ -371,6 +369,7 @@
             this.Controls.Add(this.btnAbort);
             this.Controls.Add(this.btnPatch);
             this.DoubleBuffered = true;
+            this.HelpButton = true;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(681, 643);
             this.MinimizeBox = false;
@@ -379,7 +378,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "-";
-            this.TopMost = true;
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.mainFrm_HelpButtonClicked);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainFrm_FormClosing);
             this.gbEditor.ResumeLayout(false);
             this.gbEditor.PerformLayout();

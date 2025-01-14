@@ -61,6 +61,15 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://discord.com/invite/7SGkQtAAET.
+        /// </summary>
+        internal static string DiscordMainLink {
+            get {
+                return ResourceManager.GetString("DiscordMainLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] EMXBinData {
@@ -121,6 +130,15 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md.
+        /// </summary>
+        internal static string FeaturesLink {
+            get {
+                return ResourceManager.GetString("FeaturesLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup wurde erfolgreich wiederhergestellt!
         ///Backup has been successfully restored!.
         /// </summary>
@@ -141,6 +159,15 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher.
+        /// </summary>
+        internal static string GithubMainLink {
+            get {
+                return ResourceManager.GetString("GithubMainLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] MainMenuUserScript {
@@ -157,6 +184,15 @@ namespace S6Patcher.Properties {
             get {
                 object obj = ResourceManager.GetObject("UserScriptLocal", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/Eisenmonoxid/S6Patcher/refs/heads/master/Version.txt.
+        /// </summary>
+        internal static string VersionFileLink {
+            get {
+                return ResourceManager.GetString("VersionFileLink", resourceCulture);
             }
         }
     }

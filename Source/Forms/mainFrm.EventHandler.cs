@@ -1,4 +1,5 @@
 ﻿using S6Patcher.Properties;
+using S6Patcher.Source.Forms;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -62,6 +63,12 @@ namespace S6Patcher
             MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             ResetForm();
         }
+        private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Form Box = new aboutBox();
+            Box.ShowDialog();
+            e.Cancel = true;
+        }
         private void btnAbort_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
@@ -83,7 +90,6 @@ namespace S6Patcher
         private void btnChooseFile_Click(object sender, EventArgs e)
         {
             ResetForm();
-
             OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
             {

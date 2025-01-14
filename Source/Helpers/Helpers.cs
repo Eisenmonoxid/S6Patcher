@@ -1,4 +1,5 @@
-﻿using System;
+﻿using S6Patcher.Properties;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -81,27 +82,39 @@ namespace S6Patcher
         }
         public static void CheckForUpdates()
         {
-            string CurrentVersion = String.Empty;
-            string UpdateFile = "https://raw.githubusercontent.com/Eisenmonoxid/S6Patcher/refs/heads/master/Version.txt";
-
             using (WebClient Client = new WebClient())
             {
                 Client.Encoding = Encoding.UTF8;
+                Client.DownloadStringCompleted += Client_DownloadStringCompleted;
                 ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
                 try
-                {
-                    CurrentVersion = Client.DownloadString(UpdateFile);
+                { 
+                    Client.DownloadStringAsync(new Uri(Resources.VersionFileLink));
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return; // Does not matter if nothing was found
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
-
-            if (Application.ProductVersion != CurrentVersion)
+        }
+        private static void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (e.Cancelled == false && e.Error == null)
             {
-                MessageBox.Show("A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + CurrentVersion, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (string.Compare(Application.ProductVersion, e.Result, true) != 0)
+                {
+                    MessageBox.Show("A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + e.Result, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("You are using the latest version of the S6Patcher!", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Error: Could not retrieve update information!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

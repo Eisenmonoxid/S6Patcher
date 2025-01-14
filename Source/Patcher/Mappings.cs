@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using static S6Patcher.Helpers;
+
 namespace S6Patcher
 {
     internal partial class Patcher
