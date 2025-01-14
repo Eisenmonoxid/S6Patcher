@@ -37,7 +37,14 @@ namespace S6Patcher
             }
             else if (Control == txtZoom)
             {
-                txtZoom.Text = Reader.ReadDouble().ToString();
+                if (Helpers.CurrentID == execID.HE_UBISOFT || Helpers.CurrentID == execID.HE_STEAM)
+                {
+                    txtZoom.Text = Reader.ReadSingle().ToString();
+                }
+                else
+                {
+                    txtZoom.Text = Reader.ReadDouble().ToString();
+                }
             }
             else if (Control == txtAutosave)
             {
