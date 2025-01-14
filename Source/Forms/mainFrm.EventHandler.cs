@@ -103,8 +103,7 @@ namespace S6Patcher
                 bool ValidExecutable = Helpers.GetCurrentExecutableID(ref GlobalStream);
                 if (ValidExecutable == false)
                 {
-                    GlobalStream.Close();
-                    GlobalStream.Dispose();
+                    CloseFileStream();
                     MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }

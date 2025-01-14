@@ -61,128 +61,6 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vorgang wurde abgebrochen ...
-        ///Process was aborted ....
-        /// </summary>
-        internal static string AbortedMessage {
-            get {
-                return ResourceManager.GetString("AbortedMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Changes:.
-        /// </summary>
-        internal static string btnEnglishTitle {
-            get {
-                return ResourceManager.GetString("btnEnglishTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Änderungen:.
-        /// </summary>
-        internal static string btnGermanTitle {
-            get {
-                return ResourceManager.GetString("btnGermanTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - High resolution textures for Buildings/Entities/Ground.
-        ///- Unlimited scaling of the entity size.
-        ///- Free placing and moving of entities, walls and wall gates.
-        ///- Higher general entity limit and move more entities at the same time (100 -&gt; 1055).
-        ///- Black map border area can be used and is not deleted at map save.
-        ///- Activates the Development-Mode without Registry-Key.
-        ///- Enables walls and wall gates from all climate zones in all climate zones.
-        ///- Can place, select and move all possible entity types (Carefu [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string btnPatch_EnglishText {
-            get {
-                return ResourceManager.GetString("btnPatch_EnglishText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - Hohe Texturen für Gebäude/Entitäten/Boden.
-        ///- Unbegrenztes Skalieren der Größe von Entitäten.
-        ///- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren.
-        ///- Erhöhen des allgemeinen Entitätenlimits und mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
-        ///- Schwarzer Kartenrand wird beim Speichervorgang nicht gelöscht und kann verwendet werden.
-        ///- Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
-        ///- Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
-        ///- Al [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string btnPatch_GermanText {
-            get {
-                return ResourceManager.GetString("btnPatch_GermanText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - Can activate the Development-Mode (Necessary for the LuaDebugger to work).
-        ///- Can disable the autosave or set an custom timer interval.
-        ///- Can set the maximum zoom level in the game.
-        ///- Can set the Large Address Aware Flag for more usable memory.
-        ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
-        ///- Can enable all base game knights in the &quot;Eastern Realm&quot; expansion pack.
-        ///- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
-        ///- Can set the highest quali [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string btnPatchHE_EnglishText {
-            get {
-                return ResourceManager.GetString("btnPatchHE_EnglishText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
-        ///- Kann den Autosave deaktivieren oder ein benutzerdefiniertes Intervall setzen.
-        ///- Kann das maximale Zoomlevel setzen.
-        ///- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-        ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;).
-        ///- Kann die Auswahl aller Grundspielritter im &quot;Reich des Ostens&quot; - Addon ermöglichen.
-        ///- Kann die Limited/Special Edition aktivieren (zB Zier [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string btnPatchHE_GermanText {
-            get {
-                return ResourceManager.GetString("btnPatchHE_GermanText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - Can restore the texture slider in the main menu, so high textures can be choosen.
-        ///- Can enable highest quality ground textures.
-        ///- Can set the maximum zoom level in the game.
-        ///- Can activate the Development-Mode permanently without Registry-Key.
-        ///- Can set the Large Address Aware Flag for more usable memory.
-        ///- Can fix Bugs in Script&amp;Code (e.g. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Resolution&quot;).
-        ///- Can enable all base game knights in the &quot;Eastern Realm&quot; expansion pack.
-        ///- Can enable the Limited/ [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string btnPatchOV_EnglishText {
-            get {
-                return ResourceManager.GetString("btnPatchOV_EnglishText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
-        ///- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
-        ///- Kann das maximale Zoomlevel setzen.
-        ///- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
-        ///- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-        ///- Kann Script&amp;Code-Bugs fixen (z.B. &quot;Meldungsstau&quot;, &quot;Entertainercrash&quot;, &quot;2K &amp; 4K - Auflösung&quot;).
-        ///- Kann die Auswahl aller Grundspielritter im &quot;Reich  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string btnPatchOV_GermanText {
-            get {
-                return ResourceManager.GetString("btnPatchOV_GermanText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] EMXBinData {
@@ -194,7 +72,7 @@ namespace S6Patcher.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Fehler beim Erstellen der Backup-Datei! Abbrechen ...
-        ///Error when creating Backup-File! Aborting ....
+        ///Error when creating backup file! Aborting ....
         /// </summary>
         internal static string ErrorBackup {
             get {

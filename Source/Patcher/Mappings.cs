@@ -164,7 +164,7 @@ namespace S6Patcher
             });
             Entries.Add(new PatchEntry
             {
-                Name = "Higher Entity - Limits",
+                Name = "Higher Entity Limits",
                 Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x4A710, new byte[] {0x00, 0x00, 0xF0}}, // Higher general entity limit

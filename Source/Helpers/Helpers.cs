@@ -76,6 +76,7 @@ namespace S6Patcher
                 };
             }
 
+            CurrentID = execID.NONE;
             return false;
         }
         public static void CheckForUpdates()

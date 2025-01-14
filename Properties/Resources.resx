@@ -117,93 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AbortedMessage" xml:space="preserve">
-    <value>Vorgang wurde abgebrochen ...
-Process was aborted ...</value>
-  </data>
-  <data name="btnEnglishTitle" xml:space="preserve">
-    <value>Changes:</value>
-  </data>
-  <data name="btnGermanTitle" xml:space="preserve">
-    <value>Änderungen:</value>
-  </data>
-  <data name="btnPatchHE_EnglishText" xml:space="preserve">
-    <value>- Can activate the Development-Mode (Necessary for the LuaDebugger to work).
-- Can disable the autosave or set an custom timer interval.
-- Can set the maximum zoom level in the game.
-- Can set the Large Address Aware Flag for more usable memory.
-- Can fix Bugs in Script&amp;Code (e.g. "Meldungsstau", "Entertainercrash").
-- Can enable all base game knights in the "Eastern Realm" expansion pack.
-- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
-- Can set the highest quality ground textures.
--&gt; History Editions from Steam will need to be extracted with the tool "Steamless" first!</value>
-  </data>
-  <data name="btnPatchHE_GermanText" xml:space="preserve">
-    <value>- Kann den Development-Mode aktivieren (Notwendig für die Funktion des LuaDebuggers).
-- Kann den Autosave deaktivieren oder ein benutzerdefiniertes Intervall setzen.
-- Kann das maximale Zoomlevel setzen.
-- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.
-- Kann Script&amp;Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash").
-- Kann die Auswahl aller Grundspielritter im "Reich des Ostens" - Addon ermöglichen.
-- Kann die Limited/Special Edition aktivieren (zB Zierobjekte im Grundspiel).
-- Kann Bodentexturen auf die höchste Qualitätsstufe setzen.
--&gt; History Editionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
-  </data>
-  <data name="btnPatchOV_EnglishText" xml:space="preserve">
-    <value>- Can restore the texture slider in the main menu, so high textures can be choosen.
-- Can enable highest quality ground textures.
-- Can set the maximum zoom level in the game.
-- Can activate the Development-Mode permanently without Registry-Key.
-- Can set the Large Address Aware Flag for more usable memory.
-- Can fix Bugs in Script&amp;Code (e.g. "Meldungsstau", "Entertainercrash", "2K &amp; 4K - Resolution").
-- Can enable all base game knights in the "Eastern Realm" expansion pack.
-- Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
--&gt; Original releases from Steam will need to be extracted with the tool "Steamless" first!</value>
-  </data>
-  <data name="btnPatchOV_GermanText" xml:space="preserve">
-    <value>- Kann den Textur-Slider im Menü reaktivieren, um hohe Texturen auswählen zu können.
-- Kann die Qualität von Bodentexturen auf einen benutzerdefinierten Wert setzen.
-- Kann das maximale Zoomlevel setzen.
-- Kann das Large Address Aware Flag setzen, um mehr adressierbaren Speicher zu haben.
-- Kann den Development-Mode ohne Registry-Key dauerhaft aktivieren.
-- Kann Script&amp;Code-Bugs fixen (z.B. "Meldungsstau", "Entertainercrash", "2K &amp; 4K - Auflösung").
-- Kann die Auswahl aller Grundspielritter im "Reich des Ostens" - Addon ermöglichen.
-- Kann die Limited/Special Edition aktivieren (zB Zierobjekte im Grundspiel).
--&gt; Originalversionen von Steam müssen zuerst mit dem Tool "Steamless" entpackt werden!</value>
-  </data>
-  <data name="btnPatch_EnglishText" xml:space="preserve">
-    <value>- High resolution textures for Buildings/Entities/Ground.
-- Unlimited scaling of the entity size.
-- Free placing and moving of entities, walls and wall gates.
-- Higher general entity limit and move more entities at the same time (100 -&gt; 1055).
-- Black map border area can be used and is not deleted at map save.
-- Activates the Development-Mode without Registry-Key.
-- Enables walls and wall gates from all climate zones in all climate zones.
-- Can place, select and move all possible entity types (Careful, some may crash).
-- Can apply all texture types from all climate zones (and some hidden ones too).
-- Can open map files that have been protected with the "S6Tools".
-- Can set the Large Address Aware Flag for more usable memory.</value>
-  </data>
-  <data name="btnPatch_GermanText" xml:space="preserve">
-    <value>- Hohe Texturen für Gebäude/Entitäten/Boden.
-- Unbegrenztes Skalieren der Größe von Entitäten.
-- Freies Platzieren und Ineinander-Verschieben von Entitäten, Mauern und Mauertoren.
-- Erhöhen des allgemeinen Entitätenlimits und mehr Entitäten gleichzeitig Bewegen (100 -&gt; 1055).
-- Schwarzer Kartenrand wird beim Speichervorgang nicht gelöscht und kann verwendet werden.
-- Dauerhaftes Aktivieren des Development-Modes ohne Registry-Key.
-- Mauern und Mauertore aus allen Klimazonen können gesetzt werden.
-- Alle möglichen Entitäten können platziert, selektiert und verschoben werden (Achtung, einige führen zum Absturz).
-- Alle Texturtypen von allen Klimazonen können aufgetragen werden (Auch einige Versteckte).
-- Kann Mapdateien öffnen, welche zuvor mit den "S6Tools" geschützt wurden.
-- Kann das Large Address Aware Flag aktivieren, um mehr adressierbaren Speicher zu haben.</value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="EMXBinData" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Source\Resources\EMXBinData.s6patcher;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ErrorBackup" xml:space="preserve">
     <value>Fehler beim Erstellen der Backup-Datei! Abbrechen ...
-Error when creating Backup-File! Aborting ...</value>
+Error when creating backup file! Aborting ...</value>
   </data>
   <data name="ErrorBackupFail" xml:space="preserve">
     <value>Backup konnte nicht wiederhergestellt werden!

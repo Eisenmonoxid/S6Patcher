@@ -135,7 +135,7 @@
             // txtAutosave
             // 
             this.txtAutosave.Enabled = false;
-            this.txtAutosave.Location = new System.Drawing.Point(181, 20);
+            this.txtAutosave.Location = new System.Drawing.Point(164, 20);
             this.txtAutosave.MaxLength = 5;
             this.txtAutosave.Name = "txtAutosave";
             this.txtAutosave.Size = new System.Drawing.Size(135, 22);
@@ -144,7 +144,7 @@
             // lblAutosave
             // 
             this.lblAutosave.AutoSize = true;
-            this.lblAutosave.Location = new System.Drawing.Point(322, 23);
+            this.lblAutosave.Location = new System.Drawing.Point(305, 23);
             this.lblAutosave.Name = "lblAutosave";
             this.lblAutosave.Size = new System.Drawing.Size(82, 16);
             this.lblAutosave.TabIndex = 8;
@@ -188,9 +188,9 @@
             this.cbEntityLimits.AutoSize = true;
             this.cbEntityLimits.Location = new System.Drawing.Point(6, 73);
             this.cbEntityLimits.Name = "cbEntityLimits";
-            this.cbEntityLimits.Size = new System.Drawing.Size(145, 20);
+            this.cbEntityLimits.Size = new System.Drawing.Size(138, 20);
             this.cbEntityLimits.TabIndex = 13;
-            this.cbEntityLimits.Text = "Higher Entity - Limits";
+            this.cbEntityLimits.Text = "Higher Entity Limits";
             this.cbEntityLimits.UseVisualStyleBackColor = true;
             // 
             // cbScalingPlacing
