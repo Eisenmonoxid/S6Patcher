@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
-using static S6Patcher.Helpers;
 
 namespace S6Patcher
 {
@@ -19,11 +17,6 @@ namespace S6Patcher
                 return _instance;
             }
         }
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        private static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        private static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
 
         public FileStream OpenFileStream(string Path)
         {
@@ -78,7 +71,7 @@ namespace S6Patcher
         private void DeleteUserConfiguration()
         {
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
-            List<string> Directories = GetUserScriptDirectories();
+            List<string> Directories = Helpers.GetUserScriptDirectories();
             foreach (string Element in Directories)
             {
                 DeleteSectionFromOptions(Path.Combine(Element, "Config"));
@@ -103,24 +96,29 @@ namespace S6Patcher
         private void DeleteSectionFromOptions(string CurrentPath)
         {
             CurrentPath = Path.Combine(CurrentPath, "Options.ini");
-            if (!File.Exists(CurrentPath))
+            if (File.Exists(CurrentPath) == false)
             {
                 return;
             }
 
-            StringBuilder Builder = new StringBuilder(255);
-            GetPrivateProfileString("S6Patcher", "ExtendedKnightSelection", "", Builder, 255, CurrentPath);
-            if (Builder.ToString().Length <= 0)
-            {
-                return; // Section Entry does not exist
-            }
-
-            // Open configuration file, remove Section
+            List<string> Lines;
             try
             {
-                WritePrivateProfileString("S6Patcher", null, null, CurrentPath);
+                Lines = File.ReadAllLines(CurrentPath).ToList();
             }
-            catch (Exception) // Errors here do not matter
+            catch (Exception)
+            {
+                return;
+            }
+
+            Lines.RemoveAll(x => x.Contains("S6Patcher"));
+            Lines.RemoveAll(x => x.Contains("ExtendedKnightSelection"));
+
+            try
+            {
+                File.WriteAllLines(CurrentPath, Lines);
+            }
+            catch (Exception)
             {
                 return;
             }
@@ -131,8 +129,8 @@ namespace S6Patcher
 
             string FilePath = Stream.Name;
             string FileName = Path.GetFileNameWithoutExtension(FilePath);
-            string DirectoryPath = Path.GetDirectoryName(FilePath);
-            string FinalPath = Path.Combine(DirectoryPath, FileName + "_BACKUP.exe");
+            string DirectoryName = Path.GetDirectoryName(FilePath);
+            string FinalPath = Path.Combine(DirectoryName, FileName + "_BACKUP.exe");
 
             if (File.Exists(FinalPath) == false)
             {
@@ -157,19 +155,35 @@ namespace S6Patcher
         public bool UpdateEntryInOptionsFile(string Section, string Key, bool Entry)
         {
             string Name = "Options.ini";
-            List<string> Directories = GetUserScriptDirectories();
+            List<string> Directories = Helpers.GetUserScriptDirectories();
             foreach (string Element in Directories)
             {
                 string CurrentPath = Path.Combine(Path.Combine(Element, "Config"), Name);
-                if (!File.Exists(CurrentPath))
+                if (File.Exists(CurrentPath) == false)
                 {
                     continue;
                 }
 
                 // Open configuration file, update Section, Key and Value
+                List<string> Lines;
                 try
                 {
-                    WritePrivateProfileString(Section, Key, (Entry == true) ? 1.ToString() : 0.ToString(), CurrentPath);
+                    Lines = File.ReadAllLines(CurrentPath).ToList();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("UpdateEntryInOptionsFile:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+
+                Lines.RemoveAll(x => x.Contains(Section));
+                Lines.RemoveAll(x => x.Contains(Key));
+                Lines.Add("[" + Section + "]");
+                Lines.Add(Key + "=" + ((Entry == true) ? "1" : "0"));
+
+                try
+                {
+                    File.WriteAllLines(CurrentPath, Lines);
                 }
                 catch (Exception ex)
                 {

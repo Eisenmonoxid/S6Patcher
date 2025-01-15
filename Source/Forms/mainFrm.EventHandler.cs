@@ -106,7 +106,7 @@ namespace S6Patcher
                     return;
                 }
 
-                bool ValidExecutable = Helpers.GetCurrentExecutableID(ref GlobalStream);
+                bool ValidExecutable = Helpers.SetCurrentExecutableID(ref GlobalStream);
                 if (ValidExecutable == false)
                 {
                     CloseFileStream();

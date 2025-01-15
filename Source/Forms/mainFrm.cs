@@ -8,7 +8,7 @@ namespace S6Patcher
     public partial class mainFrm : Form
     {
         private FileStream GlobalStream = null;
-        public mainFrm(string[] args)
+        public mainFrm()
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;

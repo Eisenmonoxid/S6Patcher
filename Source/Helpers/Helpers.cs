@@ -50,7 +50,7 @@ namespace S6Patcher
 
             return Directories;
         }
-        public static bool GetCurrentExecutableID(ref FileStream Stream)
+        public static bool SetCurrentExecutableID(ref FileStream Stream)
         {
             string ExpectedVersion = "1, 71, 4289, 0";
             byte[] Result = new byte[30];
@@ -85,11 +85,11 @@ namespace S6Patcher
             using (WebClient Client = new WebClient())
             {
                 Client.Encoding = Encoding.UTF8;
-                Client.DownloadStringCompleted += Client_DownloadStringCompleted;
-                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+                Client.DownloadStringCompleted += Client_DownloadStringCompleted;    
 
                 try
-                { 
+                {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
                     Client.DownloadStringAsync(new Uri(Resources.VersionFileLink));
                 }
                 catch (Exception ex)
