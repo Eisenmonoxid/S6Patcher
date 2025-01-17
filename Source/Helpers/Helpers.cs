@@ -1,12 +1,10 @@
-﻿using S6Patcher.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Windows.Forms;
 
-namespace S6Patcher
+namespace S6Patcher.Source.Helpers
 {
     public enum execID
     {
@@ -84,43 +82,6 @@ namespace S6Patcher
 
             CurrentID = execID.NONE;
             return false;
-        }
-        public static void CheckForUpdates()
-        {
-            using (WebClient Client = new WebClient())
-            {
-                Client.Encoding = Encoding.UTF8;
-                Client.DownloadStringCompleted += Client_DownloadStringCompleted;    
-
-                try
-                {
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
-                    Client.DownloadStringAsync(new Uri(Resources.VersionFileLink));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-        }
-        private static void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            if (e.Cancelled == false && e.Error == null)
-            {
-                if (string.Compare(Application.ProductVersion, e.Result, true) != 0)
-                {
-                    MessageBox.Show("A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + e.Result, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("You are using the latest version of the S6Patcher!", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Error: Could not retrieve update information!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 }

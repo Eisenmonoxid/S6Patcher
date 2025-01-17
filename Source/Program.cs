@@ -1,7 +1,8 @@
-﻿using System;
+﻿using S6Patcher.Source.Forms;
+using System;
 using System.Windows.Forms;
 
-namespace S6Patcher
+namespace S6Patcher.Source
 {
     internal static class Program
     {

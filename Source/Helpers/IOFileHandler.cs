@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace S6Patcher
+namespace S6Patcher.Source.Helpers
 {
     public sealed class IOFileHandler
     {
@@ -51,8 +51,7 @@ namespace S6Patcher
         public bool CreateBackup(string Filepath)
         {
             string FileName = Path.GetFileNameWithoutExtension(Filepath);
-            string DirectoryPath = Path.GetDirectoryName(Filepath);
-            string FinalPath = Path.Combine(DirectoryPath, FileName + "_BACKUP.exe");
+            string FinalPath = Path.Combine(Path.GetDirectoryName(Filepath), FileName + "_BACKUP.exe");
 
             if (File.Exists(FinalPath) == false)
             {
@@ -76,7 +75,7 @@ namespace S6Patcher
             {
                 DeleteSectionFromOptions(Path.Combine(Element, "Config"));
                 string ScriptPath = Path.Combine(Element, "Script");
-                if (!Directory.Exists(ScriptPath))
+                if (Directory.Exists(ScriptPath) == false)
                 {
                     continue;
                 }
@@ -111,8 +110,8 @@ namespace S6Patcher
                 return;
             }
 
-            Lines.RemoveAll(x => x.Contains("S6Patcher"));
-            Lines.RemoveAll(x => x.Contains("ExtendedKnightSelection"));
+            Lines.RemoveAll(Line => Line.Contains("S6Patcher"));
+            Lines.RemoveAll(Line => Line.Contains("ExtendedKnightSelection"));
 
             try
             {
@@ -129,8 +128,7 @@ namespace S6Patcher
 
             string FilePath = Stream.Name;
             string FileName = Path.GetFileNameWithoutExtension(FilePath);
-            string DirectoryName = Path.GetDirectoryName(FilePath);
-            string FinalPath = Path.Combine(DirectoryName, FileName + "_BACKUP.exe");
+            string FinalPath = Path.Combine(Path.GetDirectoryName(FilePath), FileName + "_BACKUP.exe");
 
             if (File.Exists(FinalPath) == false)
             {
@@ -176,8 +174,8 @@ namespace S6Patcher
                     return false;
                 }
 
-                Lines.RemoveAll(x => x.Contains(Section));
-                Lines.RemoveAll(x => x.Contains(Key));
+                Lines.RemoveAll(Line => Line.Contains(Section));
+                Lines.RemoveAll(Line => Line.Contains(Key));
                 Lines.Add("[" + Section + "]");
                 Lines.Add(Key + "=" + ((Entry == true) ? "1" : "0"));
 

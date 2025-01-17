@@ -1,10 +1,10 @@
 ﻿using S6Patcher.Properties;
-using S6Patcher.Source.Forms;
+using S6Patcher.Source.Helpers;
 using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace S6Patcher
+namespace S6Patcher.Source.Forms
 {
     public partial class mainFrm
     {
@@ -36,7 +36,7 @@ namespace S6Patcher
         }
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbHighTextures.Checked && Helpers.CurrentID != execID.ED)
+            if (cbHighTextures.Checked && Helpers.Helpers.CurrentID != Helpers.execID.ED)
             {
                 txtResolution.Enabled = true;
             }
@@ -107,7 +107,7 @@ namespace S6Patcher
                     return;
                 }
 
-                bool ValidExecutable = Helpers.SetCurrentExecutableID(ref GlobalStream);
+                bool ValidExecutable = Helpers.Helpers.SetCurrentExecutableID(ref GlobalStream);
                 if (ValidExecutable == false)
                 {
                     CloseFileStream();

@@ -1,4 +1,5 @@
 ﻿using S6Patcher.Properties;
+using S6Patcher.Source.Helpers;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -14,7 +15,8 @@ namespace S6Patcher.Source.Forms
         }
         private void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            Helpers.CheckForUpdates();
+            Updater Updater = new Updater();
+            Updater.CheckForUpdates();
         }
         private void btnClose_Click(object sender, EventArgs e)
         {

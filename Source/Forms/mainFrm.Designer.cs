@@ -1,4 +1,4 @@
-﻿namespace S6Patcher
+﻿namespace S6Patcher.Source.Forms
 {
     partial class mainFrm
     {

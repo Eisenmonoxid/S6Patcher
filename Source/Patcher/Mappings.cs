@@ -1,147 +1,152 @@
-﻿using System.Collections.Generic;
+﻿using S6Patcher.Source.Helpers;
+using System.Collections.Generic;
 using System.Text;
 
-namespace S6Patcher
+namespace S6Patcher.Source.Patcher
 {
-    internal partial class Patcher
+    internal class Mappings
     {
-        private readonly List<PatchEntry> Entries = new List<PatchEntry>();
-        private struct PatchEntry
+        public struct PatchEntry
         {
             public string Name;
             public Dictionary<long, byte[]> Mapping;
         }
         private List<PatchEntry> GetOVMappings()
         {
-            Entries.Clear();
-            Entries.Add(new PatchEntry
+            List<PatchEntry> Entries = new List<PatchEntry>
             {
-                Name = "High - Resolution Textures:",
-                Mapping = new Dictionary<long, byte[]>()
+                new PatchEntry
+                {
+                    Name = "High - Resolution Textures:",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x288ADF, new byte[] {0xE9, 0x1D, 0xD2, 0x26, 0x00, 0x90, 0x90, 0x90}}, // High entity resolution
-                    {0x4F5D01, new byte[] {0xE8, 0x87, 0x3D, 0xD9, 0xFF, 0xC7, 0x46, 0x40, 0x00,
-                        0x70, 0x9B, 0x3C, 0xE9, 0xD5, 0x2D, 0xD9, 0xFF, 0x90}}, // High entity resolution
+                    {0x4F5D01, new byte[] {0xE8, 0x87, 0x3D, 0xD9, 0xFF, 0xC7, 0x46, 0x40, 0x00, 0x70, 0x9B, 0x3C, 0xE9, 0xD5, 0x2D, 0xD9, 0xFF, 0x90}}, // High entity resolution
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Development-Mode Permanently",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Development-Mode Permanently",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x732FA, new byte[] {0xC6, 0x05, 0x28, 0xBF, 0xAA, 0x00, 0x01, 0xEB, 0x7C, 0x90}}, // Set global DevMachine to 1
                     {0xBE11, new byte[] {0x66, 0x90}}, // Enable Development-Mode without command line argument -DevM
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Script and Code Bugfixes",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Script and Code Bugfixes",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x1B5E36, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
                     {0x4FD5A9, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
                     {0x4FD5BD, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Limited/Special Edition",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Limited/Special Edition",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x23D64D, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
                     {0x23D655, new byte[] {0x90, 0x90}}, // Override JNZ, always set Special Edition to 1
                 }
-            });
+                }
+            };
 
             return Entries;
         }
         private List<PatchEntry> GetSteamHEMappings()
         {
-            Entries.Clear();
-            Entries.Add(new PatchEntry
+            List<PatchEntry> Entries = new List<PatchEntry>
             {
-                Name = "Activate Development-Mode Permanently",
-                Mapping = new Dictionary<long, byte[]>()
+                new PatchEntry
+                {
+                    Name = "Activate Development-Mode Permanently",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x1E0C94, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
                     {0x205250, new byte[] {0xC6, 0x05}}, // Set global DevMachine to 1
                     {0x205256, new byte[] {0x01}}, // Set global DevMachine to 1
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Script and Code Bugfixes",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Script and Code Bugfixes",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x33D6D7, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
                     {0xC3F081, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
                     {0xC3F095, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Limited/Special Edition",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Limited/Special Edition",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x25D4D5, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
                     {0x25D4DB, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
                 }
-            });
+                }
+            };
 
             return Entries;
         }
         private List<PatchEntry> GetUbiHEMappings()
         {
-            Entries.Clear();
-            Entries.Add(new PatchEntry
+            List<PatchEntry> Entries = new List<PatchEntry>
             {
-                Name = "Activate Development-Mode Permanently",
-                Mapping = new Dictionary<long, byte[]>()
+                new PatchEntry
+                {
+                    Name = "Activate Development-Mode Permanently",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x1E0837, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
                     {0x204B57, new byte[] {0xC6, 0x05}}, // Set global DevMachine to 1
                     {0x204B5D, new byte[] {0x01}}, // Set global DevMachine to 1
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Script and Code Bugfixes",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Script and Code Bugfixes",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x33C533, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
                     {0xC3E661, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
                     {0xC3E675, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Limited/Special Edition",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Limited/Special Edition",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x25C6FA, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
                     {0x25C700, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
                 }
-            });
+                }
+            };
 
             return Entries;
         }
         private List<PatchEntry> GetEDMappings()
         {
-            Entries.Clear();
-            Entries.Add(new PatchEntry
+            List<PatchEntry> Entries = new List<PatchEntry>
             {
-                Name = "High - Resolution Textures:",
-                Mapping = new Dictionary<long, byte[]>()
+                new PatchEntry
+                {
+                    Name = "High - Resolution Textures:",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x27A7AD, new byte[] {0xEB, 0x00}}, // Set ground texture resolution
-                    {0x25B100, new byte[] {0x09, 0x7C, 0x03, 0x6A, 0x00, 0x58, 0x83, 0xC7, 0x20, 0x89,
-                        0x46, 0x3C, 0x8B, 0x0F, 0xC7, 0x07, 0x00, 0x00, 0x00, 0x00, 0xEB}}, // General texture resolution
+                    {0x25B100, new byte[] {0x09, 0x7C, 0x03, 0x6A, 0x00, 0x58, 0x83, 0xC7, 0x20, 0x89, 0x46, 0x3C, 0x8B, 0x0F, 0xC7, 0x07, 0x00, 0x00, 0x00, 0x00, 0xEB}}, // General texture resolution
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Free Scaling and Placing of Entities",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Free Scaling and Placing of Entities",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x21285, new byte[] {0xEB}}, // Scaling lower limit
                     {0x212A0, new byte[] {0xEB}}, // Scaling upper limit
@@ -161,28 +166,28 @@ namespace S6Patcher
                     {0x45474, new byte[] {0xEB, 0x07}}, // Placement override
                     //{0x31B5C, new byte[] {0xEB}}, // -> Works, but useless (All Clutter in Editor Dialog)
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Higher Entity Limits",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Higher Entity Limits",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x4A710, new byte[] {0x00, 0x00, 0xF0}}, // Higher general entity limit
                     {0x42FC60, new byte[] {0x1F, 0x04}}, // Movable entities at the same time
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Usable Black Map Border",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Usable Black Map Border",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x3AEAC, new byte[] {0xEB, 0x08}}, // Override map border check at saving
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Activate Development-Mode Permanently",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Activate Development-Mode Permanently",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x20A0FB, new byte[] {0xC6, 0x05, 0xBC, 0x79, 0x97, 0x00, 0x01, 0xEB, 0x7C, 0x90}}, // Set DevMachine to 1
                     {0x13B4A, new byte[] {0xE9, 0xDE, 0xFE, 0xFF, 0xFF, 0xEB, 0x5C}}, // Validate Map -> Lost Feature
@@ -191,22 +196,23 @@ namespace S6Patcher
                     {0x2AE72, new byte[] {0xEB, 0x23}}, // Internal Window override
                     {0x2199F3, new byte[] {0xEB}}, // Override XML parsing error, enables "protected" maps to be loaded in the editor
                 }
-            });
-            Entries.Add(new PatchEntry
-            {
-                Name = "Show All Entities and Textures in Editor",
-                Mapping = new Dictionary<long, byte[]>()
+                },
+                new PatchEntry
+                {
+                    Name = "Show All Entities and Textures in Editor",
+                    Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x20615, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Entities in editor placement window
                     {0x20629, new byte[] {0xEB, 0x10}}, // Show all Entities in editor placement window
                     {0x24EEE, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Textures in the texture placement window
                     {0x24F05, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Textures in the texture placement window
                 }
-            });
+                }
+            };
 
             return Entries;
         }
-        private List<PatchEntry> GetMappingsByID(execID ID)
+        public List<PatchEntry> GetMappingsByID(execID ID)
         {
             switch (ID)
             {

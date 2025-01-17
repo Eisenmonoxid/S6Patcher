@@ -1,9 +1,10 @@
-﻿using System;
+﻿using S6Patcher.Source.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-namespace S6Patcher
+namespace S6Patcher.Source.Forms
 {
     public partial class mainFrm : Form
     {
@@ -22,7 +23,7 @@ namespace S6Patcher
             }
             else if (Control == txtZoom)
             {
-                if (Helpers.CurrentID == execID.HE_UBISOFT || Helpers.CurrentID == execID.HE_STEAM)
+                if (Helpers.Helpers.CurrentID == execID.HE_UBISOFT || Helpers.Helpers.CurrentID == execID.HE_STEAM)
                 {
                     txtZoom.Text = Reader.ReadSingle().ToString();
                 }
@@ -39,15 +40,15 @@ namespace S6Patcher
         private void InitializeControls()
         {
             BinaryReader Reader = new BinaryReader(GlobalStream);
-            switch (Helpers.CurrentID)
+            switch (Helpers.Helpers.CurrentID)
             {
                 case execID.OV:
                     SetControlValueFromStream(ref Reader, 0x545400, txtZoom);
                     SetControlValueFromStream(ref Reader, 0x2BE177, txtResolution);
                     break;
                 case execID.OV_OFFSET:
-                    SetControlValueFromStream(ref Reader, 0x545400 - Helpers.GlobalOffset, txtZoom);
-                    SetControlValueFromStream(ref Reader, 0x2BE177 - Helpers.GlobalOffset, txtResolution);
+                    SetControlValueFromStream(ref Reader, 0x545400 - Helpers.Helpers.GlobalOffset, txtZoom);
+                    SetControlValueFromStream(ref Reader, 0x2BE177 - Helpers.Helpers.GlobalOffset, txtResolution);
                     break;
                 case execID.HE_UBISOFT:
                     SetControlValueFromStream(ref Reader, 0xC4EC4C, txtZoom);
@@ -82,7 +83,7 @@ namespace S6Patcher
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
         }
-        private Patcher GetPatchFeaturesByControls(List<GroupBox> Controls)
+        private List<string> GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
             List<string> CheckedFeatures = new List<string>();
             CheckBox curControl;
@@ -107,27 +108,39 @@ namespace S6Patcher
                 }
             }
 
-            Patcher Patcher = new Patcher(Helpers.CurrentID, ref GlobalStream, ref CheckedFeatures);
-            return Patcher;
+            return CheckedFeatures;
         }
         private void SelectPatchFeatures()
         {
-            Patcher Patcher = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbHE, gbEditor});
+            Patcher.Patcher Patcher;
+            try
+            {
+                Patcher = new Patcher.Patcher(Helpers.Helpers.CurrentID, ref GlobalStream);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbHE, gbEditor});
+            Patcher.PatchByControlFeatures(ref Features);
+
             if (cbZoom.Checked)
             {
-                Patcher.SetZoomLevel(Helpers.CurrentID, ref GlobalStream, txtZoom.Text);
+                Patcher.SetZoomLevel(txtZoom.Text);
             }
-            if (cbHighTextures.Checked && Helpers.CurrentID != execID.ED) // Editor has no custom texture resolution
+            if (cbHighTextures.Checked && Helpers.Helpers.CurrentID != execID.ED) // Editor has no custom texture resolution
             {
-                Patcher.SetHighResolutionTextures(Helpers.CurrentID, ref GlobalStream, txtResolution.Text);
+                Patcher.SetHighResolutionTextures(txtResolution.Text);
             }
             if (cbAutosave.Checked)
             {
-                Patcher.SetAutosaveTimer(Helpers.CurrentID, ref GlobalStream, txtAutosave.Text);
+                Patcher.SetAutosaveTimer(txtAutosave.Text);
             }
             if (cbLAAFlag.Checked)
             {
-                Patcher.SetLargeAddressAwareFlag(ref GlobalStream);
+                Patcher.SetLargeAddressAwareFlag();
             }
             if (cbScriptBugFixes.Checked)
             {
