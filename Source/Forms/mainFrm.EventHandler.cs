@@ -71,6 +71,7 @@ namespace S6Patcher
         }
         private void btnAbort_Click(object sender, EventArgs e)
         {
+            CloseFileStream();
             Environment.Exit(0);
         }
         private void btnBackup_Click(object sender, EventArgs e)

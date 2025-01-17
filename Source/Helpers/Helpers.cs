@@ -66,6 +66,11 @@ namespace S6Patcher
 
             foreach (var Element in Mapping)
             {
+                if (Stream.Length < Element.Key)
+                {
+                    continue;
+                }
+
                 Stream.Position = Element.Key;
                 Stream.Read(Result, 0, Result.Length);
                 string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
