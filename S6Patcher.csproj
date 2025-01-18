@@ -86,6 +86,7 @@
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
     <Compile Include="Source\Helpers\Updater.cs" />
     <Compile Include="Source\Patcher\Mappings.cs" />
+    <Compile Include="Source\Patcher\Modloader.cs" />
     <Compile Include="Source\Patcher\Patcher.cs" />
     <Compile Include="Source\Helpers\Helpers.cs" />
     <Compile Include="Source\Program.cs" />
