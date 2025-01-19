@@ -124,7 +124,7 @@ namespace S6Patcher.Source.Forms
             }
 
             List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbHE, gbEditor});
-            Patcher.PatchByControlFeatures(ref Features);
+            Patcher.PatchByControlFeatures(Features);
 
             if (cbZoom.Checked)
             {

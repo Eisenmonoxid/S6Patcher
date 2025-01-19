@@ -3,6 +3,7 @@ using S6Patcher.Source.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
@@ -21,29 +22,27 @@ namespace S6Patcher.Source.Patcher
             GlobalID = ID;
             GlobalStream = Stream;
         }
-        public void PatchByControlFeatures(ref List<string> Names)
+        public void PatchByControlFeatures(List<string> Names)
         {
             Mappings Mappings = new Mappings();
             List<Mappings.PatchEntry> Entries = Mappings.GetMappingsByID(GlobalID);
-
             if (Entries == null)
             {
                 return;
             }
 
-            foreach (var Entry in Entries)
+            var Result = (from Entry in Entries
+                         from Name in Names
+                         where Name == Entry.Name
+                         select Entry.Mapping).ToList();
+
+            Result.ForEach(Element =>
             {
-                foreach (string Name in Names)
+                foreach (var Entry in Element)
                 {
-                    if (Name == Entry.Name)
-                    {
-                        foreach (var DictEntry in Entry.Mapping)
-                        {
-                            Helpers.Helpers.WriteBytes(ref GlobalStream, DictEntry.Key, DictEntry.Value);
-                        }
-                    }
+                    Helpers.Helpers.WriteBytes(ref GlobalStream, Entry.Key, Entry.Value);
                 }
-            }
+            });
         }
         public void SetHighResolutionTextures(string ResolutionText)
         {
@@ -164,6 +163,20 @@ namespace S6Patcher.Source.Patcher
                         0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}); // Restriction -5000.0
             }
         }
+        public void SetModLoader()
+        {
+            Modloader Loader = new Modloader();
+            Dictionary<long, byte[]> Entries = Loader.GetMappingsByID(GlobalID);
+            if (Entries == null)
+            {
+                return;
+            }
+
+            foreach (var DictEntry in Entries)
+            {
+                Helpers.Helpers.WriteBytes(ref GlobalStream, DictEntry.Key, DictEntry.Value);
+            }
+        }
         public void SetLargeAddressAwareFlag()
         {
             // Partially adapted from:
@@ -193,7 +206,6 @@ namespace S6Patcher.Source.Patcher
             // EMXBinData.s6patcher is the minified and compiled main menu script
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.Helpers.GetUserScriptDirectories();
-
             try
             {
                 string ScriptPath = String.Empty;
