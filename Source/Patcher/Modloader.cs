@@ -6,18 +6,23 @@ namespace S6Patcher.Source.Patcher
 {
     internal class Modloader : Mappings
     {
-        /*
-        *  mod.bba is always loaded, no matter if game is base or extra1.
-        *  When executable is patched, the mod.bba has to be existent, otherwise the game won't start.
-        *  Feature can be toggled on/off with the Patcher (or the player can start the backup executable).
-        *  Make bba containing game fixes available.
+        /* SIMPLE MODLOADER - OV
+         * "modloader\bba\mod.bba" .> Is always loaded first by the game, in both base and extra1.
+         * If the file does not exist, the game will show an error message on startup.
+         * The modloader can be toggled on/off with the Patcher (or the player can start the backup executable).
         */
-        private Dictionary<long, byte[]> GetOVMappings()
+        /* SIMPLE MODLOADER - HE
+         * "..\\modloader\\shr" .> The game adds this search path at the first position.
+         * The directory (and its content) is only loaded when it exists, otherwise normal startup (NO error message).
+         * The modloader can be toggled on/off with the Patcher (or the player can start the backup executable).
+        */
+        private Dictionary<long, byte[]> GetOVMappings(string Path)
         {
+            byte[] CurrentPath = Encoding.ASCII.GetBytes(Path);
             return new Dictionary<long, byte[]>()
             {
                 // .data segment
-                {0x53F5BC, Encoding.ASCII.GetBytes("modloader\\bba\\mod.bba\0\0") }, // Add mod.bba file path
+                {0x53F5BC, CurrentPath}, // Add mod.bba file path
                 // .text segment -> Check what loading method to use
                 {0x23E916, new byte[] {0xEB}}, // Always jump to ModelViewer
                 {0x23E936, new byte[] {0xEB, 0xE0, 0x90, 0x90}}, // Return to original loader after mod
@@ -30,32 +35,36 @@ namespace S6Patcher.Source.Patcher
                 {0x23E280, new byte[] {0xEB, 0xD8, 0x8B, 0x45, 0xD8, 0x89, 0x45, 0xDC, 0x8D, 0x4D, 0xDC, 0xEB, 0xDE, 0x90, 0x90, 0x90}}, // Return to original loader after mod
             };
         }
-        private Dictionary<long, byte[]> GetSteamHEMappings()
+        private Dictionary<long, byte[]> GetSteamHEMappings(string Path)
         {
+            byte[] CurrentPath = Encoding.ASCII.GetBytes(Path);
             return new Dictionary<long, byte[]>()
             { 
                 // .data segment
-                {0xC50A14, Encoding.ASCII.GetBytes("ModLoader: Adding primary directory.\0\0")}, // Print to log
-                {0xC50A58, Encoding.ASCII.GetBytes("modloader\\shr\0\0")}, // Add primary directory path
+                {0xC50A14, Encoding.ASCII.GetBytes("ModLoader: Adding primary directory.\n\0\0")}, // Print to log
+                {0xC50A58, CurrentPath}, // Add primary directory path
+                {0xC50A44, CurrentPath}, // Add primary directory path
                 // .text segment -> Check what loading method to use
                 {0x25E2D0, new byte[] {0xEB}}, // Always jump to ModelViewer
                 {0x25E304, new byte[] {0xE8, 0x41, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90}}, // Return to original loader after mod
                 // .text segment -> Override the ModelViewer func
-                {0x25E3AA, new byte[] {0xEB}}, // Return to original loader after mod
+                {0x25E3AA, new byte[] {0xEB, 0x7A}}, // Return to original loader after mod
             };
         }
-        private Dictionary<long, byte[]> GetUbiHEMappings()
+        private Dictionary<long, byte[]> GetUbiHEMappings(string Path)
         {
+            byte[] CurrentPath = Encoding.ASCII.GetBytes(Path);
             return new Dictionary<long, byte[]>()
             {
                 // .data segment
-                {0xC4FC74, Encoding.ASCII.GetBytes("ModLoader: Adding primary directory.\0\0")}, // Print to log
-                {0xC4FCB8, Encoding.ASCII.GetBytes("modloader\\shr\0\0")}, // Add primary directory path
+                {0xC4FC74, Encoding.ASCII.GetBytes("ModLoader: Adding primary directory.\n\0\0")}, // Print to log
+                {0xC4FCB8, CurrentPath}, // Add primary directory path
+                {0xC4FCA4, CurrentPath}, // Add primary directory path
                 // .text segment -> Check what loading method to use
                 {0x25D526, new byte[] {0xEB}}, // Always jump to ModelViewer
                 {0x25D55A, new byte[] {0xE8, 0x3E, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90}}, // Return to original loader after mod
                 // .text segment -> Override the ModelViewer func
-                {0x25D600, new byte[] {0xEB}}, // Return to original loader after mod
+                {0x25D600, new byte[] {0xEB, 0x7A}}, // Return to original loader after mod
             };
         }
         public new Dictionary<long, byte[]> GetMappingsByID(execID ID)
@@ -63,13 +72,13 @@ namespace S6Patcher.Source.Patcher
             switch (ID)
             {
                 case execID.OV:
-                    return GetOVMappings();
+                    return GetOVMappings("modloader\\bba\\mod.bba\0\0");
                 case execID.OV_OFFSET:
-                    return GetOVMappings();
+                    return GetOVMappings("modloader\\bba\\mod.bba\0\0");
                 case execID.HE_UBISOFT:
-                    return GetUbiHEMappings();
+                    return GetUbiHEMappings("..\\modloader\\shr\0\0");
                 case execID.HE_STEAM:
-                    return GetSteamHEMappings();
+                    return GetSteamHEMappings("..\\modloader\\shr\0\0");
                 default:
                     return null;
             }

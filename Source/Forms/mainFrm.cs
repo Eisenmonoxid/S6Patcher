@@ -147,6 +147,9 @@ namespace S6Patcher.Source.Forms
                 Patcher.SetLuaScriptBugFixes();
                 Patcher.SetKnightSelection(cbKnightSelection.Checked);
             }
+
+            // ONLY FOR DEBUG
+            Patcher.SetModLoader();
         }
         private void CloseFileStream()
         {
