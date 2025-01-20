@@ -188,6 +188,7 @@ namespace S6Patcher.Source.Forms
 
             btnPatch.Enabled = false;
             btnBackup.Enabled = false;
+            btnModFeatures.Enabled = false;
             txtExecutablePath.Text = String.Empty;
         }
     }

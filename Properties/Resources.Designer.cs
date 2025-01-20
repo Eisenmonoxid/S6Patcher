@@ -149,8 +149,8 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vorgang Erfolgreich!
-        ///Finished successfully!.
+        ///   Looks up a localized string similar to Finished successfully!\n
+        ///Do you want to create desktop shortcuts to the unpatched and patched executables?.
         /// </summary>
         internal static string FinishedSuccess {
             get {

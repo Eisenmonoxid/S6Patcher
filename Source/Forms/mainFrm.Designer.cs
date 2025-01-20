@@ -46,6 +46,8 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.btnModFeatures = new System.Windows.Forms.Button();
+            this.cbModloader = new System.Windows.Forms.CheckBox();
             this.cbLimitedEdition = new System.Windows.Forms.CheckBox();
             this.cbKnightSelection = new System.Windows.Forms.CheckBox();
             this.cbScriptBugFixes = new System.Windows.Forms.CheckBox();
@@ -55,7 +57,6 @@
             this.btnChooseFile = new System.Windows.Forms.Button();
             this.txtExecutablePath = new System.Windows.Forms.TextBox();
             this.lblSelectFile = new System.Windows.Forms.Label();
-            this.cbModloader = new System.Windows.Forms.CheckBox();
             this.gbEditor.SuspendLayout();
             this.gbHE.SuspendLayout();
             this.gbAll.SuspendLayout();
@@ -245,6 +246,7 @@
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.btnModFeatures);
             this.gbAll.Controls.Add(this.cbModloader);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
             this.gbAll.Controls.Add(this.cbKnightSelection);
@@ -265,6 +267,28 @@
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
+            // 
+            // btnModFeatures
+            // 
+            this.btnModFeatures.Enabled = false;
+            this.btnModFeatures.Location = new System.Drawing.Point(158, 201);
+            this.btnModFeatures.Name = "btnModFeatures";
+            this.btnModFeatures.Size = new System.Drawing.Size(84, 23);
+            this.btnModFeatures.TabIndex = 19;
+            this.btnModFeatures.Text = "Features";
+            this.btnModFeatures.UseVisualStyleBackColor = true;
+            this.btnModFeatures.Click += new System.EventHandler(this.btnModFeatures_Click);
+            // 
+            // cbModloader
+            // 
+            this.cbModloader.AutoSize = true;
+            this.cbModloader.Location = new System.Drawing.Point(6, 203);
+            this.cbModloader.Name = "cbModloader";
+            this.cbModloader.Size = new System.Drawing.Size(146, 20);
+            this.cbModloader.TabIndex = 18;
+            this.cbModloader.Text = "Activate Modloader:";
+            this.cbModloader.UseVisualStyleBackColor = true;
+            this.cbModloader.CheckedChanged += new System.EventHandler(this.cbModloader_CheckedChanged);
             // 
             // cbLimitedEdition
             // 
@@ -356,16 +380,6 @@
             this.lblSelectFile.TabIndex = 22;
             this.lblSelectFile.Text = "Select executable:";
             // 
-            // cbModloader
-            // 
-            this.cbModloader.AutoSize = true;
-            this.cbModloader.Location = new System.Drawing.Point(6, 203);
-            this.cbModloader.Name = "cbModloader";
-            this.cbModloader.Size = new System.Drawing.Size(143, 20);
-            this.cbModloader.TabIndex = 18;
-            this.cbModloader.Text = "Activate Modloader";
-            this.cbModloader.UseVisualStyleBackColor = true;
-            // 
             // mainFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -433,5 +447,6 @@
         private System.Windows.Forms.TextBox txtExecutablePath;
         private System.Windows.Forms.Label lblSelectFile;
         private System.Windows.Forms.CheckBox cbModloader;
+        private System.Windows.Forms.Button btnModFeatures;
     }
 }

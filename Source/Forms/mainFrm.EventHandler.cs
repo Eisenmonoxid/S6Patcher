@@ -12,6 +12,15 @@ namespace S6Patcher.Source.Forms
         {
             CloseFileStream();
         }
+        private void btnModFeatures_Click(object sender, EventArgs e)
+        {
+            modFrm Form = new modFrm();
+            Form.ShowDialog();
+        }
+        private void cbModloader_CheckedChanged(object sender, EventArgs e)
+        {
+             btnModFeatures.Enabled = cbModloader.Checked;
+        }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
             if (cbZoom.Checked)
@@ -60,8 +69,15 @@ namespace S6Patcher.Source.Forms
         private void btnPatch_Click(object sender, EventArgs e)
         {
             SelectPatchFeatures();
-            MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string Name = GlobalStream.Name;
             ResetForm();
+
+            DialogResult Result;
+            Result = MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (Result == DialogResult.Yes)
+            {
+                Helpers.Helpers.CreateDesktopShortcuts(Name);
+            }
         }
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {

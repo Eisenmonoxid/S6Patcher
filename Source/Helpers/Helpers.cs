@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IWshRuntimeLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -82,6 +83,34 @@ namespace S6Patcher.Source.Helpers
 
             CurrentID = execID.NONE;
             return false;
+        }
+        public static void CreateDesktopShortcuts(string Filepath)
+        {
+            string Desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            WshShell Shell = new WshShell();
+
+            string PatchedLink = Desktop + @"\Settlers 6 - Patched.lnk";
+            string UnpatchedLink = Desktop + @"\Settlers 6 - Unpatched.lnk";
+
+            IWshShortcut UnpatchedShortcut = (IWshShortcut)Shell.CreateShortcut(UnpatchedLink);
+            IWshShortcut PatchedShortcut = (IWshShortcut)Shell.CreateShortcut(PatchedLink);
+
+            UnpatchedShortcut.Description = "Launches UNPatched Settlers 6";
+            PatchedShortcut.Description = "Launches Patched Settlers 6";
+
+            PatchedShortcut.TargetPath = Filepath;
+            UnpatchedShortcut.TargetPath = Filepath.Replace(Path.GetExtension(Filepath), "") + "_BACKUP.exe";
+
+            try
+            {
+                UnpatchedShortcut.Save();
+                PatchedShortcut.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CreateDesktopShortcuts:\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                return;
+            }
         }
     }
 }

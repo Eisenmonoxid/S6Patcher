@@ -64,6 +64,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -82,6 +83,12 @@
     </Compile>
     <Compile Include="Source\Forms\aboutBox.Designer.cs">
       <DependentUpon>aboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Forms\modFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\modFrm.Designer.cs">
+      <DependentUpon>modFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
     <Compile Include="Source\Helpers\Updater.cs" />
@@ -122,6 +129,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Source\Forms\modFrm.resx">
+      <DependentUpon>modFrm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Resources\Scripts\UserScriptLocal.lua" />
     <EmbeddedResource Include="Source\Resources\Scripts\EMXBinData.s6patcher" />
     <EmbeddedResource Include="Source\Resources\Scripts\MainMenuUserScript.lua" />
@@ -141,6 +151,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\Resources\Mod\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
