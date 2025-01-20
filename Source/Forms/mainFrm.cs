@@ -88,7 +88,6 @@ namespace S6Patcher.Source.Forms
         {
             List<string> CheckedFeatures = new List<string>();
             CheckBox curControl;
-
             foreach (GroupBox Box in Controls)
             {
                 for (ushort it = 0; it != Box.Controls.Count; it++)

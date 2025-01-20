@@ -13,7 +13,7 @@ namespace S6Patcher.Source.Patcher
         }
         private List<PatchEntry> GetOVMappings()
         {
-            List<PatchEntry> Entries = new List<PatchEntry>
+            return new List<PatchEntry>
             {
                 new PatchEntry
                 {
@@ -53,12 +53,10 @@ namespace S6Patcher.Source.Patcher
                     }
                 }
             };
-
-            return Entries;
         }
         private List<PatchEntry> GetSteamHEMappings()
         {
-            List<PatchEntry> Entries = new List<PatchEntry>
+            return new List<PatchEntry>
             {
                 new PatchEntry
                 {
@@ -90,12 +88,10 @@ namespace S6Patcher.Source.Patcher
                     }
                 }
             };
-
-            return Entries;
         }
         private List<PatchEntry> GetUbiHEMappings()
         {
-            List<PatchEntry> Entries = new List<PatchEntry>
+            return new List<PatchEntry>
             {
                 new PatchEntry
                 {
@@ -127,12 +123,10 @@ namespace S6Patcher.Source.Patcher
                     }
                 }
             };
-
-            return Entries;
         }
         private List<PatchEntry> GetEDMappings()
         {
-            List<PatchEntry> Entries = new List<PatchEntry>
+            return new List<PatchEntry>
             {
                 new PatchEntry
                 {
@@ -209,8 +203,6 @@ namespace S6Patcher.Source.Patcher
                     }
                 }
             };
-
-            return Entries;
         }
         public List<PatchEntry> GetMappingsByID(execID ID)
         {
