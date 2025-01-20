@@ -55,6 +55,7 @@
             this.btnChooseFile = new System.Windows.Forms.Button();
             this.txtExecutablePath = new System.Windows.Forms.TextBox();
             this.lblSelectFile = new System.Windows.Forms.Label();
+            this.cbModloader = new System.Windows.Forms.CheckBox();
             this.gbEditor.SuspendLayout();
             this.gbHE.SuspendLayout();
             this.gbAll.SuspendLayout();
@@ -94,7 +95,7 @@
             // 
             this.btnPatch.Enabled = false;
             this.btnPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPatch.Location = new System.Drawing.Point(12, 441);
+            this.btnPatch.Location = new System.Drawing.Point(12, 467);
             this.btnPatch.Name = "btnPatch";
             this.btnPatch.Size = new System.Drawing.Size(642, 47);
             this.btnPatch.TabIndex = 3;
@@ -163,7 +164,7 @@
             // btnAbort
             // 
             this.btnAbort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAbort.Location = new System.Drawing.Point(12, 547);
+            this.btnAbort.Location = new System.Drawing.Point(12, 573);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(642, 47);
             this.btnAbort.TabIndex = 10;
@@ -221,7 +222,7 @@
             this.gbEditor.Controls.Add(this.cbAllEntities);
             this.gbEditor.Enabled = false;
             this.gbEditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbEditor.Location = new System.Drawing.Point(12, 310);
+            this.gbEditor.Location = new System.Drawing.Point(12, 336);
             this.gbEditor.Name = "gbEditor";
             this.gbEditor.Size = new System.Drawing.Size(642, 125);
             this.gbEditor.TabIndex = 16;
@@ -235,7 +236,7 @@
             this.gbHE.Controls.Add(this.lblAutosave);
             this.gbHE.Enabled = false;
             this.gbHE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbHE.Location = new System.Drawing.Point(12, 255);
+            this.gbHE.Location = new System.Drawing.Point(12, 281);
             this.gbHE.Name = "gbHE";
             this.gbHE.Size = new System.Drawing.Size(642, 49);
             this.gbHE.TabIndex = 17;
@@ -244,6 +245,7 @@
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.cbModloader);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
             this.gbAll.Controls.Add(this.cbKnightSelection);
             this.gbAll.Controls.Add(this.cbScriptBugFixes);
@@ -259,7 +261,7 @@
             this.gbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbAll.Location = new System.Drawing.Point(12, 42);
             this.gbAll.Name = "gbAll";
-            this.gbAll.Size = new System.Drawing.Size(642, 207);
+            this.gbAll.Size = new System.Drawing.Size(642, 233);
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
@@ -317,7 +319,7 @@
             // 
             this.btnBackup.Enabled = false;
             this.btnBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBackup.Location = new System.Drawing.Point(12, 494);
+            this.btnBackup.Location = new System.Drawing.Point(12, 520);
             this.btnBackup.Name = "btnBackup";
             this.btnBackup.Size = new System.Drawing.Size(642, 47);
             this.btnBackup.TabIndex = 19;
@@ -354,11 +356,21 @@
             this.lblSelectFile.TabIndex = 22;
             this.lblSelectFile.Text = "Select executable:";
             // 
+            // cbModloader
+            // 
+            this.cbModloader.AutoSize = true;
+            this.cbModloader.Location = new System.Drawing.Point(6, 203);
+            this.cbModloader.Name = "cbModloader";
+            this.cbModloader.Size = new System.Drawing.Size(143, 20);
+            this.cbModloader.TabIndex = 18;
+            this.cbModloader.Text = "Activate Modloader";
+            this.cbModloader.UseVisualStyleBackColor = true;
+            // 
             // mainFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(665, 604);
+            this.ClientSize = new System.Drawing.Size(665, 630);
             this.Controls.Add(this.lblSelectFile);
             this.Controls.Add(this.txtExecutablePath);
             this.Controls.Add(this.btnChooseFile);
@@ -371,9 +383,9 @@
             this.DoubleBuffered = true;
             this.HelpButton = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(681, 643);
+            this.MaximumSize = new System.Drawing.Size(681, 669);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(681, 643);
+            this.MinimumSize = new System.Drawing.Size(681, 669);
             this.Name = "mainFrm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -420,5 +432,6 @@
         private System.Windows.Forms.Button btnChooseFile;
         private System.Windows.Forms.TextBox txtExecutablePath;
         private System.Windows.Forms.Label lblSelectFile;
+        private System.Windows.Forms.CheckBox cbModloader;
     }
 }

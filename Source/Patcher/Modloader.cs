@@ -25,6 +25,7 @@ namespace S6Patcher.Source.Patcher
                 {0x53F5BC, CurrentPath}, // Add mod.bba file path
                 // .text segment -> Check what loading method to use
                 {0x23E916, new byte[] {0xEB}}, // Always jump to ModelViewer
+                {0x23E931, new byte[] {0xE8, 0x00, 0xF9, 0xFF, 0xFF}}, // Always jump to ModelViewer
                 {0x23E936, new byte[] {0xEB, 0xE0, 0x90, 0x90}}, // Return to original loader after mod
                 // .text segment -> Override the ModelViewer func
                 {0x23E236, new byte[] {0x55, 0x89, 0xE5, 0x83, 0xEC, 0x28, 0x8D, 0x4D, 0xDC, 0x68, 0x00, 0x01, 0x00, 0x00}}, // Return to original loader after mod

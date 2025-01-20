@@ -67,7 +67,8 @@ namespace S6Patcher.Source.Forms
                     cbZoom.Enabled = false;
                     lblZoomAngle.Enabled = false;
                     lblTextureRes.Enabled = false;
-					cbLimitedEdition.Enabled = false;
+                    cbLimitedEdition.Enabled = false;
+                    cbModloader.Enabled = false;
                     break;
                 case execID.NONE:
                     return;
@@ -147,9 +148,10 @@ namespace S6Patcher.Source.Forms
                 Patcher.SetLuaScriptBugFixes();
                 Patcher.SetKnightSelection(cbKnightSelection.Checked);
             }
-
-            // ONLY FOR DEBUG
-            Patcher.SetModLoader();
+            if (cbModloader.Checked)
+            {
+                Patcher.SetModLoader();
+            }
         }
         private void CloseFileStream()
         {
