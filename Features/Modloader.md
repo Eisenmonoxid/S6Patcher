@@ -12,7 +12,7 @@ Here, the process is a bit different: Since the game does not use archive files,
 paths are loaded by the game first before loading anything else. If the path does not exist, the game will launch normally without notification.
 
 ## Creating a mod
-Use the `bba6 - Tool (written by yoq and mcb)` to unpack your game files (.bba) and to create a `"mod.bba"` containing your modified game files and additional files. For the History Editions,
+Use the [bba6 - Tool](https://github.com/mcb5637/bba6tool) (written by yoq and mcb) to unpack your game files (.bba) and to create a `"mod.bba"` containing your modified game files and additional files. For the History Editions,
 it is not necessary to use the bba6 - Tool, you can directly put any modified files in the folder mentioned above.  
 **Note:** The folder structure of the game has to be retained in the `mod.bba` / the `modloader/shr` folder.
 
