@@ -176,6 +176,43 @@ namespace S6Patcher.Source.Patcher
             {
                 Helpers.Helpers.WriteBytes(ref GlobalStream, DictEntry.Key, DictEntry.Value);
             }
+
+            string ModPath = Helpers.Helpers.GetRootPathFromFile(GlobalStream.Name, GlobalID);
+            ModPath = ModPath + Path.DirectorySeparatorChar + "modloader";
+            if (Directory.Exists(ModPath) == false)
+            {
+                try
+                {
+                    Directory.CreateDirectory(ModPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                return;
+            }
+
+            if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
+            {
+                ModPath = ModPath + Path.DirectorySeparatorChar + "shr";
+                Directory.CreateDirectory(ModPath);
+            }
+            else
+            {
+                ModPath = ModPath + Path.DirectorySeparatorChar + "bba" + Path.DirectorySeparatorChar;
+                Directory.CreateDirectory(ModPath);
+                try
+                {
+                    File.WriteAllBytes(ModPath + "mod.bba", Resources.mod);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
         public void SetLargeAddressAwareFlag()
         {
@@ -223,7 +260,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Resources.ErrorLuaScriptFixes + "\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         public void SetKnightSelection(bool Checked)

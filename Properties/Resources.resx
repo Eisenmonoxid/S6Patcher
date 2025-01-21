@@ -125,41 +125,38 @@
     <value>..\Source\Resources\Scripts\EMXBinData.s6patcher;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ErrorBackup" xml:space="preserve">
-    <value>Fehler beim Erstellen der Backup-Datei! Abbrechen ...
-Error when creating backup file! Aborting ...</value>
+    <value>Could not create backup file! Aborting ...</value>
   </data>
   <data name="ErrorBackupFail" xml:space="preserve">
-    <value>Backup konnte nicht wiederhergestellt werden!
-Backup could not be restored!</value>
+    <value>Could not restore backup! Aborting ...</value>
   </data>
   <data name="ErrorLuaScriptFixes" xml:space="preserve">
-    <value>Lua-Fixes: Datei konnte nicht geschrieben werden!
-Lua-Fixes: File could not be written!</value>
+    <value>Lua-Fixes: File could not be written!</value>
   </data>
   <data name="ErrorNoFile" xml:space="preserve">
-    <value>Keine Datei ausgewählt oder Datei existiert nicht!
-No file chosen or file does not exist!</value>
+    <value>No file chosen or file does not exist!</value>
   </data>
   <data name="ErrorWrongVersion" xml:space="preserve">
-    <value>Ungültige Ausführungsdatei gewählt! Abbrechen ...
-Invalid executable has been choosen! Aborting ...</value>
+    <value>Invalid executable has been choosen! Aborting ...</value>
   </data>
   <data name="FeaturesLink" xml:space="preserve">
     <value>https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md</value>
   </data>
   <data name="FinishedBackup" xml:space="preserve">
-    <value>Backup wurde erfolgreich wiederhergestellt!
-Backup has been successfully restored!</value>
+    <value>Backup has been successfully restored!</value>
   </data>
   <data name="FinishedSuccess" xml:space="preserve">
-    <value>Finished successfully!\n
-Do you want to create desktop shortcuts to the unpatched and patched executables?</value>
+    <value>Finished successfully!
+Create desktop shortcuts to the unpatched and patched executables?</value>
   </data>
   <data name="GithubMainLink" xml:space="preserve">
     <value>https://github.com/Eisenmonoxid/S6Patcher</value>
   </data>
   <data name="MainMenuUserScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Source\Resources\Scripts\MainMenuUserScript.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="mod" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Source\Resources\Mod\mod.bba;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="UserScriptLocal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Source\Resources\Scripts\UserScriptLocal.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

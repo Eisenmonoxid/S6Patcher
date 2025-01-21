@@ -80,8 +80,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fehler beim Erstellen der Backup-Datei! Abbrechen ...
-        ///Error when creating backup file! Aborting ....
+        ///   Looks up a localized string similar to Could not create backup file! Aborting ....
         /// </summary>
         internal static string ErrorBackup {
             get {
@@ -90,8 +89,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup konnte nicht wiederhergestellt werden!
-        ///Backup could not be restored!.
+        ///   Looks up a localized string similar to Could not restore backup! Aborting ....
         /// </summary>
         internal static string ErrorBackupFail {
             get {
@@ -100,8 +98,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lua-Fixes: Datei konnte nicht geschrieben werden!
-        ///Lua-Fixes: File could not be written!.
+        ///   Looks up a localized string similar to Lua-Fixes: File could not be written!.
         /// </summary>
         internal static string ErrorLuaScriptFixes {
             get {
@@ -110,8 +107,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keine Datei ausgewählt oder Datei existiert nicht!
-        ///No file chosen or file does not exist!.
+        ///   Looks up a localized string similar to No file chosen or file does not exist!.
         /// </summary>
         internal static string ErrorNoFile {
             get {
@@ -120,8 +116,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ungültige Ausführungsdatei gewählt! Abbrechen ...
-        ///Invalid executable has been choosen! Aborting ....
+        ///   Looks up a localized string similar to Invalid executable has been choosen! Aborting ....
         /// </summary>
         internal static string ErrorWrongVersion {
             get {
@@ -139,8 +134,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup wurde erfolgreich wiederhergestellt!
-        ///Backup has been successfully restored!.
+        ///   Looks up a localized string similar to Backup has been successfully restored!.
         /// </summary>
         internal static string FinishedBackup {
             get {
@@ -149,8 +143,8 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finished successfully!\n
-        ///Do you want to create desktop shortcuts to the unpatched and patched executables?.
+        ///   Looks up a localized string similar to Finished successfully!
+        ///Create desktop shortcuts to the unpatched and patched executables?.
         /// </summary>
         internal static string FinishedSuccess {
             get {
@@ -173,6 +167,16 @@ namespace S6Patcher.Properties {
         internal static byte[] MainMenuUserScript {
             get {
                 object obj = ResourceManager.GetObject("MainMenuUserScript", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] mod {
+            get {
+                object obj = ResourceManager.GetObject("mod", resourceCulture);
                 return ((byte[])(obj));
             }
         }

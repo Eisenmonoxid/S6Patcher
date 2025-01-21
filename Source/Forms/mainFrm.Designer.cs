@@ -277,6 +277,7 @@
             this.btnModFeatures.TabIndex = 19;
             this.btnModFeatures.Text = "Features";
             this.btnModFeatures.UseVisualStyleBackColor = true;
+            this.btnModFeatures.Visible = false;
             this.btnModFeatures.Click += new System.EventHandler(this.btnModFeatures_Click);
             // 
             // cbModloader

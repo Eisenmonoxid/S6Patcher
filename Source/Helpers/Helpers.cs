@@ -112,5 +112,27 @@ namespace S6Patcher.Source.Helpers
                 return;
             }
         }
+        public static string GetRootPathFromFile(string Filepath, execID ID)
+        {
+            int Index = Filepath.LastIndexOf(Path.GetFileName(Filepath)) - 1;
+            Filepath = Filepath.Remove(Index, Filepath.Length - Index);
+
+            for (short i = 0; true; i++)
+            {
+                if ((ID == execID.OV || ID == execID.OV_OFFSET) && (i == 2))
+                {
+                    break;
+                }
+                else if (i == 3)
+                {
+                    break;
+                }
+
+                Index = Filepath.LastIndexOf(Path.DirectorySeparatorChar);
+                Filepath = Filepath.Remove(Index, Filepath.Length - Index);
+            }
+            
+            return Filepath;
+        }
     }
 }

@@ -16,9 +16,5 @@ namespace S6Patcher.Source.Forms
         {
             InitializeComponent();
         }
-        private void modFrm_Load(object sender, EventArgs e)
-        {
-            //cdMain.ShowDialog();
-        }
     }
 }
