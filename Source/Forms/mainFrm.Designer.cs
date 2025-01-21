@@ -285,9 +285,9 @@
             this.cbModloader.AutoSize = true;
             this.cbModloader.Location = new System.Drawing.Point(6, 203);
             this.cbModloader.Name = "cbModloader";
-            this.cbModloader.Size = new System.Drawing.Size(146, 20);
+            this.cbModloader.Size = new System.Drawing.Size(143, 20);
             this.cbModloader.TabIndex = 18;
-            this.cbModloader.Text = "Activate Modloader:";
+            this.cbModloader.Text = "Activate Modloader";
             this.cbModloader.UseVisualStyleBackColor = true;
             this.cbModloader.CheckedChanged += new System.EventHandler(this.cbModloader_CheckedChanged);
             // 
