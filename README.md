@@ -11,6 +11,10 @@
 - _Wähle die ausführbare(n) Datei(en), die gepatcht werden soll(en) (Settlers6.exe/Settlers6R.exe oder S6MapEditor.exe/S6MapEditorR.exe) aus, welche sich im Installationsordner befindet/n.  
 **Sollte es Fragen, Fehler oder Featurewünsche geben: [Discord](https://discord.gg/7SGkQtAAET).**_
 ---
+## Modloader
+- The S6Patcher features a very simple Modloader, which can be used to create mods without having to modify the existing game files. Look [here](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md).
+- Der S6Patcher enthält einen sehr einfachen Modloader, mit welchem Mods erstellt werden können, ohne die Originaldateien des Spiels zu verändern. Siehe [hier](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md).
+---
 ## Features
 - For illustrated descriptions of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
 - _Eine bebilderte Beschreibung einiger der Hauptfeatures des Programmes findet sich in der [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) Datei._

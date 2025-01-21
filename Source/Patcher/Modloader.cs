@@ -4,7 +4,7 @@ using System.Text;
 
 namespace S6Patcher.Source.Patcher
 {
-    internal class Modloader : Mappings
+    internal class Modloader
     {
         /* SIMPLE MODLOADER - OV
          * "modloader\bba\mod.bba" .> Is always loaded first by the game, in both base and extra1.
@@ -68,7 +68,7 @@ namespace S6Patcher.Source.Patcher
                 {0x25D600, new byte[] {0xEB, 0x7A}}, // Return to original loader after mod
             };
         }
-        public new Dictionary<long, byte[]> GetMappingsByID(execID ID)
+        public Dictionary<long, byte[]> GetMappingsByID(execID ID)
         {
             switch (ID)
             {

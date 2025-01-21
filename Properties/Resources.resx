@@ -147,7 +147,7 @@
   </data>
   <data name="FinishedSuccess" xml:space="preserve">
     <value>Finished successfully!
-Create desktop shortcuts to the unpatched and patched executables?</value>
+Create desktop shortcut to the patched file?</value>
   </data>
   <data name="GithubMainLink" xml:space="preserve">
     <value>https://github.com/Eisenmonoxid/S6Patcher</value>

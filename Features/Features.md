@@ -29,11 +29,11 @@ This excerpt should highlight some of the key features of the S6Patcher. For a f
 
 ## Mapeditor: All Entities & Textures available and freely placeable
 - In the "Place Entities" dialog within the map editor, all possible entities are available. They can be freely placed and selected. **Caution:** Some entities may cause a crash, so it's recommended to save the map before placing an unknown entity. Same goes for ground textures.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Menu_Final.png" width="20%" height="20%" alt="Menu"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/f93c4140ad422dd49f9109154c4fa031f4f3ace5/Features/Menu_Final.png" width="20%" height="20%" alt="Menu"/>
 
 ## Mapeditor: Usable black border area
 - The black border area of the map can now be utilized and will no longer be deleted when saving the map. If the map area needs to be restricted, the "Map Boundary" menu option can still be used manually.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Black_Border_Final.png" width="40%" height="40%" alt="Black_Border"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/f93c4140ad422dd49f9109154c4fa031f4f3ace5/Features/Black_Border_Final.png" width="40%" height="40%" alt="Black_Border"/>
 
 # Recommendation: DXVK
 Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 

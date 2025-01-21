@@ -12,7 +12,7 @@ Here, the process is a bit different: Since the game does not use archive files,
 paths are loaded by the game first before loading anything else. If the path does not exist, the game will launch normally without notification.
 
 ## Creating a mod
-Use the [bba6 - Tool](https://github.com/mcb5637/bba6tool) (written by yoq and mcb) to unpack your game files (.bba) and to create a `"mod.bba"` containing your modified game files and additional files. For the History Editions,
+Use the [bba6 - Tool](https://github.com/mcb5637/bba6tool) (written by yoq) to unpack your game files (.bba) and to create a `"mod.bba"` containing your modified game files and additional files. For the History Editions,
 it is not necessary to use the bba6 - Tool, you can directly put any modified files in the folder mentioned above.  
 **Note:** The folder structure of the game has to be retained in the `mod.bba` / the `modloader/shr` folder.
 
@@ -21,4 +21,24 @@ The full path in the Original Release should look something like this: <Program 
 In the History Edition, the path to the modified files looks like this: <Program Files>\Ubisoft\thesettlers6\modloader\shr\<Your modded files>
 ```
 
+## Small example mod (History Edition)
+We want to change the default player color to yellow. So we locate the file that contains the player color mapping `<Settlers>\Data\base\shr\config\playercolor.xml`. We copy this file to to the modloader path
+(the Patcher should have created the folders, if not, simply create them yourself). We have to rebuild the folder structure of the game in the `modloader\shr\` folder, so the game recognizes the modified file.
+This should look like this: `<Settlers>\modloader\shr\config\playercolor.xml`.
+After that, we can open the .xml file in any editor and replace the second entry with our own custom RGB colors:
+```xml
+		<!-- 4 City colors / player colors-->		
+		<Color>
+			<Red>255</Red>
+			<Green>255</Green>
+			<Blue>0</Blue>
+		</Color>
+```
+Save the file, start the game, and the changes should have been applied.
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/f93c4140ad422dd49f9109154c4fa031f4f3ace5/Features/Playercolor_Final.png" width="40%" height="40%" alt="Player_Color"/>
+
+For the Original Release the process is basically the same, only difference is that the folders and the file must be packed into an .bba - archive with the bba6tool. The resulting .bba file must be named `mod.bba` and
+must be located in the following path: `<Settlers>\modloader\bba\mod.bba`.
+
+## Questions
 **In case there are any questions: [Discord](https://discord.gg/7SGkQtAAET).**

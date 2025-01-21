@@ -27,6 +27,7 @@ namespace S6Patcher.Source.Helpers
             }
             catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 MessageBox.Show("OpenFileStream:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return null;
             }
@@ -61,6 +62,7 @@ namespace S6Patcher.Source.Helpers
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
@@ -85,8 +87,9 @@ namespace S6Patcher.Source.Helpers
                     {
                         File.Delete(Path.Combine(ScriptPath, Entry));
                     }
-                    catch (Exception) // Errors here do not matter
+                    catch (Exception ex) // Errors here do not matter
                     {
+                        Logger.Instance.Log(ex.ToString());
                         continue;
                     }
                 }
@@ -105,8 +108,9 @@ namespace S6Patcher.Source.Helpers
             {
                 Lines = File.ReadAllLines(CurrentPath).ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 return;
             }
 
@@ -117,8 +121,9 @@ namespace S6Patcher.Source.Helpers
             {
                 File.WriteAllLines(CurrentPath, Lines);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 return;
             }
         }
@@ -144,6 +149,7 @@ namespace S6Patcher.Source.Helpers
             }
             catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 MessageBox.Show("RestoreBackup:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
@@ -170,6 +176,7 @@ namespace S6Patcher.Source.Helpers
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show("UpdateEntryInOptionsFile:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
@@ -185,6 +192,7 @@ namespace S6Patcher.Source.Helpers
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show("UpdateEntryInOptionsFile:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }

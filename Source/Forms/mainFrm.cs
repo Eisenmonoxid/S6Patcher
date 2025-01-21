@@ -13,6 +13,7 @@ namespace S6Patcher.Source.Forms
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;
+            Logger.Instance.Log("Startup successful!");
         }
         private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {
@@ -119,6 +120,7 @@ namespace S6Patcher.Source.Forms
             }
             catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }

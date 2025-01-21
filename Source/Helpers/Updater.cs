@@ -8,7 +8,6 @@ namespace S6Patcher.Source.Helpers
 {
     internal class Updater
     {
-        public Updater() {}
         public void CheckForUpdates()
         {
             using (WebClient Client = new WebClient())
@@ -23,6 +22,7 @@ namespace S6Patcher.Source.Helpers
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }

@@ -76,7 +76,7 @@ namespace S6Patcher.Source.Forms
             Result = MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (Result == DialogResult.Yes)
             {
-                Helpers.Helpers.CreateDesktopShortcuts(Name);
+                Helpers.Helpers.CreateDesktopShortcut(Name);
             }
         }
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)

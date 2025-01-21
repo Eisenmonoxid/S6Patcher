@@ -91,6 +91,7 @@
       <DependentUpon>modFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
+    <Compile Include="Source\Helpers\Logger.cs" />
     <Compile Include="Source\Helpers\Updater.cs" />
     <Compile Include="Source\Patcher\Mappings.cs" />
     <Compile Include="Source\Patcher\Modloader.cs" />

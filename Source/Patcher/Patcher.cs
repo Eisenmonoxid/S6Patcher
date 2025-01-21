@@ -53,6 +53,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -89,6 +90,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -125,6 +127,7 @@ namespace S6Patcher.Source.Patcher
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -148,6 +151,7 @@ namespace S6Patcher.Source.Patcher
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -177,8 +181,9 @@ namespace S6Patcher.Source.Patcher
                 Helpers.Helpers.WriteBytes(ref GlobalStream, DictEntry.Key, DictEntry.Value);
             }
 
+            char Separator = Path.DirectorySeparatorChar;
             string ModPath = Helpers.Helpers.GetRootPathFromFile(GlobalStream.Name, GlobalID);
-            ModPath = ModPath + Path.DirectorySeparatorChar + "modloader";
+            ModPath = ModPath + Separator + "modloader";
             if (Directory.Exists(ModPath) == false)
             {
                 try
@@ -187,6 +192,7 @@ namespace S6Patcher.Source.Patcher
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -197,12 +203,12 @@ namespace S6Patcher.Source.Patcher
 
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
             {
-                ModPath = ModPath + Path.DirectorySeparatorChar + "shr";
+                ModPath = ModPath + Separator + "shr";
                 Directory.CreateDirectory(ModPath);
             }
             else
             {
-                ModPath = ModPath + Path.DirectorySeparatorChar + "bba" + Path.DirectorySeparatorChar;
+                ModPath = ModPath + Separator + "bba" + Separator;
                 Directory.CreateDirectory(ModPath);
                 try
                 {
@@ -210,6 +216,7 @@ namespace S6Patcher.Source.Patcher
                 }
                 catch (Exception ex)
                 {
+                    Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -260,6 +267,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
