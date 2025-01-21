@@ -35,7 +35,7 @@ After that, we can open the .xml file in any editor and replace the second entry
 		</Color>
 ```
 Save the file, start the game, and the changes should have been applied.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/f93c4140ad422dd49f9109154c4fa031f4f3ace5/Features/Playercolor_Final.png" width="40%" height="40%" alt="Player_Color"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Playercolor_Final.png" width="60%" height="60%" alt="Player_Color"/>
 
 For the Original Release the process is basically the same, only difference is that the folders and the file must be packed into an .bba - archive with the bba6tool. The resulting .bba file must be named `mod.bba` and
 must be located in the following path: `<Settlers>\modloader\bba\mod.bba`.

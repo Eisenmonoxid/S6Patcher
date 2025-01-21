@@ -2,30 +2,30 @@
 This excerpt should highlight some of the key features of the S6Patcher. For a full feature list, take a look at the [ReadME](https://github.com/Eisenmonoxid/S6Patcher/blob/master/README.md).
 
 ## All Versions: Higher Zoomlevel
-- The games' standard zoom limit value is 7200. Compared to "solutions" purely utilising the lua script, the angle of the RTS camera is maintained and other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures below show a comparison of standard 7200 and 14000 zoom levels. Every value is possible, but it is recommended to not go higher than 20000.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Zoom_High_Final.png" width="40%" height="40%" alt="Zoom_High"/>
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Zoom_Normal_Final.png" width="40%" height="40%" alt="Zoom_Normal"/>
+- The standard zoom limit value of the game is 7200. When patching, the angle of the RTS camera is maintained and other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures below show a comparison of standard 7200 and 14000 zoom levels. It is recommended to not go higher than 20000.
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Zoom_High_Final.png" width="40%" height="40%" alt="Zoom_High"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Zoom_Normal_Final.png" width="40%" height="40%" alt="Zoom_Normal"/>
 
 ## All Versions: Windowed Checkbox
 - A new checkbox in the options menu allows to start the game either in windowed or in fullscreen mode, depending on the state. 
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Windowed_Final.png" width="35%" height="35%" alt="Windowed"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Windowed_Final.png" width="35%" height="35%" alt="Windowed"/>
 
 ## All Versions: Base game knights in the expansion pack
 - All seven knights can be selected in the "Eastern Realm" expansion pack. **Caution:** Some audio feedback lines regarding the "Eastern Realm" features (Tradepost, Well, Geologist) are missing and the stories of some maps might not really make sense (e.g. "Kestrals Wedding" when playing as Kestral).
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Knights_Final.png" width="35%" height="35%" alt="Knights"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Knights_Final.png" width="35%" height="35%" alt="Knights"/>
 
 ## Original Release: Texture Resolution
 - The S6Patcher can restore the texture slider for entities and set a custom texture resolution for ground textures. The pictures show a comparison between unpatched and highest texture resolution. It is recommended to stay in the interval of 128 - 4096 for ground texture resolution.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Textures_Low_Final.png" width="35%" height="35%" alt="Textures_Low"/>
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Textures_High_Final.png" width="35%" height="35%" alt="Textures_High"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Textures_Low_Final.png" width="35%" height="35%" alt="Textures_Low"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Textures_High_Final.png" width="35%" height="35%" alt="Textures_High"/>
 
 ## Original Release: Higher Resolutions
 - Two new resolutions are added in the ingame video options menu: 2K (2560x1440) and 4K (3840x2160).
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Resolution_Final.png" width="40%" height="40%" alt="Resolution"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Resolution_Final.png" width="40%" height="40%" alt="Resolution"/>
 
 ## Mapeditor: Unlimited Scaling
 - Entities in the Mapeditor can now be freely scaled in their size.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/76c046da963664caf6438e687e7e700008d92962/Images/Scaling_Final.png" width="40%" height="40%" alt="Scaling"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Scaling_Final.png" width="40%" height="40%" alt="Scaling"/>
 
 ## Mapeditor: All Entities & Textures available and freely placeable
 - In the "Place Entities" dialog within the map editor, all possible entities are available. They can be freely placed and selected. **Caution:** Some entities may cause a crash, so it's recommended to save the map before placing an unknown entity. Same goes for ground textures.
