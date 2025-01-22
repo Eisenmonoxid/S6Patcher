@@ -10,6 +10,7 @@ namespace S6Patcher.Source.Helpers
     {
         public void CheckForUpdates()
         {
+            Logger.Instance.Log("CheckForUpdates() called.");
             using (WebClient Client = new WebClient())
             {
                 Client.Encoding = Encoding.UTF8;
@@ -34,16 +35,22 @@ namespace S6Patcher.Source.Helpers
             {
                 if (string.Compare(Application.ProductVersion, e.Result, true) != 0)
                 {
-                    MessageBox.Show("A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + e.Result, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string Message = "A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + e.Result;
+                    Logger.Instance.Log(Message);
+                    MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("You are using the latest version of the S6Patcher!", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string Message = "You are using the latest version of the S6Patcher!";
+                    Logger.Instance.Log(Message);
+                    MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
             {
-                MessageBox.Show("Error: Could not retrieve update information!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string Message = "Could not retrieve update information!";
+                Logger.Instance.Log(Message);
+                MessageBox.Show(Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

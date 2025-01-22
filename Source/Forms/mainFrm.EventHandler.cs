@@ -14,8 +14,7 @@ namespace S6Patcher.Source.Forms
         }
         private void btnModFeatures_Click(object sender, EventArgs e)
         {
-            modFrm Form = new modFrm();
-            Form.ShowDialog();
+            return; // Not implemented right now
         }
         private void cbModloader_CheckedChanged(object sender, EventArgs e)
         {
@@ -68,16 +67,20 @@ namespace S6Patcher.Source.Forms
         }
         private void btnPatch_Click(object sender, EventArgs e)
         {
+            Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
+
             SelectPatchFeatures();
             string Name = GlobalStream.Name;
             ResetForm();
+
+            Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
 
             DialogResult Result;
             Result = MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (Result == DialogResult.Yes)
             {
                 Helpers.Helpers.CreateDesktopShortcut(Name);
-            }
+            }         
         }
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -87,18 +90,22 @@ namespace S6Patcher.Source.Forms
         }
         private void btnAbort_Click(object sender, EventArgs e)
         {
+            Logger.Instance.Log("btnAbort_Click(): Exiting application ...");
             CloseFileStream();
             Environment.Exit(0);
         }
         private void btnBackup_Click(object sender, EventArgs e)
         {
+            Logger.Instance.Log("btnBackup_Click(): Restoring backup ...");
             bool Result = IOFileHandler.Instance.RestoreBackup(ref GlobalStream);
             if (Result == false)
             {
+                Logger.Instance.Log(Resources.ErrorBackupFail);
                 MessageBox.Show(Resources.ErrorBackupFail, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
+                Logger.Instance.Log(Resources.FinishedBackup);
                 MessageBox.Show(Resources.FinishedBackup, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
@@ -112,6 +119,7 @@ namespace S6Patcher.Source.Forms
             {
                 if (IOFileHandler.Instance.CreateBackup(ofd.FileName) == false)
                 {
+                    Logger.Instance.Log(Resources.ErrorBackup);
                     MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
@@ -119,6 +127,7 @@ namespace S6Patcher.Source.Forms
                 GlobalStream = IOFileHandler.Instance.OpenFileStream(ofd.FileName);
                 if (GlobalStream == null)
                 {
+                    Logger.Instance.Log(Resources.ErrorWrongVersion);
                     MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
@@ -127,6 +136,7 @@ namespace S6Patcher.Source.Forms
                 if (ValidExecutable == false)
                 {
                     CloseFileStream();
+                    Logger.Instance.Log(Resources.ErrorWrongVersion);
                     MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
@@ -137,6 +147,7 @@ namespace S6Patcher.Source.Forms
             }
             else
             {
+                Logger.Instance.Log(Resources.ErrorNoFile);
                 MessageBox.Show(Resources.ErrorNoFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

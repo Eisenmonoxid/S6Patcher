@@ -37,6 +37,7 @@ namespace S6Patcher.Source.Forms
         }
         private void OpenLink(string Link, LinkLabel CurrentLabel)
         {
+            Logger.Instance.Log("OpenLink(): " + Link);
             var Info = new ProcessStartInfo(Link);
             Process.Start(Info);
             CurrentLabel.LinkVisited = true;

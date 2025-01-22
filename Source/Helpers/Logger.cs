@@ -1,25 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Helpers
 {
     public sealed class Logger
     {
+        private static readonly string CurrentFilepath = Assembly.GetExecutingAssembly().Location;
+        private static readonly string CurrentLogFile = CurrentFilepath.Replace(Path.GetFileName(CurrentFilepath), "") + Path.DirectorySeparatorChar + "S6Patcher_Output.log";
+        private static bool FileCreated = false;
+        private static StreamWriter LogWriter = null;
+
         private static readonly Logger _instance = new Logger();
         private Logger() {}
         ~Logger() 
         {
-            if (LogWriter != null && LogWriter.BaseStream.CanRead == true)
+            if (LogWriter != null)
             {
-                LogWriter.Close();
-                LogWriter.Dispose();
-                LogWriter = null;
+                try
+                {
+                    LogWriter.Close();
+                    LogWriter.Dispose();
+                    LogWriter = null;
+                }
+                catch
+                {
+                    return;
+                }
             }
         }
         public static Logger Instance
@@ -30,11 +37,6 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
-        private static readonly string CurrentFilepath = Assembly.GetExecutingAssembly().Location;
-        private static readonly string CurrentLogFile = CurrentFilepath + Path.DirectorySeparatorChar + "S6Patcher_Log.log";
-        private static bool FileCreated = false;
-        private static StreamWriter LogWriter = null;
-        
         public void Log(string Message)
         {
             if (FileCreated == false || LogWriter == null)
@@ -42,6 +44,7 @@ namespace S6Patcher.Source.Helpers
                 try
                 {
                     LogWriter = File.CreateText(CurrentLogFile);
+                    FileCreated = true;
                 }
                 catch
                 {
@@ -50,7 +53,15 @@ namespace S6Patcher.Source.Helpers
             }
 
             string Line = DateTime.Now.ToString() + ": " + Message + "\n";
-            LogWriter.WriteLine(Line);
+            try
+            {
+                LogWriter.WriteLine(Line);
+                LogWriter.Flush();
+            }
+            catch
+            {
+                return;
+            }
         }
     }
 }

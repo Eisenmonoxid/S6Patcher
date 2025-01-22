@@ -28,10 +28,11 @@ namespace S6Patcher.Source.Helpers
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show("OpenFileStream:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return null;
             }
 
+            Logger.Instance.Log("OpenFileStream(): Returning Stream: " + Stream.Name);
             return Stream;
         }
         public OpenFileDialog CreateOFDialog()
@@ -59,11 +60,12 @@ namespace S6Patcher.Source.Helpers
                 try
                 {
                     File.Copy(Filepath, FinalPath, false);
+                    Logger.Instance.Log("CreateBackup(): Backup creation successful! Path: " + FinalPath);
                 }
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }
@@ -85,11 +87,13 @@ namespace S6Patcher.Source.Helpers
                 {
                     try
                     {
-                        File.Delete(Path.Combine(ScriptPath, Entry));
+                        string CurrentFile = Path.Combine(ScriptPath, Entry);
+                        File.Delete(CurrentFile);
+                        Logger.Instance.Log("DeleteUserConfiguration(): File sucessfully deleted: " + CurrentFile);
                     }
                     catch (Exception ex) // Errors here do not matter
                     {
-                        Logger.Instance.Log(ex.ToString());
+                        Logger.Instance.Log("DeleteUserConfiguration(): " + ex.Message);
                         continue;
                     }
                 }
@@ -100,6 +104,7 @@ namespace S6Patcher.Source.Helpers
             CurrentPath = Path.Combine(CurrentPath, "Options.ini");
             if (File.Exists(CurrentPath) == false)
             {
+                Logger.Instance.Log("DeleteSectionFromOptions(): File " + CurrentPath + " NOT found! Aborting ...");
                 return;
             }
 
@@ -126,6 +131,8 @@ namespace S6Patcher.Source.Helpers
                 Logger.Instance.Log(ex.ToString());
                 return;
             }
+
+            Logger.Instance.Log("DeleteSectionFromOptions(): File " + CurrentPath + " sucessfully updated!");
         }
         public bool RestoreBackup(ref FileStream Stream)
         {
@@ -137,6 +144,7 @@ namespace S6Patcher.Source.Helpers
 
             if (File.Exists(FinalPath) == false)
             {
+                Logger.Instance.Log("RestoreBackup(): File " + FinalPath + " NOT found!");
                 return false;
             }
 
@@ -150,10 +158,11 @@ namespace S6Patcher.Source.Helpers
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show("RestoreBackup:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
+            Logger.Instance.Log("RestoreBackup(): File " + FinalPath + " successfully restored!");
             return true;
         }
         public bool UpdateEntryInOptionsFile(string Section, string Key, bool Entry)
@@ -177,7 +186,7 @@ namespace S6Patcher.Source.Helpers
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show("UpdateEntryInOptionsFile:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
 
@@ -189,11 +198,12 @@ namespace S6Patcher.Source.Helpers
                 try
                 {
                     File.WriteAllLines(CurrentPath, Lines);
+                    Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file " + CurrentPath);
                 }
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show("UpdateEntryInOptionsFile:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }

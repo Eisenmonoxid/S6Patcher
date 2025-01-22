@@ -84,12 +84,6 @@
     <Compile Include="Source\Forms\aboutBox.Designer.cs">
       <DependentUpon>aboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\Forms\modFrm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Source\Forms\modFrm.Designer.cs">
-      <DependentUpon>modFrm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
     <Compile Include="Source\Helpers\Logger.cs" />
     <Compile Include="Source\Helpers\Updater.cs" />
@@ -130,9 +124,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Source\Forms\modFrm.resx">
-      <DependentUpon>modFrm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Source\Resources\Scripts\UserScriptLocal.lua" />
     <EmbeddedResource Include="Source\Resources\Scripts\EMXBinData.s6patcher" />
     <EmbeddedResource Include="Source\Resources\Scripts\MainMenuUserScript.lua" />

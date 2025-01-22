@@ -13,7 +13,7 @@ namespace S6Patcher.Source.Forms
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;
-            Logger.Instance.Log("Startup successful!");
+            Logger.Instance.Log("Startup successful! Text: " + this.Text);
         }
         private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {
@@ -104,6 +104,7 @@ namespace S6Patcher.Source.Forms
 
                     if (curControl.Checked)
                     {
+                        Logger.Instance.Log("GetPatchFeaturesByControls(): Feature " + curControl.Text + " was checked!");
                         CheckedFeatures.Add(curControl.Text);
                     }
                 }
@@ -192,6 +193,8 @@ namespace S6Patcher.Source.Forms
             btnBackup.Enabled = false;
             btnModFeatures.Enabled = false;
             txtExecutablePath.Text = String.Empty;
+
+            Logger.Instance.Log("ResetForm(): Form successfully reset!");
         }
     }
 }

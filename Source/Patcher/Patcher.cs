@@ -21,6 +21,8 @@ namespace S6Patcher.Source.Patcher
 
             GlobalID = ID;
             GlobalStream = Stream;
+
+            Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
         public void PatchByControlFeatures(List<string> Names)
         {
@@ -41,11 +43,14 @@ namespace S6Patcher.Source.Patcher
                 foreach (var Entry in Element)
                 {
                     Helpers.Helpers.WriteBytes(ref GlobalStream, Entry.Key, Entry.Value);
+                    Logger.Instance.Log("PatchByControlFeatures(): Patching Element: " + Entry.Key.ToString());
                 }
             });
         }
         public void SetHighResolutionTextures(string ResolutionText)
         {
+            Logger.Instance.Log("SetHighResolutionTextures(): Called with " + ResolutionText);
+
             UInt32 Resolution;
             try
             {
@@ -83,6 +88,8 @@ namespace S6Patcher.Source.Patcher
         }
         public void SetAutosaveTimer(string AutosaveText)
         {
+            Logger.Instance.Log("SetAutosaveTimer(): Called with " + AutosaveText);
+
             double Timer;
             try
             {
@@ -112,6 +119,8 @@ namespace S6Patcher.Source.Patcher
         }
         public void SetZoomLevel(string ZoomText)
         {
+            Logger.Instance.Log("SetZoomLevel(): Called with " + ZoomText);
+
             float Offset = 4800;
             float TransitionFactor = 3700;
 
@@ -169,10 +178,13 @@ namespace S6Patcher.Source.Patcher
         }
         public void SetModLoader()
         {
+            Logger.Instance.Log("SetModLoader(): Called.");
+
             Modloader Loader = new Modloader();
             Dictionary<long, byte[]> Entries = Loader.GetMappingsByID(GlobalID);
             if (Entries == null)
             {
+                Logger.Instance.Log("SetModLoader(): Entries was zero!");
                 return;
             }
 
@@ -189,6 +201,7 @@ namespace S6Patcher.Source.Patcher
                 try
                 {
                     Directory.CreateDirectory(ModPath);
+                    Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
                 }
                 catch (Exception ex)
                 {
@@ -198,6 +211,7 @@ namespace S6Patcher.Source.Patcher
             }
             else
             {
+                Logger.Instance.Log("SetModLoader(): Folder " + ModPath + " found! Returning ...");
                 return;
             }
 
@@ -205,6 +219,7 @@ namespace S6Patcher.Source.Patcher
             {
                 ModPath = ModPath + Separator + "shr";
                 Directory.CreateDirectory(ModPath);
+                Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
             }
             else
             {
@@ -213,6 +228,7 @@ namespace S6Patcher.Source.Patcher
                 try
                 {
                     File.WriteAllBytes(ModPath + "mod.bba", Resources.mod);
+                    Logger.Instance.Log("SetModLoader(): Written mod.bba to Path " + ModPath);
                 }
                 catch (Exception ex)
                 {
@@ -223,6 +239,8 @@ namespace S6Patcher.Source.Patcher
         }
         public void SetLargeAddressAwareFlag()
         {
+            Logger.Instance.Log("SetLargeAddressAwareFlag(): Called.");
+
             // Partially adapted from:
             // https://stackoverflow.com/questions/9054469/how-to-check-if-exe-is-set-as-largeaddressaware
             const int IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
@@ -233,6 +251,7 @@ namespace S6Patcher.Source.Patcher
 
             if (Reader.ReadInt32() != 0x4550)
             {
+                Logger.Instance.Log("SetLargeAddressAwareFlag(): Error - Not at expected offset!");
                 return;
             }
 
@@ -247,6 +266,8 @@ namespace S6Patcher.Source.Patcher
         }
         public void SetLuaScriptBugFixes()
         {
+            Logger.Instance.Log("SetLuaScriptBugFixes(): Called.");
+
             // EMXBinData.s6patcher is the minified and compiled main menu script
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.Helpers.GetUserScriptDirectories();
@@ -259,10 +280,12 @@ namespace S6Patcher.Source.Patcher
                     if (Directory.Exists(ScriptPath) == false)
                     {
                         Directory.CreateDirectory(ScriptPath);
+                        Logger.Instance.Log("SetLuaScriptBugFixes(): Created directory " + ScriptPath);
                     }
 
                     File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[0]), Resources.UserScriptLocal);
                     File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[1]), Resources.EMXBinData);
+                    Logger.Instance.Log("SetLuaScriptBugFixes(): Written Scriptfiles to " + ScriptPath);
                 }
             }
             catch (Exception ex)
@@ -273,6 +296,7 @@ namespace S6Patcher.Source.Patcher
         }
         public void SetKnightSelection(bool Checked)
         {
+            Logger.Instance.Log("SetKnightSelection(): Called with " + Checked.ToString());
             IOFileHandler.Instance.UpdateEntryInOptionsFile("S6Patcher", "ExtendedKnightSelection", Checked);
         }
     }

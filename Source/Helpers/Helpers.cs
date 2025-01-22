@@ -29,7 +29,8 @@ namespace S6Patcher.Source.Helpers
             }
             catch (Exception ex)
             {
-                MessageBox.Show("WriteToFileStream:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Logger.Instance.Log(ex.ToString());
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
         public static List<string> GetUserScriptDirectories()
@@ -43,7 +44,9 @@ namespace S6Patcher.Source.Helpers
             {
                 if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 {
-                    Directories.Add(Path.Combine(DocumentPath, Element));
+                    string Directory = Path.Combine(DocumentPath, Element);
+                    Directories.Add(Directory);
+                    Logger.Instance.Log("GetUserScriptDirectories(): Added Directory: " + Directory);
                 }
             }
 
@@ -51,6 +54,8 @@ namespace S6Patcher.Source.Helpers
         }
         public static bool SetCurrentExecutableID(ref FileStream Stream)
         {
+            Logger.Instance.Log("SetCurrentExecutableID(): Called with Stream: " + Stream.Name);
+
             string ExpectedVersion = "1, 71, 4289, 0";
             byte[] Result = new byte[30];
 
@@ -67,21 +72,25 @@ namespace S6Patcher.Source.Helpers
             {
                 if (Stream.Length < Element.Key)
                 {
+                    Logger.Instance.Log("SetCurrentExecutableID(): Stream Length smaller than Mapping Index: " + Stream.Length.ToString());
                     continue;
                 }
 
                 Stream.Position = Element.Key;
                 Stream.Read(Result, 0, Result.Length);
                 string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
+                Logger.Instance.Log("SetCurrentExecutableID(): Read from File: " + Version);
 
                 if (Version == ExpectedVersion)
                 {
                     CurrentID = Element.Value;
+                    Logger.Instance.Log("SetCurrentExecutableID(): Valid executable! execID: " + CurrentID.ToString());
                     return true;
                 };
             }
 
             CurrentID = execID.NONE;
+            Logger.Instance.Log("SetCurrentExecutableID(): NO valid executable was found!");
             return false;
         }
         public static void CreateDesktopShortcut(string Filepath)
@@ -97,16 +106,19 @@ namespace S6Patcher.Source.Helpers
             try
             {
                 PatchedShortcut.Save();
+                Logger.Instance.Log("CreateDesktopShortcut(): Creating shortcut successful! Link: " + Link);
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show("CreateDesktopShortcuts:\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
                 return;
             }
         }
         public static string GetRootPathFromFile(string Filepath, execID ID)
         {
+            Logger.Instance.Log("GetRootPathFromFile(): Called with Input: " + Filepath);
+
             int Index = Filepath.LastIndexOf(Path.GetFileName(Filepath)) - 1;
             Filepath = Filepath.Remove(Index, Filepath.Length - Index);
 
@@ -124,7 +136,8 @@ namespace S6Patcher.Source.Helpers
                 Index = Filepath.LastIndexOf(Path.DirectorySeparatorChar);
                 Filepath = Filepath.Remove(Index, Filepath.Length - Index);
             }
-            
+
+            Logger.Instance.Log("GetRootPathFromFile(): Returns: " + Filepath);
             return Filepath;
         }
     }
