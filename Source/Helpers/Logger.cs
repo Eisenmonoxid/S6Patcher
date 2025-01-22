@@ -52,7 +52,7 @@ namespace S6Patcher.Source.Helpers
                 }
             }
 
-            string Line = DateTime.Now.ToString() + ": " + Message + "\n";
+            string Line = DateTime.Now.ToString() + ": " + Message;
             try
             {
                 LogWriter.WriteLine(Line);
