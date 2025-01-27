@@ -37,16 +37,25 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
+        public bool CreateOutputLogFile()
+        {
+            try
+            {
+                LogWriter = File.CreateText(CurrentLogFile);
+                FileCreated = true;
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
         public void Log(string Message)
         {
             if (FileCreated == false || LogWriter == null)
             {
-                try
-                {
-                    LogWriter = File.CreateText(CurrentLogFile);
-                    FileCreated = true;
-                }
-                catch
+                if (CreateOutputLogFile() == false)
                 {
                     return;
                 }

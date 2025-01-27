@@ -124,11 +124,11 @@ namespace S6Patcher.Source.Forms
                     return;
                 }
 
-                GlobalStream = IOFileHandler.Instance.OpenFileStream(ofd.FileName);
+                GlobalStream = IOFileHandler.Instance.OpenFileStream(Helpers.Helpers.IsPlayLauncherExecutable(ofd.FileName));
                 if (GlobalStream == null)
                 {
-                    Logger.Instance.Log(Resources.ErrorWrongVersion);
-                    MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Logger.Instance.Log(Resources.ErrorInvalidExecutable);
+                    MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
@@ -136,8 +136,8 @@ namespace S6Patcher.Source.Forms
                 if (ValidExecutable == false)
                 {
                     CloseFileStream();
-                    Logger.Instance.Log(Resources.ErrorWrongVersion);
-                    MessageBox.Show(Resources.ErrorWrongVersion, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Logger.Instance.Log(Resources.ErrorInvalidExecutable);
+                    MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 

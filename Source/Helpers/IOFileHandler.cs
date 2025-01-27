@@ -52,9 +52,7 @@ namespace S6Patcher.Source.Helpers
         }
         public bool CreateBackup(string Filepath)
         {
-            string FileName = Path.GetFileNameWithoutExtension(Filepath);
-            string FinalPath = Path.Combine(Path.GetDirectoryName(Filepath), FileName + "_BACKUP.exe");
-
+            string FinalPath = Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + "_BACKUP.exe");
             if (File.Exists(FinalPath) == false)
             {
                 try
@@ -69,12 +67,14 @@ namespace S6Patcher.Source.Helpers
                     return false;
                 }
             }
+
             return true;
         }
         private void DeleteUserConfiguration()
         {
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.GetUserScriptDirectories();
+
             foreach (string Element in Directories)
             {
                 DeleteSectionFromOptions(Path.Combine(Element, "Config"));
@@ -139,8 +139,7 @@ namespace S6Patcher.Source.Helpers
             DeleteUserConfiguration(); // Delete Userscript & Config Section from Documents folder
 
             string FilePath = Stream.Name;
-            string FileName = Path.GetFileNameWithoutExtension(FilePath);
-            string FinalPath = Path.Combine(Path.GetDirectoryName(FilePath), FileName + "_BACKUP.exe");
+            string FinalPath = Path.Combine(Path.GetDirectoryName(FilePath), Path.GetFileNameWithoutExtension(FilePath) + "_BACKUP.exe");
 
             if (File.Exists(FinalPath) == false)
             {

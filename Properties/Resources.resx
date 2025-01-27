@@ -130,14 +130,16 @@
   <data name="ErrorBackupFail" xml:space="preserve">
     <value>Could not restore backup! Aborting ...</value>
   </data>
+  <data name="ErrorInvalidExecutable" xml:space="preserve">
+    <value>Invalid executable has been choosen! Aborting ...
+
+(If your game is from Steam, you will have to unpack it with the tool "Steamless" before using the S6Patcher!)</value>
+  </data>
   <data name="ErrorLuaScriptFixes" xml:space="preserve">
     <value>Lua-Fixes: File could not be written!</value>
   </data>
   <data name="ErrorNoFile" xml:space="preserve">
     <value>No file chosen or file does not exist!</value>
-  </data>
-  <data name="ErrorWrongVersion" xml:space="preserve">
-    <value>Invalid executable has been choosen! Aborting ...</value>
   </data>
   <data name="FeaturesLink" xml:space="preserve">
     <value>https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md</value>
