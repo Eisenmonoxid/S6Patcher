@@ -88,5 +88,18 @@ namespace S6Patcher.Source.Patcher.Mappings
                 }
             };
         }
+
+        public override UInt32[] GetTextureResolutionMapping()
+        {
+            throw new NotImplementedException();
+        }
+        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
+        {
+            throw new NotImplementedException();
+        }
+        public override UInt32[] GetAutoSaveMapping()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

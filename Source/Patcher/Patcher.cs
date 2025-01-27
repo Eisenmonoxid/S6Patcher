@@ -12,6 +12,7 @@ namespace S6Patcher.Source.Patcher
     internal partial class Patcher
     {
         private FileStream GlobalStream = null;
+        private readonly Mapping GlobalMappings = null;
         private readonly execID GlobalID = execID.NONE;
         public Patcher(execID ID, ref FileStream Stream)
         {
@@ -22,13 +23,13 @@ namespace S6Patcher.Source.Patcher
 
             GlobalID = ID;
             GlobalStream = Stream;
+            GlobalMappings = Mapping.GetMappingsByID(GlobalID);
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
         public void PatchByControlFeatures(List<string> Names)
         {
-            Mapping Mappings = Mapping.GetMappingsByID(GlobalID);
-            List<Mapping.PatchEntry> Entries = Mappings.GetMapping();
+            List<Mapping.PatchEntry> Entries = GlobalMappings.GetMapping();
             if (Entries == null)
             {
                 return;
@@ -64,27 +65,10 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            byte[] HighResolution = BitConverter.GetBytes(Resolution);
-            byte[] MediumResolution = BitConverter.GetBytes(Resolution / 2);
-            byte[] LowResolution = BitConverter.GetBytes(Resolution / 4);
-
-            if (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET)
+            UInt32[] Mapping = GlobalMappings.GetTextureResolutionMapping();
+            for (uint i = 0; i < Mapping.Length; i++)
             {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2BE177, HighResolution);
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2BE17E, MediumResolution);
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2BE185, LowResolution);
-            }
-            else if (GlobalID == execID.HE_UBISOFT)
-            {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2D4188, HighResolution);
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2D418F, MediumResolution);
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2D4196, LowResolution);
-            }
-            else if (GlobalID == execID.HE_STEAM)
-            {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2D4D74, HighResolution);
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2D4D7B, MediumResolution);
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2D4D82, LowResolution);
+                Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[i], BitConverter.GetBytes(Resolution / Convert.ToUInt32(Math.Pow(2, i))));
             }
         }
         public void SetAutosaveTimer(string AutosaveText)
@@ -104,77 +88,33 @@ namespace S6Patcher.Source.Patcher
             }
 
             byte[] Interval = BitConverter.GetBytes(Timer * 60000);
-            switch (GlobalID)
-            {
-                case execID.HE_STEAM:
-                    Helpers.Helpers.WriteBytes(ref GlobalStream, 0x1C6045, (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
-                    Helpers.Helpers.WriteBytes(ref GlobalStream, 0xEB95C0, Interval);
-                    break;
-                case execID.HE_UBISOFT:
-                    Helpers.Helpers.WriteBytes(ref GlobalStream, 0x1C5F2A, (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
-                    Helpers.Helpers.WriteBytes(ref GlobalStream, 0xEB83C0, Interval);
-                    break;
-                default:
-                    return;
-            }
+            UInt32[] Mapping = GlobalMappings.GetAutoSaveMapping();
+
+            Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[0], (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
+            Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[1], Interval);
         }
         public void SetZoomLevel(string ZoomText)
         {
             Logger.Instance.Log("SetZoomLevel(): Called with " + ZoomText);
 
-            float Offset = 4800;
-            float TransitionFactor = 3700;
-
-            if (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET)
+            double Level;
+            float Distance;
+            try
             {
-                double zoomLevel;
-                float clutterFarDistance;
-
-                try
-                {
-                    zoomLevel = Convert.ToDouble(ZoomText);
-                    clutterFarDistance = Convert.ToSingle(ZoomText);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x545400, BitConverter.GetBytes(zoomLevel));
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2B334E, new byte[] {0xC7, 0x45, 0x64});
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2B3351, BitConverter.GetBytes(clutterFarDistance + Offset));
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2B3355, new byte[] {0xC7, 0x45, 0x6C});
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2B3358, BitConverter.GetBytes(TransitionFactor));
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x2B335C, new byte[] {0x90, 0x90});
-                Helpers.Helpers.WriteBytes(ref GlobalStream, 0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
-                        0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00}); // Restriction -5000.0
+                Level = Convert.ToDouble(ZoomText);
+                Distance = Convert.ToSingle(ZoomText);
             }
-            else
+            catch (Exception ex)
             {
-                float zoomLevel;
+                Logger.Instance.Log(ex.ToString());
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-                try
-                {
-                    zoomLevel = Convert.ToSingle(ZoomText);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0xC4F9EC : 0xC4EC4C, BitConverter.GetBytes(zoomLevel));
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0x270E73 : 0x270311, new byte[] {0xC7, 0x45, 0xF0});
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0x270E76 : 0x270314, BitConverter.GetBytes(zoomLevel + Offset));
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0x270E7A : 0x270318, new byte[] {0xC7, 0x45, 0xF4});
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0x270E7D : 0x27031B, BitConverter.GetBytes(TransitionFactor));
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0x270E81 : 0x27031F, new byte[] {0x90});
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0x270E87 : 0x270325, new byte[] {0x90, 0x90, 0x90});
-                Helpers.Helpers.WriteBytes(ref GlobalStream, (GlobalID == execID.HE_STEAM) ? 0x2540B8 : 0x2532F7, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
-                        0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}); // Restriction -5000.0
+            Dictionary<long, byte[]> Mapping = GlobalMappings.GetZoomLevelMapping(Level, Distance);
+            foreach (var Element in Mapping)
+            {
+                Helpers.Helpers.WriteBytes(ref GlobalStream, Element.Key, Element.Value);
             }
         }
         public void SetModLoader()

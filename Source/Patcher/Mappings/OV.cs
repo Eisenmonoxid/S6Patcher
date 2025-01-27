@@ -51,5 +51,30 @@ namespace S6Patcher.Source.Patcher.Mappings
                 }
             };
         }
+
+        public override UInt32[] GetTextureResolutionMapping()
+        {
+            return new UInt32[] {0x2BE177, 0x2BE17E, 0x2BE185};
+        }
+        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
+        {
+            float Offset = 4800;
+            float TransitionFactor = 3700;
+
+            return new Dictionary<long, byte[]>()
+            {
+                {0x545400, BitConverter.GetBytes(ZoomLevel)},
+                {0x2B334E, new byte[] {0xC7, 0x45, 0x64}},
+                {0x2B3351, BitConverter.GetBytes(ClutterFarDistance + Offset)},
+                {0x2B3355, new byte[] {0xC7, 0x45, 0x6C}},
+                {0x2B3358, BitConverter.GetBytes(TransitionFactor)},
+                {0x2B335C, new byte[] {0x90, 0x90}},
+                {0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00}},
+            };
+        }
+        public override UInt32[] GetAutoSaveMapping()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
