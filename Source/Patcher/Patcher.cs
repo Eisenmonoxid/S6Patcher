@@ -1,5 +1,6 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Helpers;
+using S6Patcher.Source.Patcher.Mappings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,8 +27,8 @@ namespace S6Patcher.Source.Patcher
         }
         public void PatchByControlFeatures(List<string> Names)
         {
-            Mappings Mappings = new Mappings();
-            List<Mappings.PatchEntry> Entries = Mappings.GetMappingsByID(GlobalID);
+            Mapping Mappings = Mapping.GetMappingsByID(GlobalID);
+            List<Mapping.PatchEntry> Entries = Mappings.GetMapping();
             if (Entries == null)
             {
                 return;
