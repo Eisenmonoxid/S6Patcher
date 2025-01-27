@@ -98,6 +98,17 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid executable has been choosen! Aborting ...
+        ///
+        ///(If your game is from Steam, you will have to unpack it with the tool &quot;Steamless&quot; before using the S6Patcher!).
+        /// </summary>
+        internal static string ErrorInvalidExecutable {
+            get {
+                return ResourceManager.GetString("ErrorInvalidExecutable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lua-Fixes: File could not be written!.
         /// </summary>
         internal static string ErrorLuaScriptFixes {
@@ -112,15 +123,6 @@ namespace S6Patcher.Properties {
         internal static string ErrorNoFile {
             get {
                 return ResourceManager.GetString("ErrorNoFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid executable has been choosen! Aborting ....
-        /// </summary>
-        internal static string ErrorWrongVersion {
-            get {
-                return ResourceManager.GetString("ErrorWrongVersion", resourceCulture);
             }
         }
         

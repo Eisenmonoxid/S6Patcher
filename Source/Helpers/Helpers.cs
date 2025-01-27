@@ -140,5 +140,24 @@ namespace S6Patcher.Source.Helpers
             Logger.Instance.Log("GetRootPathFromFile(): Returns: " + Filepath);
             return Filepath;
         }
+        public static string IsPlayLauncherExecutable(string Filepath)
+        {
+            string CurrentPath = Path.GetFileNameWithoutExtension(Filepath);
+            if (CurrentPath.StartsWith("Play"))
+            {
+                Logger.Instance.Log("IsPlayLauncherExecutable(): Found Launcher!");
+
+                bool IsExtra1 = CurrentPath.Contains("Eastern");
+                CurrentPath = Path.GetDirectoryName(Filepath);
+                CurrentPath = Path.Combine(CurrentPath, ((IsExtra1 == true) ? "extra1" : "base") + "\\bin\\Settlers6.exe");
+                if (System.IO.File.Exists(CurrentPath) == true)
+                {
+                    Logger.Instance.Log("IsPlayLauncherExecutable(): Redirecting Path to " + CurrentPath);
+                    Filepath = CurrentPath;
+                }
+            }
+
+            return Filepath;
+        }
     }
 }
