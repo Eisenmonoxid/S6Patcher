@@ -5,9 +5,9 @@ using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
-    internal class UbiHE : Mapping
+    internal class HE_Ubi : Mapping
     {
-        public UbiHE() {}
+        public HE_Ubi() {}
         public override List<PatchEntry> GetMapping()
         {
             return new List<PatchEntry>

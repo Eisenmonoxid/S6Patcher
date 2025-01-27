@@ -89,8 +89,8 @@
     <Compile Include="Source\Helpers\Updater.cs" />
     <Compile Include="Source\Patcher\Mappings\Mapping.cs" />
     <Compile Include="Source\Patcher\Mappings\ED.cs" />
-    <Compile Include="Source\Patcher\Mappings\UbiHE.cs" />
-    <Compile Include="Source\Patcher\Mappings\SteamHE.cs" />
+    <Compile Include="Source\Patcher\Mappings\HE_Ubi.cs" />
+    <Compile Include="Source\Patcher\Mappings\HE_Steam.cs" />
     <Compile Include="Source\Patcher\Mappings\OV.cs" />
     <Compile Include="Source\Patcher\Modloader.cs" />
     <Compile Include="Source\Patcher\Patcher.cs" />

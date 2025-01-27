@@ -5,9 +5,9 @@ using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
-    internal class SteamHE : Mapping
+    internal class HE_Steam : Mapping
     {
-        public SteamHE() {}
+        public HE_Steam() {}
         public override List<PatchEntry> GetMapping()
         {
             return new List<PatchEntry>
