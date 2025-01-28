@@ -8,7 +8,7 @@ namespace S6Patcher.Source.Helpers
 {
     public sealed class IOFileHandler
     {
-        private static readonly IOFileHandler _instance = new IOFileHandler();
+        private static readonly IOFileHandler _instance = new();
         private IOFileHandler() {}
         public static IOFileHandler Instance
         {
@@ -18,7 +18,7 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
-        public FileStream OpenFileStream(string Path)
+        public FileStream? OpenFileStream(string Path)
         {
             FileStream Stream;
             try
@@ -37,7 +37,7 @@ namespace S6Patcher.Source.Helpers
         }
         public OpenFileDialog CreateOFDialog()
         {
-            OpenFileDialog ofd = new OpenFileDialog
+            OpenFileDialog ofd = new()
             {
                 CheckFileExists = true,
                 ShowHelp = false,
@@ -75,29 +75,28 @@ namespace S6Patcher.Source.Helpers
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             List<string> Directories = Helpers.GetUserScriptDirectories();
 
-            foreach (string Element in Directories)
+            Directories.ForEach(Element =>
             {
                 DeleteSectionFromOptions(Path.Combine(Element, "Config"));
                 string ScriptPath = Path.Combine(Element, "Script");
-                if (Directory.Exists(ScriptPath) == false)
+                if (Directory.Exists(ScriptPath) == true)
                 {
-                    continue;
-                }
-                foreach (string Entry in ScriptFiles)
-                {
-                    try
+                    foreach (string Entry in ScriptFiles)
                     {
-                        string CurrentFile = Path.Combine(ScriptPath, Entry);
-                        File.Delete(CurrentFile);
-                        Logger.Instance.Log("DeleteUserConfiguration(): File sucessfully deleted: " + CurrentFile);
-                    }
-                    catch (Exception ex) // Errors here do not matter
-                    {
-                        Logger.Instance.Log("DeleteUserConfiguration(): " + ex.Message);
-                        continue;
+                        try
+                        {
+                            string CurrentFile = Path.Combine(ScriptPath, Entry);
+                            File.Delete(CurrentFile);
+                            Logger.Instance.Log("DeleteUserConfiguration(): File sucessfully deleted: " + CurrentFile);
+                        }
+                        catch (Exception ex) // Errors here do not matter
+                        {
+                            Logger.Instance.Log("DeleteUserConfiguration(): " + ex.Message);
+                            continue;
+                        }
                     }
                 }
-            }
+            });
         }
         private void DeleteSectionFromOptions(string CurrentPath)
         {

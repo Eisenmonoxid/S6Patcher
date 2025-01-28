@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
@@ -10,8 +8,8 @@ namespace S6Patcher.Source.Patcher.Mappings
         public ED() {}
         public override List<PatchEntry> GetMapping()
         {
-            return new List<PatchEntry>
-            {
+            return
+            [
                 new PatchEntry
                 {
                     Name = "High - Resolution Textures:",
@@ -86,7 +84,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                         {0x24F05, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Textures in the texture placement window
                     }
                 }
-            };
+            ];
         }
 
         public override UInt32[] GetTextureResolutionMapping()

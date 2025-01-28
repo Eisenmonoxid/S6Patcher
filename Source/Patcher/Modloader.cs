@@ -70,19 +70,16 @@ namespace S6Patcher.Source.Patcher
         }
         public Dictionary<long, byte[]> GetMappingsByID(execID ID)
         {
-            switch (ID)
+            return ID switch
             {
-                case execID.OV:
-                    return GetOVMappings("modloader\\bba\\mod.bba\0\0");
-                case execID.OV_OFFSET:
-                    return GetOVMappings("modloader\\bba\\mod.bba\0\0");
-                case execID.HE_UBISOFT:
-                    return GetUbiHEMappings("..\\modloader\\shr\0\0");
-                case execID.HE_STEAM:
-                    return GetSteamHEMappings("..\\modloader\\shr\0\0");
-                default:
-                    return null;
-            }
+                execID.OV => GetOVMappings("modloader\\bba\\mod.bba\0\0"),
+                execID.OV_OFFSET => GetOVMappings("modloader\\bba\\mod.bba\0\0"),
+                execID.HE_UBISOFT => GetUbiHEMappings("..\\modloader\\shr\0\0"),
+                execID.HE_STEAM => GetSteamHEMappings("..\\modloader\\shr\0\0"),
+                execID.NONE => throw new System.NotImplementedException(),
+                execID.ED => throw new System.NotImplementedException(),
+                _ => null,
+            };
         }
     }
 }

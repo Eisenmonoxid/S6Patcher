@@ -87,7 +87,7 @@ namespace S6Patcher.Source.Forms
         }
         private List<string> GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
-            List<string> CheckedFeatures = new List<string>();
+            List<string> CheckedFeatures = [];
             CheckBox curControl;
             foreach (GroupBox Box in Controls)
             {
@@ -126,7 +126,7 @@ namespace S6Patcher.Source.Forms
                 return;
             }
 
-            List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbHE, gbEditor});
+            List<string> Features = GetPatchFeaturesByControls([gbAll, gbHE, gbEditor]);
             Patcher.PatchByControlFeatures(Features);
 
             if (cbZoom.Checked)

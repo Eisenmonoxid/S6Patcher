@@ -18,11 +18,11 @@ namespace S6Patcher.Source.Helpers
     };
     public static class Helpers
     {
-        public static UInt32 GlobalOffset = 0x3F0000;
+        public static readonly UInt32 GlobalOffset = 0x3F0000;
         public static execID CurrentID = execID.NONE;
         public static void WriteBytes(ref FileStream Stream, long Position, byte[] Bytes)
         {
-            Stream.Position = (CurrentID == execID.OV_OFFSET) ? Position - GlobalOffset : Position;
+            Stream.Position = (CurrentID == execID.OV_OFFSET) ? (Position - GlobalOffset) : Position;
             try
             {
                 Stream.Write(Bytes, 0, Bytes.Length);
@@ -38,7 +38,7 @@ namespace S6Patcher.Source.Helpers
             // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
             // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
             string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            List<string> Directories = new List<string>();
+            List<string> Directories = [];
 
             foreach (string Element in Directory.GetDirectories(DocumentPath))
             {
@@ -59,7 +59,7 @@ namespace S6Patcher.Source.Helpers
             string ExpectedVersion = "1, 71, 4289, 0";
             byte[] Result = new byte[30];
 
-            Dictionary<UInt32, execID> Mapping = new Dictionary<UInt32, execID>()
+            Dictionary<UInt32, execID> Mapping = new()
             {
                 {0x6ECADC, execID.OV},
                 {0x2FCADC, execID.OV_OFFSET},
@@ -77,7 +77,7 @@ namespace S6Patcher.Source.Helpers
                 }
 
                 Stream.Position = Element.Key;
-                Stream.Read(Result, 0, Result.Length);
+                Stream.ReadExactly(Result);
                 string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
                 Logger.Instance.Log("SetCurrentExecutableID(): Read from File: " + Version);
 
@@ -98,7 +98,7 @@ namespace S6Patcher.Source.Helpers
             string Link = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             Link += @"\Settlers 6 - Patched.lnk";
 
-            WshShell Shell = new WshShell();
+            WshShell Shell = new();
             IWshShortcut PatchedShortcut = (IWshShortcut)Shell.CreateShortcut(Link);
             PatchedShortcut.Description = "Launches Patched Settlers RoaE";
             PatchedShortcut.TargetPath = Filepath;

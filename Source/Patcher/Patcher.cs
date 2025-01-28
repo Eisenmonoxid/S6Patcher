@@ -90,7 +90,7 @@ namespace S6Patcher.Source.Patcher
             byte[] Interval = BitConverter.GetBytes(Timer * 60000);
             UInt32[] Mapping = GlobalMappings.GetAutoSaveMapping();
 
-            Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[0], (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
+            Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[0], (Timer == 0.0) ? [0xEB] : [0x76]);
             Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[1], Interval);
         }
         public void SetZoomLevel(string ZoomText)

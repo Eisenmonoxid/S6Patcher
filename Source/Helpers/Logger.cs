@@ -11,7 +11,7 @@ namespace S6Patcher.Source.Helpers
         private static bool FileCreated = false;
         private static StreamWriter LogWriter = null;
 
-        private static readonly Logger _instance = new Logger();
+        private static readonly Logger _instance = new();
         private Logger() {}
         ~Logger() 
         {

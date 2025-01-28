@@ -11,7 +11,7 @@ namespace S6Patcher.Source.Helpers
         public void CheckForUpdates()
         {
             Logger.Instance.Log("CheckForUpdates() called.");
-            using (WebClient Client = new WebClient())
+            using (WebClient Client = new())
             {
                 Client.Encoding = Encoding.UTF8;
                 Client.DownloadStringCompleted += Client_DownloadStringCompleted;
@@ -33,7 +33,7 @@ namespace S6Patcher.Source.Helpers
         {
             if (e.Cancelled == false && e.Error == null)
             {
-                if (string.Compare(Application.ProductVersion, e.Result, true) != 0)
+                if (string.Equals(Application.ProductVersion, e.Result, StringComparison.CurrentCultureIgnoreCase) == false)
                 {
                     string Message = "A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + e.Result;
                     Logger.Instance.Log(Message);

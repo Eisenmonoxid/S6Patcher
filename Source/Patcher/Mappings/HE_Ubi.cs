@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
@@ -10,8 +9,8 @@ namespace S6Patcher.Source.Patcher.Mappings
         public HE_Ubi() {}
         public override List<PatchEntry> GetMapping()
         {
-            return new List<PatchEntry>
-            {
+            return
+            [
                 new PatchEntry
                 {
                     Name = "Activate Development-Mode Permanently",
@@ -41,13 +40,11 @@ namespace S6Patcher.Source.Patcher.Mappings
                         {0x25C700, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
                     }
                 }
-            };
+            ];
         }
 
-        public override UInt32[] GetTextureResolutionMapping()
-        {
-            return new UInt32[] {0x2D4188, 0x2D418F, 0x2D4196};
-        }
+        public override UInt32[] GetAutoSaveMapping() => [0x1C5F2A, 0xEB83C0];
+        public override UInt32[] GetTextureResolutionMapping() => [0x2D4188, 0x2D418F, 0x2D4196];
         public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
         {
             float Offset = 4800;
@@ -64,10 +61,6 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x270325, new byte[] {0x90, 0x90, 0x90}},
                 {0x2532F7, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}},
             };
-        }
-        public override UInt32[] GetAutoSaveMapping()
-        {
-            return new UInt32[] {0x1C5F2A, 0xEB83C0};
         }
     }
 }

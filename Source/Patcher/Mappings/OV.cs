@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
@@ -10,8 +9,8 @@ namespace S6Patcher.Source.Patcher.Mappings
         public OV() {}
         public override List<PatchEntry> GetMapping()
         {
-            return new List<PatchEntry>
-            {
+            return
+            [
                 new PatchEntry
                 {
                     Name = "High - Resolution Textures:",
@@ -49,13 +48,14 @@ namespace S6Patcher.Source.Patcher.Mappings
                         {0x23D655, new byte[] {0x90, 0x90}}, // Override JNZ, always set Special Edition to 1
                     }
                 }
-            };
+            ];
         }
 
-        public override UInt32[] GetTextureResolutionMapping()
+        public override UInt32[] GetAutoSaveMapping()
         {
-            return new UInt32[] {0x2BE177, 0x2BE17E, 0x2BE185};
+            throw new NotImplementedException();
         }
+        public override UInt32[] GetTextureResolutionMapping() => [0x2BE177, 0x2BE17E, 0x2BE185];
         public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
         {
             float Offset = 4800;
@@ -71,10 +71,6 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x2B335C, new byte[] {0x90, 0x90}},
                 {0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00}},
             };
-        }
-        public override UInt32[] GetAutoSaveMapping()
-        {
-            throw new NotImplementedException();
         }
     }
 }

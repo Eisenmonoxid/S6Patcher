@@ -1,10 +1,6 @@
 ﻿using S6Patcher.Source.Helpers;
-using S6Patcher.Source.Patcher.Mappings;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
@@ -21,21 +17,15 @@ namespace S6Patcher.Source.Patcher.Mappings
         public abstract UInt32[] GetTextureResolutionMapping();
         public static Mapping GetMappingsByID(execID ID)
         {
-            switch (ID)
+            return ID switch
             {
-                case execID.OV:
-                    return new OV();
-                case execID.OV_OFFSET:
-                    return new OV();
-                case execID.HE_UBISOFT:
-                    return new HE_Ubi();
-                case execID.HE_STEAM:
-                    return new HE_Steam();
-                case execID.ED:
-                    return new ED();
-                default:
-                    throw new NotImplementedException("Error: No valid execID passed!");
-            }
+                execID.OV => new OV(),
+                execID.OV_OFFSET => new OV(),
+                execID.HE_UBISOFT => new HE_Ubi(),
+                execID.HE_STEAM => new HE_Steam(),
+                execID.ED => new ED(),
+                _ => throw new NotImplementedException("Error: No valid execID passed!"),
+            };
         }
     }
 }
