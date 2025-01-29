@@ -28,394 +28,378 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbLAAFlag = new System.Windows.Forms.CheckBox();
-            this.cbZoom = new System.Windows.Forms.CheckBox();
-            this.txtZoom = new System.Windows.Forms.TextBox();
-            this.btnPatch = new System.Windows.Forms.Button();
-            this.lblZoomAngle = new System.Windows.Forms.Label();
-            this.cbAutosave = new System.Windows.Forms.CheckBox();
-            this.cbAllEntities = new System.Windows.Forms.CheckBox();
-            this.txtAutosave = new System.Windows.Forms.TextBox();
-            this.lblAutosave = new System.Windows.Forms.Label();
-            this.cbDevMode = new System.Windows.Forms.CheckBox();
-            this.btnAbort = new System.Windows.Forms.Button();
-            this.cbHighTextures = new System.Windows.Forms.CheckBox();
-            this.cbEntityLimits = new System.Windows.Forms.CheckBox();
-            this.cbScalingPlacing = new System.Windows.Forms.CheckBox();
-            this.cbMapBorder = new System.Windows.Forms.CheckBox();
-            this.gbEditor = new System.Windows.Forms.GroupBox();
-            this.gbHE = new System.Windows.Forms.GroupBox();
-            this.gbAll = new System.Windows.Forms.GroupBox();
-            this.btnModFeatures = new System.Windows.Forms.Button();
-            this.cbModloader = new System.Windows.Forms.CheckBox();
-            this.cbLimitedEdition = new System.Windows.Forms.CheckBox();
-            this.cbKnightSelection = new System.Windows.Forms.CheckBox();
-            this.cbScriptBugFixes = new System.Windows.Forms.CheckBox();
-            this.lblTextureRes = new System.Windows.Forms.Label();
-            this.txtResolution = new System.Windows.Forms.TextBox();
-            this.btnBackup = new System.Windows.Forms.Button();
-            this.btnChooseFile = new System.Windows.Forms.Button();
-            this.txtExecutablePath = new System.Windows.Forms.TextBox();
-            this.lblSelectFile = new System.Windows.Forms.Label();
-            this.gbEditor.SuspendLayout();
-            this.gbHE.SuspendLayout();
-            this.gbAll.SuspendLayout();
-            this.SuspendLayout();
+            cbLAAFlag = new System.Windows.Forms.CheckBox();
+            cbZoom = new System.Windows.Forms.CheckBox();
+            txtZoom = new System.Windows.Forms.TextBox();
+            btnPatch = new System.Windows.Forms.Button();
+            lblZoomAngle = new System.Windows.Forms.Label();
+            cbAutosave = new System.Windows.Forms.CheckBox();
+            cbAllEntities = new System.Windows.Forms.CheckBox();
+            txtAutosave = new System.Windows.Forms.TextBox();
+            lblAutosave = new System.Windows.Forms.Label();
+            cbDevMode = new System.Windows.Forms.CheckBox();
+            btnAbort = new System.Windows.Forms.Button();
+            cbHighTextures = new System.Windows.Forms.CheckBox();
+            cbEntityLimits = new System.Windows.Forms.CheckBox();
+            cbScalingPlacing = new System.Windows.Forms.CheckBox();
+            cbMapBorder = new System.Windows.Forms.CheckBox();
+            gbEditor = new System.Windows.Forms.GroupBox();
+            gbHE = new System.Windows.Forms.GroupBox();
+            gbAll = new System.Windows.Forms.GroupBox();
+            cbModloader = new System.Windows.Forms.CheckBox();
+            cbLimitedEdition = new System.Windows.Forms.CheckBox();
+            cbKnightSelection = new System.Windows.Forms.CheckBox();
+            cbScriptBugFixes = new System.Windows.Forms.CheckBox();
+            lblTextureRes = new System.Windows.Forms.Label();
+            txtResolution = new System.Windows.Forms.TextBox();
+            btnBackup = new System.Windows.Forms.Button();
+            btnChooseFile = new System.Windows.Forms.Button();
+            txtExecutablePath = new System.Windows.Forms.TextBox();
+            lblSelectFile = new System.Windows.Forms.Label();
+            gbEditor.SuspendLayout();
+            gbHE.SuspendLayout();
+            gbAll.SuspendLayout();
+            SuspendLayout();
             // 
             // cbLAAFlag
             // 
-            this.cbLAAFlag.AutoSize = true;
-            this.cbLAAFlag.Location = new System.Drawing.Point(6, 47);
-            this.cbLAAFlag.Name = "cbLAAFlag";
-            this.cbLAAFlag.Size = new System.Drawing.Size(139, 20);
-            this.cbLAAFlag.TabIndex = 0;
-            this.cbLAAFlag.Text = "Activate LAA - Flag";
-            this.cbLAAFlag.UseVisualStyleBackColor = true;
+            cbLAAFlag.AutoSize = true;
+            cbLAAFlag.Location = new System.Drawing.Point(6, 47);
+            cbLAAFlag.Name = "cbLAAFlag";
+            cbLAAFlag.Size = new System.Drawing.Size(139, 20);
+            cbLAAFlag.TabIndex = 0;
+            cbLAAFlag.Text = "Activate LAA - Flag";
+            cbLAAFlag.UseVisualStyleBackColor = true;
             // 
             // cbZoom
             // 
-            this.cbZoom.AutoSize = true;
-            this.cbZoom.Location = new System.Drawing.Point(6, 73);
-            this.cbZoom.Name = "cbZoom";
-            this.cbZoom.Size = new System.Drawing.Size(131, 20);
-            this.cbZoom.TabIndex = 1;
-            this.cbZoom.Text = "Max. Zoom Level:";
-            this.cbZoom.UseVisualStyleBackColor = true;
-            this.cbZoom.CheckedChanged += new System.EventHandler(this.cbZoom_CheckedChanged);
+            cbZoom.AutoSize = true;
+            cbZoom.Location = new System.Drawing.Point(6, 73);
+            cbZoom.Name = "cbZoom";
+            cbZoom.Size = new System.Drawing.Size(131, 20);
+            cbZoom.TabIndex = 1;
+            cbZoom.Text = "Max. Zoom Level:";
+            cbZoom.UseVisualStyleBackColor = true;
+            cbZoom.CheckedChanged += cbZoom_CheckedChanged;
             // 
             // txtZoom
             // 
-            this.txtZoom.Enabled = false;
-            this.txtZoom.Location = new System.Drawing.Point(143, 71);
-            this.txtZoom.MaxLength = 8;
-            this.txtZoom.Name = "txtZoom";
-            this.txtZoom.Size = new System.Drawing.Size(152, 22);
-            this.txtZoom.TabIndex = 2;
+            txtZoom.Enabled = false;
+            txtZoom.Location = new System.Drawing.Point(143, 71);
+            txtZoom.MaxLength = 8;
+            txtZoom.Name = "txtZoom";
+            txtZoom.Size = new System.Drawing.Size(152, 22);
+            txtZoom.TabIndex = 2;
             // 
             // btnPatch
             // 
-            this.btnPatch.Enabled = false;
-            this.btnPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPatch.Location = new System.Drawing.Point(12, 467);
-            this.btnPatch.Name = "btnPatch";
-            this.btnPatch.Size = new System.Drawing.Size(642, 47);
-            this.btnPatch.TabIndex = 3;
-            this.btnPatch.Text = "Patch File";
-            this.btnPatch.UseVisualStyleBackColor = true;
-            this.btnPatch.Click += new System.EventHandler(this.btnPatch_Click);
+            btnPatch.Enabled = false;
+            btnPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            btnPatch.Location = new System.Drawing.Point(12, 467);
+            btnPatch.Name = "btnPatch";
+            btnPatch.Size = new System.Drawing.Size(642, 47);
+            btnPatch.TabIndex = 3;
+            btnPatch.Text = "Patch File";
+            btnPatch.UseVisualStyleBackColor = true;
+            btnPatch.Click += btnPatch_Click;
             // 
             // lblZoomAngle
             // 
-            this.lblZoomAngle.AutoSize = true;
-            this.lblZoomAngle.Location = new System.Drawing.Point(301, 74);
-            this.lblZoomAngle.Name = "lblZoomAngle";
-            this.lblZoomAngle.Size = new System.Drawing.Size(96, 16);
-            this.lblZoomAngle.TabIndex = 4;
-            this.lblZoomAngle.Text = "Standard: 7200";
+            lblZoomAngle.AutoSize = true;
+            lblZoomAngle.Location = new System.Drawing.Point(301, 74);
+            lblZoomAngle.Name = "lblZoomAngle";
+            lblZoomAngle.Size = new System.Drawing.Size(96, 16);
+            lblZoomAngle.TabIndex = 4;
+            lblZoomAngle.Text = "Standard: 7200";
             // 
             // cbAutosave
             // 
-            this.cbAutosave.AutoSize = true;
-            this.cbAutosave.Location = new System.Drawing.Point(6, 22);
-            this.cbAutosave.Name = "cbAutosave";
-            this.cbAutosave.Size = new System.Drawing.Size(152, 20);
-            this.cbAutosave.TabIndex = 5;
-            this.cbAutosave.Text = "Autosave Time (min):";
-            this.cbAutosave.UseVisualStyleBackColor = true;
-            this.cbAutosave.CheckedChanged += new System.EventHandler(this.cbAutosave_CheckedChanged);
+            cbAutosave.AutoSize = true;
+            cbAutosave.Location = new System.Drawing.Point(6, 22);
+            cbAutosave.Name = "cbAutosave";
+            cbAutosave.Size = new System.Drawing.Size(152, 20);
+            cbAutosave.TabIndex = 5;
+            cbAutosave.Text = "Autosave Time (min):";
+            cbAutosave.UseVisualStyleBackColor = true;
+            cbAutosave.CheckedChanged += cbAutosave_CheckedChanged;
             // 
             // cbAllEntities
             // 
-            this.cbAllEntities.AutoSize = true;
-            this.cbAllEntities.Location = new System.Drawing.Point(6, 99);
-            this.cbAllEntities.Name = "cbAllEntities";
-            this.cbAllEntities.Size = new System.Drawing.Size(255, 20);
-            this.cbAllEntities.TabIndex = 6;
-            this.cbAllEntities.Text = "Show All Entities and Textures in Editor";
-            this.cbAllEntities.UseVisualStyleBackColor = true;
+            cbAllEntities.AutoSize = true;
+            cbAllEntities.Location = new System.Drawing.Point(6, 99);
+            cbAllEntities.Name = "cbAllEntities";
+            cbAllEntities.Size = new System.Drawing.Size(255, 20);
+            cbAllEntities.TabIndex = 6;
+            cbAllEntities.Text = "Show All Entities and Textures in Editor";
+            cbAllEntities.UseVisualStyleBackColor = true;
             // 
             // txtAutosave
             // 
-            this.txtAutosave.Enabled = false;
-            this.txtAutosave.Location = new System.Drawing.Point(164, 20);
-            this.txtAutosave.MaxLength = 5;
-            this.txtAutosave.Name = "txtAutosave";
-            this.txtAutosave.Size = new System.Drawing.Size(135, 22);
-            this.txtAutosave.TabIndex = 7;
+            txtAutosave.Enabled = false;
+            txtAutosave.Location = new System.Drawing.Point(164, 20);
+            txtAutosave.MaxLength = 5;
+            txtAutosave.Name = "txtAutosave";
+            txtAutosave.Size = new System.Drawing.Size(135, 22);
+            txtAutosave.TabIndex = 7;
             // 
             // lblAutosave
             // 
-            this.lblAutosave.AutoSize = true;
-            this.lblAutosave.Location = new System.Drawing.Point(305, 23);
-            this.lblAutosave.Name = "lblAutosave";
-            this.lblAutosave.Size = new System.Drawing.Size(82, 16);
-            this.lblAutosave.TabIndex = 8;
-            this.lblAutosave.Text = "Standard: 15";
+            lblAutosave.AutoSize = true;
+            lblAutosave.Location = new System.Drawing.Point(305, 23);
+            lblAutosave.Name = "lblAutosave";
+            lblAutosave.Size = new System.Drawing.Size(82, 16);
+            lblAutosave.TabIndex = 8;
+            lblAutosave.Text = "Standard: 15";
             // 
             // cbDevMode
             // 
-            this.cbDevMode.AutoSize = true;
-            this.cbDevMode.Location = new System.Drawing.Point(6, 99);
-            this.cbDevMode.Name = "cbDevMode";
-            this.cbDevMode.Size = new System.Drawing.Size(275, 20);
-            this.cbDevMode.TabIndex = 9;
-            this.cbDevMode.Text = "Activate Development-Mode Permanently";
-            this.cbDevMode.UseVisualStyleBackColor = true;
+            cbDevMode.AutoSize = true;
+            cbDevMode.Location = new System.Drawing.Point(6, 99);
+            cbDevMode.Name = "cbDevMode";
+            cbDevMode.Size = new System.Drawing.Size(275, 20);
+            cbDevMode.TabIndex = 9;
+            cbDevMode.Text = "Activate Development-Mode Permanently";
+            cbDevMode.UseVisualStyleBackColor = true;
             // 
             // btnAbort
             // 
-            this.btnAbort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAbort.Location = new System.Drawing.Point(12, 573);
-            this.btnAbort.Name = "btnAbort";
-            this.btnAbort.Size = new System.Drawing.Size(642, 47);
-            this.btnAbort.TabIndex = 10;
-            this.btnAbort.Text = "Exit";
-            this.btnAbort.UseVisualStyleBackColor = true;
-            this.btnAbort.Click += new System.EventHandler(this.btnAbort_Click);
+            btnAbort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            btnAbort.Location = new System.Drawing.Point(12, 573);
+            btnAbort.Name = "btnAbort";
+            btnAbort.Size = new System.Drawing.Size(642, 47);
+            btnAbort.TabIndex = 10;
+            btnAbort.Text = "Exit";
+            btnAbort.UseVisualStyleBackColor = true;
+            btnAbort.Click += btnAbort_Click;
             // 
             // cbHighTextures
             // 
-            this.cbHighTextures.AutoSize = true;
-            this.cbHighTextures.Location = new System.Drawing.Point(6, 21);
-            this.cbHighTextures.Name = "cbHighTextures";
-            this.cbHighTextures.Size = new System.Drawing.Size(186, 20);
-            this.cbHighTextures.TabIndex = 12;
-            this.cbHighTextures.Tag = "";
-            this.cbHighTextures.Text = "High - Resolution Textures:";
-            this.cbHighTextures.UseVisualStyleBackColor = true;
-            this.cbHighTextures.CheckedChanged += new System.EventHandler(this.cbHighTextures_CheckedChanged);
+            cbHighTextures.AutoSize = true;
+            cbHighTextures.Location = new System.Drawing.Point(6, 21);
+            cbHighTextures.Name = "cbHighTextures";
+            cbHighTextures.Size = new System.Drawing.Size(186, 20);
+            cbHighTextures.TabIndex = 12;
+            cbHighTextures.Tag = "";
+            cbHighTextures.Text = "High - Resolution Textures:";
+            cbHighTextures.UseVisualStyleBackColor = true;
+            cbHighTextures.CheckedChanged += cbHighTextures_CheckedChanged;
             // 
             // cbEntityLimits
             // 
-            this.cbEntityLimits.AutoSize = true;
-            this.cbEntityLimits.Location = new System.Drawing.Point(6, 73);
-            this.cbEntityLimits.Name = "cbEntityLimits";
-            this.cbEntityLimits.Size = new System.Drawing.Size(138, 20);
-            this.cbEntityLimits.TabIndex = 13;
-            this.cbEntityLimits.Text = "Higher Entity Limits";
-            this.cbEntityLimits.UseVisualStyleBackColor = true;
+            cbEntityLimits.AutoSize = true;
+            cbEntityLimits.Location = new System.Drawing.Point(6, 73);
+            cbEntityLimits.Name = "cbEntityLimits";
+            cbEntityLimits.Size = new System.Drawing.Size(138, 20);
+            cbEntityLimits.TabIndex = 13;
+            cbEntityLimits.Text = "Higher Entity Limits";
+            cbEntityLimits.UseVisualStyleBackColor = true;
             // 
             // cbScalingPlacing
             // 
-            this.cbScalingPlacing.AutoSize = true;
-            this.cbScalingPlacing.Location = new System.Drawing.Point(6, 47);
-            this.cbScalingPlacing.Name = "cbScalingPlacing";
-            this.cbScalingPlacing.Size = new System.Drawing.Size(236, 20);
-            this.cbScalingPlacing.TabIndex = 14;
-            this.cbScalingPlacing.Text = "Free Scaling and Placing of Entities";
-            this.cbScalingPlacing.UseVisualStyleBackColor = true;
+            cbScalingPlacing.AutoSize = true;
+            cbScalingPlacing.Location = new System.Drawing.Point(6, 47);
+            cbScalingPlacing.Name = "cbScalingPlacing";
+            cbScalingPlacing.Size = new System.Drawing.Size(236, 20);
+            cbScalingPlacing.TabIndex = 14;
+            cbScalingPlacing.Text = "Free Scaling and Placing of Entities";
+            cbScalingPlacing.UseVisualStyleBackColor = true;
             // 
             // cbMapBorder
             // 
-            this.cbMapBorder.AutoSize = true;
-            this.cbMapBorder.Location = new System.Drawing.Point(6, 21);
-            this.cbMapBorder.Name = "cbMapBorder";
-            this.cbMapBorder.Size = new System.Drawing.Size(181, 20);
-            this.cbMapBorder.TabIndex = 15;
-            this.cbMapBorder.Text = "Usable Black Map Border";
-            this.cbMapBorder.UseVisualStyleBackColor = true;
+            cbMapBorder.AutoSize = true;
+            cbMapBorder.Location = new System.Drawing.Point(6, 21);
+            cbMapBorder.Name = "cbMapBorder";
+            cbMapBorder.Size = new System.Drawing.Size(181, 20);
+            cbMapBorder.TabIndex = 15;
+            cbMapBorder.Text = "Usable Black Map Border";
+            cbMapBorder.UseVisualStyleBackColor = true;
             // 
             // gbEditor
             // 
-            this.gbEditor.Controls.Add(this.cbMapBorder);
-            this.gbEditor.Controls.Add(this.cbEntityLimits);
-            this.gbEditor.Controls.Add(this.cbScalingPlacing);
-            this.gbEditor.Controls.Add(this.cbAllEntities);
-            this.gbEditor.Enabled = false;
-            this.gbEditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbEditor.Location = new System.Drawing.Point(12, 336);
-            this.gbEditor.Name = "gbEditor";
-            this.gbEditor.Size = new System.Drawing.Size(642, 125);
-            this.gbEditor.TabIndex = 16;
-            this.gbEditor.TabStop = false;
-            this.gbEditor.Text = "Mapeditor";
+            gbEditor.Controls.Add(cbMapBorder);
+            gbEditor.Controls.Add(cbEntityLimits);
+            gbEditor.Controls.Add(cbScalingPlacing);
+            gbEditor.Controls.Add(cbAllEntities);
+            gbEditor.Enabled = false;
+            gbEditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            gbEditor.Location = new System.Drawing.Point(12, 336);
+            gbEditor.Name = "gbEditor";
+            gbEditor.Size = new System.Drawing.Size(642, 125);
+            gbEditor.TabIndex = 16;
+            gbEditor.TabStop = false;
+            gbEditor.Text = "Mapeditor";
             // 
             // gbHE
             // 
-            this.gbHE.Controls.Add(this.cbAutosave);
-            this.gbHE.Controls.Add(this.txtAutosave);
-            this.gbHE.Controls.Add(this.lblAutosave);
-            this.gbHE.Enabled = false;
-            this.gbHE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbHE.Location = new System.Drawing.Point(12, 281);
-            this.gbHE.Name = "gbHE";
-            this.gbHE.Size = new System.Drawing.Size(642, 49);
-            this.gbHE.TabIndex = 17;
-            this.gbHE.TabStop = false;
-            this.gbHE.Text = "History Edition";
+            gbHE.Controls.Add(cbAutosave);
+            gbHE.Controls.Add(txtAutosave);
+            gbHE.Controls.Add(lblAutosave);
+            gbHE.Enabled = false;
+            gbHE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            gbHE.Location = new System.Drawing.Point(12, 281);
+            gbHE.Name = "gbHE";
+            gbHE.Size = new System.Drawing.Size(642, 49);
+            gbHE.TabIndex = 17;
+            gbHE.TabStop = false;
+            gbHE.Text = "History Edition";
             // 
             // gbAll
             // 
-            this.gbAll.Controls.Add(this.btnModFeatures);
-            this.gbAll.Controls.Add(this.cbModloader);
-            this.gbAll.Controls.Add(this.cbLimitedEdition);
-            this.gbAll.Controls.Add(this.cbKnightSelection);
-            this.gbAll.Controls.Add(this.cbScriptBugFixes);
-            this.gbAll.Controls.Add(this.lblTextureRes);
-            this.gbAll.Controls.Add(this.txtResolution);
-            this.gbAll.Controls.Add(this.cbHighTextures);
-            this.gbAll.Controls.Add(this.cbLAAFlag);
-            this.gbAll.Controls.Add(this.cbZoom);
-            this.gbAll.Controls.Add(this.txtZoom);
-            this.gbAll.Controls.Add(this.cbDevMode);
-            this.gbAll.Controls.Add(this.lblZoomAngle);
-            this.gbAll.Enabled = false;
-            this.gbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbAll.Location = new System.Drawing.Point(12, 42);
-            this.gbAll.Name = "gbAll";
-            this.gbAll.Size = new System.Drawing.Size(642, 233);
-            this.gbAll.TabIndex = 18;
-            this.gbAll.TabStop = false;
-            this.gbAll.Text = "General Options";
-            // 
-            // btnModFeatures
-            // 
-            this.btnModFeatures.Enabled = false;
-            this.btnModFeatures.Location = new System.Drawing.Point(158, 201);
-            this.btnModFeatures.Name = "btnModFeatures";
-            this.btnModFeatures.Size = new System.Drawing.Size(84, 23);
-            this.btnModFeatures.TabIndex = 19;
-            this.btnModFeatures.Text = "Features";
-            this.btnModFeatures.UseVisualStyleBackColor = true;
-            this.btnModFeatures.Visible = false;
-            this.btnModFeatures.Click += new System.EventHandler(this.btnModFeatures_Click);
+            gbAll.Controls.Add(cbModloader);
+            gbAll.Controls.Add(cbLimitedEdition);
+            gbAll.Controls.Add(cbKnightSelection);
+            gbAll.Controls.Add(cbScriptBugFixes);
+            gbAll.Controls.Add(lblTextureRes);
+            gbAll.Controls.Add(txtResolution);
+            gbAll.Controls.Add(cbHighTextures);
+            gbAll.Controls.Add(cbLAAFlag);
+            gbAll.Controls.Add(cbZoom);
+            gbAll.Controls.Add(txtZoom);
+            gbAll.Controls.Add(cbDevMode);
+            gbAll.Controls.Add(lblZoomAngle);
+            gbAll.Enabled = false;
+            gbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            gbAll.Location = new System.Drawing.Point(12, 42);
+            gbAll.Name = "gbAll";
+            gbAll.Size = new System.Drawing.Size(642, 233);
+            gbAll.TabIndex = 18;
+            gbAll.TabStop = false;
+            gbAll.Text = "General Options";
             // 
             // cbModloader
             // 
-            this.cbModloader.AutoSize = true;
-            this.cbModloader.Location = new System.Drawing.Point(6, 203);
-            this.cbModloader.Name = "cbModloader";
-            this.cbModloader.Size = new System.Drawing.Size(143, 20);
-            this.cbModloader.TabIndex = 18;
-            this.cbModloader.Text = "Activate Modloader";
-            this.cbModloader.UseVisualStyleBackColor = true;
-            this.cbModloader.CheckedChanged += new System.EventHandler(this.cbModloader_CheckedChanged);
+            cbModloader.AutoSize = true;
+            cbModloader.Location = new System.Drawing.Point(6, 203);
+            cbModloader.Name = "cbModloader";
+            cbModloader.Size = new System.Drawing.Size(143, 20);
+            cbModloader.TabIndex = 18;
+            cbModloader.Text = "Activate Modloader";
+            cbModloader.UseVisualStyleBackColor = true;
             // 
             // cbLimitedEdition
             // 
-            this.cbLimitedEdition.AutoSize = true;
-            this.cbLimitedEdition.Location = new System.Drawing.Point(6, 177);
-            this.cbLimitedEdition.Name = "cbLimitedEdition";
-            this.cbLimitedEdition.Size = new System.Drawing.Size(214, 20);
-            this.cbLimitedEdition.TabIndex = 17;
-            this.cbLimitedEdition.Text = "Activate Limited/Special Edition";
-            this.cbLimitedEdition.UseVisualStyleBackColor = true;
+            cbLimitedEdition.AutoSize = true;
+            cbLimitedEdition.Location = new System.Drawing.Point(6, 177);
+            cbLimitedEdition.Name = "cbLimitedEdition";
+            cbLimitedEdition.Size = new System.Drawing.Size(214, 20);
+            cbLimitedEdition.TabIndex = 17;
+            cbLimitedEdition.Text = "Activate Limited/Special Edition";
+            cbLimitedEdition.UseVisualStyleBackColor = true;
             // 
             // cbKnightSelection
             // 
-            this.cbKnightSelection.AutoSize = true;
-            this.cbKnightSelection.Enabled = false;
-            this.cbKnightSelection.Location = new System.Drawing.Point(6, 151);
-            this.cbKnightSelection.Name = "cbKnightSelection";
-            this.cbKnightSelection.Size = new System.Drawing.Size(290, 20);
-            this.cbKnightSelection.TabIndex = 16;
-            this.cbKnightSelection.Text = "Enable Basegame Knights in Eastern Realm";
-            this.cbKnightSelection.UseVisualStyleBackColor = true;
+            cbKnightSelection.AutoSize = true;
+            cbKnightSelection.Enabled = false;
+            cbKnightSelection.Location = new System.Drawing.Point(6, 151);
+            cbKnightSelection.Name = "cbKnightSelection";
+            cbKnightSelection.Size = new System.Drawing.Size(290, 20);
+            cbKnightSelection.TabIndex = 16;
+            cbKnightSelection.Text = "Enable Basegame Knights in Eastern Realm";
+            cbKnightSelection.UseVisualStyleBackColor = true;
             // 
             // cbScriptBugFixes
             // 
-            this.cbScriptBugFixes.AutoSize = true;
-            this.cbScriptBugFixes.Location = new System.Drawing.Point(6, 125);
-            this.cbScriptBugFixes.Name = "cbScriptBugFixes";
-            this.cbScriptBugFixes.Size = new System.Drawing.Size(227, 20);
-            this.cbScriptBugFixes.TabIndex = 15;
-            this.cbScriptBugFixes.Text = "Activate Script and Code Bugfixes";
-            this.cbScriptBugFixes.UseVisualStyleBackColor = true;
-            this.cbScriptBugFixes.CheckedChanged += new System.EventHandler(this.cbScriptBugFixes_CheckedChanged);
+            cbScriptBugFixes.AutoSize = true;
+            cbScriptBugFixes.Location = new System.Drawing.Point(6, 125);
+            cbScriptBugFixes.Name = "cbScriptBugFixes";
+            cbScriptBugFixes.Size = new System.Drawing.Size(227, 20);
+            cbScriptBugFixes.TabIndex = 15;
+            cbScriptBugFixes.Text = "Activate Script and Code Bugfixes";
+            cbScriptBugFixes.UseVisualStyleBackColor = true;
+            cbScriptBugFixes.CheckedChanged += cbScriptBugFixes_CheckedChanged;
             // 
             // lblTextureRes
             // 
-            this.lblTextureRes.AutoSize = true;
-            this.lblTextureRes.Location = new System.Drawing.Point(346, 22);
-            this.lblTextureRes.Name = "lblTextureRes";
-            this.lblTextureRes.Size = new System.Drawing.Size(89, 16);
-            this.lblTextureRes.TabIndex = 14;
-            this.lblTextureRes.Text = "Standard: 512";
+            lblTextureRes.AutoSize = true;
+            lblTextureRes.Location = new System.Drawing.Point(346, 22);
+            lblTextureRes.Name = "lblTextureRes";
+            lblTextureRes.Size = new System.Drawing.Size(89, 16);
+            lblTextureRes.TabIndex = 14;
+            lblTextureRes.Text = "Standard: 512";
             // 
             // txtResolution
             // 
-            this.txtResolution.Location = new System.Drawing.Point(198, 19);
-            this.txtResolution.MaxLength = 4;
-            this.txtResolution.Name = "txtResolution";
-            this.txtResolution.Size = new System.Drawing.Size(142, 22);
-            this.txtResolution.TabIndex = 13;
+            txtResolution.Location = new System.Drawing.Point(198, 19);
+            txtResolution.MaxLength = 4;
+            txtResolution.Name = "txtResolution";
+            txtResolution.Size = new System.Drawing.Size(142, 22);
+            txtResolution.TabIndex = 13;
             // 
             // btnBackup
             // 
-            this.btnBackup.Enabled = false;
-            this.btnBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBackup.Location = new System.Drawing.Point(12, 520);
-            this.btnBackup.Name = "btnBackup";
-            this.btnBackup.Size = new System.Drawing.Size(642, 47);
-            this.btnBackup.TabIndex = 19;
-            this.btnBackup.Text = "Restore Backup";
-            this.btnBackup.UseVisualStyleBackColor = true;
-            this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
+            btnBackup.Enabled = false;
+            btnBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            btnBackup.Location = new System.Drawing.Point(12, 520);
+            btnBackup.Name = "btnBackup";
+            btnBackup.Size = new System.Drawing.Size(642, 47);
+            btnBackup.TabIndex = 19;
+            btnBackup.Text = "Restore Backup";
+            btnBackup.UseVisualStyleBackColor = true;
+            btnBackup.Click += btnBackup_Click;
             // 
             // btnChooseFile
             // 
-            this.btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChooseFile.Location = new System.Drawing.Point(548, 6);
-            this.btnChooseFile.Name = "btnChooseFile";
-            this.btnChooseFile.Size = new System.Drawing.Size(106, 28);
-            this.btnChooseFile.TabIndex = 20;
-            this.btnChooseFile.Text = "Choose File ...";
-            this.btnChooseFile.UseVisualStyleBackColor = true;
-            this.btnChooseFile.Click += new System.EventHandler(this.btnChooseFile_Click);
+            btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            btnChooseFile.Location = new System.Drawing.Point(548, 6);
+            btnChooseFile.Name = "btnChooseFile";
+            btnChooseFile.Size = new System.Drawing.Size(106, 28);
+            btnChooseFile.TabIndex = 20;
+            btnChooseFile.Text = "Choose File ...";
+            btnChooseFile.UseVisualStyleBackColor = true;
+            btnChooseFile.Click += btnChooseFile_Click;
             // 
             // txtExecutablePath
             // 
-            this.txtExecutablePath.Location = new System.Drawing.Point(136, 10);
-            this.txtExecutablePath.Name = "txtExecutablePath";
-            this.txtExecutablePath.ReadOnly = true;
-            this.txtExecutablePath.Size = new System.Drawing.Size(406, 20);
-            this.txtExecutablePath.TabIndex = 21;
+            txtExecutablePath.Location = new System.Drawing.Point(136, 10);
+            txtExecutablePath.Name = "txtExecutablePath";
+            txtExecutablePath.ReadOnly = true;
+            txtExecutablePath.Size = new System.Drawing.Size(406, 23);
+            txtExecutablePath.TabIndex = 21;
             // 
             // lblSelectFile
             // 
-            this.lblSelectFile.AutoSize = true;
-            this.lblSelectFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSelectFile.Location = new System.Drawing.Point(12, 11);
-            this.lblSelectFile.Name = "lblSelectFile";
-            this.lblSelectFile.Size = new System.Drawing.Size(117, 16);
-            this.lblSelectFile.TabIndex = 22;
-            this.lblSelectFile.Text = "Select executable:";
+            lblSelectFile.AutoSize = true;
+            lblSelectFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            lblSelectFile.Location = new System.Drawing.Point(12, 11);
+            lblSelectFile.Name = "lblSelectFile";
+            lblSelectFile.Size = new System.Drawing.Size(117, 16);
+            lblSelectFile.TabIndex = 22;
+            lblSelectFile.Text = "Select executable:";
             // 
             // mainFrm
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(665, 630);
-            this.Controls.Add(this.lblSelectFile);
-            this.Controls.Add(this.txtExecutablePath);
-            this.Controls.Add(this.btnChooseFile);
-            this.Controls.Add(this.btnBackup);
-            this.Controls.Add(this.gbAll);
-            this.Controls.Add(this.gbHE);
-            this.Controls.Add(this.gbEditor);
-            this.Controls.Add(this.btnAbort);
-            this.Controls.Add(this.btnPatch);
-            this.DoubleBuffered = true;
-            this.HelpButton = true;
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(681, 669);
-            this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(681, 669);
-            this.Name = "mainFrm";
-            this.ShowIcon = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "-";
-            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.mainFrm_HelpButtonClicked);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainFrm_FormClosing);
-            this.gbEditor.ResumeLayout(false);
-            this.gbEditor.PerformLayout();
-            this.gbHE.ResumeLayout(false);
-            this.gbHE.PerformLayout();
-            this.gbAll.ResumeLayout(false);
-            this.gbAll.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            AutoScroll = true;
+            ClientSize = new System.Drawing.Size(665, 630);
+            Controls.Add(lblSelectFile);
+            Controls.Add(txtExecutablePath);
+            Controls.Add(btnChooseFile);
+            Controls.Add(btnBackup);
+            Controls.Add(gbAll);
+            Controls.Add(gbHE);
+            Controls.Add(gbEditor);
+            Controls.Add(btnAbort);
+            Controls.Add(btnPatch);
+            DoubleBuffered = true;
+            HelpButton = true;
+            MaximizeBox = false;
+            MaximumSize = new System.Drawing.Size(681, 669);
+            MinimizeBox = false;
+            MinimumSize = new System.Drawing.Size(681, 669);
+            Name = "mainFrm";
+            ShowIcon = false;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "-";
+            HelpButtonClicked += mainFrm_HelpButtonClicked;
+            FormClosing += mainFrm_FormClosing;
+            gbEditor.ResumeLayout(false);
+            gbEditor.PerformLayout();
+            gbHE.ResumeLayout(false);
+            gbHE.PerformLayout();
+            gbAll.ResumeLayout(false);
+            gbAll.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -448,6 +432,5 @@
         private System.Windows.Forms.TextBox txtExecutablePath;
         private System.Windows.Forms.Label lblSelectFile;
         private System.Windows.Forms.CheckBox cbModloader;
-        private System.Windows.Forms.Button btnModFeatures;
     }
 }

@@ -12,14 +12,6 @@ namespace S6Patcher.Source.Forms
         {
             CloseFileStream();
         }
-        private void btnModFeatures_Click(object sender, EventArgs e)
-        {
-            return; // Not implemented right now
-        }
-        private void cbModloader_CheckedChanged(object sender, EventArgs e)
-        {
-             btnModFeatures.Enabled = cbModloader.Checked;
-        }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
             if (cbZoom.Checked)
@@ -80,7 +72,7 @@ namespace S6Patcher.Source.Forms
             if (Result == DialogResult.Yes)
             {
                 Helpers.Helpers.CreateDesktopShortcut(Name);
-            }         
+            }
         }
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {

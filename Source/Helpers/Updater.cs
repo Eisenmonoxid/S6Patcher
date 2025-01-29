@@ -1,56 +1,43 @@
 ﻿using S6Patcher.Properties;
 using System;
 using System.Net;
-using System.Text;
+using System.Net.Http;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Helpers
 {
     internal class Updater
     {
-        public void CheckForUpdates()
+        public async void CheckForUpdates()
         {
             Logger.Instance.Log("CheckForUpdates() called.");
-            using (WebClient Client = new())
-            {
-                Client.Encoding = Encoding.UTF8;
-                Client.DownloadStringCompleted += Client_DownloadStringCompleted;
+            using WebClient Client = new();
+            string Result = String.Empty;
+            string Version = Application.ProductVersion;
 
-                try
-                {
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
-                    Client.DownloadStringAsync(new Uri(Resources.VersionFileLink));
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-        }
-        private void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            if (e.Cancelled == false && e.Error == null)
+            try
             {
-                if (string.Equals(Application.ProductVersion, e.Result, StringComparison.CurrentCultureIgnoreCase) == false)
-                {
-                    string Message = "A new version is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + e.Result;
-                    Logger.Instance.Log(Message);
-                    MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    string Message = "You are using the latest version of the S6Patcher!";
-                    Logger.Instance.Log(Message);
-                    MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                Result = await Client.DownloadStringTaskAsync(new Uri(Resources.VersionFileLink));
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                MessageBox.Show("Could not retrieve update information!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.Equals(Version, Result, StringComparison.CurrentCultureIgnoreCase) == false)
+            {
+                string Message = "A new version is available on GitHub!\n\nCurrent Version: " + Version + "\nNew Version: " + Result;
+                Logger.Instance.Log(Message);
+                MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                string Message = "Could not retrieve update information!";
+                string Message = "You are using the latest version of the S6Patcher!";
                 Logger.Instance.Log(Message);
-                MessageBox.Show(Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
