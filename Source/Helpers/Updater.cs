@@ -1,8 +1,6 @@
 ﻿using S6Patcher.Properties;
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Helpers

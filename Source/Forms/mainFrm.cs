@@ -74,7 +74,7 @@ namespace S6Patcher.Source.Forms
                 case execID.NONE:
                     return;
                 default:
-                    return; 
+                    return;
             }
 
             gbAll.Enabled = true;
@@ -166,7 +166,7 @@ namespace S6Patcher.Source.Forms
         private void ResetForm()
         {
             CloseFileStream();
-            foreach (var Control in new List<GroupBox> {gbAll, gbHE, gbEditor})
+            foreach (var Control in new List<GroupBox> { gbAll, gbHE, gbEditor })
             {
                 Control.Enabled = false;
 
@@ -179,13 +179,13 @@ namespace S6Patcher.Source.Forms
                         curCheckBox = (CheckBox)Element;
                         curCheckBox.Checked = false;
                     }
-                    catch {};
+                    catch { };
                     try
                     {
                         curTextBox = (TextBox)Element;
                         curTextBox.Text = String.Empty;
                     }
-                    catch {};
+                    catch { };
                 }
             }
 

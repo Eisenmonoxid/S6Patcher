@@ -49,6 +49,10 @@
     <DebugType>portable</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Source\Resources\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Source\Resources\favicon.ico" />
     <EmbeddedResource Include="Source\Resources\Scripts\UserScriptLocal.lua" />
     <EmbeddedResource Include="Source\Resources\Scripts\EMXBinData.s6patcher" />
     <EmbeddedResource Include="Source\Resources\Scripts\MainMenuUserScript.lua" />

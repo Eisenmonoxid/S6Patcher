@@ -387,11 +387,11 @@
             MinimizeBox = false;
             MinimumSize = new System.Drawing.Size(681, 669);
             Name = "mainFrm";
-            ShowIcon = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "-";
             HelpButtonClicked += mainFrm_HelpButtonClicked;
             FormClosing += mainFrm_FormClosing;
+            Load += mainFrm_Load;
             gbEditor.ResumeLayout(false);
             gbEditor.PerformLayout();
             gbHE.ResumeLayout(false);

@@ -2,12 +2,23 @@
 using S6Patcher.Source.Helpers;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Forms
 {
     public partial class mainFrm
     {
+        private void mainFrm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                using Stream Stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Source.Resources.favicon.ico");
+                this.Icon = new System.Drawing.Icon(Stream);
+                this.ShowIcon = true;
+            }
+            catch {}
+        }
         private void mainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
             CloseFileStream();
