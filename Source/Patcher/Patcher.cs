@@ -136,7 +136,8 @@ namespace S6Patcher.Source.Patcher
 
             char Separator = Path.DirectorySeparatorChar;
             string ModPath = Helpers.Helpers.GetRootPathFromFile(GlobalStream.Name, GlobalID);
-            ModPath = ModPath + Separator + "modloader";
+            ModPath += (Separator + "modloader");
+
             if (Directory.Exists(ModPath) == false)
             {
                 try
