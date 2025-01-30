@@ -141,7 +141,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Resources\favicon.ico" />
+    <EmbeddedResource Include="Source\Resources\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Version.txt" />

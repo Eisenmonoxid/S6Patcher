@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Forms
@@ -74,7 +75,7 @@ namespace S6Patcher.Source.Forms
                 case execID.NONE:
                     return;
                 default:
-                    return; 
+                    return;
             }
 
             gbAll.Enabled = true;
@@ -88,27 +89,17 @@ namespace S6Patcher.Source.Forms
         private List<string> GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
             List<string> CheckedFeatures = new List<string>();
-            CheckBox curControl;
-            foreach (GroupBox Box in Controls)
+            Controls.ForEach(Box =>
             {
-                for (ushort it = 0; it != Box.Controls.Count; it++)
+                foreach (var Element in Box.Controls)
                 {
-                    try
+                    if ((Element is CheckBox Check) && Check.Checked)
                     {
-                        curControl = (CheckBox)Box.Controls[it];
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-
-                    if (curControl.Checked)
-                    {
-                        Logger.Instance.Log("GetPatchFeaturesByControls(): Feature " + curControl.Text + " was checked!");
-                        CheckedFeatures.Add(curControl.Text);
+                        Logger.Instance.Log("GetPatchFeaturesByControls(): Feature " + Check.Text + " was checked!");
+                        CheckedFeatures.Add(Check.Text);
                     }
                 }
-            }
+            });
 
             return CheckedFeatures;
         }
@@ -169,30 +160,22 @@ namespace S6Patcher.Source.Forms
             foreach (var Control in new List<GroupBox> {gbAll, gbHE, gbEditor})
             {
                 Control.Enabled = false;
-
-                CheckBox curCheckBox;
-                TextBox curTextBox;
                 foreach (var Element in Control.Controls)
                 {
-                    try
+                    if (Element is CheckBox Box)
                     {
-                        curCheckBox = (CheckBox)Element;
-                        curCheckBox.Checked = false;
+                        Box.Checked = false;
                     }
-                    catch {};
-                    try
+                    else if (Element is TextBox Text)
                     {
-                        curTextBox = (TextBox)Element;
-                        curTextBox.Text = String.Empty;
+                        Text.Text = string.Empty;
                     }
-                    catch {};
                 }
             }
 
             btnPatch.Enabled = false;
             btnBackup.Enabled = false;
-            btnModFeatures.Enabled = false;
-            txtExecutablePath.Text = String.Empty;
+            txtExecutablePath.Text = string.Empty;
 
             Logger.Instance.Log("ResetForm(): Form successfully reset!");
         }

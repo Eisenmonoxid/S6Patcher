@@ -46,7 +46,6 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
-            this.btnModFeatures = new System.Windows.Forms.Button();
             this.cbModloader = new System.Windows.Forms.CheckBox();
             this.cbLimitedEdition = new System.Windows.Forms.CheckBox();
             this.cbKnightSelection = new System.Windows.Forms.CheckBox();
@@ -246,7 +245,6 @@
             // 
             // gbAll
             // 
-            this.gbAll.Controls.Add(this.btnModFeatures);
             this.gbAll.Controls.Add(this.cbModloader);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
             this.gbAll.Controls.Add(this.cbKnightSelection);
@@ -268,18 +266,6 @@
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
             // 
-            // btnModFeatures
-            // 
-            this.btnModFeatures.Enabled = false;
-            this.btnModFeatures.Location = new System.Drawing.Point(158, 201);
-            this.btnModFeatures.Name = "btnModFeatures";
-            this.btnModFeatures.Size = new System.Drawing.Size(84, 23);
-            this.btnModFeatures.TabIndex = 19;
-            this.btnModFeatures.Text = "Features";
-            this.btnModFeatures.UseVisualStyleBackColor = true;
-            this.btnModFeatures.Visible = false;
-            this.btnModFeatures.Click += new System.EventHandler(this.btnModFeatures_Click);
-            // 
             // cbModloader
             // 
             this.cbModloader.AutoSize = true;
@@ -289,7 +275,6 @@
             this.cbModloader.TabIndex = 18;
             this.cbModloader.Text = "Activate Modloader";
             this.cbModloader.UseVisualStyleBackColor = true;
-            this.cbModloader.CheckedChanged += new System.EventHandler(this.cbModloader_CheckedChanged);
             // 
             // cbLimitedEdition
             // 
@@ -407,6 +392,7 @@
             this.Text = "-";
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.mainFrm_HelpButtonClicked);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainFrm_FormClosing);
+            this.Load += new System.EventHandler(this.mainFrm_Load);
             this.gbEditor.ResumeLayout(false);
             this.gbEditor.PerformLayout();
             this.gbHE.ResumeLayout(false);
@@ -448,6 +434,5 @@
         private System.Windows.Forms.TextBox txtExecutablePath;
         private System.Windows.Forms.Label lblSelectFile;
         private System.Windows.Forms.CheckBox cbModloader;
-        private System.Windows.Forms.Button btnModFeatures;
     }
 }

@@ -2,6 +2,7 @@
 using S6Patcher.Source.Helpers;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Forms
@@ -12,13 +13,17 @@ namespace S6Patcher.Source.Forms
         {
             CloseFileStream();
         }
-        private void btnModFeatures_Click(object sender, EventArgs e)
+        private void mainFrm_Load(object sender, EventArgs e)
         {
-            return; // Not implemented right now
-        }
-        private void cbModloader_CheckedChanged(object sender, EventArgs e)
-        {
-             btnModFeatures.Enabled = cbModloader.Checked;
+            try
+            {
+                using (Stream IconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Source.Resources.favicon.ico"))
+                {
+                    this.Icon = new System.Drawing.Icon(IconStream);
+                    this.ShowIcon = true;
+                }
+            }
+            catch {}
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
