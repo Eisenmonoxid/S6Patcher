@@ -12,7 +12,7 @@ namespace S6Patcher.Source.Patcher
     internal partial class Patcher
     {
         private FileStream GlobalStream = null;
-        private readonly Mapping GlobalMappings = null;
+        private readonly MappingBase GlobalMappings = null;
         private readonly execID GlobalID = execID.NONE;
         public Patcher(execID ID, ref FileStream Stream)
         {
@@ -23,13 +23,13 @@ namespace S6Patcher.Source.Patcher
 
             GlobalID = ID;
             GlobalStream = Stream;
-            GlobalMappings = Mapping.GetMappingsByID(GlobalID);
+            GlobalMappings = MappingBase.GetMappingsByID(GlobalID);
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
         public void PatchByControlFeatures(List<string> Names)
         {
-            List<Mapping.PatchEntry> Entries = GlobalMappings.GetMapping();
+            List<MappingBase.PatchEntry> Entries = GlobalMappings.GetMapping();
             if (Entries == null)
             {
                 return;

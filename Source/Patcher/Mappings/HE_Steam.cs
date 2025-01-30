@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
-    internal class HE_Steam : Mapping
+    internal class HE_Steam : MappingBase
     {
         public HE_Steam() {}
         public override List<PatchEntry> GetMapping()

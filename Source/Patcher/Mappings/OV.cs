@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
-    internal class OV : Mapping
+    internal class OV : MappingBase
     {
         public OV() {}
         public override List<PatchEntry> GetMapping()

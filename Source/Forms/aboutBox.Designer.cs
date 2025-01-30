@@ -132,10 +132,8 @@
             this.Name = "aboutBox";
             this.Padding = new System.Windows.Forms.Padding(9);
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.aboutBox_Load);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();

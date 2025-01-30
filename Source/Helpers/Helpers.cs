@@ -18,7 +18,7 @@ namespace S6Patcher.Source.Helpers
     };
     public static class Helpers
     {
-        public static UInt32 GlobalOffset = 0x3F0000;
+        public static readonly UInt32 GlobalOffset = 0x3F0000;
         public static execID CurrentID = execID.NONE;
         public static void WriteBytes(ref FileStream Stream, long Position, byte[] Bytes)
         {

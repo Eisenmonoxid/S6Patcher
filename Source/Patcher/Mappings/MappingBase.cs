@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
-    public abstract class Mapping
+    public abstract class MappingBase
     {
         public struct PatchEntry
         {
@@ -19,7 +19,7 @@ namespace S6Patcher.Source.Patcher.Mappings
         public abstract Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance);
         public abstract UInt32[] GetAutoSaveMapping();
         public abstract UInt32[] GetTextureResolutionMapping();
-        public static Mapping GetMappingsByID(execID ID)
+        public static MappingBase GetMappingsByID(execID ID)
         {
             switch (ID)
             {
