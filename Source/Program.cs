@@ -1,11 +1,6 @@
 ﻿using S6Patcher.Source.Forms;
 using System;
-using System.Reflection;
 using System.Windows.Forms;
-
-[assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.0")]
-[assembly: AssemblyCompany("Eisenmonoxid")]
 
 namespace S6Patcher.Source
 {
