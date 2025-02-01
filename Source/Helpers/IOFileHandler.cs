@@ -73,31 +73,28 @@ namespace S6Patcher.Source.Helpers
         private void DeleteUserConfiguration()
         {
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
-            List<string> Directories = Helpers.GetUserScriptDirectories();
-
-            foreach (string Element in Directories)
+            Helpers.GetUserScriptDirectories().ForEach(Element =>
             {
                 DeleteSectionFromOptions(Path.Combine(Element, "Config"));
                 string ScriptPath = Path.Combine(Element, "Script");
-                if (Directory.Exists(ScriptPath) == false)
+                if (Directory.Exists(ScriptPath) == true)
                 {
-                    continue;
-                }
-                foreach (string Entry in ScriptFiles)
-                {
-                    try
+                    foreach (string Entry in ScriptFiles)
                     {
-                        string CurrentFile = Path.Combine(ScriptPath, Entry);
-                        File.Delete(CurrentFile);
-                        Logger.Instance.Log("DeleteUserConfiguration(): File sucessfully deleted: " + CurrentFile);
-                    }
-                    catch (Exception ex) // Errors here do not matter
-                    {
-                        Logger.Instance.Log("DeleteUserConfiguration(): " + ex.Message);
-                        continue;
+                        try
+                        {
+                            string CurrentFile = Path.Combine(ScriptPath, Entry);
+                            File.Delete(CurrentFile);
+                            Logger.Instance.Log("DeleteUserConfiguration(): File sucessfully deleted: " + CurrentFile);
+                        }
+                        catch (Exception ex) // Errors here do not matter
+                        {
+                            Logger.Instance.Log("DeleteUserConfiguration(): " + ex.Message);
+                            continue;
+                        }
                     }
                 }
-            }
+            });
         }
         private void DeleteSectionFromOptions(string CurrentPath)
         {

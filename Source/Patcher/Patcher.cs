@@ -212,29 +212,23 @@ namespace S6Patcher.Source.Patcher
 
             // EMXBinData.s6patcher is the minified and compiled main menu script
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
-            List<string> Directories = Helpers.Helpers.GetUserScriptDirectories();
-            try
+            Helpers.Helpers.GetUserScriptDirectories().ForEach(Element =>
             {
-                string ScriptPath = String.Empty;
-                foreach (string Element in Directories)
+                string ScriptPath = Path.Combine(Element, "Script");
+                try
                 {
-                    ScriptPath = Path.Combine(Element, "Script");
-                    if (Directory.Exists(ScriptPath) == false)
-                    {
-                        Directory.CreateDirectory(ScriptPath);
-                        Logger.Instance.Log("SetLuaScriptBugFixes(): Created directory " + ScriptPath);
-                    }
-
+                    Directory.CreateDirectory(ScriptPath);
                     File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[0]), Resources.UserScriptLocal);
                     File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[1]), Resources.EMXBinData);
-                    Logger.Instance.Log("SetLuaScriptBugFixes(): Written Scriptfiles to " + ScriptPath);
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Log(ex.ToString());
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfiles to " + ScriptPath);
+            });
         }
         public void SetKnightSelection(bool Checked)
         {

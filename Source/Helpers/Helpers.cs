@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -37,27 +38,19 @@ namespace S6Patcher.Source.Helpers
         {
             // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
             // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
-            string DocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            List<string> Directories = new List<string>();
-
-            foreach (string Element in Directory.GetDirectories(DocumentPath))
-            {
-                if (Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
-                {
-                    string Directory = Path.Combine(DocumentPath, Element);
-                    Directories.Add(Directory);
-                    Logger.Instance.Log("GetUserScriptDirectories(): Added Directory: " + Directory);
-                }
-            }
-
-            return Directories;
+            string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            return Directory.GetDirectories(DocumentsPath)
+                .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
+                .Select(Element => {Element = Path.Combine(DocumentsPath, Element); return Element;})
+                .ToList();
         }
         public static bool SetCurrentExecutableID(ref FileStream Stream)
         {
             Logger.Instance.Log("SetCurrentExecutableID(): Called with Stream: " + Stream.Name);
 
             string ExpectedVersion = "1, 71, 4289, 0";
-            byte[] Result = new byte[30];
+            int ByteSize = Encoding.Unicode.GetByteCount(ExpectedVersion) + 1;
+            byte[] Result = new byte[ByteSize];
 
             Dictionary<UInt32, execID> Mapping = new Dictionary<UInt32, execID>()
             {
@@ -72,7 +65,7 @@ namespace S6Patcher.Source.Helpers
             {
                 if (Stream.Length < Element.Key)
                 {
-                    Logger.Instance.Log("SetCurrentExecutableID(): Stream Length smaller than Mapping Index: " + Stream.Length.ToString());
+                    Logger.Instance.Log("SetCurrentExecutableID(): " + Element.Value.ToString() + " Stream Length smaller than Mapping Index: " + Stream.Length.ToString());
                     continue;
                 }
 

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Forms
@@ -88,20 +88,15 @@ namespace S6Patcher.Source.Forms
         }
         private List<string> GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
-            List<string> CheckedFeatures = new List<string>();
+            IEnumerable<CheckBox> Boxes = null;
             Controls.ForEach(Box =>
             {
-                foreach (var Element in Box.Controls)
-                {
-                    if ((Element is CheckBox Check) && Check.Checked)
-                    {
-                        Logger.Instance.Log("GetPatchFeaturesByControls(): Feature " + Check.Text + " was checked!");
-                        CheckedFeatures.Add(Check.Text);
-                    }
-                }
+                Boxes = Box.Controls.OfType<CheckBox>()
+                        .Where(Element => Element.Checked)
+                        .Concat(Boxes ?? Enumerable.Empty<CheckBox>());
             });
 
-            return CheckedFeatures;
+            return Boxes.Select(Element => Element.Text).ToList();
         }
         private void SelectPatchFeatures()
         {
@@ -146,18 +141,11 @@ namespace S6Patcher.Source.Forms
                 Patcher.SetModLoader();
             }
         }
-        private void CloseFileStream()
-        {
-            if (GlobalStream != null && GlobalStream.CanRead == true) // Close Filestream if not already done
-            {
-                GlobalStream.Close();
-                GlobalStream.Dispose();
-            }
-        }
         private void ResetForm()
         {
             CloseFileStream();
-            foreach (var Control in new List<GroupBox> {gbAll, gbHE, gbEditor})
+
+            new List<GroupBox> {gbAll, gbHE, gbEditor}.ForEach(Control =>
             {
                 Control.Enabled = false;
                 foreach (var Element in Control.Controls)
@@ -171,13 +159,22 @@ namespace S6Patcher.Source.Forms
                         Text.Text = string.Empty;
                     }
                 }
-            }
+            });
 
             btnPatch.Enabled = false;
             btnBackup.Enabled = false;
             txtExecutablePath.Text = string.Empty;
+            this.ActiveControl = null;
 
             Logger.Instance.Log("ResetForm(): Form successfully reset!");
+        }
+        private void CloseFileStream()
+        {
+            if (GlobalStream != null && GlobalStream.CanRead == true) // Close Filestream if not already done
+            {
+                GlobalStream.Close();
+                GlobalStream.Dispose();
+            }
         }
     }
 }

@@ -49,7 +49,7 @@ namespace S6Patcher.Source.Forms
         }
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbHighTextures.Checked && Helpers.Helpers.CurrentID != Helpers.execID.ED)
+            if (cbHighTextures.Checked && Helpers.Helpers.CurrentID != execID.ED)
             {
                 txtResolution.Enabled = true;
             }
@@ -74,8 +74,8 @@ namespace S6Patcher.Source.Forms
         {
             Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
 
-            SelectPatchFeatures();
             string Name = GlobalStream.Name;
+            SelectPatchFeatures(); // execute patching
             ResetForm();
 
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
@@ -103,6 +103,8 @@ namespace S6Patcher.Source.Forms
         {
             Logger.Instance.Log("btnBackup_Click(): Restoring backup ...");
             bool Result = IOFileHandler.Instance.RestoreBackup(ref GlobalStream);
+            ResetForm();
+
             if (Result == false)
             {
                 Logger.Instance.Log(Resources.ErrorBackupFail);
@@ -113,8 +115,6 @@ namespace S6Patcher.Source.Forms
                 Logger.Instance.Log(Resources.FinishedBackup);
                 MessageBox.Show(Resources.FinishedBackup, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            ResetForm();
         }
         private void btnChooseFile_Click(object sender, EventArgs e)
         {
