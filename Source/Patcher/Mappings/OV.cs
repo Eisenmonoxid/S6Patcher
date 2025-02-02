@@ -6,7 +6,6 @@ namespace S6Patcher.Source.Patcher.Mappings
 {
     internal class OV : MappingBase
     {
-        public OV() {}
         public override List<PatchEntry> GetMapping()
         {
             return new List<PatchEntry>
@@ -48,6 +47,27 @@ namespace S6Patcher.Source.Patcher.Mappings
                         {0x23D655, new byte[] {0x90, 0x90}}, // Override JNZ, always set Special Edition to 1
                     }
                 }
+            };
+        }
+
+        public override Dictionary<long, byte[]> GetModloaderMapping()
+        {
+            byte[] CurrentPath = Encoding.ASCII.GetBytes("modloader\\bba\\mod.bba\0\0");
+            return new Dictionary<long, byte[]>()
+            {
+                // .data segment
+                {0x53F5BC, CurrentPath}, // Add mod.bba file path
+                // .text segment -> Check what loading method to use
+                {0x23E916, new byte[] {0xEB}}, // Always jump to ModelViewer
+                {0x23E931, new byte[] {0xE8, 0x00, 0xF9, 0xFF, 0xFF}}, // Always jump to ModelViewer
+                {0x23E936, new byte[] {0xEB, 0xE0, 0x90, 0x90}}, // Return to original loader after mod
+                // .text segment -> Override the ModelViewer func
+                {0x23E236, new byte[] {0x55, 0x89, 0xE5, 0x83, 0xEC, 0x28, 0x8D, 0x4D, 0xDC, 0x68, 0x00, 0x01, 0x00, 0x00}}, // Return to original loader after mod
+                {0x23E244, new byte[] {0xE8, 0x35, 0xE6, 0xE2, 0xFF, 0x8D, 0x4D, 0xDC, 0x68, 0xBC, 0xF5, 0x93, 0x00}}, // Return to original loader after mod
+                {0x23E251, new byte[] {0xE8, 0xC2, 0xE7, 0xE2, 0xFF, 0xEB, 0x1F, 0x90, 0x90, 0x6A, 0x00, 0x8D, 0x7C, 0x25, 0xDC}}, // Return to original loader after mod
+                {0x23E260, new byte[] {0x31, 0xC0, 0xE8, 0x06, 0xF0, 0xFF, 0xFF, 0xEB, 0x19, 0x90, 0x90, 0xE8, 0xF0, 0xE3, 0xE2, 0xFF}}, // Return to original loader after mod
+                {0x23E270, new byte[] {0x83, 0xC4, 0x2A, 0x89, 0xEC, 0x5D, 0xC3, 0x8B, 0x45, 0xDC, 0x89, 0x45, 0xD8, 0x89, 0x4D, 0xDC}}, // Return to original loader after mod
+                {0x23E280, new byte[] {0xEB, 0xD8, 0x8B, 0x45, 0xD8, 0x89, 0x45, 0xDC, 0x8D, 0x4D, 0xDC, 0xEB, 0xDE, 0x90, 0x90, 0x90}}, // Return to original loader after mod
             };
         }
 

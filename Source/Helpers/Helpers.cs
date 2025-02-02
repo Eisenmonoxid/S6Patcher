@@ -143,6 +143,7 @@ namespace S6Patcher.Source.Helpers
                 bool IsExtra1 = CurrentPath.Contains("Eastern");
                 CurrentPath = Path.GetDirectoryName(Filepath);
                 CurrentPath = Path.Combine(CurrentPath, ((IsExtra1 == true) ? "extra1" : "base") + "\\bin\\Settlers6.exe");
+
                 if (System.IO.File.Exists(CurrentPath) == true)
                 {
                     Logger.Instance.Log("IsPlayLauncherExecutable(): Redirecting Path to " + CurrentPath);

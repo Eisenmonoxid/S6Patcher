@@ -1,10 +1,6 @@
 ﻿using S6Patcher.Source.Helpers;
-using S6Patcher.Source.Patcher.Mappings;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
@@ -16,6 +12,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             public Dictionary<long, byte[]> Mapping;
         }
         public abstract List<PatchEntry> GetMapping();
+        public abstract Dictionary<long, byte[]> GetModloaderMapping();
         public abstract Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance);
         public abstract UInt32[] GetAutoSaveMapping();
         public abstract UInt32[] GetTextureResolutionMapping();

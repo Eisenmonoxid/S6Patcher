@@ -6,7 +6,6 @@ namespace S6Patcher.Source.Patcher.Mappings
 {
     internal class HE_Ubi : MappingBase
     {
-        public HE_Ubi() {}
         public override List<PatchEntry> GetMapping()
         {
             return new List<PatchEntry>
@@ -43,6 +42,23 @@ namespace S6Patcher.Source.Patcher.Mappings
             };
         }
 
+        public override Dictionary<long, byte[]> GetModloaderMapping()
+        {
+            byte[] CurrentPath = Encoding.ASCII.GetBytes("..\\modloader\\shr\0\0");
+            return new Dictionary<long, byte[]>()
+            {
+                // .data segment
+                {0xC4FC74, Encoding.ASCII.GetBytes("ModLoader: Adding primary directory.\n\0\0")}, // Print to log
+                {0xC4FCB8, CurrentPath}, // Add primary directory path
+                {0xC4FCA4, CurrentPath}, // Add primary directory path
+                // .text segment -> Check what loading method to use
+                {0x25D526, new byte[] {0xEB}}, // Always jump to ModelViewer
+                {0x25D55A, new byte[] {0xE8, 0x3E, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90}}, // Return to original loader after mod
+                // .text segment -> Override the ModelViewer func
+                {0x25D600, new byte[] {0xEB, 0x7A}}, // Return to original loader after mod
+            };
+        }
+
         public override UInt32[] GetTextureResolutionMapping()
         {
             return new UInt32[] {0x2D4188, 0x2D418F, 0x2D4196};
@@ -54,7 +70,7 @@ namespace S6Patcher.Source.Patcher.Mappings
 
             return new Dictionary<long, byte[]>()
             {
-                {0xC4EC4C, BitConverter.GetBytes(ClutterFarDistance)}, // The HE uses the zoomlevel as single ...
+                {0xC4EC4C, BitConverter.GetBytes(ClutterFarDistance)}, // This is not an error, the HE uses the zoomlevel as single instead of double like in the OV ...
                 {0x270311, new byte[] {0xC7, 0x45, 0xF0}},
                 {0x270314, BitConverter.GetBytes(ClutterFarDistance + Offset)},
                 {0x270318, new byte[] {0xC7, 0x45, 0xF4}},

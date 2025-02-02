@@ -92,7 +92,6 @@
     <Compile Include="Source\Patcher\Mappings\HE_Ubi.cs" />
     <Compile Include="Source\Patcher\Mappings\HE_Steam.cs" />
     <Compile Include="Source\Patcher\Mappings\OV.cs" />
-    <Compile Include="Source\Patcher\Modloader.cs" />
     <Compile Include="Source\Patcher\Patcher.cs" />
     <Compile Include="Source\Helpers\Helpers.cs" />
     <Compile Include="Source\Program.cs" />

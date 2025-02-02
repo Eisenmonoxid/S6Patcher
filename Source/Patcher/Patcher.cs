@@ -121,17 +121,10 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("SetModLoader(): Called.");
 
-            Modloader Loader = new Modloader();
-            Dictionary<long, byte[]> Entries = Loader.GetMappingsByID(GlobalID);
-            if (Entries == null)
+            Dictionary<long, byte[]> Entries = GlobalMappings.GetModloaderMapping();
+            foreach (var Entry in Entries)
             {
-                Logger.Instance.Log("SetModLoader(): Entries was zero!");
-                return;
-            }
-
-            foreach (var DictEntry in Entries)
-            {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, DictEntry.Key, DictEntry.Value);
+                Helpers.Helpers.WriteBytes(ref GlobalStream, Entry.Key, Entry.Value);
             }
 
             char Separator = Path.DirectorySeparatorChar;
@@ -159,13 +152,13 @@ namespace S6Patcher.Source.Patcher
 
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
             {
-                ModPath = ModPath + Separator + "shr";
+                ModPath += (Separator + "shr");
                 Directory.CreateDirectory(ModPath);
                 Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
             }
             else
             {
-                ModPath = ModPath + Separator + "bba" + Separator;
+                ModPath += (Separator + "bba" + Separator);
                 Directory.CreateDirectory(ModPath);
                 try
                 {

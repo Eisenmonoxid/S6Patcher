@@ -5,7 +5,6 @@ namespace S6Patcher.Source.Patcher.Mappings
 {
     internal class ED : MappingBase
     {
-        public ED() {}
         public override List<PatchEntry> GetMapping()
         {
             return new List<PatchEntry>
@@ -87,6 +86,10 @@ namespace S6Patcher.Source.Patcher.Mappings
             };
         }
 
+        public override Dictionary<long, byte[]> GetModloaderMapping()
+        {
+            throw new NotImplementedException();
+        }
         public override UInt32[] GetTextureResolutionMapping()
         {
             throw new NotImplementedException();
