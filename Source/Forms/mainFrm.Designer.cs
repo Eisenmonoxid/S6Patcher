@@ -46,6 +46,10 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.gbUserscriptOptions = new System.Windows.Forms.GroupBox();
+            this.cbUseMilitaryRelease = new System.Windows.Forms.CheckBox();
+            this.cbUseDowngrade = new System.Windows.Forms.CheckBox();
+            this.cbUseSingleStop = new System.Windows.Forms.CheckBox();
             this.cbModloader = new System.Windows.Forms.CheckBox();
             this.cbLimitedEdition = new System.Windows.Forms.CheckBox();
             this.cbKnightSelection = new System.Windows.Forms.CheckBox();
@@ -59,6 +63,7 @@
             this.gbEditor.SuspendLayout();
             this.gbHE.SuspendLayout();
             this.gbAll.SuspendLayout();
+            this.gbUserscriptOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbLAAFlag
@@ -245,6 +250,7 @@
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.gbUserscriptOptions);
             this.gbAll.Controls.Add(this.cbModloader);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
             this.gbAll.Controls.Add(this.cbKnightSelection);
@@ -265,6 +271,49 @@
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
+            // 
+            // gbUserscriptOptions
+            // 
+            this.gbUserscriptOptions.Controls.Add(this.cbUseMilitaryRelease);
+            this.gbUserscriptOptions.Controls.Add(this.cbUseDowngrade);
+            this.gbUserscriptOptions.Controls.Add(this.cbUseSingleStop);
+            this.gbUserscriptOptions.Enabled = false;
+            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 127);
+            this.gbUserscriptOptions.Name = "gbUserscriptOptions";
+            this.gbUserscriptOptions.Size = new System.Drawing.Size(200, 100);
+            this.gbUserscriptOptions.TabIndex = 19;
+            this.gbUserscriptOptions.TabStop = false;
+            this.gbUserscriptOptions.Text = "Gameplay Options";
+            // 
+            // cbUseMilitaryRelease
+            // 
+            this.cbUseMilitaryRelease.AutoSize = true;
+            this.cbUseMilitaryRelease.Location = new System.Drawing.Point(6, 73);
+            this.cbUseMilitaryRelease.Name = "cbUseMilitaryRelease";
+            this.cbUseMilitaryRelease.Size = new System.Drawing.Size(163, 20);
+            this.cbUseMilitaryRelease.TabIndex = 2;
+            this.cbUseMilitaryRelease.Text = "Military Release Button";
+            this.cbUseMilitaryRelease.UseVisualStyleBackColor = true;
+            // 
+            // cbUseDowngrade
+            // 
+            this.cbUseDowngrade.AutoSize = true;
+            this.cbUseDowngrade.Location = new System.Drawing.Point(6, 47);
+            this.cbUseDowngrade.Name = "cbUseDowngrade";
+            this.cbUseDowngrade.Size = new System.Drawing.Size(136, 20);
+            this.cbUseDowngrade.TabIndex = 1;
+            this.cbUseDowngrade.Text = "Downgrade Button";
+            this.cbUseDowngrade.UseVisualStyleBackColor = true;
+            // 
+            // cbUseSingleStop
+            // 
+            this.cbUseSingleStop.AutoSize = true;
+            this.cbUseSingleStop.Location = new System.Drawing.Point(6, 21);
+            this.cbUseSingleStop.Name = "cbUseSingleStop";
+            this.cbUseSingleStop.Size = new System.Drawing.Size(135, 20);
+            this.cbUseSingleStop.TabIndex = 0;
+            this.cbUseSingleStop.Text = "Single Stop Button";
+            this.cbUseSingleStop.UseVisualStyleBackColor = true;
             // 
             // cbModloader
             // 
@@ -399,6 +448,8 @@
             this.gbHE.PerformLayout();
             this.gbAll.ResumeLayout(false);
             this.gbAll.PerformLayout();
+            this.gbUserscriptOptions.ResumeLayout(false);
+            this.gbUserscriptOptions.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -434,5 +485,9 @@
         private System.Windows.Forms.TextBox txtExecutablePath;
         private System.Windows.Forms.Label lblSelectFile;
         private System.Windows.Forms.CheckBox cbModloader;
+        private System.Windows.Forms.GroupBox gbUserscriptOptions;
+        private System.Windows.Forms.CheckBox cbUseMilitaryRelease;
+        private System.Windows.Forms.CheckBox cbUseDowngrade;
+        private System.Windows.Forms.CheckBox cbUseSingleStop;
     }
 }

@@ -21,7 +21,7 @@ namespace S6Patcher.Source.Helpers
     {
         public static readonly UInt32 GlobalOffset = 0x3F0000;
         public static execID CurrentID = execID.NONE;
-        public static void WriteBytes(ref FileStream Stream, long Position, byte[] Bytes)
+        public static void WriteBytes(FileStream Stream, long Position, byte[] Bytes)
         {
             Stream.Position = (CurrentID == execID.OV_OFFSET) ? Position - GlobalOffset : Position;
             try
@@ -44,7 +44,7 @@ namespace S6Patcher.Source.Helpers
                 .Select(Element => {Element = Path.Combine(DocumentsPath, Element); return Element;})
                 .ToList();
         }
-        public static bool SetCurrentExecutableID(ref FileStream Stream)
+        public static bool SetCurrentExecutableID(FileStream Stream)
         {
             Logger.Instance.Log("SetCurrentExecutableID(): Called with Stream: " + Stream.Name);
 

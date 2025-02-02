@@ -11,14 +11,14 @@ namespace S6Patcher.Source.Patcher
 {
     internal partial class Patcher
     {
-        private FileStream GlobalStream = null;
+        private readonly FileStream GlobalStream = null;
         private readonly MappingBase GlobalMappings = null;
         private readonly execID GlobalID = execID.NONE;
-        public Patcher(execID ID, ref FileStream Stream)
+        public Patcher(execID ID, FileStream Stream)
         {
-            if (ID == execID.NONE || Stream == null)
+            if (ID == execID.NONE || Stream == null || Stream.CanWrite == false)
             {
-                throw new ArgumentException("Missing arguments to Patcher ctor.");
+                throw new ArgumentException("Erroneous arguments to Patcher ctor.");
             }
 
             GlobalID = ID;
@@ -44,7 +44,7 @@ namespace S6Patcher.Source.Patcher
             {
                 foreach (var Entry in Element)
                 {
-                    Helpers.Helpers.WriteBytes(ref GlobalStream, Entry.Key, Entry.Value);
+                    Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
                     Logger.Instance.Log("PatchByControlFeatures(): Patching Element: " + Entry.Key.ToString());
                 }
             });
@@ -68,7 +68,7 @@ namespace S6Patcher.Source.Patcher
             UInt32[] Mapping = GlobalMappings.GetTextureResolutionMapping();
             for (uint i = 0; i < Mapping.Length; i++)
             {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[i], BitConverter.GetBytes(Resolution / Convert.ToUInt32(Math.Pow(2, i))));
+                Helpers.Helpers.WriteBytes(GlobalStream, Mapping[i], BitConverter.GetBytes(Resolution / Convert.ToUInt32(Math.Pow(2, i))));
             }
         }
         public void SetAutosaveTimer(string AutosaveText)
@@ -90,8 +90,8 @@ namespace S6Patcher.Source.Patcher
             byte[] Interval = BitConverter.GetBytes(Timer * 60000);
             UInt32[] Mapping = GlobalMappings.GetAutoSaveMapping();
 
-            Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[0], (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
-            Helpers.Helpers.WriteBytes(ref GlobalStream, Mapping[1], Interval);
+            Helpers.Helpers.WriteBytes(GlobalStream, Mapping[0], (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
+            Helpers.Helpers.WriteBytes(GlobalStream, Mapping[1], Interval);
         }
         public void SetZoomLevel(string ZoomText)
         {
@@ -114,7 +114,7 @@ namespace S6Patcher.Source.Patcher
             Dictionary<long, byte[]> Mapping = GlobalMappings.GetZoomLevelMapping(Level, Distance);
             foreach (var Element in Mapping)
             {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, Element.Key, Element.Value);
+                Helpers.Helpers.WriteBytes(GlobalStream, Element.Key, Element.Value);
             }
         }
         public void SetModLoader()
@@ -124,7 +124,7 @@ namespace S6Patcher.Source.Patcher
             Dictionary<long, byte[]> Entries = GlobalMappings.GetModloaderMapping();
             foreach (var Entry in Entries)
             {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, Entry.Key, Entry.Value);
+                Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
             }
 
             char Separator = Path.DirectorySeparatorChar;
@@ -196,7 +196,7 @@ namespace S6Patcher.Source.Patcher
             Int16 Flag = Reader.ReadInt16();
             if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
             {
-                Helpers.Helpers.WriteBytes(ref GlobalStream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
+                Helpers.Helpers.WriteBytes(GlobalStream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
             }
         }
         public void SetLuaScriptBugFixes()
@@ -223,10 +223,10 @@ namespace S6Patcher.Source.Patcher
                 Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfiles to " + ScriptPath);
             });
         }
-        public void SetKnightSelection(bool Checked)
+        public void SetEntryInOptionsFile(string Entry, bool Checked)
         {
-            Logger.Instance.Log("SetKnightSelection(): Called with " + Checked.ToString());
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("S6Patcher", "ExtendedKnightSelection", Checked);
+            Logger.Instance.Log("SetEntryInOptionsFile(): Called with " + Entry + " - Value: " + Checked.ToString());
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("S6Patcher", Entry, Checked);
         }
     }
 }

@@ -2,6 +2,7 @@
 using S6Patcher.Source.Helpers;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -63,11 +64,17 @@ namespace S6Patcher.Source.Forms
             if (cbScriptBugFixes.Checked)
             {
                 cbKnightSelection.Enabled = true;
+                gbUserscriptOptions.Enabled = true;
             }
             else
             {
                 cbKnightSelection.Checked = false;
                 cbKnightSelection.Enabled = false;
+                gbUserscriptOptions.Enabled = false;
+
+                gbUserscriptOptions.Controls.OfType<CheckBox>()
+                    .Select(Element => {Element.Checked = false; return Element;})
+                    .ToArray();
             }
         }
         private void btnPatch_Click(object sender, EventArgs e)
@@ -137,7 +144,7 @@ namespace S6Patcher.Source.Forms
                     return;
                 }
 
-                bool ValidExecutable = Helpers.Helpers.SetCurrentExecutableID(ref GlobalStream);
+                bool ValidExecutable = Helpers.Helpers.SetCurrentExecutableID(GlobalStream);
                 if (ValidExecutable == false)
                 {
                     CloseFileStream();
