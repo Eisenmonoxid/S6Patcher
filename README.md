@@ -7,21 +7,15 @@
 ## Usage
 - Select the game executable(s) that you wish to patch (Settlers6.exe/Settlers6R.exe or S6MapEditor.exe/S6MapEditorR.exe). Look in your installation folder.  
 **Should you have any questions, errors or feature requests: [Discord](https://discord.gg/7SGkQtAAET).**
-
-- _Wähle die ausführbare(n) Datei(en), die gepatcht werden soll(en) (Settlers6.exe/Settlers6R.exe oder S6MapEditor.exe/S6MapEditorR.exe) aus, welche sich im Installationsordner befindet/n.  
-**Sollte es Fragen, Fehler oder Featurewünsche geben: [Discord](https://discord.gg/7SGkQtAAET).**_
 ---
 ## Modloader
-- The S6Patcher features a very simple Modloader, which can be used to create mods without having to modify the existing game files. Look [here](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md).
-- Der S6Patcher enthält einen sehr einfachen Modloader, mit welchem Mods erstellt werden können, ohne die Originaldateien des Spiels zu verändern. Siehe [hier](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md).
+- The S6Patcher features a simple Modloader, which can be used to create mods without having to modify the existing game files. Look [here](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md).
 ---
 ## Features
 - For illustrated descriptions of some of the key features of the application, take a look at the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
-- _Eine bebilderte Beschreibung einiger der Hauptfeatures des Programmes findet sich in der [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) Datei._
 
 ### Original Release
 - For the original release (OV) with latest Patch 1.71.
-- _Für die Originalversion (OV) mit neuestem Patch 1.71._
 
 German:
 ```
@@ -49,7 +43,6 @@ English:
 ```
 ### History Edition
 - For all History Editions.
-- _Für alle History Editionen._
 
 German:
 ```
@@ -77,7 +70,6 @@ English:
 ```
 ### Mapeditor
 - For all Mapeditor releases.
-- _Für alle Mapeditorversionen._
 
 German:
 ```
@@ -113,6 +105,7 @@ English:
 - A new folder `"Script"` in `<Documents>\THE SETTLERS - Rise of an Empire\` and two lua script files `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
 While UserScriptLocal is in plain text and can be modified, EMXBinData is the minified and precompiled `"MainMenuUserScript.lua"`. 
 - The configuration file `<Documents>\THE SETTLERS - Rise of an Empire\Config\Options.ini` is extended with a new section `[S6Patcher]`, where some values are stored.
+- When the option "Activate Modloader" is checked when patching, the application creates a new folder in the game installation path where modded files can be stored.
 
 The Patcher is developed with the .NET Framework 4.8 and is therefore compatible with Windows 7 SP1 up to the latest Windows OS (Windows 11 at the time of writing).  
 The application uses WinForms, so Linux support via e.g. [Mono](https://en.wikipedia.org/wiki/Mono_(software)) could be possible, but is currently untested.

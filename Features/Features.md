@@ -14,6 +14,11 @@ This excerpt should highlight some of the key features of the S6Patcher. For a f
 - All seven knights can be selected in the "Eastern Realm" expansion pack. **Caution:** Some audio feedback lines regarding the "Eastern Realm" features (Tradepost, Well, Geologist) are missing and the stories of some maps might not really make sense (e.g. "Kestrals Wedding" when playing as Kestral).
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Knights_Final.png" width="35%" height="35%" alt="Knights"/>
 
+## All Versions: Single Stop, Downgrade & Military Release
+- These new buttons (originally introduced in the NEP by Netsurfer in 2009) were rewritten and are now available in campaign and singleplayer. 
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Downgrade_Final.png" width="60%" height="60%" alt="Downgrade"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Military_Release_Final.png" width="60%" height="60%" alt="Military_Release"/>
+
 ## Original Release: Texture Resolution
 - The S6Patcher can restore the texture slider for entities and set a custom texture resolution for ground textures. The pictures show a comparison between unpatched and highest texture resolution. It is recommended to stay in the interval of 128 - 4096 for ground texture resolution.
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Textures_Low_Final.png" width="35%" height="35%" alt="Textures_Low"/>
