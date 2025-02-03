@@ -70,12 +70,12 @@ namespace S6Patcher.Source.Helpers
 
             return true;
         }
-        private void DeleteUserConfiguration()
+        private void DeleteUserConfiguration(string[] Options)
         {
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             Helpers.GetUserScriptDirectories().ForEach(Element =>
             {
-                DeleteSectionFromOptions(Path.Combine(Element, "Config"));
+                DeleteSectionFromOptions(Path.Combine(Element, "Config"), Options);
                 string ScriptPath = Path.Combine(Element, "Script");
                 if (Directory.Exists(ScriptPath) == true)
                 {
@@ -96,7 +96,7 @@ namespace S6Patcher.Source.Helpers
                 }
             });
         }
-        private void DeleteSectionFromOptions(string CurrentPath)
+        private void DeleteSectionFromOptions(string CurrentPath, string[] Options)
         {
             CurrentPath = Path.Combine(CurrentPath, "Options.ini");
             if (File.Exists(CurrentPath) == false)
@@ -116,8 +116,10 @@ namespace S6Patcher.Source.Helpers
                 return;
             }
 
-            Lines.RemoveAll(Line => Line.Contains("S6Patcher"));
-            Lines.RemoveAll(Line => Line.Contains("ExtendedKnightSelection"));
+            foreach (string Element in Options)
+            {
+                Lines.RemoveAll(Line => Line.Contains(Element));
+            }
 
             try
             {
@@ -131,9 +133,9 @@ namespace S6Patcher.Source.Helpers
 
             Logger.Instance.Log("DeleteSectionFromOptions(): File " + CurrentPath + " sucessfully updated!");
         }
-        public bool RestoreBackup(ref FileStream Stream)
+        public bool RestoreBackup(FileStream Stream, string[] Options)
         {
-            DeleteUserConfiguration(); // Delete Userscript & Config Section from Documents folder
+            DeleteUserConfiguration(Options); // Delete Userscript & Config Section from Documents folder
 
             string FilePath = Stream.Name;
             string FinalPath = Path.Combine(Path.GetDirectoryName(FilePath), Path.GetFileNameWithoutExtension(FilePath) + "_BACKUP.exe");
@@ -186,10 +188,12 @@ namespace S6Patcher.Source.Helpers
                     return false;
                 }
 
-                Lines.RemoveAll(Line => Line.Contains(Section));
                 Lines.RemoveAll(Line => Line.Contains(Key));
-                Lines.Add("[" + Section + "]");
-                Lines.Add(Key + "=" + ((Entry == true) ? "1" : "0"));
+                if (Lines.Contains(Section) == false)
+                {
+                    Lines.Add(Section);
+                }
+                Lines.Insert(Lines.IndexOf(Section) + 1, Key + "=" + ((Entry == true) ? "1" : "0"));
 
                 try
                 {

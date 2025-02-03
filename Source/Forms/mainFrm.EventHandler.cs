@@ -109,7 +109,7 @@ namespace S6Patcher.Source.Forms
         private void btnBackup_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnBackup_Click(): Restoring backup ...");
-            bool Result = IOFileHandler.Instance.RestoreBackup(ref GlobalStream);
+            bool Result = IOFileHandler.Instance.RestoreBackup(GlobalStream, GlobalOptions);
             ResetForm();
 
             if (Result == false)

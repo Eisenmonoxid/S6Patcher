@@ -1,8 +1,8 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {}
+S6Patcher.CurrentMapType = nil;
 S6Patcher.OverrideSelectionChanged = false;
-S6Patcher.GlobalDowngradeCosts = 100;
 -- ************************************************************************************************************************************************************* --
 -- Fix the "Meldungsstau" Bug in the game																					 									 --
 -- ************************************************************************************************************************************************************* --
@@ -101,6 +101,7 @@ end
 S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	local Name = Framework.GetCurrentMapName();
 	local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
+	S6Patcher.CurrentMapType = Type;
 
 	if Type == 0 or Type == 3 then -- Singleplayer and Usermap
 		local Names = {Framework.GetValidKnightNames(Name, Type)};
@@ -112,12 +113,12 @@ S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	return false;
 end
 
-if Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0
+if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
+	and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0
 	and (Framework.GetGameExtraNo() >= 1) 
 	and (not Framework.IsNetworkGame())
 	and (not S6Patcher.GlobalScriptOverridden)
-	and (S6Patcher.SelectedKnight ~= nil)
-	and (S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true) then
+	and (S6Patcher.SelectedKnight ~= nil) then
 	
 	S6Patcher.OverrideGlobalScript();
 	if S6Patcher.RestartMap == nil then
@@ -140,7 +141,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- SingleStopButtons on Buildings																														 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 then
+if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
 	S6Patcher.OverrideSelectionChanged = true;
 	
 	GUI_BuildingButtons.GateAutoToggleClicked = function()
@@ -192,25 +193,17 @@ end
 -- ************************************************************************************************************************************************************* --
 -- DowngradeButton on Buildings																															 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 then
+if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
 	S6Patcher.OverrideSelectionChanged = true;
 	
 	GUI_BuildingButtons.GateOpenCloseClicked = function()
 		local PlayerID = GUI.GetPlayerID();
 		local EntityID = GUI.GetSelectedEntity();
-
-		local CanBuyBoolean, CanNotBuyString = AreCostsAffordable({Goods.G_Gold, S6Patcher.GlobalDowngradeCosts});
-		if CanBuyBoolean == true then
-			Sound.FXPlay2DSound("ui\\menu_click");
-			GUI.DeselectEntity(EntityID);
-			GUI.RemoveGoodFromStock(Logic.GetHeadquarters(PlayerID), Goods.G_Gold, S6Patcher.GlobalDowngradeCosts);
-			GUI.SendScriptCommand("Logic.HurtEntity("..EntityID..", ("..Logic.GetEntityHealth(EntityID).." - ("..Logic.GetEntityMaxHealth(EntityID).."/2)))");
-		else
-			Message(CanNotBuyString);
-		end
-		--if g_OnGameStartPresentationMode == true or XGUIEng.IsModifierPressed(Keys.ModifierControl) then -- TODO: Upgrade all buildings of type with modifier pressed???
-		--    GUI_BuildingButtons.GatesAllOpenCloseClicked()
-		--end
+		local Value = Logic.GetEntityHealth(EntityID) - (Logic.GetEntityMaxHealth(EntityID) * 0.5);
+		
+		Sound.FXPlay2DSound("ui\\menu_click");
+		GUI.DeselectEntity(EntityID);
+		GUI.SendScriptCommand("Logic.HurtEntity(" .. tostring(EntityID) .. ", " .. tostring(math.ceil(Value)) .. ");");
 	end
 
 	GUI_BuildingButtons.GateOpenCloseUpdate = function()
@@ -222,6 +215,7 @@ if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 then
 			or Logic.IsConstructionComplete(EntityID) == 0 
 			or Logic.IsBurning(EntityID) == true
 			or Logic.CanCancelKnockDownBuilding(EntityID) == true
+			or Logic.IsEntityInCategory(EntityID, EntityCategories.Cathedrals) == 1
 			or Logic.GetEntityHealth(EntityID) < Logic.GetEntityMaxHealth(EntityID)
 			or Logic.GetUpgradeLevel(EntityID) < Logic.GetMaxUpgradeLevel(EntityID)
 		then
@@ -233,15 +227,63 @@ if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 then
 		XGUIEng.ShowWidget(CurrentWidgetID, 1);
 	end
 
-	function GUI_BuildingButtons.GateOpenCloseMouseOver()	
-		local TooltipTextKey;
-		if Logic.IsGateOpen(EntityID) == true then
-			TooltipTextKey = "GateClose"; -- TODO
+	GUI_BuildingButtons.GateOpenCloseMouseOver = function()	
+		GUI_Tooltip.TooltipNormal("DowngradeButton");
+	end
+end
+-- ************************************************************************************************************************************************************* --
+-- Release soldiers, siege engines and ammunition carts																									 		 --
+-- ************************************************************************************************************************************************************* --
+if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
+	if S6Patcher.DismountClicked == nil then
+		S6Patcher.DismountClicked = GUI_Military.DismountClicked;
+	end
+	GUI_Military.DismountClicked = function()
+		local PlayerID = GUI.GetPlayerID();
+		local EntityID = GUI.GetSelectedEntity();
+		local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
+		
+		if Logic.IsLeader(EntityID) == 1 and GuardedEntityID == 0 then
+			Sound.FXPlay2DSound("ui\\menu_click");
+
+			local Soldiers = {Logic.GetSoldiersAttachedToLeader(EntityID)};
+			if Soldiers[1] > 1 then
+				local Soldier = table.remove(Soldiers, (Soldiers[1] + 1));
+				local posX, posY = Logic.GetEntityPosition(Soldier);
+				GUI.SendScriptCommand([[
+					Logic.CreateEffect(EGL_Effects.FXDie, ]] .. tostring(posX) .. [[, ]] .. tostring(posY) .. [[, ]] .. tostring(PlayerID) .. [[);
+					Logic.DestroyEntity(]] .. tostring(Soldier) .. [[);
+				]]);
+			else
+				GUI.ClearSelection();
+				local posX, posY = Logic.GetEntityPosition(EntityID);		
+				GUI.SendScriptCommand([[
+					Logic.CreateEffect(EGL_Effects.FXDie, ]] .. tostring(posX) .. [[, ]] .. tostring(posY) .. [[, ]] .. tostring(PlayerID) .. [[);
+					Logic.DestroyGroupByLeader(]] .. tostring(EntityID) .. [[);
+				]]);
+				
+				Soldiers = nil;
+			end
 		else
-			TooltipTextKey = "GateOpen"; -- TODO
+			S6Patcher.DismountClicked();
+		end
+    end
+
+	if S6Patcher.DismountUpdate == nil then
+		S6Patcher.DismountUpdate = GUI_Military.DismountUpdate;
+	end
+	GUI_Military.DismountUpdate = function()
+        local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
+        local EntityID = GUI.GetSelectedEntity();
+        local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
+
+		if Logic.GetEntityType(EntityID) == Entities.U_MilitaryLeader and GuardedEntityID == 0 then
+			SetIcon(CurrentWidgetID, {14, 12});
+			XGUIEng.DisableButton(CurrentWidgetID, 0);
+			return;
 		end
 		
-		GUI_Tooltip.TooltipBuy({Goods.G_Gold, S6Patcher.GlobalDowngradeCosts}, TooltipTextKey);
+		S6Patcher.DismountUpdate();
 	end
 end
 
@@ -251,93 +293,49 @@ end
 function GameCallback_GUI_SelectionChanged(_Source)
 	S6Patcher.GameCallback_GUI_SelectionChanged();
 	
-	if S6Patcher.OverrideSelectionChanged then
+	if S6Patcher.OverrideSelectionChanged and S6Patcher.CurrentMapType ~= 3 then -- Don't show in usermaps to not break compatibility
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
 	end
 end
--- ************************************************************************************************************************************************************* --
--- Release soldiers, siege engines and ammunition carts																									 		 --
--- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 then
-	if S6Patcher.RefillClicked == nil then
-		S6Patcher.RefillClicked = GUI_Military.RefillClicked;
-	end
-	GUI_Military.RefillClicked = function()
-		local PlayerID = GUI.GetPlayerID();
-		local LeaderID = GUI.GetSelectedEntity();
-		local BarracksID = Logic.GetRefillerID(LeaderID);
-		
-		if BarracksID == 0 then
-			local posX, posY;
-			local Soldiers = {Logic.GetSoldiersAttachedToLeader(LeaderID)};
-			if Soldiers[1] > 1 then
-				local RetiredSoldier = table.remove(Soldiers, (Soldiers[1] + 1));
-				posX, posY = Logic.GetEntityPosition(RetiredSoldier);
-				GUI.SendScriptCommand([[
-					Logic.CreateEffect(EGL_Effects.FXDie, ]] .. tostring(posX) .. [[, ]] .. tostring(posY) .. [[, ]] .. tostring(PlayerID) .. [[);
-					Logic.DestroyEntity(]] .. tostring(RetiredSoldier) .. [[);
-				]]);
-			else
-				GUI.ClearSelection();
-				posX, posY = Logic.GetEntityPosition(LeaderID);		
-				GUI.SendScriptCommand([[
-					Logic.CreateEffect(EGL_Effects.FXDie, ]] .. tostring(posX) .. [[, ]] .. tostring(posY) .. [[, ]] .. tostring(PlayerID) .. [[);
-					Logic.DestroyGroupByLeader(]] .. tostring(LeaderID) .. [[);
-				]]);
-				Soldiers = nil;
-			end
-			
-			Sound.FXPlay2DSound("ui\\menu_click");
-		else
-			S6Patcher.RefillClicked();
-		end
-	end
 
-	if S6Patcher.RefillMouseOver == nil then
-		S6Patcher.RefillMouseOver = GUI_Military.RefillMouseOver;
-	end
-	GUI_Military.RefillMouseOver = function()
-		local LeaderID = GUI.GetSelectedEntity();
-		local BarracksID = Logic.GetRefillerID(LeaderID);
-		
-		if BarracksID ~= 0 then
-			S6Patcher.RefillMouseOver();
+if S6Patcher.SetNameAndDescription == nil then
+	S6Patcher.SetNameAndDescription = GUI_Tooltip.SetNameAndDescription;
+end
+GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
+	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
+	if (S6Patcher.CurrentMapType ~= 3 and _OptionalTextKeyName ~= nil) then
+		if _OptionalTextKeyName == "DowngradeButton" then
+			local Title = {de = "Rückbau", en = "Downgrade"};
+			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
+			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+			return;
+		elseif CurrentWidgetID == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
+			local Title = {de = "Entlassen", en = "Dismiss"};
+			local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
+			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
 			return;
 		end
 	end
+	
+	return S6Patcher.SetNameAndDescription(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean);	
+end
+S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _Title, _Text)
+	XGUIEng.SetText(_TooltipNameWidget, "{center}" .. S6Patcher.GetLocalizedText(_Title));
+	XGUIEng.SetText(_TooltipDescriptionWidget, S6Patcher.GetLocalizedText(_Text));
 
-	if S6Patcher.RefillUpdate == nil then
-		S6Patcher.RefillUpdate = GUI_Military.RefillUpdate;
-	end
-	GUI_Military.RefillUpdate = function()
-		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID()
-		local PlayerID = GUI.GetPlayerID()
-		local LeaderID = GUI.GetSelectedEntity()
-		local SelectedEntities = {GUI.GetSelectedEntities()}
-		
-		if LeaderID == nil
-		or Logic.IsEntityInCategory(LeaderID, EntityCategories.Leader) == 0 
-		or #SelectedEntities > 1 then
-			XGUIEng.ShowWidget(CurrentWidgetID, 0);
-			return;
-		end
-		
-		local MaxSoldiers = Logic.LeaderGetMaxNumberOfSoldiers(LeaderID);
-		local CurrentSoldiers = Logic.GetSoldiersAttachedToLeader(LeaderID);
-		local RefillerID = Logic.GetRefillerID(LeaderID);
-		
-		if RefillerID ~= 0 then
-			SetIcon(CurrentWidgetID, {12, 5});
-			if CurrentSoldiers == MaxSoldiers then
-				XGUIEng.DisableButton(CurrentWidgetID, 1);
-			else
-				XGUIEng.DisableButton(CurrentWidgetID, 0);
-			end
-		else
-			SetIcon(CurrentWidgetID, {14, 12});
-			XGUIEng.DisableButton(CurrentWidgetID, 0);
-		end
+	local Height = XGUIEng.GetTextHeight(_TooltipDescriptionWidget, true)
+	local W, H = XGUIEng.GetWidgetSize(_TooltipDescriptionWidget)
+
+	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height)
+end
+S6Patcher.GetLocalizedText = function(_text)
+	local Language = Network.GetDesiredLanguage();
+	if Language == "de" then
+		return _text.de;
+	else
+		return _text.en;
 	end
 end
+
 -- #EOF

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Forms
@@ -11,6 +10,7 @@ namespace S6Patcher.Source.Forms
     public partial class mainFrm : Form
     {
         private FileStream GlobalStream = null;
+        private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease"};
         public mainFrm()
         {
             InitializeComponent();
@@ -144,11 +144,10 @@ namespace S6Patcher.Source.Forms
         }
         private void SetEntriesInOptionsFileByCheckBox(Patcher.Patcher Patcher)
         {
-            string[] Options = new string[] {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease"};
-            Patcher.SetEntryInOptionsFile(Options[0], cbKnightSelection.Checked);
+            Patcher.SetEntryInOptionsFile(GlobalOptions[0], cbKnightSelection.Checked);
 
             (from Entry in gbUserscriptOptions.Controls.OfType<CheckBox>()
-                from Name in Options
+                from Name in GlobalOptions
                 where Name == Entry.Name.Remove(0, "cb".Length)
                 select Entry).ToList().ForEach(Element =>
                 {
