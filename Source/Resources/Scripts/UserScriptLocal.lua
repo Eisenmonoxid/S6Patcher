@@ -48,13 +48,9 @@ GUI_BuildingInfo.BuildingNameUpdate = function()
 	S6Patcher.BuildingNameUpdate()
 
 	local WidgetID = XGUIEng.GetCurrentWidgetID();
-	if XGUIEng.GetText(WidgetID) == "{center}B_Cathedral_Big" then
-		local Language = Network.GetDesiredLanguage();
-		if Language == "de" then
-			XGUIEng.SetText(WidgetID, "{center}Kathedrale");
-		elseif Language == "en" then
-			XGUIEng.SetText(WidgetID, "{center}Cathedral");
-		end
+	if XGUIEng.GetText(WidgetID) == "{center}B_Cathedral_Big" then		
+		local Text = S6Patcher.GetLocalizedText({de = "{center}Kathedrale", en = "{center}Cathedral"});
+		XGUIEng.SetText(WidgetID, Text);
 	end
 end
 -- ************************************************************************************************************************************************************* --
@@ -151,17 +147,7 @@ if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and S6Patcher.Curre
 	end
 
 	GUI_BuildingButtons.GateAutoToggleMouseOver = function()
-		local EntityID = GUI.GetSelectedEntity();
-		local Stopped = Logic.IsBuildingStopped(EntityID);
-		
-		local TooltipTextKey;
-		if Stopped then
-			TooltipTextKey = "StartBuilding";
-		else
-			TooltipTextKey = "StopBuilding";
-		end
-
-		GUI_Tooltip.TooltipNormal(TooltipTextKey);
+		GUI_Tooltip.TooltipNormal((Logic.IsBuildingStopped(GUI.GetSelectedEntity()) and "StartBuilding") or "StopBuilding");
 	end
 
 	GUI_BuildingButtons.GateAutoToggleUpdate = function()
@@ -179,14 +165,8 @@ if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and S6Patcher.Curre
 			XGUIEng.ShowWidget(CurrentWidgetID, 0);
 			return;
 		end
-
-		local Stopped = Logic.IsBuildingStopped(EntityID);
-		if Stopped then
-			SetIcon(CurrentWidgetID, {4, 12});
-		else
-			SetIcon(CurrentWidgetID, {4, 13});
-		end
 		
+		SetIcon(CurrentWidgetID, (Logic.IsBuildingStopped(EntityID) and {4, 12}) or {4, 13});
 		XGUIEng.ShowWidget(CurrentWidgetID, 1);
 	end
 end
@@ -232,7 +212,7 @@ if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and S6Patcher.Curren
 	end
 end
 -- ************************************************************************************************************************************************************* --
--- Release soldiers, siege engines and ammunition carts																									 		 --
+-- Release soldiers																																		 		 --
 -- ************************************************************************************************************************************************************* --
 if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
 	if S6Patcher.DismountClicked == nil then
@@ -243,7 +223,7 @@ if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and S6Patcher.
 		local EntityID = GUI.GetSelectedEntity();
 		local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
 		
-		if Logic.IsLeader(EntityID) == 1 and GuardedEntityID == 0 then
+		if EntityID ~= 0 and Logic.IsLeader(EntityID) == 1 and GuardedEntityID == 0 then
 			Sound.FXPlay2DSound("ui\\menu_click");
 
 			local Soldiers = {Logic.GetSoldiersAttachedToLeader(EntityID)};
@@ -273,25 +253,45 @@ if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and S6Patcher.
 		S6Patcher.DismountUpdate = GUI_Military.DismountUpdate;
 	end
 	GUI_Military.DismountUpdate = function()
-        local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
-        local EntityID = GUI.GetSelectedEntity();
-        local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
+		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
+		local EntityID = GUI.GetSelectedEntity();
+		local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
 
-		if Logic.GetEntityType(EntityID) == Entities.U_MilitaryLeader and GuardedEntityID == 0 then
+		if EntityID ~= 0 and Logic.GetEntityType(EntityID) == Entities.U_MilitaryLeader and GuardedEntityID == 0 then
 			SetIcon(CurrentWidgetID, {14, 12});
 			XGUIEng.DisableButton(CurrentWidgetID, 0);
 			return;
 		end
 		
+		SetIcon(CurrentWidgetID, {12, 1});
 		S6Patcher.DismountUpdate();
+	end
+end
+
+S6Patcher.HandleMilitaryReleaseTooltip = function(_widgetID, _TooltipNameWidget, _TooltipDescriptionWidget)
+	if _widgetID ~= XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
+		return false;
+	end
+
+	local Title = {de = "Entlassen", en = "Dismiss"};
+	local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
+	
+	local EntityID = GUI.GetSelectedEntity();
+	local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
+	
+	if EntityID ~= 0 and Logic.GetEntityType(EntityID) == Entities.U_MilitaryLeader and GuardedEntityID == 0 then
+		S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+		return true;
+	else
+		return false;
 	end
 end
 
 if S6Patcher.GameCallback_GUI_SelectionChanged == nil then
 	S6Patcher.GameCallback_GUI_SelectionChanged = GameCallback_GUI_SelectionChanged;
 end
-function GameCallback_GUI_SelectionChanged(_Source)
-	S6Patcher.GameCallback_GUI_SelectionChanged();
+GameCallback_GUI_SelectionChanged = function(_Source)
+	S6Patcher.GameCallback_GUI_SelectionChanged(_Source);
 	
 	if S6Patcher.OverrideSelectionChanged and S6Patcher.CurrentMapType ~= 3 then -- Don't show in usermaps to not break compatibility
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
@@ -304,16 +304,14 @@ if S6Patcher.SetNameAndDescription == nil then
 end
 GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
 	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
-	if (S6Patcher.CurrentMapType ~= 3 and _OptionalTextKeyName ~= nil) then
+	
+	if S6Patcher.CurrentMapType ~= 3 then -- compatibility with usermaps
 		if _OptionalTextKeyName == "DowngradeButton" then
 			local Title = {de = "Rückbau", en = "Downgrade"};
 			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
 			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
 			return;
-		elseif CurrentWidgetID == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
-			local Title = {de = "Entlassen", en = "Dismiss"};
-			local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
-			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+		elseif S6Patcher.HandleMilitaryReleaseTooltip(CurrentWidgetID, _TooltipNameWidget, _TooltipDescriptionWidget) == true then
 			return;
 		end
 	end
@@ -330,12 +328,6 @@ S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _
 	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height)
 end
 S6Patcher.GetLocalizedText = function(_text)
-	local Language = Network.GetDesiredLanguage();
-	if Language == "de" then
-		return _text.de;
-	else
-		return _text.en;
-	end
+	return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en;
 end
-
 -- #EOF
