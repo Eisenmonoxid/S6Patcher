@@ -142,6 +142,7 @@ namespace S6Patcher.Source.Patcher
                 {
                     Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
             else
@@ -202,6 +203,12 @@ namespace S6Patcher.Source.Patcher
         public void SetLuaScriptBugFixes()
         {
             Logger.Instance.Log("SetLuaScriptBugFixes(): Called.");
+
+            Dictionary<long, byte[]> Entries = GlobalMappings.GetOverrideUserScriptMapping();
+            foreach (var Entry in Entries)
+            {
+                Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
+            }
 
             // EMXBinData.s6patcher is the minified and compiled main menu script
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};

@@ -102,5 +102,9 @@ namespace S6Patcher.Source.Patcher.Mappings
         {
             throw new NotImplementedException();
         }
+        public override Dictionary<long, byte[]> GetOverrideUserScriptMapping()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

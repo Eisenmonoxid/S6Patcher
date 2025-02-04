@@ -72,6 +72,7 @@ namespace S6Patcher.Source.Forms
                     lblTextureRes.Enabled = false;
                     cbLimitedEdition.Enabled = false;
                     cbModloader.Enabled = false;
+                    cbScriptBugFixes.Enabled = false;
                     break;
                 case execID.NONE:
                     return;

@@ -1,8 +1,11 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
-S6Patcher = S6Patcher or {}
-S6Patcher.CurrentMapType = nil;
-S6Patcher.OverrideSelectionChanged = false;
+S6Patcher = S6Patcher or {
+	CurrentMapType = nil;
+	UseSingleStop = false;
+	UseDowngrade = false;
+	UseMilitaryRelease = false;
+};
 -- ************************************************************************************************************************************************************* --
 -- Fix the "Meldungsstau" Bug in the game																					 									 --
 -- ************************************************************************************************************************************************************* --
@@ -51,23 +54,6 @@ GUI_BuildingInfo.BuildingNameUpdate = function()
 	if XGUIEng.GetText(WidgetID) == "{center}B_Cathedral_Big" then		
 		local Text = S6Patcher.GetLocalizedText({de = "{center}Kathedrale", en = "{center}Cathedral"});
 		XGUIEng.SetText(WidgetID, Text);
-	end
-end
--- ************************************************************************************************************************************************************* --
--- Remove debug messages in development mode																				 									 --
--- ************************************************************************************************************************************************************* --
-if S6Patcher.GameCallback_GameSpeedChanged == nil then
-	S6Patcher.GameCallback_GameSpeedChanged = GameCallback_GameSpeedChanged;
-end
-GameCallback_GameSpeedChanged = function(_Speed)
-	if Framework.IsDevM() == true then
-		if Logic.GetTime() >= 2 then
-			GUI_Minimap.ToggleGameSpeedUpdate(_Speed)
-			local Flag = (_Speed == 0 and 1) or 0;
-			XGUIEng.ShowWidget("/InGame/Root/Normal/PauseScreen", Flag);
-		end
-	else
-		S6Patcher.GameCallback_GameSpeedChanged(_Speed);
 	end
 end
 -- ************************************************************************************************************************************************************* --
@@ -155,7 +141,7 @@ end
 -- SingleStopButtons on Buildings																														 		 --
 -- ************************************************************************************************************************************************************* --
 if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
-	S6Patcher.OverrideSelectionChanged = true;
+	S6Patcher.UseSingleStop = true;
 	
 	GUI_BuildingButtons.GateAutoToggleClicked = function()
 		Sound.FXPlay2DSound("ui\\menu_click");
@@ -191,7 +177,7 @@ end
 -- DowngradeButton on Buildings																															 		 --
 -- ************************************************************************************************************************************************************* --
 if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
-	S6Patcher.OverrideSelectionChanged = true;
+	S6Patcher.UseDowngrade = true;
 	
 	GUI_BuildingButtons.GateOpenCloseClicked = function()
 		local PlayerID = GUI.GetPlayerID();
@@ -232,6 +218,8 @@ end
 -- Release soldiers																																		 		 --
 -- ************************************************************************************************************************************************************* --
 if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
+	S6Patcher.UseMilitaryRelease = true;
+
 	if S6Patcher.DismountClicked == nil then
 		S6Patcher.DismountClicked = GUI_Military.DismountClicked;
 	end
@@ -310,9 +298,9 @@ end
 GameCallback_GUI_SelectionChanged = function(_Source)
 	S6Patcher.GameCallback_GUI_SelectionChanged(_Source);
 	
-	if S6Patcher.OverrideSelectionChanged and S6Patcher.CurrentMapType ~= 3 then -- Don't show in usermaps to not break compatibility
-		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
-		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
+	if S6Patcher.CurrentMapType ~= 3 then -- Don't show in usermaps to not break compatibility
+		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", (S6Patcher.SingleStopButtons == true and 1) or 0); -- Unused in the game
+		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", (S6Patcher.UseDowngrade == true and 1) or 0); -- Unused in the game
 	end
 end
 

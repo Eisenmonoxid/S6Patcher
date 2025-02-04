@@ -105,10 +105,7 @@ namespace S6Patcher.Source.Helpers
             Stream.Position = Addresses[ID == execID.OV ? 0 : 1];
             Stream.Read(Result, 0, Result.Length);
 
-            bool Valid = Identifier.SequenceEqual(Result);
-            Logger.Instance.Log("IsSteamExecutableValid(): Valid: " + Valid.ToString());
-
-            return Valid;
+            return Identifier.SequenceEqual(Result);
         }
         public static void CreateDesktopShortcut(string Filepath)
         {

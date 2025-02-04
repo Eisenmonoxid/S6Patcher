@@ -26,11 +26,6 @@ namespace S6Patcher.Source.Forms
             }
             catch {}
         }
-        private void cbDevMode_CheckedChanged(object sender, EventArgs e)
-        {
-            cbScriptBugFixes.Checked = false;
-            cbScriptBugFixes.Enabled = cbDevMode.Checked;
-        }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
             if (cbZoom.Checked)
