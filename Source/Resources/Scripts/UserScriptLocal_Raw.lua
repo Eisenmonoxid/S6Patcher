@@ -298,9 +298,9 @@ end
 GameCallback_GUI_SelectionChanged = function(_Source)
 	S6Patcher.GameCallback_GUI_SelectionChanged(_Source);
 	
-	if S6Patcher.CurrentMapType ~= 3 then -- Don't show in usermaps to not break compatibility
-		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", (S6Patcher.SingleStopButtons == true and 1) or 0); -- Unused in the game
-		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", (S6Patcher.UseDowngrade == true and 1) or 0); -- Unused in the game
+	if (S6Patcher.CurrentMapType ~= 3) and (S6Patcher.SingleStopButtons == true or S6Patcher.UseDowngrade == true) then -- Don't show in usermaps to not break compatibility	
+		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
+		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
 	end
 end
 
