@@ -129,14 +129,15 @@ namespace S6Patcher.Source.Forms
             OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
             {
-                if (IOFileHandler.Instance.CreateBackup(ofd.FileName) == false)
+                string FileName = Helpers.Helpers.IsPlayLauncherExecutable(ofd.FileName);
+                if (IOFileHandler.Instance.CreateBackup(FileName) == false)
                 {
                     Logger.Instance.Log(Resources.ErrorBackup);
                     MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                GlobalStream = IOFileHandler.Instance.OpenFileStream(Helpers.Helpers.IsPlayLauncherExecutable(ofd.FileName));
+                GlobalStream = IOFileHandler.Instance.OpenFileStream(FileName);
                 if (GlobalStream == null)
                 {
                     Logger.Instance.Log(Resources.ErrorInvalidExecutable);
