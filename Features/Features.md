@@ -16,8 +16,8 @@ This excerpt should highlight some of the key features of the S6Patcher. For a f
 
 ## All Versions: Single Stop, Downgrade & Military Release
 - These new buttons (originally introduced in the NEP by Netsurfer in 2009) were rewritten and are now available in campaign and singleplayer. 
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Downgrade_Final.png" width="60%" height="60%" alt="Downgrade"/>
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Military_Release_Final.png" width="60%" height="60%" alt="Military_Release"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Downgrade_Final.png" width="60%" height="60%" alt="Downgrade"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Military_Release_Final.png" width="60%" height="60%" alt="Military_Release"/>
 
 ## Original Release: Texture Resolution
 - The S6Patcher can restore the texture slider for entities and set a custom texture resolution for ground textures. The pictures show a comparison between unpatched and highest texture resolution. It is recommended to stay in the interval of 128 - 4096 for ground texture resolution.

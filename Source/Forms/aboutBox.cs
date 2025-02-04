@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
 
 namespace S6Patcher.Source.Forms
 {
@@ -30,6 +31,7 @@ namespace S6Patcher.Source.Forms
             if (e.Button == MouseButtons.Right)
             {
                 Clipboard.SetText(Resources.GithubMainLink);
+                Logger.Instance.Log("lblDC_LinkClicked(): Link copied to clipboard: " + Resources.GithubMainLink);
             }
             else
             {
@@ -41,6 +43,7 @@ namespace S6Patcher.Source.Forms
             if (e.Button == MouseButtons.Right)
             {
                 Clipboard.SetText(Resources.DiscordMainLink);
+                Logger.Instance.Log("lblDC_LinkClicked(): Link copied to clipboard: " + Resources.DiscordMainLink);
             }
             else
             {
@@ -52,6 +55,7 @@ namespace S6Patcher.Source.Forms
             if (e.Button == MouseButtons.Right)
             {
                 Clipboard.SetText(Resources.FeaturesLink);
+                Logger.Instance.Log("lblDC_LinkClicked(): Link copied to clipboard: " + Resources.FeaturesLink);
             }
             else
             {

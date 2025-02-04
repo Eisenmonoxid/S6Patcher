@@ -90,10 +90,7 @@ end
 if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
-Framework.GetProgramVersion = function()
-	local String = S6Patcher.GetProgramVersion();
-	return String .. " - S6Patcher v3";
-end
+Framework.GetProgramVersion = function() return S6Patcher.GetProgramVersion() .. " - S6Patcher v3"; end
 -- ************************************************************************************************************************************************************* --
 -- Make 2K (2560x1440) and 4K (3840x2160) resolutions available in the original release																			 --
 -- ************************************************************************************************************************************************************* --
@@ -241,12 +238,5 @@ S6Patcher.ExtendedGameOptions = function()
 		XGUIEng.CheckBoxSetIsChecked(RootPath .. "/CheckBox", false)
 	end
 end
-S6Patcher.GetLocalizedText = function(_text)
-	local Language = Network.GetDesiredLanguage();
-	if Language == "de" then
-		return _text.de;
-	else
-		return _text.en;
-	end
-end
+S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end
 -- #EOF

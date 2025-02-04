@@ -166,9 +166,9 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] MainMenuUserScript {
+        internal static byte[] MainMenuUserScript_Raw {
             get {
-                object obj = ResourceManager.GetObject("MainMenuUserScript", resourceCulture);
+                object obj = ResourceManager.GetObject("MainMenuUserScript_Raw", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -189,6 +189,16 @@ namespace S6Patcher.Properties {
         internal static byte[] UserScriptLocal {
             get {
                 object obj = ResourceManager.GetObject("UserScriptLocal", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] UserScriptLocal_Raw {
+            get {
+                object obj = ResourceManager.GetObject("UserScriptLocal_Raw", resourceCulture);
                 return ((byte[])(obj));
             }
         }
