@@ -165,6 +165,7 @@
             this.cbDevMode.TabIndex = 9;
             this.cbDevMode.Text = "Activate Development-Mode Permanently";
             this.cbDevMode.UseVisualStyleBackColor = true;
+            this.cbDevMode.CheckedChanged += new System.EventHandler(this.cbDevMode_CheckedChanged);
             // 
             // btnAbort
             // 
@@ -349,6 +350,7 @@
             // cbScriptBugFixes
             // 
             this.cbScriptBugFixes.AutoSize = true;
+            this.cbScriptBugFixes.Enabled = false;
             this.cbScriptBugFixes.Location = new System.Drawing.Point(6, 125);
             this.cbScriptBugFixes.Name = "cbScriptBugFixes";
             this.cbScriptBugFixes.Size = new System.Drawing.Size(227, 20);

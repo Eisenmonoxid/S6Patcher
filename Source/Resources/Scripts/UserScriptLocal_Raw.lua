@@ -54,6 +54,23 @@ GUI_BuildingInfo.BuildingNameUpdate = function()
 	end
 end
 -- ************************************************************************************************************************************************************* --
+-- Remove debug messages in development mode																				 									 --
+-- ************************************************************************************************************************************************************* --
+if S6Patcher.GameCallback_GameSpeedChanged == nil then
+	S6Patcher.GameCallback_GameSpeedChanged = GameCallback_GameSpeedChanged;
+end
+GameCallback_GameSpeedChanged = function(_Speed)
+	if Framework.IsDevM() == true then
+		if Logic.GetTime() >= 2 then
+			GUI_Minimap.ToggleGameSpeedUpdate(_Speed)
+			local Flag = (_Speed == 0 and 1) or 0;
+			XGUIEng.ShowWidget("/InGame/Root/Normal/PauseScreen", Flag);
+		end
+	else
+		S6Patcher.GameCallback_GameSpeedChanged(_Speed);
+	end
+end
+-- ************************************************************************************************************************************************************* --
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.GlobalScriptOverridden = false;

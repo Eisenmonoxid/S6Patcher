@@ -82,10 +82,12 @@ end
 g_MainMenu.UpdateBackground = function()
 	S6Patcher.g_MainMenu_UpdateBackground();
 
-	XGUIEng.SetMaterialTexture("/InGame/Background/BG", 0, "MainMenu/limitedBG.png")
-	XGUIEng.ShowWidget("/InGame/Background/Bars/Limited", 0)
-	XGUIEng.ShowWidget("/InGame/Background/Bars/BottomBarLimited", 0)
-	XGUIEng.ShowWidget("/InGame/Background/Bars/BottomBar", 1)
+	XGUIEng.SetMaterialTexture("/InGame/Background/BG", 0, "MainMenu/limitedBG.png");
+	XGUIEng.ShowWidget("/InGame/Background/Bars/Limited", 0);
+	XGUIEng.ShowWidget("/InGame/Background/Bars/BottomBarLimited", 0);
+	XGUIEng.ShowWidget("/InGame/Background/Bars/BottomBar", 1);
+	XGUIEng.ShowAllSubWidgets("/InGame/Main/Debug", 0); -- Hide devmode buttons
+	XGUIEng.ShowWidget("/InGame/Main/TEMP_FastLaunch", 0); -- Hide devmode buttons
 end
 if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;

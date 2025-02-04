@@ -76,6 +76,15 @@ namespace S6Patcher.Source.Helpers
 
                 if (Version == ExpectedVersion)
                 {
+                    if (Element.Value == execID.OV || Element.Value == execID.HE_STEAM)
+                    {
+                        if (IsSteamExecutableValid(Stream, Element.Value) == false)
+                        {
+                            Logger.Instance.Log("SetCurrentExecutableID(): Steam Executable has not been unpacked! Aborting ...");
+                            return false;
+                        }
+                    }
+
                     CurrentID = Element.Value;
                     Logger.Instance.Log("SetCurrentExecutableID(): Valid executable! execID: " + CurrentID.ToString());
                     return true;
@@ -86,6 +95,20 @@ namespace S6Patcher.Source.Helpers
             Logger.Instance.Log("SetCurrentExecutableID(): NO valid executable was found!");
             return false;
         }
+        public static bool IsSteamExecutableValid(FileStream Stream, execID ID)
+        {
+            byte[] Identifier = new byte[] {0x84, 0xC0};
+            UInt32[] Addresses = new UInt32[] {0x00C044, 0x1E0F08}; // 0 = OV, 1 = SteamHE
+
+            byte[] Result = new byte[Identifier.Length];
+            Stream.Position = Addresses[ID == execID.OV ? 0 : 1];
+            Stream.Read(Result, 0, Result.Length);
+
+            bool Valid = Identifier.SequenceEqual(Result);
+            Logger.Instance.Log("IsSteamExecutableValid(): Valid: " + Valid.ToString());
+
+            return Valid;
+        }
         public static void CreateDesktopShortcut(string Filepath)
         {
             string Link = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
@@ -93,7 +116,7 @@ namespace S6Patcher.Source.Helpers
 
             WshShell Shell = new WshShell();
             IWshShortcut PatchedShortcut = (IWshShortcut)Shell.CreateShortcut(Link);
-            PatchedShortcut.Description = "Launches Patched Settlers RoaE";
+            PatchedShortcut.Description = "Launches Patched " + Path.GetFileNameWithoutExtension(Filepath);
             PatchedShortcut.TargetPath = Filepath;
 
             try
