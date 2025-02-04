@@ -150,12 +150,13 @@ namespace S6Patcher.Source.Forms
                     return;
                 }
 
-                bool ValidExecutable = Helpers.Helpers.SetCurrentExecutableID(GlobalStream);
-                if (ValidExecutable == false)
+                uint ValidExecutable = Helpers.Helpers.SetCurrentExecutableID(GlobalStream);
+                if (ValidExecutable != 0)
                 {
                     CloseFileStream();
-                    Logger.Instance.Log(Resources.ErrorInvalidExecutable);
-                    MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string Error = (ValidExecutable == 1) ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
+                    Logger.Instance.Log(Error);
+                    MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 

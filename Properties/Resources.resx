@@ -131,9 +131,10 @@
     <value>Could not restore backup! Aborting ...</value>
   </data>
   <data name="ErrorInvalidExecutable" xml:space="preserve">
-    <value>Invalid executable has been choosen! Aborting ...
-
-(If your game is from Steam, you will have to unpack it with the tool "Steamless" before using the S6Patcher!)</value>
+    <value>Invalid executable has been choosen! Aborting ...</value>
+  </data>
+  <data name="ErrorInvalidExecutableSteam" xml:space="preserve">
+    <value>Steam executable invalid, has to be unpacked with the tool "Steamless" before using the S6Patcher!</value>
   </data>
   <data name="ErrorLuaScriptFixes" xml:space="preserve">
     <value>Lua-Fixes: File could not be written!</value>

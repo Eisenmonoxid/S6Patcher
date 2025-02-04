@@ -98,13 +98,20 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid executable has been choosen! Aborting ...
-        ///
-        ///(If your game is from Steam, you will have to unpack it with the tool &quot;Steamless&quot; before using the S6Patcher!).
+        ///   Looks up a localized string similar to Invalid executable has been choosen! Aborting ....
         /// </summary>
         internal static string ErrorInvalidExecutable {
             get {
                 return ResourceManager.GetString("ErrorInvalidExecutable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steam executable invalid, has to be unpacked with the tool &quot;Steamless&quot; before using the S6Patcher!.
+        /// </summary>
+        internal static string ErrorInvalidExecutableSteam {
+            get {
+                return ResourceManager.GetString("ErrorInvalidExecutableSteam", resourceCulture);
             }
         }
         

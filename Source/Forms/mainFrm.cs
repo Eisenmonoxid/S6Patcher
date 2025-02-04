@@ -141,10 +141,6 @@ namespace S6Patcher.Source.Forms
             {
                 Patcher.SetModLoader();
             }
-            if (cbScriptBugFixes.Checked == true && cbDevMode.Checked == false) // Load local userscript
-            {
-
-            }
         }
         private void SetEntriesInOptionsFileByCheckBox(Patcher.Patcher Patcher)
         {

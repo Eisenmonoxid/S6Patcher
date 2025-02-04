@@ -44,7 +44,7 @@ namespace S6Patcher.Source.Helpers
                 .Select(Element => {Element = Path.Combine(DocumentsPath, Element); return Element;})
                 .ToList();
         }
-        public static bool SetCurrentExecutableID(FileStream Stream)
+        public static uint SetCurrentExecutableID(FileStream Stream)
         {
             Logger.Instance.Log("SetCurrentExecutableID(): Called with Stream: " + Stream.Name);
 
@@ -80,20 +80,21 @@ namespace S6Patcher.Source.Helpers
                     {
                         if (IsSteamExecutableValid(Stream, Element.Value) == false)
                         {
+                            CurrentID = execID.NONE;
                             Logger.Instance.Log("SetCurrentExecutableID(): Steam Executable has not been unpacked! Aborting ...");
-                            return false;
+                            return 2;
                         }
                     }
 
                     CurrentID = Element.Value;
                     Logger.Instance.Log("SetCurrentExecutableID(): Valid executable! execID: " + CurrentID.ToString());
-                    return true;
+                    return 0;
                 };
             }
 
             CurrentID = execID.NONE;
             Logger.Instance.Log("SetCurrentExecutableID(): NO valid executable was found!");
-            return false;
+            return 1;
         }
         public static bool IsSteamExecutableValid(FileStream Stream, execID ID)
         {
