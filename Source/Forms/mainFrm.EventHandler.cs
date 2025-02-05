@@ -92,7 +92,7 @@ namespace S6Patcher.Source.Forms
             if (Result == DialogResult.Yes)
             {
                 Helpers.Helpers.CreateDesktopShortcut(Name);
-            }         
+            }
         }
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {

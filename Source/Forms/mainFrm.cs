@@ -67,12 +67,7 @@ namespace S6Patcher.Source.Forms
                     break;
                 case execID.ED:
                     gbEditor.Enabled = true;
-                    cbZoom.Enabled = false;
-                    lblZoomAngle.Enabled = false;
-                    lblTextureRes.Enabled = false;
-                    cbLimitedEdition.Enabled = false;
-                    cbModloader.Enabled = false;
-                    cbScriptBugFixes.Enabled = false;
+                    ToggleEditorControls(false);
                     break;
                 case execID.NONE:
                     return;
@@ -85,8 +80,22 @@ namespace S6Patcher.Source.Forms
             txtZoom.Enabled = false;
             txtAutosave.Enabled = false;
 
+            if (Helpers.Helpers.CurrentID != execID.ED)
+            {
+                ToggleEditorControls(true);
+            }
+
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
+        }
+        private void ToggleEditorControls(bool Enable)
+        {
+            cbZoom.Enabled = Enable;
+            lblZoomAngle.Enabled = Enable;
+            lblTextureRes.Enabled = Enable;
+            cbLimitedEdition.Enabled = Enable;
+            cbModloader.Enabled = Enable;
+            cbScriptBugFixes.Enabled = Enable;
         }
         private List<string> GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
