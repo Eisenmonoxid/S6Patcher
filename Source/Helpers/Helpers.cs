@@ -17,6 +17,7 @@ namespace S6Patcher.Source.Helpers
         HE_STEAM = 4,
         ED = 5
     };
+
     public static class Helpers
     {
         public static readonly UInt32 GlobalOffset = 0x3F0000;
@@ -31,7 +32,6 @@ namespace S6Patcher.Source.Helpers
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
         public static List<string> GetUserScriptDirectories()
@@ -49,8 +49,8 @@ namespace S6Patcher.Source.Helpers
             Logger.Instance.Log("SetCurrentExecutableID(): Called with Stream: " + Stream.Name);
 
             string ExpectedVersion = "1, 71, 4289, 0";
-            int ByteSize = Encoding.Unicode.GetByteCount(ExpectedVersion) + 1;
-            byte[] Result = new byte[ByteSize];
+            int Size = Encoding.Unicode.GetByteCount(ExpectedVersion) + 1;
+            byte[] Result = new byte[Size];
 
             Dictionary<UInt32, execID> Mapping = new Dictionary<UInt32, execID>()
             {
@@ -99,7 +99,7 @@ namespace S6Patcher.Source.Helpers
         public static bool IsSteamExecutableValid(FileStream Stream, execID ID)
         {
             byte[] Identifier = new byte[] {0x84, 0xC0};
-            UInt32[] Addresses = new UInt32[] {0x00C044, 0x1E0F08}; // 0 = OV, 1 = SteamHE
+            UInt32[] Addresses = new UInt32[] {0x00C044, 0x1E0F08}; // 0 = OV, 1 = Steam HE
 
             byte[] Result = new byte[Identifier.Length];
             Stream.Position = Addresses[ID == execID.OV ? 0 : 1];
@@ -110,49 +110,37 @@ namespace S6Patcher.Source.Helpers
         public static void CreateDesktopShortcut(string Filepath)
         {
             string Link = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            Link += @"\Settlers 6 - Patched.lnk";
-
-            WshShell Shell = new WshShell();
-            IWshShortcut PatchedShortcut = (IWshShortcut)Shell.CreateShortcut(Link);
-            PatchedShortcut.Description = "Launches Patched " + Path.GetFileNameWithoutExtension(Filepath);
-            PatchedShortcut.TargetPath = Filepath;
+            Link += @"\" + Path.GetFileNameWithoutExtension(Filepath) + " - Patched.lnk";
 
             try
             {
+                WshShell Shell = new WshShell();
+                IWshShortcut PatchedShortcut = (IWshShortcut)Shell.CreateShortcut(Link);
+                PatchedShortcut.Description = "Launches Patched " + Path.GetFileNameWithoutExtension(Filepath);
+                PatchedShortcut.TargetPath = Filepath;
                 PatchedShortcut.Save();
-                Logger.Instance.Log("CreateDesktopShortcut(): Creating shortcut successful! Link: " + Link);
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            Logger.Instance.Log("CreateDesktopShortcut(): Creating shortcut successful! Link: " + Link);
         }
-        public static string GetRootPathFromFile(string Filepath, execID ID)
+        public static string GetRootDirectory(string Filepath, uint Depth)
         {
-            Logger.Instance.Log("GetRootPathFromFile(): Called with Input: " + Filepath);
+            Logger.Instance.Log("GetRootPathFromFile(): Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
 
-            int Index = Filepath.LastIndexOf(Path.GetFileName(Filepath)) - 1;
-            Filepath = Filepath.Remove(Index, Filepath.Length - Index);
-
-            for (short i = 0; true; i++)
+            DirectoryInfo Info = new DirectoryInfo(Path.GetDirectoryName(Filepath));
+            for (; Depth > 0; Depth--)
             {
-                if ((ID == execID.OV || ID == execID.OV_OFFSET) && (i == 2))
-                {
-                    break;
-                }
-                else if (i == 3)
-                {
-                    break;
-                }
-
-                Index = Filepath.LastIndexOf(Path.DirectorySeparatorChar);
-                Filepath = Filepath.Remove(Index, Filepath.Length - Index);
+                Info = Info.Parent;
             }
 
-            Logger.Instance.Log("GetRootPathFromFile(): Returns: " + Filepath);
-            return Filepath;
+            Logger.Instance.Log("GetRootPathFromFile(): Returning Path: " + Info.FullName);
+            return Info.FullName;
         }
         public static string IsPlayLauncherExecutable(string Filepath)
         {
@@ -161,9 +149,8 @@ namespace S6Patcher.Source.Helpers
             {
                 Logger.Instance.Log("IsPlayLauncherExecutable(): Found Launcher!");
 
-                bool IsExtra1 = CurrentPath.Contains("Eastern");
                 CurrentPath = Path.GetDirectoryName(Filepath);
-                CurrentPath = Path.Combine(CurrentPath, ((IsExtra1 == true) ? "extra1" : "base") + "\\bin\\Settlers6.exe");
+                CurrentPath = Path.Combine(CurrentPath, CurrentPath.Contains("Eastern") ? "extra1" : "base", "bin", "Settlers6.exe");
 
                 if (System.IO.File.Exists(CurrentPath) == true)
                 {

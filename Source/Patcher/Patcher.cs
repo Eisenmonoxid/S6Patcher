@@ -14,6 +14,7 @@ namespace S6Patcher.Source.Patcher
         private readonly FileStream GlobalStream = null;
         private readonly MappingBase GlobalMappings = null;
         private readonly execID GlobalID = execID.NONE;
+
         public Patcher(execID ID, FileStream Stream)
         {
             if (ID == execID.NONE || Stream == null || Stream.CanWrite == false)
@@ -27,18 +28,15 @@ namespace S6Patcher.Source.Patcher
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
+
         public void PatchByControlFeatures(List<string> Names)
         {
             List<MappingBase.PatchEntry> Entries = GlobalMappings.GetMapping();
-            if (Entries == null)
-            {
-                return;
-            }
-
-            var Result = (from Entry in Entries
-                         from Name in Names
-                         where Name == Entry.Name
-                         select Entry.Mapping).ToList();
+            var Result = (
+                from Entry in Entries
+                from Name in Names
+                where Name == Entry.Name
+                select Entry.Mapping).ToList();
 
             Result.ForEach(Element =>
             {
@@ -49,11 +47,12 @@ namespace S6Patcher.Source.Patcher
                 }
             });
         }
+
         public void SetHighResolutionTextures(string ResolutionText)
         {
             Logger.Instance.Log("SetHighResolutionTextures(): Called with " + ResolutionText);
 
-            UInt32 Resolution;
+            uint Resolution;
             try
             {
                 Resolution = Convert.ToUInt32(ResolutionText);
@@ -65,12 +64,13 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            UInt32[] Mapping = GlobalMappings.GetTextureResolutionMapping();
-            for (uint i = 0; i < Mapping.Length; i++)
+            Dictionary<long, byte[]> Mapping = GlobalMappings.GetTextureResolutionMapping(Resolution);
+            foreach (var Element in Mapping)
             {
-                Helpers.Helpers.WriteBytes(GlobalStream, Mapping[i], BitConverter.GetBytes(Resolution / Convert.ToUInt32(Math.Pow(2, i))));
+                Helpers.Helpers.WriteBytes(GlobalStream, Element.Key, Element.Value);
             }
         }
+
         public void SetAutosaveTimer(string AutosaveText)
         {
             Logger.Instance.Log("SetAutosaveTimer(): Called with " + AutosaveText);
@@ -87,12 +87,13 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            byte[] Interval = BitConverter.GetBytes(Timer * 60000);
-            UInt32[] Mapping = GlobalMappings.GetAutoSaveMapping();
-
-            Helpers.Helpers.WriteBytes(GlobalStream, Mapping[0], (Timer == 0.0) ? new byte[] {0xEB} : new byte[] {0x76});
-            Helpers.Helpers.WriteBytes(GlobalStream, Mapping[1], Interval);
+            Dictionary<long, byte[]> Mapping = GlobalMappings.GetAutoSaveMapping(Timer);
+            foreach (var Element in Mapping)
+            {
+                Helpers.Helpers.WriteBytes(GlobalStream, Element.Key, Element.Value);
+            }
         }
+
         public void SetZoomLevel(string ZoomText)
         {
             Logger.Instance.Log("SetZoomLevel(): Called with " + ZoomText);
@@ -117,6 +118,7 @@ namespace S6Patcher.Source.Patcher
                 Helpers.Helpers.WriteBytes(GlobalStream, Element.Key, Element.Value);
             }
         }
+
         public void SetModLoader()
         {
             Logger.Instance.Log("SetModLoader(): Called.");
@@ -127,52 +129,9 @@ namespace S6Patcher.Source.Patcher
                 Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
             }
 
-            char Separator = Path.DirectorySeparatorChar;
-            string ModPath = Helpers.Helpers.GetRootPathFromFile(GlobalStream.Name, GlobalID);
-            ModPath += (Separator + "modloader");
-
-            if (Directory.Exists(ModPath) == false)
-            {
-                try
-                {
-                    Directory.CreateDirectory(ModPath);
-                    Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-            else
-            {
-                Logger.Instance.Log("SetModLoader(): Folder " + ModPath + " found! Returning ...");
-                return;
-            }
-
-            if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
-            {
-                ModPath += (Separator + "shr");
-                Directory.CreateDirectory(ModPath);
-                Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
-            }
-            else
-            {
-                ModPath += (Separator + "bba" + Separator);
-                Directory.CreateDirectory(ModPath);
-                try
-                {
-                    File.WriteAllBytes(ModPath + "mod.bba", Resources.mod);
-                    Logger.Instance.Log("SetModLoader(): Written mod.bba to Path " + ModPath);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            IOFileHandler.Instance.CreateModLoader(GlobalStream, GlobalID);
         }
+
         public void SetLargeAddressAwareFlag()
         {
             Logger.Instance.Log("SetLargeAddressAwareFlag(): Called.");
@@ -199,7 +158,10 @@ namespace S6Patcher.Source.Patcher
             {
                 Helpers.Helpers.WriteBytes(GlobalStream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
             }
+
+            Logger.Instance.Log("SetLargeAddressAwareFlag(): Finished successfully.");
         }
+
         public void SetLuaScriptBugFixes()
         {
             Logger.Instance.Log("SetLuaScriptBugFixes(): Called.");
@@ -230,10 +192,12 @@ namespace S6Patcher.Source.Patcher
                 Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfiles to " + ScriptPath);
             });
         }
+
         public void SetEntryInOptionsFile(string Entry, bool Checked)
         {
             Logger.Instance.Log("SetEntryInOptionsFile(): Called with " + Entry + " - Value: " + Checked.ToString());
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked);
         }
+
     }
 }

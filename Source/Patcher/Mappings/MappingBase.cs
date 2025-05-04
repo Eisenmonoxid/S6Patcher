@@ -14,8 +14,8 @@ namespace S6Patcher.Source.Patcher.Mappings
         public abstract List<PatchEntry> GetMapping();
         public abstract Dictionary<long, byte[]> GetModloaderMapping();
         public abstract Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance);
-        public abstract UInt32[] GetAutoSaveMapping();
-        public abstract UInt32[] GetTextureResolutionMapping();
+        public abstract Dictionary<long, byte[]> GetAutoSaveMapping(double Time);
+        public abstract Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution);
         public abstract Dictionary<long, byte[]> GetOverrideUserScriptMapping();
         public static MappingBase GetMappingsByID(execID ID)
         {

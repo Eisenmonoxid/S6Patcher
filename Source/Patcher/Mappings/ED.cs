@@ -90,7 +90,7 @@ namespace S6Patcher.Source.Patcher.Mappings
         {
             throw new NotImplementedException();
         }
-        public override UInt32[] GetTextureResolutionMapping()
+        public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution)
         {
             throw new NotImplementedException();
         }
@@ -98,7 +98,7 @@ namespace S6Patcher.Source.Patcher.Mappings
         {
             throw new NotImplementedException();
         }
-        public override UInt32[] GetAutoSaveMapping()
+        public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time)
         {
             throw new NotImplementedException();
         }

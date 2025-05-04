@@ -59,9 +59,17 @@ namespace S6Patcher.Source.Patcher.Mappings
             };
         }
 
-        public override UInt32[] GetTextureResolutionMapping()
+        public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution)
         {
-            return new UInt32[] {0x2D4188, 0x2D418F, 0x2D4196};
+            Dictionary<long, byte[]> Mapping = new Dictionary<long, byte[]>();
+
+            uint i = 0;
+            foreach (var Element in new uint[] {0x2D4188, 0x2D418F, 0x2D4196})
+            {
+                Mapping.Add(Element, BitConverter.GetBytes(Resolution / Convert.ToUInt32(Math.Pow(2, i++))));
+            }
+
+            return Mapping;
         }
         public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
         {
@@ -87,9 +95,14 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x1C577C, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
             };
         }
-        public override UInt32[] GetAutoSaveMapping()
+        public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time)
         {
-            return new UInt32[] {0x1C5F2A, 0xEB83C0};
+            byte[] Interval = BitConverter.GetBytes(Time * 60000);
+            return new Dictionary<long, byte[]>()
+            {
+                {0x1C5F2A, (Time == 0.0) ? new byte[] {0xEB} : new byte[] {0x76}}, // Switch autosave on or off
+                {0xEB83C0, Interval},
+            };
         }
     }
 }

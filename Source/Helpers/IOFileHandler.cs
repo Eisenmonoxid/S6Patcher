@@ -1,4 +1,5 @@
-﻿using System;
+﻿using S6Patcher.Properties;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace S6Patcher.Source.Helpers
             Logger.Instance.Log("OpenFileStream(): Returning Stream: " + Stream.Name);
             return Stream;
         }
+
         public OpenFileDialog CreateOFDialog()
         {
             OpenFileDialog ofd = new OpenFileDialog
@@ -50,15 +52,15 @@ namespace S6Patcher.Source.Helpers
 
             return ofd;
         }
+
         public bool CreateBackup(string Filepath)
         {
-            string FinalPath = Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + "_BACKUP.exe");
-            if (File.Exists(FinalPath) == false)
+            string BackupPath = Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + "_BACKUP.exe");
+            if (File.Exists(BackupPath) == false)
             {
                 try
                 {
-                    File.Copy(Filepath, FinalPath, false);
-                    Logger.Instance.Log("CreateBackup(): Backup creation successful! Path: " + FinalPath);
+                    File.Copy(Filepath, BackupPath, false);
                 }
                 catch (Exception ex)
                 {
@@ -68,8 +70,10 @@ namespace S6Patcher.Source.Helpers
                 }
             }
 
+            Logger.Instance.Log("CreateBackup(): Backup creation successful! Path: " + BackupPath);
             return true;
         }
+
         private void DeleteUserConfiguration(string[] Options)
         {
             string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
@@ -96,6 +100,7 @@ namespace S6Patcher.Source.Helpers
                 }
             });
         }
+
         private void DeleteSectionFromOptions(string CurrentPath, string[] Options)
         {
             CurrentPath = Path.Combine(CurrentPath, "Options.ini");
@@ -133,6 +138,7 @@ namespace S6Patcher.Source.Helpers
 
             Logger.Instance.Log("DeleteSectionFromOptions(): File " + CurrentPath + " sucessfully updated!");
         }
+
         public bool RestoreBackup(FileStream Stream, string[] Options)
         {
             DeleteUserConfiguration(Options); // Delete Userscript & Config Section from Documents folder
@@ -163,13 +169,14 @@ namespace S6Patcher.Source.Helpers
             Logger.Instance.Log("RestoreBackup(): File " + FinalPath + " successfully restored!");
             return true;
         }
+
         public bool UpdateEntryInOptionsFile(string Section, string Key, bool Entry)
         {
             string Name = "Options.ini";
             List<string> Directories = Helpers.GetUserScriptDirectories();
             foreach (string Element in Directories)
             {
-                string CurrentPath = Path.Combine(Path.Combine(Element, "Config"), Name);
+                string CurrentPath = Path.Combine(Element, "Config", Name);
                 if (File.Exists(CurrentPath) == false)
                 {
                     continue;
@@ -210,5 +217,49 @@ namespace S6Patcher.Source.Helpers
 
             return true;
         }
+
+        public void CreateModLoader(FileStream GlobalStream, execID GlobalID)
+        {
+            char Separator = Path.DirectorySeparatorChar;
+            uint DirectoryDepth = (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET) ? 2U : 3U;
+            string ModPath = Helpers.GetRootDirectory(GlobalStream.Name, DirectoryDepth);
+            ModPath += (Separator + "modloader");
+
+            try
+            {
+                Directory.CreateDirectory(ModPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Logger.Instance.Log("SetModLoader(): Directory created or already existed: " + ModPath);
+
+            if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
+            {
+                ModPath += (Separator + "shr");
+                Directory.CreateDirectory(ModPath);
+                Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
+            }
+            else
+            {
+                ModPath += (Separator + "bba" + Separator);
+                Directory.CreateDirectory(ModPath);
+                try
+                {
+                    File.WriteAllBytes(ModPath + "mod.bba", Resources.mod);
+                    Logger.Instance.Log("SetModLoader(): Written mod.bba to Path " + ModPath);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Log(ex.ToString());
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
     }
 }
