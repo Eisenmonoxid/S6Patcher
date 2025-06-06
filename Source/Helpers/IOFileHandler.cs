@@ -205,7 +205,6 @@ namespace S6Patcher.Source.Helpers
                 try
                 {
                     File.WriteAllLines(CurrentPath, Lines);
-                    Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file " + CurrentPath);
                 }
                 catch (Exception ex)
                 {
@@ -213,6 +212,8 @@ namespace S6Patcher.Source.Helpers
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
+
+                Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file " + CurrentPath);
             }
 
             return true;

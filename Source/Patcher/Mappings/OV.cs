@@ -36,6 +36,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                         {0x1B5E36, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
                         {0x4FD5A9, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
                         {0x4FD5BD, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
+                        {0x00BA9F, new byte[] {0xEB, 0x27}}, // Disable parental control check, start multiple instances at the same time and enable remote session game start
                     }
                 },
                 new PatchEntry
