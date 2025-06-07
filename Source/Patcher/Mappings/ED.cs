@@ -47,7 +47,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                     Name = "Higher Entity Limits",
                     Mapping = new Dictionary<long, byte[]>()
                     {
-                        {0x4A710, new byte[] {0x00, 0x00, 0xF0}}, // Higher general entity limit
+                        {0x04A710, new byte[] {0x00, 0x00, 0xF0}}, // Higher general entity limit
                         {0x42FC60, new byte[] {0x1F, 0x04}}, // Movable entities at the same time
                     }
                 },
@@ -65,10 +65,10 @@ namespace S6Patcher.Source.Patcher.Mappings
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x20A0FB, new byte[] {0xC6, 0x05, 0xBC, 0x79, 0x97, 0x00, 0x01, 0xEB, 0x7C, 0x90}}, // Set DevMachine to 1
-                        {0x13B4A, new byte[] {0xE9, 0xDE, 0xFE, 0xFF, 0xFF, 0xEB, 0x5C}}, // Validate Map -> Lost Feature
-                        {0xCC36, new byte[] {0x74, 0x7A}}, // Validate Map -> Lost Feature
-                        {0x4C5A9, new byte[] {0xEB, 0x1C}}, // Remove lag when using windows in map editor (ThreadSleep 250 ms)
-                        {0x2AE72, new byte[] {0xEB, 0x23}}, // Internal Window override
+                        {0x013B4A, new byte[] {0xE9, 0xDE, 0xFE, 0xFF, 0xFF, 0xEB, 0x5C}}, // Validate Map -> Lost Feature
+                        {0x00CC36, new byte[] {0x74, 0x7A}}, // Validate Map -> Lost Feature
+                        {0x04C5A9, new byte[] {0xEB, 0x1C}}, // Remove lag when using windows in map editor (ThreadSleep 250 ms)
+                        {0x02AE72, new byte[] {0xEB, 0x23}}, // Internal Window override
                         {0x2199F3, new byte[] {0xEB}}, // Override XML parsing error, enables "protected" maps to be loaded in the editor
                     }
                 },

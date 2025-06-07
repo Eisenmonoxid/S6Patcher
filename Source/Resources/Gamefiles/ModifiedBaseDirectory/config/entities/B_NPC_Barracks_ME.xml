@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?><root>
+  <Display classname="ED::CBuildingProps">
+        <Class>ED::CDisplayBuilding</Class>
+        <Banner>Default</Banner>
+        <Model>Buildings\B_NPC_Barracks_ME</Model>
+        <Model2>Buildings\B_NPC_Barracks_ME_Light</Model2>
+        <Decal>Buildings\B_NPC_Barracks_ME_Decal</Decal>
+        <FireNodeCount>15</FireNodeCount>
+    </Display>
+
+    <Logic classname="EGL::CUpgradableBuildingProps">
+    <Class>EGL::CUpgradableBuilding</Class>
+		<CanBeBuildOnOuterRim>true</CanBeBuildOnOuterRim>
+		<FlattenOnBuild>false</FlattenOnBuild>
+        <MayRemoveEntities>true</MayRemoveEntities>
+        <MaxNumberOfUpgrades>0</MaxNumberOfUpgrades>
+        <SecondsToUpgrade>18</SecondsToUpgrade>
+
+        <MinFloorFireSize>0</MinFloorFireSize>
+        <MaxFloorFireSize>15</MaxFloorFireSize>
+        <MaxHealth>200</MaxHealth>
+        <AccessCategory>AccessCategoryBuilding</AccessCategory>
+		<NeedsPlayer>true</NeedsPlayer>
+		<ForceNoPlayer>false</ForceNoPlayer>
+		<CanBeKnockedDown>false</CanBeKnockedDown>
+		<Worker>U_OutpostConstructionWorker</Worker>
+		<MaxWorkers>0</MaxWorkers>
+		<MaxHealth>250</MaxHealth>
+        <NoAutoRepair>true</NoAutoRepair>
+		<RepairBuildingTL>TL_WORKER_REPAIR</RepairBuildingTL>
+		<MaxFloorFireSize>0</MaxFloorFireSize>
+
+        <Exploration>0</Exploration>
+		<EntityCategories>
+			<EntityCategory>AttackableBuilding</EntityCategory>
+			<EntityCategory>BanditsCamp</EntityCategory>
+			<EntityCategory>CityBuilding</EntityCategory>
+		</EntityCategories>
+        <IsHeightLocking>true</IsHeightLocking>
+    
+        <UpgradeCosts>
+           <UpgradeCost>
+               <GoodAmount>
+                   <GoodType>G_Wood</GoodType>
+                   <Amount>1</Amount>
+               </GoodAmount>
+               <GoodAmount>
+                   <GoodType>G_Wood</GoodType>
+                   <Amount>1</Amount>
+               </GoodAmount>
+           </UpgradeCost>
+        
+           <UpgradeCost>
+               <GoodAmount>
+                   <GoodType>G_Wood</GoodType>
+                   <Amount>1</Amount>
+               </GoodAmount>
+               <GoodAmount>
+                   <GoodType>G_Wood</GoodType>
+                   <Amount>1</Amount>
+               </GoodAmount>
+            </UpgradeCost>
+        </UpgradeCosts>
+      <ApproachPos>
+          <X>200</X>
+          <Y>-500</Y>
+        </ApproachPos>
+        <ApproachR>0</ApproachR>
+        <DoorPos>
+          <X>100</X>
+          <Y>-100</Y>
+        </DoorPos>
+       <BlockingAreas>
+          <BlockingArea>
+            <Blocked1>
+              <X>-300</X>
+              <Y>300</Y>
+            </Blocked1>
+            <Blocked2>
+              <X>400</X>
+              <Y>-400</Y>
+            </Blocked2>
+          </BlockingArea>
+        </BlockingAreas>
+        <BuildBlockingAreas>
+          <BuildBlockingArea>
+            <Blocked1>
+              <X>-300</X>
+              <Y>300</Y>
+            </Blocked1>
+            <Blocked2>
+              <X>400</X>
+              <Y>-550</Y>
+            </Blocked2>
+          </BuildBlockingArea>
+        </BuildBlockingAreas>
+
+    <ConstructionInfo>
+      <Time>18</Time>
+
+      <BuilderSlots>
+        <BuilderSlot>
+          <Position>
+            <X>-500</X>
+            <Y>400</Y>
+          </Position>
+          <Orientation>0</Orientation>
+        </BuilderSlot>
+      </BuilderSlots>
+      <ConstructionSite>B_BuildingPlot_8x8</ConstructionSite>
+    </ConstructionInfo>
+    
+    <SoundImpactType>Stone_Wood</SoundImpactType>
+    
+  </Logic>
+  <Behaviors>
+
+    <Behavior>
+      <Logic classname="EGL::CBehaviorProps">
+        <Class>EGL::CParticleEffectSwitchBehavior</Class>
+      </Logic>
+      <Display classname="ED::CBehaviorProps">
+        <Class>ED::CParticleEffectSwitchBehavior</Class>
+      </Display>
+    </Behavior>
+
+   
+      <Behavior>
+        <Logic classname="EGL::CRespawnResourceEntityBehaviorProps">
+			<Class>EGL::CRespawnResourceEntityBehavior</Class>
+			<SpawnBattalion>true</SpawnBattalion>
+			<MaxCapacity>4</MaxCapacity>
+			<MinSpawn>0.01</MinSpawn>
+			<MaxSpawn>0.01</MaxSpawn>
+			<MaxSpawnCapacity>1</MaxSpawnCapacity>
+			<SpawnRange>800</SpawnRange>
+			<MinScale>1</MinScale>
+			<MaxScale>1</MaxScale>
+			<SpawnTypes>
+				<SpawnType>U_MilitaryBandit_Melee_ME</SpawnType>
+				<SpawnType>U_MilitaryBandit_Ranged_ME</SpawnType>
+			</SpawnTypes>
+		</Logic>
+    </Behavior>
+    
+    <Behavior>
+            <Logic classname="EGL::CAmmunitionFillerBehaviorProps">
+                <Class>EGL::CAmmunitionFillerBehavior</Class>
+                <TargetCategory>Soldier</TargetCategory>
+                <AmmunitionType>G_TorchAmmunition</AmmunitionType>
+                <CooldownTurns>2000</CooldownTurns>
+                <RefillingRange>2000</RefillingRange>
+            </Logic>
+        </Behavior>
+   </Behaviors>
+  <MapEditor>
+    <TreePosition>Buildings\Village</TreePosition>
+    <ShowInTree>true</ShowInTree>
+    <Clime>MiddleEurope</Clime>
+    <Scalable>false</Scalable>
+    <TemplateResistant>true</TemplateResistant>
+  </MapEditor>
+</root>

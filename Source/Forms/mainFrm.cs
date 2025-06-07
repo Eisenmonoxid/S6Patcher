@@ -152,6 +152,7 @@ namespace S6Patcher.Source.Forms
                 Patcher.SetModLoader();
             }
         }
+
         private void SetEntriesInOptionsFileByCheckBox(Patcher.Patcher Patcher)
         {
             Patcher.SetEntryInOptionsFile(GlobalOptions[0], cbKnightSelection.Checked);
@@ -164,6 +165,7 @@ namespace S6Patcher.Source.Forms
                     Patcher.SetEntryInOptionsFile(Element.Name.Remove(0, "cb".Length), Element.Checked);
                 });
         }
+
         private void ResetForm()
         {
             CloseFileStream();
@@ -191,6 +193,7 @@ namespace S6Patcher.Source.Forms
 
             Logger.Instance.Log("ResetForm(): Form successfully reset!");
         }
+
         private void CloseFileStream()
         {
             if (GlobalStream != null && GlobalStream.CanRead == true) // Close Filestream if not already done

@@ -43,7 +43,7 @@ namespace S6Patcher.Source.Patcher
                 foreach (var Entry in Element)
                 {
                     Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
-                    Logger.Instance.Log("PatchByControlFeatures(): Patching Element: " + Entry.Key.ToString());
+                    Logger.Instance.Log("PatchByControlFeatures(): Patching Element: " + $"{Entry.Key:X}");
                 }
             });
         }
@@ -198,6 +198,5 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("SetEntryInOptionsFile(): Called with " + Entry + " - Value: " + Checked.ToString());
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked);
         }
-
     }
 }

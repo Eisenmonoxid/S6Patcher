@@ -71,6 +71,7 @@ namespace S6Patcher.Source.Patcher.Mappings
 
             return Mapping;
         }
+
         public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
         {
             float Offset = 4800;
@@ -88,6 +89,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x2532F7, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}},
             };
         }
+
         public override Dictionary<long, byte[]> GetOverrideUserScriptMapping()
         {
             return new Dictionary<long, byte[]>()
@@ -95,6 +97,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x1C577C, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
             };
         }
+
         public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time)
         {
             byte[] Interval = BitConverter.GetBytes(Time * 60000);

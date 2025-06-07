@@ -25,7 +25,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x732FA, new byte[] {0xC6, 0x05, 0x28, 0xBF, 0xAA, 0x00, 0x01, 0xEB, 0x7C, 0x90}}, // Set global DevMachine to 1
-                        {0xBE11, new byte[] {0x66, 0x90}}, // Enable Development-Mode without command line argument -DevM
+                        {0x0BE11, new byte[] {0x66, 0x90}}, // Enable Development-Mode without command line argument -DevM
                     }
                 },
                 new PatchEntry
@@ -84,6 +84,7 @@ namespace S6Patcher.Source.Patcher.Mappings
 
             return Mapping;
         }
+
         public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
         {
             float Offset = 4800;
@@ -100,6 +101,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00}},
             };
         }
+
         public override Dictionary<long, byte[]> GetOverrideUserScriptMapping()
         {
             return new Dictionary<long, byte[]>()
@@ -107,6 +109,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x1A9E5, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
             };
         }
+
         public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time)
         {
             throw new NotImplementedException();

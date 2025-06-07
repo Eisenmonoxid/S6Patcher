@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -10,7 +11,7 @@ namespace S6Patcher.Source.Helpers
     public sealed class IOFileHandler
     {
         private static readonly IOFileHandler _instance = new IOFileHandler();
-        private IOFileHandler() {}
+        private IOFileHandler() { }
         public static IOFileHandler Instance
         {
             get
@@ -262,5 +263,24 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
+        // TODO: Ask user if mod package should be downloaded and display download size beforehand (e.g. 4 KB will be downloaded)
+        // Download + Exctraction async to not stall gui thread
+        // Use max compression for zip folder
+        public bool ExtractZipArchive(string ZipPath, string DestinationPath)
+        {
+            try
+            {
+                ZipFile.ExtractToDirectory(ZipPath, DestinationPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            Logger.Instance.Log("ExtractZipArchive(): Successfully extracted " + ZipPath + " to " + DestinationPath);
+            return true;
+        }
     }
 }
