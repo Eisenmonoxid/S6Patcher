@@ -31,6 +31,5 @@ for i = 1, 8 do
 		Logic.AddGoodToStock(StorehouseID, Goods.G_Dye, 0, true, true);
 	end
 end
-
 S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end
 -- #EOF

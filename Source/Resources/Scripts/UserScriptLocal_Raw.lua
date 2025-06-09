@@ -66,7 +66,7 @@ S6Patcher.OverrideGlobalScript = function()
 	local Knight = Entities[S6Patcher.DefaultKnightNames[S6Patcher.SelectedKnight]];
 
 	GUI.SendScriptCommand([[
-		S6Patcher = S6Patcher or {}
+		S6Patcher = S6Patcher or {};
 		S6Patcher.UpdateKnight = function()
 			local PlayerID = ]] .. tostring(GUI.GetPlayerID()) .. [[;
 			local KnightID = Logic.GetKnightID(PlayerID);
@@ -86,10 +86,10 @@ S6Patcher.OverrideGlobalScript = function()
 			local Orientation = Logic.GetEntityOrientation(_knightID);
 			local ScriptName = Logic.GetEntityName(_knightID);
 
-			Logic.DestroyEntity(_knightID);
 			local ID = Logic.CreateEntity(_newType, posX, posY, Orientation, PlayerID);
 			Logic.SetEntityName(ID, ScriptName);
 			Logic.SetPrimaryKnightID(PlayerID, ID);
+			Logic.DestroyEntity(_knightID);
 		end
 
 		S6Patcher.UpdateKnight();

@@ -90,7 +90,7 @@ end
 if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
-Framework.GetProgramVersion = function() return S6Patcher.GetProgramVersion() .. " - S6Patcher v3"; end
+Framework.GetProgramVersion = function() return S6Patcher.GetProgramVersion() .. " - S6Patcher v4"; end
 -- ************************************************************************************************************************************************************* --
 -- Make 2K (2560x1440) and 4K (3840x2160) resolutions available in the original release																			 --
 -- ************************************************************************************************************************************************************* --
