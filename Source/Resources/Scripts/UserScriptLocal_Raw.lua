@@ -1,7 +1,7 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {
-	CurrentMapType = nil;
+	DoNotUseFeatures = (NEP or QSB) and true or false;
 	UseSingleStop = false;
 	UseDowngrade = false;
 	UseMilitaryRelease = false;
@@ -100,7 +100,6 @@ end
 S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	local Name = Framework.GetCurrentMapName();
 	local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
-	S6Patcher.CurrentMapType = Type;
 
 	if Type == 0 or Type == 3 then -- Singleplayer and Usermap
 		local Names = {Framework.GetValidKnightNames(Name, Type)};
@@ -140,7 +139,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- SingleStopButtons on Buildings																														 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
+if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and not S6Patcher.DoNotUseFeatures then
 	S6Patcher.UseSingleStop = true;
 	
 	GUI_BuildingButtons.GateAutoToggleClicked = function()
@@ -176,7 +175,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- DowngradeButton on Buildings																															 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
+if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.DoNotUseFeatures then
 	S6Patcher.UseDowngrade = true;
 	
 	GUI_BuildingButtons.GateOpenCloseClicked = function()
@@ -217,7 +216,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Release soldiers																																		 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and S6Patcher.CurrentMapType ~= 3 then
+if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and not S6Patcher.DoNotUseFeatures then
 	S6Patcher.UseMilitaryRelease = true;
 
 	if S6Patcher.DismountClicked == nil then
@@ -298,7 +297,7 @@ end
 GameCallback_GUI_SelectionChanged = function(_Source)
 	S6Patcher.GameCallback_GUI_SelectionChanged(_Source);
 	
-	if (S6Patcher.CurrentMapType ~= 3) and (S6Patcher.SingleStopButtons == true or S6Patcher.UseDowngrade == true) then -- Don't show in usermaps to not break compatibility	
+	if (not S6Patcher.DoNotUseFeatures) and (S6Patcher.SingleStopButtons == true or S6Patcher.UseDowngrade == true) then -- Don't show in usermaps to not break compatibility	
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
 	end
@@ -310,7 +309,7 @@ end
 GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
 	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
 	
-	if S6Patcher.CurrentMapType ~= 3 then -- compatibility with usermaps
+	if not S6Patcher.DoNotUseFeatures then -- compatibility with usermaps
 		if _OptionalTextKeyName == "DowngradeButton" then
 			local Title = {de = "Rückbau", en = "Downgrade"};
 			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};

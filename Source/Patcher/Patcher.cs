@@ -172,24 +172,23 @@ namespace S6Patcher.Source.Patcher
                 Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
             }
 
-            // EMXBinData.s6patcher is the minified and compiled main menu script
-            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             Helpers.Helpers.GetUserScriptDirectories().ForEach(Element =>
             {
-                string ScriptPath = Path.Combine(Element, "Script");
+                string CurrentPath = Path.Combine(Element, "Script");
                 try
                 {
-                    Directory.CreateDirectory(ScriptPath);
-                    File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[0]), Resources.UserScriptLocal);
-                    File.WriteAllBytes(Path.Combine(ScriptPath, ScriptFiles[1]), Resources.EMXBinData);
+                    Directory.CreateDirectory(CurrentPath);
+                    for (uint i = 0; i < IOFileHandler.ScriptFiles.Length; i++)
+                    {
+                        File.WriteAllBytes(Path.Combine(CurrentPath, IOFileHandler.ScriptFiles[i]), IOFileHandler.ScriptResources[i]);
+                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfile named " + IOFileHandler.ScriptFiles[i] + " to " + CurrentPath);
+                    }
                 }
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-                Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfiles to " + ScriptPath);
             });
         }
 

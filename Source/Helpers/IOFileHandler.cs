@@ -11,14 +11,17 @@ namespace S6Patcher.Source.Helpers
     public sealed class IOFileHandler
     {
         private static readonly IOFileHandler _instance = new IOFileHandler();
-        private IOFileHandler() { }
-        public static IOFileHandler Instance
+        private IOFileHandler() {}
+        public static IOFileHandler Instance => _instance;
+
+        private static readonly Dictionary<string, byte[]> Scripts = new Dictionary<string, byte[]>()
         {
-            get
-            {
-                return _instance;
-            }
-        }
+            {"UserScriptLocal.lua", Resources.UserScriptLocal},
+            {"EMXBinData.s6patcher", Resources.EMXBinData},
+            {"UserScriptGlobal.lua", Resources.UserScriptGlobal}
+        };
+        public static string[] ScriptFiles => Scripts.Keys.ToArray();
+        public static byte[][] ScriptResources => Scripts.Values.ToArray();
 
         public FileStream OpenFileStream(string Path)
         {
@@ -77,7 +80,6 @@ namespace S6Patcher.Source.Helpers
 
         private void DeleteUserConfiguration(string[] Options)
         {
-            string[] ScriptFiles = {"UserScriptLocal.lua", "EMXBinData.s6patcher"};
             Helpers.GetUserScriptDirectories().ForEach(Element =>
             {
                 DeleteSectionFromOptions(Path.Combine(Element, "Config"), Options);
