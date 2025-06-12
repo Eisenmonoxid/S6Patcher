@@ -266,7 +266,7 @@ namespace S6Patcher.Source.Helpers
         }
 
         // TODO: Ask user if mod package should be downloaded and display download size beforehand (e.g. 4 KB will be downloaded)
-        // Download + Exctraction async to not stall gui thread
+        // Download + Extraction async to not stall gui thread
         // Use max compression for zip folder
         public bool ExtractZipArchive(string ZipPath, string DestinationPath)
         {
