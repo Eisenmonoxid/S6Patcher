@@ -176,4 +176,7 @@ Create desktop shortcut to the patched file?</value>
   <data name="VersionFileLink" xml:space="preserve">
     <value>https://raw.githubusercontent.com/Eisenmonoxid/S6Patcher/refs/heads/master/Version.txt</value>
   </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Select recommended settings or customize manually?</value>
+  </data>
 </root>

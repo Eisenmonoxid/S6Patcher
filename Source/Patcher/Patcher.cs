@@ -1,5 +1,4 @@
-﻿using S6Patcher.Properties;
-using S6Patcher.Source.Helpers;
+﻿using S6Patcher.Source.Helpers;
 using S6Patcher.Source.Patcher.Mappings;
 using System;
 using System.Collections.Generic;

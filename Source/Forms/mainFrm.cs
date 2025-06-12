@@ -1,9 +1,11 @@
-﻿using S6Patcher.Source.Helpers;
+﻿using S6Patcher.Properties;
+using S6Patcher.Source.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static S6Patcher.Source.Helpers.Helpers;
 
 namespace S6Patcher.Source.Forms
 {
@@ -26,7 +28,7 @@ namespace S6Patcher.Source.Forms
             }
             else if (Control == txtZoom)
             {
-                if (Helpers.Helpers.CurrentID == execID.HE_UBISOFT || Helpers.Helpers.CurrentID == execID.HE_STEAM)
+                if (CurrentID == execID.HE_UBISOFT || CurrentID == execID.HE_STEAM)
                 {
                     txtZoom.Text = Reader.ReadSingle().ToString();
                 }
@@ -43,15 +45,15 @@ namespace S6Patcher.Source.Forms
         private void InitializeControls()
         {
             BinaryReader Reader = new BinaryReader(GlobalStream);
-            switch (Helpers.Helpers.CurrentID)
+            switch (CurrentID)
             {
                 case execID.OV:
                     SetControlValueFromStream(ref Reader, 0x545400, txtZoom);
                     SetControlValueFromStream(ref Reader, 0x2BE177, txtResolution);
                     break;
                 case execID.OV_OFFSET:
-                    SetControlValueFromStream(ref Reader, 0x545400 - Helpers.Helpers.GlobalOffset, txtZoom);
-                    SetControlValueFromStream(ref Reader, 0x2BE177 - Helpers.Helpers.GlobalOffset, txtResolution);
+                    SetControlValueFromStream(ref Reader, 0x545400 - GlobalOffset, txtZoom);
+                    SetControlValueFromStream(ref Reader, 0x2BE177 - GlobalOffset, txtResolution);
                     break;
                 case execID.HE_UBISOFT:
                     SetControlValueFromStream(ref Reader, 0xC4EC4C, txtZoom);
@@ -79,14 +81,14 @@ namespace S6Patcher.Source.Forms
             txtResolution.Enabled = false;
             txtZoom.Enabled = false;
             txtAutosave.Enabled = false;
-
-            if (Helpers.Helpers.CurrentID != execID.ED)
-            {
-                ToggleEditorControls(true);
-            }
-
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
+
+            if (CurrentID != execID.ED)
+            {
+                ToggleEditorControls(true);
+                AskForRecommendedSettings();
+            }
         }
         private void ToggleEditorControls(bool Enable)
         {
@@ -96,6 +98,32 @@ namespace S6Patcher.Source.Forms
             cbLimitedEdition.Enabled = Enable;
             cbModloader.Enabled = Enable;
             cbScriptBugFixes.Enabled = Enable;
+        }
+        private void AskForRecommendedSettings()
+        {
+            DialogResult Result = MessageBox.Show(Resources.WelcomeMessage, "Select Recommended Settings ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (Result == DialogResult.Yes)
+            {
+                cbZoom.Checked = true;
+                cbScriptBugFixes.Checked = true;
+                cbModloader.Checked = true;
+                cbHighTextures.Checked = true;
+                cbLAAFlag.Checked = true;
+                cbKnightSelection.Checked = true;
+                cbLimitedEdition.Checked = true;
+                cbUseSingleStop.Checked = true;
+                cbUseDowngrade.Checked = true;
+                cbUseMilitaryRelease.Checked = true;
+
+                txtZoom.Text = "12000";
+                txtResolution.Text = "4096";
+
+                if (CurrentID == execID.HE_STEAM || CurrentID == execID.HE_UBISOFT)
+                {
+                    cbAutosave.Checked = true;
+                    txtAutosave.Text = "30";
+                }
+            }
         }
         private List<string> GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
@@ -114,7 +142,7 @@ namespace S6Patcher.Source.Forms
             Patcher.Patcher Patcher;
             try
             {
-                Patcher = new Patcher.Patcher(Helpers.Helpers.CurrentID, GlobalStream);
+                Patcher = new Patcher.Patcher(CurrentID, GlobalStream);
             }
             catch (Exception ex)
             {
@@ -130,7 +158,7 @@ namespace S6Patcher.Source.Forms
             {
                 Patcher.SetZoomLevel(txtZoom.Text);
             }
-            if (cbHighTextures.Checked && Helpers.Helpers.CurrentID != execID.ED) // Editor has no custom texture resolution
+            if (cbHighTextures.Checked && CurrentID != execID.ED) // Editor has no custom texture resolution
             {
                 Patcher.SetHighResolutionTextures(txtResolution.Text);
             }

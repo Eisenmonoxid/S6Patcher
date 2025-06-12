@@ -113,9 +113,9 @@
             this.lblZoomAngle.AutoSize = true;
             this.lblZoomAngle.Location = new System.Drawing.Point(301, 74);
             this.lblZoomAngle.Name = "lblZoomAngle";
-            this.lblZoomAngle.Size = new System.Drawing.Size(96, 16);
+            this.lblZoomAngle.Size = new System.Drawing.Size(83, 16);
             this.lblZoomAngle.TabIndex = 4;
-            this.lblZoomAngle.Text = "Standard: 7200";
+            this.lblZoomAngle.Text = "Default: 7200";
             // 
             // cbAutosave
             // 
@@ -152,18 +152,18 @@
             this.lblAutosave.AutoSize = true;
             this.lblAutosave.Location = new System.Drawing.Point(305, 23);
             this.lblAutosave.Name = "lblAutosave";
-            this.lblAutosave.Size = new System.Drawing.Size(82, 16);
+            this.lblAutosave.Size = new System.Drawing.Size(69, 16);
             this.lblAutosave.TabIndex = 8;
-            this.lblAutosave.Text = "Standard: 15";
+            this.lblAutosave.Text = "Default: 15";
             // 
             // cbDevMode
             // 
             this.cbDevMode.AutoSize = true;
             this.cbDevMode.Location = new System.Drawing.Point(6, 99);
             this.cbDevMode.Name = "cbDevMode";
-            this.cbDevMode.Size = new System.Drawing.Size(275, 20);
+            this.cbDevMode.Size = new System.Drawing.Size(274, 20);
             this.cbDevMode.TabIndex = 9;
-            this.cbDevMode.Text = "Activate Development-Mode Permanently";
+            this.cbDevMode.Text = "Activate Development Mode Permanently";
             this.cbDevMode.UseVisualStyleBackColor = true;
             // 
             // btnAbort
@@ -341,9 +341,9 @@
             this.cbKnightSelection.Enabled = false;
             this.cbKnightSelection.Location = new System.Drawing.Point(6, 151);
             this.cbKnightSelection.Name = "cbKnightSelection";
-            this.cbKnightSelection.Size = new System.Drawing.Size(290, 20);
+            this.cbKnightSelection.Size = new System.Drawing.Size(292, 20);
             this.cbKnightSelection.TabIndex = 16;
-            this.cbKnightSelection.Text = "Enable Basegame Knights in Eastern Realm";
+            this.cbKnightSelection.Text = "Enable base game Knights in Eastern Realm";
             this.cbKnightSelection.UseVisualStyleBackColor = true;
             // 
             // cbScriptBugFixes
@@ -362,9 +362,9 @@
             this.lblTextureRes.AutoSize = true;
             this.lblTextureRes.Location = new System.Drawing.Point(346, 22);
             this.lblTextureRes.Name = "lblTextureRes";
-            this.lblTextureRes.Size = new System.Drawing.Size(89, 16);
+            this.lblTextureRes.Size = new System.Drawing.Size(76, 16);
             this.lblTextureRes.TabIndex = 14;
-            this.lblTextureRes.Text = "Standard: 512";
+            this.lblTextureRes.Text = "Default: 512";
             // 
             // txtResolution
             // 

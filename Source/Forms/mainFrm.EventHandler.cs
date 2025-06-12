@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using static S6Patcher.Source.Helpers.Helpers;
 
 namespace S6Patcher.Source.Forms
 {
@@ -24,40 +25,22 @@ namespace S6Patcher.Source.Forms
                     this.ShowIcon = true;
                 }
             }
-            catch {}
+            finally
+            {
+                Logger.Instance.Log("mainFrm_Load(): Form loaded successfully.");
+            }
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbZoom.Checked)
-            {
-                txtZoom.Enabled = true;
-            }
-            else
-            {
-                txtZoom.Enabled = false;
-            }
+            txtZoom.Enabled = cbZoom.Checked;
         }
         private void cbAutosave_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbAutosave.Checked)
-            {
-                txtAutosave.Enabled = true;
-            }
-            else
-            {
-                txtAutosave.Enabled = false;
-            }
+            txtAutosave.Enabled = cbAutosave.Checked;
         }
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbHighTextures.Checked && Helpers.Helpers.CurrentID != execID.ED)
-            {
-                txtResolution.Enabled = true;
-            }
-            else
-            {
-                txtResolution.Enabled = false;
-            }
+            txtResolution.Enabled = cbHighTextures.Checked && (Helpers.Helpers.CurrentID != execID.ED);
         }
         private void cbScriptBugFixes_CheckedChanged(object sender, EventArgs e)
         {
@@ -91,13 +74,12 @@ namespace S6Patcher.Source.Forms
             Result = MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (Result == DialogResult.Yes)
             {
-                Helpers.Helpers.CreateDesktopShortcut(Name);
+                CreateDesktopShortcut(Name);
             }
         }
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Form Box = new aboutBox();
-            Box.ShowDialog();
+            new aboutBox().ShowDialog();
             e.Cancel = true;
         }
         private void btnAbort_Click(object sender, EventArgs e)
@@ -129,7 +111,7 @@ namespace S6Patcher.Source.Forms
             OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog();
             if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
             {
-                string FileName = Helpers.Helpers.IsPlayLauncherExecutable(ofd.FileName);
+                string FileName = IsPlayLauncherExecutable(ofd.FileName);
                 if (IOFileHandler.Instance.CreateBackup(FileName) == false)
                 {
                     Logger.Instance.Log(Resources.ErrorBackup);
@@ -145,7 +127,7 @@ namespace S6Patcher.Source.Forms
                     return;
                 }
 
-                uint ValidExecutable = Helpers.Helpers.SetCurrentExecutableID(GlobalStream);
+                uint ValidExecutable = SetCurrentExecutableID(GlobalStream);
                 if (ValidExecutable != 0)
                 {
                     CloseFileStream();

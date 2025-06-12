@@ -1,7 +1,7 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {
-	DoNotUseFeatures = (NEP or QSB) and true or false;
+	DisableFeatures = (NEP or QSB) and true or false;
 	UseSingleStop = false;
 	UseDowngrade = false;
 	UseMilitaryRelease = false;
@@ -139,7 +139,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- SingleStopButtons on Buildings																														 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and not S6Patcher.DoNotUseFeatures then
+if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and not S6Patcher.DisableFeatures then
 	S6Patcher.UseSingleStop = true;
 	
 	GUI_BuildingButtons.GateAutoToggleClicked = function()
@@ -175,7 +175,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- DowngradeButton on Buildings																															 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.DoNotUseFeatures then
+if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.DisableFeatures then
 	S6Patcher.UseDowngrade = true;
 	
 	GUI_BuildingButtons.GateOpenCloseClicked = function()
@@ -216,7 +216,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Release soldiers																																		 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and not S6Patcher.DoNotUseFeatures then
+if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and not S6Patcher.DisableFeatures then
 	S6Patcher.UseMilitaryRelease = true;
 
 	if S6Patcher.DismountClicked == nil then
@@ -227,7 +227,7 @@ if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and not S6Patc
 		local EntityID = GUI.GetSelectedEntity();
 		local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
 		
-		if EntityID ~= 0 and Logic.IsLeader(EntityID) == 1 and GuardedEntityID == 0 then
+		if EntityID ~= 0 and GuardedEntityID == 0 and Logic.IsLeader(EntityID) == 1 then
 			Sound.FXPlay2DSound("ui\\menu_click");
 
 			local Soldiers = {Logic.GetSoldiersAttachedToLeader(EntityID)};
@@ -272,23 +272,9 @@ if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and not S6Patc
 	end
 end
 
-S6Patcher.HandleMilitaryReleaseTooltip = function(_widgetID, _TooltipNameWidget, _TooltipDescriptionWidget)
-	if _widgetID ~= XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
-		return false;
-	end
-
-	local Title = {de = "Entlassen", en = "Dismiss"};
-	local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
-	
+S6Patcher.CanDisplayDismissButton = function()
 	local EntityID = GUI.GetSelectedEntity();
-	local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
-	
-	if EntityID ~= 0 and Logic.GetEntityType(EntityID) == Entities.U_MilitaryLeader and GuardedEntityID == 0 then
-		S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
-		return true;
-	else
-		return false;
-	end
+	return (EntityID ~= 0) and (Logic.GetGuardedEntityID(EntityID) == 0) and (Logic.GetEntityType(EntityID) == Entities.U_MilitaryLeader);
 end
 
 if S6Patcher.GameCallback_GUI_SelectionChanged == nil then
@@ -297,7 +283,7 @@ end
 GameCallback_GUI_SelectionChanged = function(_Source)
 	S6Patcher.GameCallback_GUI_SelectionChanged(_Source);
 	
-	if (not S6Patcher.DoNotUseFeatures) and (S6Patcher.SingleStopButtons == true or S6Patcher.UseDowngrade == true) then -- Don't show in usermaps to not break compatibility	
+	if S6Patcher.UseSingleStop or S6Patcher.UseDowngrade then -- Don't show in usermaps to not break compatibility	
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
 	end
@@ -307,17 +293,20 @@ if S6Patcher.SetNameAndDescription == nil then
 	S6Patcher.SetNameAndDescription = GUI_Tooltip.SetNameAndDescription;
 end
 GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
-	local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
+	if S6Patcher.EnableFeatures then -- compatibility with usermaps
 	
-	if not S6Patcher.DoNotUseFeatures then -- compatibility with usermaps
 		if _OptionalTextKeyName == "DowngradeButton" then
 			local Title = {de = "Rückbau", en = "Downgrade"};
 			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
 			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
 			return;
-		elseif S6Patcher.HandleMilitaryReleaseTooltip(CurrentWidgetID, _TooltipNameWidget, _TooltipDescriptionWidget) == true then
+		elseif XGUIEng.GetCurrentWidgetID() == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") and S6Patcher.CanDisplayDismissButton() then
+			local Title = {de = "Entlassen", en = "Dismiss"};
+			local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
+			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
 			return;
 		end
+		
 	end
 	
 	return S6Patcher.SetNameAndDescription(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean);	

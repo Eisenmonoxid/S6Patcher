@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using static System.Windows.Forms.LinkLabel;
 
 namespace S6Patcher.Source.Forms
 {
@@ -18,8 +17,7 @@ namespace S6Patcher.Source.Forms
         }
         private void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            Updater Updater = new Updater();
-            Updater.CheckForUpdates();
+            new Updater().CheckForUpdates();
         }
         private void btnClose_Click(object sender, EventArgs e)
         {

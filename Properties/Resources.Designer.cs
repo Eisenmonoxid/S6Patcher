@@ -238,5 +238,14 @@ namespace S6Patcher.Properties {
                 return ResourceManager.GetString("VersionFileLink", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select recommended settings or customize manually?.
+        /// </summary>
+        internal static string WelcomeMessage {
+            get {
+                return ResourceManager.GetString("WelcomeMessage", resourceCulture);
+            }
+        }
     }
 }
