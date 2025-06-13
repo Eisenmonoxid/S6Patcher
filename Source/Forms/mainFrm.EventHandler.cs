@@ -74,7 +74,14 @@ namespace S6Patcher.Source.Forms
             Result = MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (Result == DialogResult.Yes)
             {
-                CreateDesktopShortcut(Name);
+                if (Name.Contains("extra1"))
+                {
+                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
+                }
+                else
+                {
+                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
+                }
             }
         }
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)

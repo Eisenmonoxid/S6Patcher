@@ -20,7 +20,7 @@ namespace S6Patcher.Source.Helpers
 
     public static class Helpers
     {
-        public static readonly UInt32 GlobalOffset = 0x3F0000;
+        public static readonly uint GlobalOffset = 0x3F0000;
         public static execID CurrentID = execID.NONE;
         public static void WriteBytes(FileStream Stream, long Position, byte[] Bytes)
         {
@@ -107,17 +107,18 @@ namespace S6Patcher.Source.Helpers
 
             return Identifier.SequenceEqual(Result);
         }
-        public static void CreateDesktopShortcut(string Filepath)
+        public static void CreateDesktopShortcut(string Filepath, string LinkName, string Arguments)
         {
             string Link = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            Link += @"\" + Path.GetFileNameWithoutExtension(Filepath) + " - Patched.lnk";
+            Link += @"\" + LinkName + " - Patched.lnk";
 
             try
             {
                 WshShell Shell = new WshShell();
                 IWshShortcut PatchedShortcut = (IWshShortcut)Shell.CreateShortcut(Link);
-                PatchedShortcut.Description = "Launches Patched " + Path.GetFileNameWithoutExtension(Filepath);
+                PatchedShortcut.Description = "Launches patched " + LinkName;
                 PatchedShortcut.TargetPath = Filepath;
+                PatchedShortcut.Arguments = Arguments;
                 PatchedShortcut.Save();
             }
             catch (Exception ex)

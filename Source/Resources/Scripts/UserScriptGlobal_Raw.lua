@@ -1,6 +1,8 @@
 -- UserScriptGlobal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
-S6Patcher = S6Patcher or {};
+S6Patcher = S6Patcher or {
+	DisableFeatures = (NEP or QSB) and true or false,
+};
 -- ************************************************************************************************************************************************************* --
 -- "B_NPC_Barracks_ME" will now correctly respawn soldiers																					 					 --
 -- ************************************************************************************************************************************************************* --

@@ -1,10 +1,12 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {
-	DisableFeatures = (NEP or QSB) and true or false;
-	UseSingleStop = false;
-	UseDowngrade = false;
-	UseMilitaryRelease = false;
+	DisableFeatures = (NEP or QSB) and true or false,
+	UseSingleStop = false,
+	UseDowngrade = false,
+	UseMilitaryRelease = false,
+	UseDayNightCycle = false,
+	DayNightCycleEnvironmentSet = nil,
 };
 -- ************************************************************************************************************************************************************* --
 -- Fix the "Meldungsstau" Bug in the game																					 									 --
@@ -48,12 +50,36 @@ if S6Patcher.BuildingNameUpdate == nil then
 	S6Patcher.BuildingNameUpdate = GUI_BuildingInfo.BuildingNameUpdate;
 end
 GUI_BuildingInfo.BuildingNameUpdate = function()
-	S6Patcher.BuildingNameUpdate()
+	S6Patcher.BuildingNameUpdate();
 
 	local WidgetID = XGUIEng.GetCurrentWidgetID();
 	if XGUIEng.GetText(WidgetID) == "{center}B_Cathedral_Big" then		
 		local Text = S6Patcher.GetLocalizedText({de = "{center}Kathedrale", en = "{center}Cathedral"});
 		XGUIEng.SetText(WidgetID, Text);
+	end
+end
+-- ************************************************************************************************************************************************************* --
+-- Enable a Day/Night Cycle																					 									 	 			 --
+-- ************************************************************************************************************************************************************* --
+if Options.GetIntValue("S6Patcher", "DayNightCycle", 0) ~= 0 and (not S6Patcher.DisableFeatures) then
+	S6Patcher.UseDayNightCycle = true;
+
+	if S6Patcher.GameCallback_Feedback_EndOfMonth == nil then
+		S6Patcher.GameCallback_Feedback_EndOfMonth = GameCallback_Feedback_EndOfMonth;
+	end
+	GameCallback_Feedback_EndOfMonth = function(_LastMonth, _NewMonth)
+		S6Patcher.GameCallback_Feedback_EndOfMonth(_LastMonth, _NewMonth);
+		
+		local Month = 7; -- September
+		local Duration = 120; -- 2 minutes
+		
+		if (_NewMonth == Month) and (S6Patcher.UseDayNightCycle) and (not Logic.IsWeatherEventActive()) then
+			if S6Patcher.DayNightCycleEnvironmentSet == nil then
+				S6Patcher.DayNightCycleEnvironmentSet = Display.AddEnvironmentSettingsSequence("ME_Special_Sundawn.xml");
+			end
+			
+			Display.PlayEnvironmentSettingsSequence(S6Patcher.DayNightCycleEnvironmentSet, Duration);
+		end
 	end
 end
 -- ************************************************************************************************************************************************************* --
@@ -200,6 +226,7 @@ if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.Di
 			or Logic.IsEntityInCategory(EntityID, EntityCategories.Cathedrals) == 1
 			or Logic.GetEntityHealth(EntityID) < Logic.GetEntityMaxHealth(EntityID)
 			or Logic.GetUpgradeLevel(EntityID) < Logic.GetMaxUpgradeLevel(EntityID)
+			or Logic.GetEntityType(EntityID) == Entities.B_TableBeer
 		then
 			XGUIEng.ShowWidget(CurrentWidgetID, 0);
 			return;
@@ -294,7 +321,6 @@ if S6Patcher.SetNameAndDescription == nil then
 end
 GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
 	if not S6Patcher.DisableFeatures then -- compatibility with usermaps
-	
 		if _OptionalTextKeyName == "DowngradeButton" then
 			local Title = {de = "Rückbau", en = "Downgrade"};
 			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
@@ -305,8 +331,7 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
 			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
 			return;
-		end
-		
+		end	
 	end
 	
 	return S6Patcher.SetNameAndDescription(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean);	

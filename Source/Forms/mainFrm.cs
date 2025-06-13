@@ -12,7 +12,7 @@ namespace S6Patcher.Source.Forms
     public partial class mainFrm : Form
     {
         private FileStream GlobalStream = null;
-        private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease"};
+        private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle"};
         public mainFrm()
         {
             InitializeComponent();
@@ -101,7 +101,7 @@ namespace S6Patcher.Source.Forms
         }
         private void AskForRecommendedSettings()
         {
-            DialogResult Result = MessageBox.Show(Resources.WelcomeMessage, "Select Recommended Settings ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult Result = MessageBox.Show(Resources.WelcomeMessage, "Preselect Recommended Settings ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (Result == DialogResult.Yes)
             {
                 cbZoom.Checked = true;
@@ -115,7 +115,7 @@ namespace S6Patcher.Source.Forms
                 cbUseDowngrade.Checked = true;
                 cbUseMilitaryRelease.Checked = true;
 
-                txtZoom.Text = "12000";
+                txtZoom.Text = "14000";
                 txtResolution.Text = "4096";
 
                 if (CurrentID == execID.HE_STEAM || CurrentID == execID.HE_UBISOFT)
