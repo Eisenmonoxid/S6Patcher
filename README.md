@@ -1,8 +1,8 @@
 # S6Patcher
 A simple application that fixes some bugs and adds new features in the various editions of "Settlers 6 - Rise of an Empire". 
 <p align="center">
-	<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/53acfce6ab42f9d2ee6f38f1699d6a8742013e4c/Features/Header.jpg" width="60%" height="60%" alt="Header"/>
-</p>>
+	<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/53acfce6ab42f9d2ee6f38f1699d6a8742013e4c/Features/Header.jpg" width="80%" height="80%" alt="Header"/>
+</p>
 
 ---
 ## Download
@@ -69,3 +69,7 @@ For illustrated descriptions of some of the key features of the application, tak
 - A new folder `Script` in `<Documents>\THE SETTLERS - Rise of an Empire\` and three precompiled lua script files `"UserScriptGlobal.lua"`, `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
 - The configuration file `<Documents>\THE SETTLERS - Rise of an Empire\Config\Options.ini` is extended with a new section `[S6Patcher]`, where some necessary configuration values are stored.
 - When the option "Activate Modloader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
+
+## Linux Support
+The S6Patcher is developed using .NET Framework 4.8 with C# 7.3 and WinForms. Linux support has been tested using [Mono](https://www.mono-project.com/download/stable/). 
+[libgdiplus](https://www.mono-project.com/docs/gui/libgdiplus/) may also be needed to run the application on your Linux distribution.
