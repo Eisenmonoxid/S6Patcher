@@ -19,6 +19,10 @@ This excerpt should highlight some of the key features of the S6Patcher. For a f
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Downgrade_Final.png" width="60%" height="60%" alt="Downgrade"/>
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Military_Release_Final.png" width="60%" height="60%" alt="Military_Release"/>
 
+## All Versions: Day/Night Cycle
+- A day/night cycle similiar to the one in Settlers 7. This is entirely cosmetic and has no impact on the gameplay. 
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/53acfce6ab42f9d2ee6f38f1699d6a8742013e4c/Features/Night_Cycle_Final.png" width="60%" height="60%" alt="Night"/>
+
 ## Original Release: Texture Resolution
 - The S6Patcher can restore the texture slider for entities and set a custom texture resolution for ground textures. The pictures show a comparison between unpatched and highest texture resolution. It is recommended to stay in the interval of 128 - 4096 for ground texture resolution.
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Textures_Low_Final.png" width="35%" height="35%" alt="Textures_Low"/>

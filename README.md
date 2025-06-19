@@ -1,5 +1,8 @@
 # S6Patcher
 A simple application that fixes some bugs and adds new features in the various editions of "Settlers 6 - Rise of an Empire". 
+<p align="center">
+	<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/53acfce6ab42f9d2ee6f38f1699d6a8742013e4c/Features/Header.jpg" width="35%" height="35%" alt="Header"/>
+</p>>
 
 ---
 ## Download

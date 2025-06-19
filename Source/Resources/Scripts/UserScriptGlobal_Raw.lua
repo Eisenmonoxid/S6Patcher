@@ -1,8 +1,8 @@
 -- UserScriptGlobal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
-S6Patcher = S6Patcher or {
-	DisableFeatures = (NEP or QSB) and true or false,
-};
+S6Patcher = S6Patcher or {};
+S6Patcher.DisableFeatures = (NEP or QSB) and true or false;
+S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end
 -- ************************************************************************************************************************************************************* --
 -- "B_NPC_Barracks_ME" will now correctly respawn soldiers																					 					 --
 -- ************************************************************************************************************************************************************* --
@@ -17,7 +17,8 @@ GameCallback_OnBuildingConstructionComplete = function(_PlayerID, _EntityID)
 		Logic.RespawnResourceSetMaxSpawn(_EntityID, 0.01);
 		Logic.RespawnResourceSetMinSpawn(_EntityID, 0.01);
 	end
-	
+end
+S6Patcher.UpdateExistingBarracks = function()
 	for Key, Value in pairs(Logic.GetEntitiesOfType(Entities.B_NPC_Barracks_ME)) do
 		Logic.RespawnResourceSetMaxSpawn(Value, 0.01);
 		Logic.RespawnResourceSetMinSpawn(Value, 0.01);
@@ -26,12 +27,18 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Add salt and dye to city storehouse slots																					 								 --
 -- ************************************************************************************************************************************************************* --
-for i = 1, 8 do
-	local StorehouseID = Logic.GetStoreHouse(i);
-	if StorehouseID ~= 0 then
-		Logic.AddGoodToStock(StorehouseID, Goods.G_Salt, 0, true, true);
-		Logic.AddGoodToStock(StorehouseID, Goods.G_Dye, 0, true, true);
+S6Patcher.AddGoodsToInOutStock = function()
+	for i = 1, 8 do
+		local StorehouseID = Logic.GetStoreHouse(i);
+		if StorehouseID ~= 0 then
+			Logic.AddGoodToStock(StorehouseID, Goods.G_Salt, 0, true, true);
+			Logic.AddGoodToStock(StorehouseID, Goods.G_Dye, 0, true, true);
+		end
 	end
 end
-S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end
+-- ************************************************************************************************************************************************************* --
+-- Execute funcs on startup/load																					 											 --
+-- ************************************************************************************************************************************************************* --
+S6Patcher.AddGoodsToInOutStock();
+S6Patcher.UpdateExistingBarracks();
 -- #EOF
