@@ -46,7 +46,9 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.btnBugfixMod = new System.Windows.Forms.Button();
             this.gbUserscriptOptions = new System.Windows.Forms.GroupBox();
+            this.cbDayNightCycle = new System.Windows.Forms.CheckBox();
             this.cbUseMilitaryRelease = new System.Windows.Forms.CheckBox();
             this.cbUseDowngrade = new System.Windows.Forms.CheckBox();
             this.cbUseSingleStop = new System.Windows.Forms.CheckBox();
@@ -71,9 +73,9 @@
             this.cbLAAFlag.AutoSize = true;
             this.cbLAAFlag.Location = new System.Drawing.Point(6, 47);
             this.cbLAAFlag.Name = "cbLAAFlag";
-            this.cbLAAFlag.Size = new System.Drawing.Size(139, 20);
+            this.cbLAAFlag.Size = new System.Drawing.Size(237, 20);
             this.cbLAAFlag.TabIndex = 0;
-            this.cbLAAFlag.Text = "Activate LAA - Flag";
+            this.cbLAAFlag.Text = "Activate Large Address Aware Flag";
             this.cbLAAFlag.UseVisualStyleBackColor = true;
             // 
             // cbZoom
@@ -250,6 +252,7 @@
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.btnBugfixMod);
             this.gbAll.Controls.Add(this.gbUserscriptOptions);
             this.gbAll.Controls.Add(this.cbModloader);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
@@ -272,18 +275,41 @@
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
             // 
+            // btnBugfixMod
+            // 
+            this.btnBugfixMod.Enabled = false;
+            this.btnBugfixMod.Location = new System.Drawing.Point(158, 200);
+            this.btnBugfixMod.Name = "btnBugfixMod";
+            this.btnBugfixMod.Size = new System.Drawing.Size(160, 24);
+            this.btnBugfixMod.TabIndex = 20;
+            this.btnBugfixMod.Text = "Download Bugfix Mod";
+            this.btnBugfixMod.UseVisualStyleBackColor = true;
+            this.btnBugfixMod.Visible = false;
+            this.btnBugfixMod.Click += new System.EventHandler(this.btnBugfixMod_Click);
+            // 
             // gbUserscriptOptions
             // 
+            this.gbUserscriptOptions.Controls.Add(this.cbDayNightCycle);
             this.gbUserscriptOptions.Controls.Add(this.cbUseMilitaryRelease);
             this.gbUserscriptOptions.Controls.Add(this.cbUseDowngrade);
             this.gbUserscriptOptions.Controls.Add(this.cbUseSingleStop);
             this.gbUserscriptOptions.Enabled = false;
-            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 127);
+            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 103);
             this.gbUserscriptOptions.Name = "gbUserscriptOptions";
-            this.gbUserscriptOptions.Size = new System.Drawing.Size(200, 100);
+            this.gbUserscriptOptions.Size = new System.Drawing.Size(200, 124);
             this.gbUserscriptOptions.TabIndex = 19;
             this.gbUserscriptOptions.TabStop = false;
             this.gbUserscriptOptions.Text = "Gameplay Options";
+            // 
+            // cbDayNightCycle
+            // 
+            this.cbDayNightCycle.AutoSize = true;
+            this.cbDayNightCycle.Location = new System.Drawing.Point(6, 99);
+            this.cbDayNightCycle.Name = "cbDayNightCycle";
+            this.cbDayNightCycle.Size = new System.Drawing.Size(123, 20);
+            this.cbDayNightCycle.TabIndex = 3;
+            this.cbDayNightCycle.Text = "Day/Night Cycle";
+            this.cbDayNightCycle.UseVisualStyleBackColor = true;
             // 
             // cbUseMilitaryRelease
             // 
@@ -324,6 +350,7 @@
             this.cbModloader.TabIndex = 18;
             this.cbModloader.Text = "Activate Modloader";
             this.cbModloader.UseVisualStyleBackColor = true;
+            this.cbModloader.CheckedChanged += new System.EventHandler(this.cbModloader_CheckedChanged);
             // 
             // cbLimitedEdition
             // 
@@ -417,8 +444,10 @@
             // 
             // mainFrm
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(665, 630);
             this.Controls.Add(this.lblSelectFile);
             this.Controls.Add(this.txtExecutablePath);
@@ -489,5 +518,7 @@
         private System.Windows.Forms.CheckBox cbUseMilitaryRelease;
         private System.Windows.Forms.CheckBox cbUseDowngrade;
         private System.Windows.Forms.CheckBox cbUseSingleStop;
+        private System.Windows.Forms.CheckBox cbDayNightCycle;
+        private System.Windows.Forms.Button btnBugfixMod;
     }
 }

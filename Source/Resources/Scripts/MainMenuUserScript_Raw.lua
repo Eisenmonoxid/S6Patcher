@@ -16,6 +16,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		else
 			if S6Patcher.KnightSelection.SavedKnightID ~= -1 then
 				DisplayOptions.SkirmishSetKnight(1, S6Patcher.KnightSelection.SavedKnightID);
+				S6Patcher.KnightSelection.SavedKnightID = -1;
 			end
 			Framework.SetOnGameStartLuaCommand("return;");
 		end
@@ -54,10 +55,10 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 end
 S6Patcher.KnightSelection.SetKnightSelection = function(_showKnights)
 	local Context = S6Patcher.KnightSelection;
-	CustomGame.KnightTypes = (_showKnights == true) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
-	CustomGame.CurrentKnightList = (_showKnights == true) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
-	g_MapAndHeroPreview.KnightTypes = (_showKnights == true) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
-	RemapKnightID = (_showKnights == true) and Context.OverrideRemapKnightID or Context.RemapKnightID;
+	CustomGame.KnightTypes = (_showKnights) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	CustomGame.CurrentKnightList = (_showKnights) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	g_MapAndHeroPreview.KnightTypes = (_showKnights) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	RemapKnightID = (_showKnights) and Context.OverrideRemapKnightID or Context.RemapKnightID;
 end
 S6Patcher.KnightSelection.OverrideRemapKnightID = function(_ID)
 	return ((_ID == 1) and 7) or (_ID - 1);
@@ -69,8 +70,7 @@ end
 if Framework.GetGameExtraNo() >= 1 and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedKnightID = -1;
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
-	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", 
-													"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
+	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
 	S6Patcher.KnightSelection.OverrideGlobalKnightSelection();
 end
 -- ************************************************************************************************************************************************************* --

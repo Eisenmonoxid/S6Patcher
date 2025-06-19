@@ -269,25 +269,5 @@ namespace S6Patcher.Source.Helpers
         {
             return Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + ".backup");
         }
-
-        // TODO: Ask user if mod package should be downloaded and display download size beforehand (e.g. 4 KB will be downloaded)
-        // Download + Extraction async to not stall gui thread
-        // Use max compression for zip folder
-        public bool ExtractZipArchive(string ZipPath, string DestinationPath)
-        {
-            try
-            {
-                ZipFile.ExtractToDirectory(ZipPath, DestinationPath);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            Logger.Instance.Log("ExtractZipArchive(): Successfully extracted " + ZipPath + " to " + DestinationPath);
-            return true;
-        }
     }
 }

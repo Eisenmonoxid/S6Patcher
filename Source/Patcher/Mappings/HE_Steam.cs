@@ -12,7 +12,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             {
                 new PatchEntry
                 {
-                    Name = "Activate Development-Mode Permanently",
+                    Name = "cbDevMode",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x1E0C94, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
@@ -22,17 +22,18 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Activate Script and Code Bugfixes",
+                    Name = "cbScriptBugFixes",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x33D6D7, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
                         {0xC3F081, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
                         {0xC3F095, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
+                        {0x1C5897, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
                     }
                 },
                 new PatchEntry
                 {
-                    Name = "Activate Limited/Special Edition",
+                    Name = "cbLimitedEdition",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x25D4D5, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
@@ -87,14 +88,6 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x270E81, new byte[] {0x90}},
                 {0x270E87, new byte[] {0x90, 0x90, 0x90}},
                 {0x2540B8, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}},
-            };
-        }
-
-        public override Dictionary<long, byte[]> GetOverrideUserScriptMapping()
-        {
-            return new Dictionary<long, byte[]>()
-            {
-                {0x1C5897, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
             };
         }
 

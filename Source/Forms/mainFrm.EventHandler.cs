@@ -30,6 +30,11 @@ namespace S6Patcher.Source.Forms
                 Logger.Instance.Log("mainFrm_Load(): Form loaded successfully.");
             }
         }
+
+        private void cbModloader_CheckedChanged(object sender, EventArgs e)
+        {
+            btnBugfixMod.Enabled = cbModloader.Checked;
+        }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
             txtZoom.Enabled = cbZoom.Checked;
@@ -60,6 +65,13 @@ namespace S6Patcher.Source.Forms
                     .ToArray();
             }
         }
+
+        private void btnBugfixMod_Click(object sender, EventArgs e)
+        {
+            // Start Thread, download and install mod files
+            // Patcher.Mod Mod = new Patcher.Mod(String.Empty, String.Empty);
+        }
+
         private void btnPatch_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
@@ -69,6 +81,12 @@ namespace S6Patcher.Source.Forms
             ResetForm();
 
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
+
+            if (Program.IsMono)
+            {
+                Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut.");
+                return;
+            }
 
             DialogResult Result;
             Result = MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
@@ -84,17 +102,20 @@ namespace S6Patcher.Source.Forms
                 }
             }
         }
+
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
             new aboutBox().ShowDialog();
             e.Cancel = true;
         }
+
         private void btnAbort_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnAbort_Click(): Exiting application ...");
             CloseFileStream();
             Environment.Exit(0);
         }
+
         private void btnBackup_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnBackup_Click(): Restoring backup ...");
@@ -112,6 +133,7 @@ namespace S6Patcher.Source.Forms
                 MessageBox.Show(Resources.FinishedBackup, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
         private void btnChooseFile_Click(object sender, EventArgs e)
         {
             ResetForm();

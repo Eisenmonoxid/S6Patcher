@@ -12,7 +12,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             {
                 new PatchEntry
                 {
-                    Name = "High - Resolution Textures:",
+                    Name = "cbHighTextures",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x288ADF, new byte[] {0xE9, 0x1D, 0xD2, 0x26, 0x00, 0x90, 0x90, 0x90}}, // High entity resolution
@@ -21,7 +21,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Activate Development-Mode Permanently",
+                    Name = "cbDevMode",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x732FA, new byte[] {0xC6, 0x05, 0x28, 0xBF, 0xAA, 0x00, 0x01, 0xEB, 0x7C, 0x90}}, // Set global DevMachine to 1
@@ -30,18 +30,19 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Activate Script and Code Bugfixes",
+                    Name = "cbScriptBugFixes",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x1B5E36, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
                         {0x4FD5A9, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
                         {0x4FD5BD, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                         {0x00BA9F, new byte[] {0xEB, 0x27}}, // Disable parental control check, start multiple instances at the same time and enable remote session game start
+                        {0x01A9E5, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
                     }
                 },
                 new PatchEntry
                 {
-                    Name = "Activate Limited/Special Edition",
+                    Name = "cbLimitedEdition",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x23D64D, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
@@ -99,14 +100,6 @@ namespace S6Patcher.Source.Patcher.Mappings
                 {0x2B3358, BitConverter.GetBytes(TransitionFactor)},
                 {0x2B335C, new byte[] {0x90, 0x90}},
                 {0x27AC99, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0xC2, 0x08, 0x00}},
-            };
-        }
-
-        public override Dictionary<long, byte[]> GetOverrideUserScriptMapping()
-        {
-            return new Dictionary<long, byte[]>()
-            {
-                {0x1A9E5, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
             };
         }
 

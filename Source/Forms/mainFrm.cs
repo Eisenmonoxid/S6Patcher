@@ -17,7 +17,7 @@ namespace S6Patcher.Source.Forms
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;
-            Logger.Instance.Log("Startup successful! Text: " + this.Text);
+            Logger.Instance.Log("Startup successful! " + this.Text + " - Mono: " + Program.IsMono.ToString());
         }
         private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {
@@ -135,7 +135,7 @@ namespace S6Patcher.Source.Forms
                         .Concat(Boxes ?? Enumerable.Empty<CheckBox>());
             });
 
-            return Boxes.Select(Element => Element.Text).ToList();
+            return Boxes.Select(Element => Element.Name).ToList();
         }
         private void SelectPatchFeatures()
         {

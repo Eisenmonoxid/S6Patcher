@@ -11,7 +11,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             {
                 new PatchEntry
                 {
-                    Name = "High - Resolution Textures:",
+                    Name = "cbHighTextures",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x27A7AD, new byte[] {0xEB, 0x00}}, // Set ground texture resolution
@@ -20,7 +20,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Free Scaling and Placing of Entities",
+                    Name = "cbScalingPlacing",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x21285, new byte[] {0xEB}}, // Scaling lower limit
@@ -44,7 +44,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Higher Entity Limits",
+                    Name = "cbEntityLimits",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x04A710, new byte[] {0x00, 0x00, 0xF0}}, // Higher general entity limit
@@ -53,7 +53,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Usable Black Map Border",
+                    Name = "cbMapBorder",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x3AEAC, new byte[] {0xEB, 0x08}}, // Override map border check at saving
@@ -61,7 +61,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Activate Development-Mode Permanently",
+                    Name = "cbDevMode",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x20A0FB, new byte[] {0xC6, 0x05, 0xBC, 0x79, 0x97, 0x00, 0x01, 0xEB, 0x7C, 0x90}}, // Set DevMachine to 1
@@ -74,7 +74,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 },
                 new PatchEntry
                 {
-                    Name = "Show All Entities and Textures in Editor",
+                    Name = "cbAllEntities",
                     Mapping = new Dictionary<long, byte[]>()
                     {
                         {0x20615, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Entities in editor placement window
@@ -99,10 +99,6 @@ namespace S6Patcher.Source.Patcher.Mappings
             throw new NotImplementedException();
         }
         public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time)
-        {
-            throw new NotImplementedException();
-        }
-        public override Dictionary<long, byte[]> GetOverrideUserScriptMapping()
         {
             throw new NotImplementedException();
         }

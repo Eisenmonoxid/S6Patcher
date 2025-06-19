@@ -42,7 +42,7 @@ namespace S6Patcher.Source.Patcher
                 foreach (var Entry in Element)
                 {
                     Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
-                    Logger.Instance.Log("PatchByControlFeatures(): Patching Element: " + $"{Entry.Key:X}");
+                    Logger.Instance.Log("PatchByControlFeatures(): Patching Element: 0x" + $"{Entry.Key:X}");
                 }
             });
         }
@@ -164,12 +164,6 @@ namespace S6Patcher.Source.Patcher
         public void SetLuaScriptBugFixes()
         {
             Logger.Instance.Log("SetLuaScriptBugFixes(): Called.");
-
-            Dictionary<long, byte[]> Entries = GlobalMappings.GetOverrideUserScriptMapping();
-            foreach (var Entry in Entries)
-            {
-                Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
-            }
 
             Helpers.Helpers.GetUserScriptDirectories().ForEach(Element =>
             {
