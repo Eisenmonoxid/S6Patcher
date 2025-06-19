@@ -2,7 +2,7 @@
 This excerpt should highlight some of the key features of the S6Patcher. For a full feature list, take a look at the [ReadME](https://github.com/Eisenmonoxid/S6Patcher/blob/master/README.md).
 
 ## All Versions: Higher Zoomlevel
-- The standard zoom limit value of the game is 7200. When patching, the angle of the RTS camera is maintained and other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures below show a comparison of standard 7200 and 14000 zoom levels. It is recommended to not go higher than 20000.
+- The default zoom limit value of the game is 7200. When patching, the angle of the RTS camera is maintained and other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures below show a comparison of standard 7200 and 14000 zoom levels. It is recommended to not go higher than 20000.
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Zoom_High_Final.png" width="40%" height="40%" alt="Zoom_High"/>
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Zoom_Normal_Final.png" width="40%" height="40%" alt="Zoom_Normal"/>
 

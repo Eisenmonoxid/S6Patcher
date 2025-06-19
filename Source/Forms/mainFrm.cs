@@ -114,6 +114,7 @@ namespace S6Patcher.Source.Forms
                 cbUseSingleStop.Checked = true;
                 cbUseDowngrade.Checked = true;
                 cbUseMilitaryRelease.Checked = true;
+                cbDayNightCycle.Checked = true;
 
                 txtZoom.Text = "14000";
                 txtResolution.Text = "4096";

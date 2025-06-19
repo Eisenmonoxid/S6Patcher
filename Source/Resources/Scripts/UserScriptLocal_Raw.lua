@@ -70,8 +70,8 @@ if Options.GetIntValue("S6Patcher", "DayNightCycle", 0) ~= 0 and (not S6Patcher.
 	GameCallback_Feedback_EndOfMonth = function(_LastMonth, _NewMonth)
 		S6Patcher.GameCallback_Feedback_EndOfMonth(_LastMonth, _NewMonth);
 		
-		local Month = 7; -- September
-		local Duration = 120; -- 2 minutes
+		local Month = 5; -- August
+		local Duration = 180; -- 3 minutes (ingame time, not real time)
 		
 		if (_NewMonth == Month) and (S6Patcher.UseDayNightCycle) and (not Logic.IsWeatherEventActive()) then
 			if S6Patcher.DayNightCycleEnvironmentSet == nil then
