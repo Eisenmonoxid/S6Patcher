@@ -59,7 +59,7 @@ namespace S6Patcher.Source.Helpers
 
         public bool CreateBackup(string Filepath)
         {
-            string BackupPath = Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + "_BACKUP.exe");
+            string BackupPath = GetBackupPath(Filepath);
             if (File.Exists(BackupPath) == false)
             {
                 try
@@ -147,7 +147,7 @@ namespace S6Patcher.Source.Helpers
             DeleteUserConfiguration(Options); // Delete Userscript & Config Section from Documents folder
 
             string FilePath = Stream.Name;
-            string FinalPath = Path.Combine(Path.GetDirectoryName(FilePath), Path.GetFileNameWithoutExtension(FilePath) + "_BACKUP.exe");
+            string FinalPath = GetBackupPath(FilePath);
 
             if (File.Exists(FinalPath) == false)
             {
@@ -263,6 +263,11 @@ namespace S6Patcher.Source.Helpers
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private string GetBackupPath(string Filepath)
+        {
+            return Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + ".backup");
         }
 
         // TODO: Ask user if mod package should be downloaded and display download size beforehand (e.g. 4 KB will be downloaded)
