@@ -13,29 +13,21 @@ namespace S6Patcher.Source.Helpers
 
         private static readonly Logger _instance = new Logger();
         private Logger() {}
+        public static Logger Instance => _instance;
         ~Logger() 
         {
-            if (LogWriter != null)
+            try
             {
-                try
-                {
-                    LogWriter.Close();
-                    LogWriter.Dispose();
-                    LogWriter = null;
-                }
-                catch
-                {
-                    return;
-                }
+                LogWriter.Close();
+                LogWriter.Dispose();
+                LogWriter = null;
+            }
+            catch
+            {
+                return;
             }
         }
-        public static Logger Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
+
 
         public bool CreateOutputLogFile()
         {

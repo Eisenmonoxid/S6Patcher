@@ -135,7 +135,6 @@
     <EmbeddedResource Include="Source\Resources\Scripts\MainMenuUserScript_Raw.lua" />
     <EmbeddedResource Include="Source\Resources\Scripts\UserScriptLocal_Raw.lua" />
     <EmbeddedResource Include="Source\Resources\Scripts\UserScriptGlobal.lua" />
-    <EmbeddedResource Include="Source\Resources\Scripts\UserScriptGlobal_Raw.lua" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

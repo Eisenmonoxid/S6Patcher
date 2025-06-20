@@ -1,7 +1,7 @@
 -- UserScriptGlobal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.DisableFeatures = (NEP or QSB) and true or false;
+S6Patcher.DisableFeatures = (function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName());
 S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end
 -- ************************************************************************************************************************************************************* --
 -- "B_NPC_Barracks_ME" will now correctly respawn soldiers																					 					 --
@@ -18,16 +18,16 @@ GameCallback_OnBuildingConstructionComplete = function(_PlayerID, _EntityID)
 		Logic.RespawnResourceSetMinSpawn(_EntityID, 0.01);
 	end
 end
-S6Patcher.UpdateExistingBarracks = function()
-	for Key, Value in pairs(Logic.GetEntitiesOfType(Entities.B_NPC_Barracks_ME)) do
+(function(_entityTypes)
+	for Key, Value in pairs(_entityTypes) do
 		Logic.RespawnResourceSetMaxSpawn(Value, 0.01);
 		Logic.RespawnResourceSetMinSpawn(Value, 0.01);
 	end
-end
+end)(Logic.GetEntitiesOfType(Entities.B_NPC_Barracks_ME));
 -- ************************************************************************************************************************************************************* --
 -- Add salt and dye to city storehouse slots																					 								 --
 -- ************************************************************************************************************************************************************* --
-S6Patcher.AddGoodsToInOutStock = function()
+(function()
 	for i = 1, 8 do
 		local StorehouseID = Logic.GetStoreHouse(i);
 		if StorehouseID ~= 0 then
@@ -35,10 +35,5 @@ S6Patcher.AddGoodsToInOutStock = function()
 			Logic.AddGoodToStock(StorehouseID, Goods.G_Dye, 0, true, true);
 		end
 	end
-end
--- ************************************************************************************************************************************************************* --
--- Execute funcs on startup/load																					 											 --
--- ************************************************************************************************************************************************************* --
-S6Patcher.AddGoodsToInOutStock();
-S6Patcher.UpdateExistingBarracks();
+end)();
 -- #EOF

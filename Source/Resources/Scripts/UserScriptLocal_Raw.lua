@@ -1,7 +1,7 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {
-	DisableFeatures = (NEP or QSB) and true or false,
+	DisableFeatures = (function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName());
 	UseSingleStop = false,
 	UseDowngrade = false,
 	UseMilitaryRelease = false,
