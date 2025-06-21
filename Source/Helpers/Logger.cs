@@ -28,7 +28,6 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
-
         public bool CreateOutputLogFile()
         {
             try
@@ -43,6 +42,7 @@ namespace S6Patcher.Source.Helpers
 
             return true;
         }
+
         public void Log(string Message)
         {
             if (FileCreated == false || LogWriter == null)

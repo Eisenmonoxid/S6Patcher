@@ -11,8 +11,15 @@ Other download sources could potentially offer outdated versions!
 
 ---
 ## Usage
-Select the game executable(s) that you wish to patch (`Settlers6.exe`/`Settlers6R.exe` or `S6MapEditor.exe`/`S6MapEditorR.exe`). These should be located in the installation folder of the game.  
-**Should there be any questions, errors or feature requests: [Discord](https://discord.gg/7SGkQtAAET).**
+1. Download the latest release and launch the `S6Patcher.exe`.
+2. Click the button `"Choose File ..."` and select the game executable that you wish to patch (`Settlers6.exe`/`Settlers6R.exe` or `S6MapEditor.exe`/`S6MapEditorR.exe`). These should be located in the installation folder of the game.  
+3. Select the features that you wish to apply (or choose the recommended preset).
+4. Click on the button `Patch` and wait for the process to finish.
+5. Close the application and start the game/editor as usual.
+
+In case your game is from `Steam`, you will have to use the tool `Steamless` before patching.
+
+**Should there be any questions or errors: [Discord](https://discord.gg/7SGkQtAAET).**
 
 ---
 ## Modloader
@@ -26,27 +33,25 @@ For illustrated descriptions of some of the key features of the application, tak
 - For the original release (OV) with latest Patch 1.71.
 ```
 - Can restore the texture slider in the graphics menu, so high quality textures are available.
-- Can set the quality of ground textures to a custom value.
+- Can set the quality of ground textures to a custom resolution.
 - Can set the maximum zoom level in the game.
-- Can activate the Development Mode.
+- Can activate the Development Mode. (Necessary for e.g. the LuaDebugger to work).
 - Can set the Large Address Aware Flag for more usable virtual memory.
-- Can fix Bugs in Script&Code (e.g. "Meldungsstau", "Entertainercrash", "2K & 4K - Resolution").
+- Can fix multiple bugs and errors in Script & Code (e.g. "Meldungsstau", "Entertainercrash", "2K & 4K - Resolution").
 - Can enable all base game knights in the "Eastern Realm" expansion pack.
 - Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
--> Original releases from Steam will have to be extracted with the tool "Steamless" first!
 ```
 ### History Edition
 - For all History Editions.
 ```
-- Can set the quality of ground textures to a custom value.
+- Can set the quality of ground textures to a custom resolution.
 - Can activate the Development Mode. (Necessary for e.g. the LuaDebugger to work).
 - Can disable the autosave or set a custom timer interval.
 - Can set the maximum zoom level in the game.
-- Can set the Large Address Aware Flag for more usable memory.
-- Can fix Bugs in Script&Code (e.g. "Meldungsstau", "Entertainercrash").
+- Can set the Large Address Aware Flag for more usable virtual memory.
+- Can fix multiple bugs and errors in Script & Code (e.g. "Meldungsstau", "Entertainercrash").
 - Can enable all base game knights in the "Eastern Realm" expansion pack.
 - Can enable the Limited/Special Edition (e.g. decorative objects in the base game).
--> History Editions from Steam will have to be extracted with the tool "Steamless" first!
 ```
 ### Mapeditor
 - For all Mapeditor releases.
@@ -61,12 +66,12 @@ For illustrated descriptions of some of the key features of the application, tak
 - Can place, select and move all possible entity types (Careful, some may crash).
 - Can apply all texture types from all climate zones (and some hidden ones too).
 - Can open map files that have been protected with the "S6Tools".
-- Can set the Large Address Aware Flag for more usable memory.
+- Can set the Large Address Aware Flag for more usable virtual memory.
 ```
 ---
 ## Tech
 - The S6Patcher modifies bytes in the game/editor executable. A backup of the executable is created beforehand and can be restored from the application.
-- A new folder `Script` in `<Documents>\THE SETTLERS - Rise of an Empire\` and three precompiled lua script files `"UserScriptGlobal.lua"`, `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
+- A new folder `Script` in `<Documents>\THE SETTLERS - Rise of an Empire\` and three lua script files `"UserScriptGlobal.lua"`, `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
 - The configuration file `<Documents>\THE SETTLERS - Rise of an Empire\Config\Options.ini` is extended with a new section `[S6Patcher]`, where some necessary configuration values are stored.
 - When the option "Activate Modloader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
 
