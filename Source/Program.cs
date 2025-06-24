@@ -7,7 +7,6 @@ namespace S6Patcher.Source
     internal static class Program
     {
         internal static bool IsMono {get;} = Type.GetType("Mono.Runtime") != null;
-
         [STAThread]
         static void Main()
         {

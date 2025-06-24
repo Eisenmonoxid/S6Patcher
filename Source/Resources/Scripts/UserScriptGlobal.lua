@@ -36,4 +36,47 @@ end)(Logic.GetEntitiesOfType(Entities.B_NPC_Barracks_ME));
 		end
 	end
 end)();
+-- ************************************************************************************************************************************************************* --
+-- Some campaign fixes																					 														 --
+-- ************************************************************************************************************************************************************* --
+S6Patcher.ReplaceKnight = S6Patcher.ReplaceKnight or function(_knightID, _newType)
+	if Logic.GetEntityType(_knightID) == _newType then
+		return;
+	end
+
+	local posX, posY, posZ = Logic.EntityGetPos(_knightID);
+	local PlayerID = Logic.EntityGetPlayer(_knightID);
+	local Orientation = Logic.GetEntityOrientation(_knightID);
+	local ScriptName = Logic.GetEntityName(_knightID);
+
+	local ID = Logic.CreateEntity(_newType, posX, posY, Orientation, PlayerID);
+	Logic.SetEntityName(ID, ScriptName);
+	Logic.SetPrimaryKnightID(PlayerID, ID);
+	Logic.DestroyEntity(_knightID);
+end
+(function()
+	if Framework.GetCampaignName() == "c00" and Framework.GetCampaignMap() == "c00_m16_Rossotorres" then
+		-- Interrupt Quests running
+		local Found = FindQuestsByName("HiddenQuest_NPCMarcusMustSurvive", false);
+		if #Found > 0 then
+			for _, Quest in ipairs(Found) do
+				Quest:Interrupt();
+			end
+		end
+	
+		-- Update Knight Entities and Heads
+		local Knights = {
+			{Index = HarbourPlayerKnight, 		pID = HarborPlayerID}, 
+			{Index = GranCastillaPlayerKnight, 	pID = GranCastillaPlayerID}, 
+			{Index = MonasterioPlayerKnight, 	pID = MonasterioPlayerID}
+		};
+			
+		for i = 1, #Knights do
+			if Knights[i].Index ~= nil and Knights[i].pID ~= nil then
+				S6Patcher.ReplaceKnight(Logic.GetKnightID(Knights[i].pID), Knights[i].Index.Type);
+				CreateQuestToProtectKnight(Knights[i].pID);
+			end
+		end
+	end
+end)();
 -- #EOF
