@@ -77,6 +77,18 @@ end
 				CreateQuestToProtectKnight(Knights[i].pID);
 			end
 		end
+	elseif Framework.GetCampaignName() == "c00" and Framework.GetCampaignMap() == "c00_m03_Gallos" then
+		Logic.ExecuteInLuaLocalState([[
+			GUI.SetPlayerName(8, XGUIEng.GetStringTableText("UI_ObjectNames/B_NPC_ShipsStorehouse"));
+		]]);
+	elseif Framework.GetCampaignName() == "c00" and Framework.GetCampaignMap() == "c00_m11_Tios" then
+		StartFlexibalPlayerVoiceAfterOneSecond = function()
+			if Logic.GetTime() >= FlexibalPlayerVoiceStart + 1 then
+				SendVoiceMessage(FlexibleSpeakerPlayerID, FlexibalPlayerVoiceText);
+				FlexibleSpeakerPlayerID = SetupPlayer(FlexibleSpeakerPlayerID, "H_Knight_RedPrince", "Red Prince", "VillageColor2");
+				return true;
+			end
+		end
 	end
 end)();
 -- #EOF
