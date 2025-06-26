@@ -18,6 +18,7 @@ namespace S6Patcher.Source.Forms
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;
             Logger.Instance.Log("Startup successful! " + this.Text + " - Mono: " + Program.IsMono.ToString());
+            new Updater(true).CheckForUpdates();
         }
         private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
         {

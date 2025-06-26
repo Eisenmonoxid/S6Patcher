@@ -17,7 +17,7 @@ namespace S6Patcher.Source.Forms
         }
         private void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            new Updater().CheckForUpdates();
+            new Updater(false).CheckForUpdates();
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
