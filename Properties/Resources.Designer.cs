@@ -211,16 +211,6 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] UserScriptLocal_Raw {
-            get {
-                object obj = ResourceManager.GetObject("UserScriptLocal_Raw", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://raw.githubusercontent.com/Eisenmonoxid/S6Patcher/refs/heads/master/Version.txt.
         /// </summary>
         internal static string VersionFileLink {

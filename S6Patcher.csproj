@@ -133,7 +133,6 @@
     <EmbeddedResource Include="Source\Resources\Scripts\EMXBinData.s6patcher" />
     <EmbeddedResource Include="Source\Resources\Mod\mod.bba" />
     <EmbeddedResource Include="Source\Resources\Scripts\MainMenuUserScript_Raw.lua" />
-    <EmbeddedResource Include="Source\Resources\Scripts\UserScriptLocal_Raw.lua" />
     <EmbeddedResource Include="Source\Resources\Scripts\UserScriptGlobal.lua" />
   </ItemGroup>
   <ItemGroup>
