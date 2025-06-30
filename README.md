@@ -14,10 +14,13 @@ Other download sources could potentially offer outdated versions!
 1. Download the latest release and launch the `S6Patcher.exe`.
 2. Click the button `"Choose File ..."` and select the game executable that you wish to patch (`Settlers6.exe`/`Settlers6R.exe` or `S6MapEditor.exe`/`S6MapEditorR.exe`). These should be located in the installation folder of the game.  
 3. Select the features that you wish to apply (or choose the recommended preset).
-4. Click on the button `Patch` and wait for the process to finish.
+4. Click on the button `Patch File` and wait for the process to finish.
 5. Close the application and start the game/editor as usual.
 
 In case your game is from `Steam`, you will have to use the tool `Steamless` before patching.
+
+When patching, the application will create a backup of the original file. To restore this backup, simply choose the 
+previously patched .exe file and use the button `Restore Backup`.
 
 **Should there be any questions or errors: [Discord](https://discord.gg/7SGkQtAAET).**
 
@@ -77,4 +80,5 @@ For illustrated descriptions of some of the key features of the application, tak
 
 ## Linux Support
 The S6Patcher is developed using .NET Framework 4.8 with C# 7.3 and WinForms. Linux support has been tested using [Mono](https://www.mono-project.com/download/stable/). 
-[libgdiplus](https://www.mono-project.com/docs/gui/libgdiplus/) may also be needed to run the application on your Linux distribution.
+[libgdiplus](https://www.mono-project.com/docs/gui/libgdiplus/) may also be needed to run the application on your Linux distribution.   
+In case the three lua script files are not created, download them from the repository and place them in the folder manually.

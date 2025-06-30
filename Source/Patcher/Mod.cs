@@ -1,10 +1,6 @@
 ﻿using S6Patcher.Source.Helpers;
 using System;
-using System.Collections.Generic;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher

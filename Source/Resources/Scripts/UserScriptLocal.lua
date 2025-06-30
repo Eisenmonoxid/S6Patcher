@@ -2,6 +2,8 @@
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {
 	DisableFeatures = (function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName());
+	GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end;
+	
 	UseSingleStop = false,
 	UseDowngrade = false,
 	UseMilitaryRelease = false,
@@ -157,6 +159,42 @@ S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	return false;
 end
 
+S6Patcher.EnableSpecialKnights = function()
+	g_MilitaryFeedback.Knights[Entities.U_KnightSabatta] = "H_Knight_Sabatt";
+	g_HeroAbilityFeedback.Knights[Entities.U_KnightSabatta] = "Sabatta";
+
+	g_MilitaryFeedback.Knights[Entities.U_KnightRedPrince] = "H_Knight_RedPrince";
+	g_HeroAbilityFeedback.Knights[Entities.U_KnightRedPrince] = "RedPrince";
+	
+	S6Patcher.GetKnightAbilityAndIcons = GUI_Knight.GetKnightAbilityAndIcons;
+	GUI_Knight.GetKnightAbilityAndIcons = function(_KnightID)
+		local KnightType = Logic.GetEntityType(_KnightID)
+		if KnightType == Entities.U_KnightSabatta then
+			return Abilities.AbilityConvert, {11, 6};
+		elseif KnightType == Entities.U_KnightRedPrince then
+			return Abilities.AbilityTorch, {2, 10};
+		else
+			return S6Patcher.GetKnightAbilityAndIcons(_KnightID);
+		end
+	end
+	
+	S6Patcher.StartAbilityClicked = GUI_Knight.StartAbilityClicked;
+	GUI_Knight.StartAbilityClicked = function(_Ability)
+		local KnightID = GUI.GetSelectedEntity();
+		if KnightID == nil or Logic.IsKnight(KnightID) == false then
+			return;
+		end
+		
+		if Logic.GetEntityType(KnightID) == Entities.U_KnightRedPrince then
+			GUI.SendScriptCommand([[S6Patcher.KnightRedPrinceAbility(]] .. tostring(GUI.GetPlayerID()) .. [[)]]);
+			Sound.FXPlay2DSound("ui\\menu_click");
+			HeroAbilityFeedback(KnightID);
+		else
+			return S6Patcher.StartAbilityClicked(_Ability);
+		end
+	end
+end
+
 if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
 	and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0
 	and (Framework.GetGameExtraNo() >= 1) 
@@ -164,7 +202,9 @@ if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
 	and (not S6Patcher.GlobalScriptOverridden)
 	and (S6Patcher.SelectedKnight ~= nil) then
 	
+	S6Patcher.EnableSpecialKnights();
 	S6Patcher.OverrideGlobalScript();
+	
 	if S6Patcher.RestartMap == nil then
 		S6Patcher.RestartMap = Framework.RestartMap;
 	end
@@ -365,8 +405,4 @@ S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _
 
 	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height)
 end
-S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end
--- DEVELOPMENT --
-g_MilitaryFeedback.Knights[Entities.U_KnightSabatta] = "H_Knight_Sabatt";
-g_HeroAbilityFeedback.Knights[Entities.U_KnightSabatta] = "Sabatta";
 -- #EOF

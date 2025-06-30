@@ -51,6 +51,7 @@ namespace S6Patcher.Source.Helpers
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 Multiselect = false,
                 ShowReadOnly = false,
+                Filter = "Executable file|*.exe",
             };
 
             return ofd;

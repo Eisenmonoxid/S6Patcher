@@ -70,6 +70,7 @@ namespace S6Patcher.Source.Forms
         {
             // Start Thread, download and install mod files
             // Patcher.Mod Mod = new Patcher.Mod(String.Empty, String.Empty);
+            return;
         }
 
         private void btnPatch_Click(object sender, EventArgs e)

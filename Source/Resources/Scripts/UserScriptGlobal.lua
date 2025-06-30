@@ -55,7 +55,14 @@ S6Patcher.ReplaceKnight = S6Patcher.ReplaceKnight or function(_knightID, _newTyp
 	Logic.DestroyEntity(_knightID);
 end
 (function()
-	if Framework.GetCampaignName() == "c00" and Framework.GetCampaignMap() == "c00_m16_Rossotorres" then
+	if g_GlobalThroneRoom ~= nil then
+		return;
+	end
+
+	local Campaign = Framework.GetCampaignName();
+	local Map = Framework.GetCampaignMap();
+	
+	if Campaign == "c00" and Map == "c00_m16_Rossotorres" then
 		-- Interrupt Quests running
 		local Found = FindQuestsByName("HiddenQuest_NPCMarcusMustSurvive", false);
 		if #Found > 0 then
@@ -77,11 +84,11 @@ end
 				CreateQuestToProtectKnight(Knights[i].pID);
 			end
 		end
-	elseif Framework.GetCampaignName() == "c00" and Framework.GetCampaignMap() == "c00_m03_Gallos" then
+	elseif Campaign == "c00" and Map == "c00_m03_Gallos" then
 		Logic.ExecuteInLuaLocalState([[
 			GUI.SetPlayerName(8, XGUIEng.GetStringTableText("UI_ObjectNames/B_NPC_ShipsStorehouse"));
 		]]);
-	elseif Framework.GetCampaignName() == "c00" and Framework.GetCampaignMap() == "c00_m11_Tios" then
+	elseif Campaign == "c00" and Map == "c00_m11_Tios" then
 		StartFlexibalPlayerVoiceAfterOneSecond = function()
 			if Logic.GetTime() >= FlexibalPlayerVoiceStart + 1 then
 				SendVoiceMessage(FlexibleSpeakerPlayerID, FlexibalPlayerVoiceText);
@@ -91,4 +98,42 @@ end
 		end
 	end
 end)();
+-- ************************************************************************************************************************************************************* --
+-- Special Knight Abilities																										 								 --
+-- ************************************************************************************************************************************************************* --
+S6Patcher.AbilityEffectsOnMap = {};
+S6Patcher.EffectCleanupJob = nil;
+S6Patcher.KnightRedPrinceAbility = function(_playerID)
+	local EffectTime = 15;
+	local Area = 8000;
+	local KnightID = Logic.GetKnightID(_playerID);
+	local posX, posY, posZ = Logic.EntityGetPos(KnightID);
+	local Entries = {Logic.GetEntitiesInArea(0, posX, posY, Area, 16)};
+	
+	if Entries[1] <= 0 then
+		return;
+	end
+	
+	for i = 2, Entries[1] do
+		if Logic.IsEntityTypeInCategory(Logic.GetEntityType(Entries[i]), EntityCategories.Worker) == 1 and not Logic.IsIll(Entries[i]) then
+			Logic.MakeSettlerIll(Entries[i], true);
+			local Position = {Logic.EntityGetPos(Entries[i])};
+			local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_SickBuilding, Position[1], Position[2], 0, 1);
+			table.insert(S6Patcher.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + EffectTime})
+		end
+	end
+	
+	if S6Patcher.EffectCleanupJob == nil then
+		S6Patcher.EffectCleanupJob = StartSimpleJobEx(S6Patcher.CleanupKnightEffects);
+	end
+end
+S6Patcher.CleanupKnightEffects = function()
+	local CurrentTime = Logic.GetTime();
+	for Key, Value in pairs(S6Patcher.AbilityEffectsOnMap) do
+		if Value[2] <= CurrentTime then
+			Logic.DestroyEffect(Value[1]);
+			S6Patcher.AbilityEffectsOnMap[Key] = nil;
+		end
+	end
+end
 -- #EOF
