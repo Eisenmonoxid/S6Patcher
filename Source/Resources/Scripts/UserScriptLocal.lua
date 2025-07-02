@@ -88,55 +88,56 @@ end
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.GlobalScriptOverridden = false;
-S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
+S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong", "U_KnightSabatta", "U_KnightRedPrince"};
 S6Patcher.OverrideGlobalScript = function()
 	Framework.SetOnGameStartLuaCommand("return;"); -- free memory
 	local Knight = Entities[S6Patcher.DefaultKnightNames[S6Patcher.SelectedKnight]];
 
 	GUI.SendScriptCommand([[
 		S6Patcher = S6Patcher or {};
-		S6Patcher.PlayerID = S6Patcher.PlayerID or ]] .. tostring(GUI.GetPlayerID()) .. [[;
-		S6Patcher.SavedKnightID = S6Patcher.SavedKnightID or Logic.GetKnightID(S6Patcher.PlayerID);
+		S6Patcher.PlayerID = ]] .. tostring(GUI.GetPlayerID()) .. [[;
+		S6Patcher.SavedKnightID = Logic.GetKnightID(S6Patcher.PlayerID);
 
 		S6Patcher.ReplaceKnight = function(_knightID, _newType)
-			if Logic.GetEntityType(_knightID) == _newType then
-				return;
+			if _knightID == 0 or Logic.GetEntityType(_knightID) == _newType then
+				return nil;
 			end
 
 			local posX, posY, posZ = Logic.EntityGetPos(_knightID);
 			local PlayerID = Logic.EntityGetPlayer(_knightID);
 			local Orientation = Logic.GetEntityOrientation(_knightID);
 			local ScriptName = Logic.GetEntityName(_knightID);
+			
+			if ScriptName ~= ("Player" .. PlayerID .. "Knight") then
+				return nil;
+			end
 
 			local ID = Logic.CreateEntity(_newType, posX, posY, Orientation, PlayerID);
 			Logic.SetEntityName(ID, ScriptName);
 			Logic.SetPrimaryKnightID(PlayerID, ID);
 			Logic.DestroyEntity(_knightID);
+			
+			return ID;
 		end
 
-		if (S6Patcher.SavedKnightID ~= 0) then
-			S6Patcher.ReplaceKnight(S6Patcher.SavedKnightID, ]] .. tostring(Knight) .. [[);
-			Logic.ExecuteInLuaLocalState('LocalSetKnightPicture();');
-		else
+		local Result = S6Patcher.ReplaceKnight(S6Patcher.SavedKnightID, ]] .. tostring(Knight) .. [[);
+		if Result == nil or Result == S6Patcher.SavedKnightID then
 			return;
 		end
-		
-		if S6Patcher.SavedKnightID == Logic.GetKnightID(S6Patcher.PlayerID) then
-			return;
-		end
-		
+		Logic.ExecuteInLuaLocalState('LocalSetKnightPicture();');
+
 		for _, Quest in ipairs(Quests) do
 			if Quest.Objectives then
 				for i = 1, Quest.Objectives[0] do
 					if type(Quest.Objectives[i].Data) == "table" then
 						for j = 1, #Quest.Objectives[i].Data do
 							if Quest.Objectives[i].Data[j] == S6Patcher.SavedKnightID then
-								Quest.Objectives[i].Data[j] = Logic.GetKnightID(S6Patcher.PlayerID);
+								Quest.Objectives[i].Data[j] = Result;
 							end
 						end
 					elseif type(Quest.Objectives[i].Data) == "number" then
 						if Quest.Objectives[i].Data == S6Patcher.SavedKnightID then
-							Quest.Objectives[i].Data = Logic.GetKnightID(S6Patcher.PlayerID);
+							Quest.Objectives[i].Data = Result;
 						end
 					end
 				end

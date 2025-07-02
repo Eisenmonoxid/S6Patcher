@@ -1,7 +1,7 @@
 -- MainMenuUserScript by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
-S6Patcher = S6Patcher or {}
-S6Patcher.KnightSelection = S6Patcher.KnightSelection or {}
+S6Patcher = S6Patcher or {};
+S6Patcher.KnightSelection = S6Patcher.KnightSelection or {};
 -- ************************************************************************************************************************************************************* --
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
@@ -61,6 +61,7 @@ S6Patcher.KnightSelection.SetKnightSelection = function(_showKnights)
 	RemapKnightID = (_showKnights) and Context.OverrideRemapKnightID or Context.RemapKnightID;
 end
 S6Patcher.KnightSelection.OverrideRemapKnightID = function(_ID)
+	if _ID > 7 then return "" end;
 	return ((_ID == 1) and 7) or (_ID - 1);
 end
 S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _selectedMapType)
@@ -70,7 +71,7 @@ end
 if Framework.GetGameExtraNo() >= 1 and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedKnightID = -1;
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
-	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};	
+	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong", "U_KnightSabatta", "U_KnightRedPrince"};	
 	S6Patcher.KnightSelection.OverrideGlobalKnightSelection();
 end
 -- ************************************************************************************************************************************************************* --
