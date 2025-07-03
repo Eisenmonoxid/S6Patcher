@@ -31,6 +31,14 @@ namespace S6Patcher.Source.Forms
             }
         }
 
+        private void cbKnightSelection_CheckedChanged(object sender, EventArgs e)
+        {
+            cbSpecialKnightsAvailable.Enabled = cbKnightSelection.Checked;
+            if (!cbKnightSelection.Checked)
+            {
+                cbSpecialKnightsAvailable.Checked = false;
+            }
+        }
         private void cbModloader_CheckedChanged(object sender, EventArgs e)
         {
             btnBugfixMod.Enabled = cbModloader.Checked;
@@ -45,21 +53,16 @@ namespace S6Patcher.Source.Forms
         }
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
-            txtResolution.Enabled = cbHighTextures.Checked && (Helpers.Helpers.CurrentID != execID.ED);
+            txtResolution.Enabled = cbHighTextures.Checked && (CurrentID != execID.ED);
         }
         private void cbScriptBugFixes_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbScriptBugFixes.Checked)
-            {
-                cbKnightSelection.Enabled = true;
-                gbUserscriptOptions.Enabled = true;
-            }
-            else
+            cbKnightSelection.Enabled = cbScriptBugFixes.Checked;
+            gbUserscriptOptions.Enabled = cbScriptBugFixes.Checked;
+
+            if (!cbScriptBugFixes.Checked)
             {
                 cbKnightSelection.Checked = false;
-                cbKnightSelection.Enabled = false;
-                gbUserscriptOptions.Enabled = false;
-
                 gbUserscriptOptions.Controls.OfType<CheckBox>()
                     .Select(Element => {Element.Checked = false; return Element;})
                     .ToArray();
@@ -86,11 +89,12 @@ namespace S6Patcher.Source.Forms
             if (Program.IsMono)
             {
                 Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut.");
+                MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             DialogResult Result;
-            Result = MessageBox.Show(Resources.FinishedSuccess, "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            Result = MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (Result == DialogResult.Yes)
             {
                 if (CurrentID == execID.HE_UBISOFT || CurrentID == execID.HE_STEAM && !Name.Contains("extra1"))

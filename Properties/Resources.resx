@@ -148,6 +148,9 @@
   <data name="FinishedBackup" xml:space="preserve">
     <value>Backup has been successfully restored!</value>
   </data>
+  <data name="FinishedMono" xml:space="preserve">
+    <value>Finished successfully!</value>
+  </data>
   <data name="FinishedSuccess" xml:space="preserve">
     <value>Finished successfully!
 Create desktop shortcut to the patched file?</value>

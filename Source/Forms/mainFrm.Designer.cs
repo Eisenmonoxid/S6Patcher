@@ -48,6 +48,7 @@
             this.gbAll = new System.Windows.Forms.GroupBox();
             this.btnBugfixMod = new System.Windows.Forms.Button();
             this.gbUserscriptOptions = new System.Windows.Forms.GroupBox();
+            this.cbSpecialKnightsAvailable = new System.Windows.Forms.CheckBox();
             this.cbDayNightCycle = new System.Windows.Forms.CheckBox();
             this.cbUseMilitaryRelease = new System.Windows.Forms.CheckBox();
             this.cbUseDowngrade = new System.Windows.Forms.CheckBox();
@@ -289,17 +290,29 @@
             // 
             // gbUserscriptOptions
             // 
+            this.gbUserscriptOptions.Controls.Add(this.cbSpecialKnightsAvailable);
             this.gbUserscriptOptions.Controls.Add(this.cbDayNightCycle);
             this.gbUserscriptOptions.Controls.Add(this.cbUseMilitaryRelease);
             this.gbUserscriptOptions.Controls.Add(this.cbUseDowngrade);
             this.gbUserscriptOptions.Controls.Add(this.cbUseSingleStop);
             this.gbUserscriptOptions.Enabled = false;
-            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 103);
+            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 74);
             this.gbUserscriptOptions.Name = "gbUserscriptOptions";
-            this.gbUserscriptOptions.Size = new System.Drawing.Size(200, 124);
+            this.gbUserscriptOptions.Size = new System.Drawing.Size(200, 153);
             this.gbUserscriptOptions.TabIndex = 19;
             this.gbUserscriptOptions.TabStop = false;
             this.gbUserscriptOptions.Text = "Gameplay Options";
+            // 
+            // cbSpecialKnightsAvailable
+            // 
+            this.cbSpecialKnightsAvailable.AutoSize = true;
+            this.cbSpecialKnightsAvailable.Enabled = false;
+            this.cbSpecialKnightsAvailable.Location = new System.Drawing.Point(6, 125);
+            this.cbSpecialKnightsAvailable.Name = "cbSpecialKnightsAvailable";
+            this.cbSpecialKnightsAvailable.Size = new System.Drawing.Size(164, 20);
+            this.cbSpecialKnightsAvailable.TabIndex = 4;
+            this.cbSpecialKnightsAvailable.Text = "Enable Special Knights";
+            this.cbSpecialKnightsAvailable.UseVisualStyleBackColor = true;
             // 
             // cbDayNightCycle
             // 
@@ -372,6 +385,7 @@
             this.cbKnightSelection.TabIndex = 16;
             this.cbKnightSelection.Text = "Enable base game Knights in Eastern Realm";
             this.cbKnightSelection.UseVisualStyleBackColor = true;
+            this.cbKnightSelection.CheckedChanged += new System.EventHandler(this.cbKnightSelection_CheckedChanged);
             // 
             // cbScriptBugFixes
             // 
@@ -520,5 +534,6 @@
         private System.Windows.Forms.CheckBox cbUseSingleStop;
         private System.Windows.Forms.CheckBox cbDayNightCycle;
         private System.Windows.Forms.Button btnBugfixMod;
+        private System.Windows.Forms.CheckBox cbSpecialKnightsAvailable;
     }
 }

@@ -203,7 +203,9 @@ if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
 	and (not S6Patcher.GlobalScriptOverridden)
 	and (S6Patcher.SelectedKnight ~= nil) then
 	
-	S6Patcher.EnableSpecialKnights();
+	if Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0 then
+		S6Patcher.EnableSpecialKnights();
+	end
 	S6Patcher.OverrideGlobalScript();
 	
 	if S6Patcher.RestartMap == nil then

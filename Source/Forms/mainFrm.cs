@@ -12,7 +12,7 @@ namespace S6Patcher.Source.Forms
     public partial class mainFrm : Form
     {
         private FileStream GlobalStream = null;
-        private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle"};
+        private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
         public mainFrm()
         {
             InitializeComponent();

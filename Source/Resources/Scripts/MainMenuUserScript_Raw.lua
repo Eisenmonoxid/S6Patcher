@@ -71,7 +71,13 @@ end
 if Framework.GetGameExtraNo() >= 1 and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedKnightID = -1;
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
-	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong", "U_KnightSabatta", "U_KnightRedPrince"};	
+	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
+	
+	if Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0 then
+		S6Patcher.KnightSelection.NewKnightTypes[#S6Patcher.KnightSelection.NewKnightTypes + 1] = "U_KnightSabatta";
+		S6Patcher.KnightSelection.NewKnightTypes[#S6Patcher.KnightSelection.NewKnightTypes + 1] = "U_KnightRedPrince";
+	end
+	
 	S6Patcher.KnightSelection.OverrideGlobalKnightSelection();
 end
 -- ************************************************************************************************************************************************************* --
