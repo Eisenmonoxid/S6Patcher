@@ -2,7 +2,6 @@
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
 S6Patcher.DisableFeatures = (function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName());
-S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end
 -- ************************************************************************************************************************************************************* --
 -- "B_NPC_Barracks_ME" will now correctly respawn soldiers																					 					 --
 -- ************************************************************************************************************************************************************* --
@@ -39,7 +38,7 @@ end)();
 -- ************************************************************************************************************************************************************* --
 -- Some campaign fixes																					 														 --
 -- ************************************************************************************************************************************************************* --
-S6Patcher.ReplaceKnight = S6Patcher.ReplaceKnight or function(_knightID, _newType)
+S6Patcher.ReplaceGlobalKnight = function(_knightID, _newType)
 	if Logic.GetEntityType(_knightID) == _newType then
 		return;
 	end
@@ -80,7 +79,7 @@ end
 			
 		for i = 1, #Knights do
 			if Knights[i].Index ~= nil and Knights[i].pID ~= nil then
-				S6Patcher.ReplaceKnight(Logic.GetKnightID(Knights[i].pID), Knights[i].Index.Type);
+				S6Patcher.ReplaceGlobalKnight(Logic.GetKnightID(Knights[i].pID), Knights[i].Index.Type);
 				CreateQuestToProtectKnight(Knights[i].pID);
 			end
 		end

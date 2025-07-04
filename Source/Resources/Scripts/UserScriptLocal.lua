@@ -1,15 +1,13 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {
-	DisableFeatures = (function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName());
-	GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end;
-	
 	UseSingleStop = false,
 	UseDowngrade = false,
 	UseMilitaryRelease = false,
 	UseDayNightCycle = false,
 	DayNightCycleEnvironmentSet = nil,
 };
+S6Patcher.DisableFeatures = ((function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName()));
 -- ************************************************************************************************************************************************************* --
 -- Fix the "Meldungsstau" Bug in the game																					 									 --
 -- ************************************************************************************************************************************************************* --
@@ -408,4 +406,5 @@ S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _
 
 	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height)
 end
+S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end;
 -- #EOF

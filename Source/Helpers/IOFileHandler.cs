@@ -43,7 +43,7 @@ namespace S6Patcher.Source.Helpers
 
         public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder)
         {
-            OpenFileDialog ofd = new OpenFileDialog
+            return new OpenFileDialog
             {
                 CheckFileExists = true,
                 ShowHelp = false,
@@ -54,8 +54,6 @@ namespace S6Patcher.Source.Helpers
                 ShowReadOnly = false,
                 Filter = Filter
             };
-
-            return ofd;
         }
 
         public bool CreateBackup(string Filepath)
