@@ -164,6 +164,9 @@ Create desktop shortcut to the patched file?</value>
   <data name="mod" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Source\Resources\Mod\mod.bba;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="MonoOptionsFile" xml:space="preserve">
+    <value>Please provide the path to the "Options.ini" configuration file that the game has created!</value>
+  </data>
   <data name="UserScriptGlobal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Source\Resources\Scripts\UserScriptGlobal.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

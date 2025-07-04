@@ -200,6 +200,15 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please provide the path to the &quot;Options.ini&quot; configuration file that the game has created!.
+        /// </summary>
+        internal static string MonoOptionsFile {
+            get {
+                return ResourceManager.GetString("MonoOptionsFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] UserScriptGlobal {

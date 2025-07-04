@@ -89,7 +89,7 @@ namespace S6Patcher.Source.Forms
             if (Program.IsMono)
             {
                 Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut.");
-                MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Resources.FinishedMono, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -150,8 +150,8 @@ namespace S6Patcher.Source.Forms
         private void btnChooseFile_Click(object sender, EventArgs e)
         {
             ResetForm();
-            OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog();
-            if (ofd.ShowDialog() == DialogResult.OK && File.Exists(ofd.FileName))
+            OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Executable file|*.exe", Environment.SpecialFolder.ProgramFiles);
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 string FileName = IsPlayLauncherExecutable(ofd.FileName);
                 if (IOFileHandler.Instance.CreateBackup(FileName) == false)

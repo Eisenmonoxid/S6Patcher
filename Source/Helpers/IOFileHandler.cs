@@ -1,6 +1,7 @@
 ﻿using S6Patcher.Properties;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -40,7 +41,7 @@ namespace S6Patcher.Source.Helpers
             return Stream;
         }
 
-        public OpenFileDialog CreateOFDialog()
+        public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder)
         {
             OpenFileDialog ofd = new OpenFileDialog
             {
@@ -48,10 +49,10 @@ namespace S6Patcher.Source.Helpers
                 ShowHelp = false,
                 CheckPathExists = true,
                 DereferenceLinks = true,
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                InitialDirectory = Environment.GetFolderPath(Folder),
                 Multiselect = false,
                 ShowReadOnly = false,
-                Filter = "Executable file|*.exe",
+                Filter = Filter
             };
 
             return ofd;
@@ -182,6 +183,7 @@ namespace S6Patcher.Source.Helpers
                 string CurrentPath = Path.Combine(Element, "Config", Name);
                 if (File.Exists(CurrentPath) == false)
                 {
+                    Logger.Instance.Log("UpdateEntryInOptionsFile(): Skipping! Did not find Options file " + CurrentPath);
                     continue;
                 }
 

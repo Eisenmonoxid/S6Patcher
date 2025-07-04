@@ -1,4 +1,5 @@
 ﻿using IWshRuntimeLibrary;
+using S6Patcher.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +23,7 @@ namespace S6Patcher.Source.Helpers
     {
         public static readonly uint GlobalOffset = 0x3F0000;
         public static execID CurrentID = execID.NONE;
+        public static string Mono_DocumentsPath = string.Empty;
         public static void WriteBytes(FileStream Stream, long Position, byte[] Bytes)
         {
             Stream.Position = (CurrentID == execID.OV_OFFSET) ? Position - GlobalOffset : Position;
@@ -39,6 +41,30 @@ namespace S6Patcher.Source.Helpers
             // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
             // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
             string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (Program.IsMono)
+            {
+                if (Mono_DocumentsPath == string.Empty)
+                {
+                    MessageBox.Show(Resources.MonoOptionsFile, "Select Options.ini file ...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Configuration file|*.ini", Environment.SpecialFolder.MyDocuments);
+
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        DirectoryInfo Info = new DirectoryInfo(ofd.FileName);
+                        Mono_DocumentsPath = Info.Parent.Parent.Parent.FullName;
+                    }
+                    else
+                    {
+                        Logger.Instance.Log("GetUserScriptDirectories(): User did not select a file! Aborting ...");
+                        ofd.Dispose();
+                        return new List<string>();
+                    }
+                    ofd.Dispose();
+                }
+
+                DocumentsPath = Mono_DocumentsPath;
+            }
+
             return Directory.GetDirectories(DocumentsPath)
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 .Select(Element => {Element = Path.Combine(DocumentsPath, Element); return Element;})
