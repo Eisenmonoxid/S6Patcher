@@ -1,9 +1,14 @@
-﻿using S6Patcher.Source.Helpers;
+﻿using Microsoft.Win32.SafeHandles;
+using S6Patcher.Source.Helpers;
 using S6Patcher.Source.Patcher.Mappings;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher

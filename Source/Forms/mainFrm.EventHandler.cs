@@ -81,8 +81,10 @@ namespace S6Patcher.Source.Forms
             Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
 
             string Name = GlobalStream.Name;
-            SelectPatchFeatures(); // execute patching
-            ResetForm();
+            long Size = GlobalStream.Length;
+
+            SelectPatchFeatures(); // Execute Patching
+            ResetForm(); // Close FileStream and reset form controls
 
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
 
@@ -92,6 +94,19 @@ namespace S6Patcher.Source.Forms
                 MessageBox.Show(Resources.FinishedMono, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
+            uint CheckSum = UpdatePEHeaderFileCheckSum(Name, Size);
+            FileStream CurrentStream = IOFileHandler.Instance.OpenFileStream(Name);
+            if (GlobalStream == null)
+            {
+                Logger.Instance.Log(Resources.ErrorInvalidExecutable);
+                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            WriteBytes(CurrentStream, 0x168, BitConverter.GetBytes(CheckSum));
+            CurrentStream.Close();
+            CurrentStream.Dispose();
 
             DialogResult Result;
             Result = MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.YesNo, MessageBoxIcon.Information);

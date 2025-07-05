@@ -1,9 +1,12 @@
 ﻿using IWshRuntimeLibrary;
+using Microsoft.Win32.SafeHandles;
 using S6Patcher.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -187,6 +190,27 @@ namespace S6Patcher.Source.Helpers
             }
 
             return Filepath;
+        }
+
+        [DllImport("imagehlp.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern int CheckSumMappedFile(SafeMemoryMappedViewHandle BaseAddress, uint FileLength, ref uint HeaderSum, ref uint CheckSum);
+
+        public static uint UpdatePEHeaderFileCheckSum(string Path, long Size)
+        {
+            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Called.");
+
+            uint CheckSum = 0x0;
+            uint HeaderSum = 0x0;
+            using (MemoryMappedFile Mapping = MemoryMappedFile.CreateFromFile(Path))
+            {
+                using (MemoryMappedViewAccessor View = Mapping.CreateViewAccessor())
+                {
+                    CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
+                };
+            };
+
+            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Finished successfully. New CheckSum: " + CheckSum.ToString());
+            return CheckSum;
         }
     }
 }
