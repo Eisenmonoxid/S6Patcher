@@ -1,14 +1,9 @@
-﻿using Microsoft.Win32.SafeHandles;
-using S6Patcher.Source.Helpers;
+﻿using S6Patcher.Source.Helpers;
 using S6Patcher.Source.Patcher.Mappings;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
@@ -18,6 +13,7 @@ namespace S6Patcher.Source.Patcher
         private readonly FileStream GlobalStream = null;
         private readonly MappingBase GlobalMappings = null;
         private readonly execID GlobalID = execID.NONE;
+        public uint GlobalOffset {get;} = 0x3F0000;
 
         public Patcher(execID ID, FileStream Stream)
         {
@@ -46,7 +42,7 @@ namespace S6Patcher.Source.Patcher
             {
                 foreach (var Entry in Element)
                 {
-                    Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
+                    WriteBytes(Entry.Key, Entry.Value);
                     Logger.Instance.Log("PatchByControlFeatures(): Patching Element: 0x" + $"{Entry.Key:X}");
                 }
             });
@@ -71,7 +67,7 @@ namespace S6Patcher.Source.Patcher
             Dictionary<long, byte[]> Mapping = GlobalMappings.GetTextureResolutionMapping(Resolution);
             foreach (var Element in Mapping)
             {
-                Helpers.Helpers.WriteBytes(GlobalStream, Element.Key, Element.Value);
+                WriteBytes(Element.Key, Element.Value);
             }
         }
 
@@ -94,7 +90,7 @@ namespace S6Patcher.Source.Patcher
             Dictionary<long, byte[]> Mapping = GlobalMappings.GetAutoSaveMapping(Timer);
             foreach (var Element in Mapping)
             {
-                Helpers.Helpers.WriteBytes(GlobalStream, Element.Key, Element.Value);
+                WriteBytes(Element.Key, Element.Value);
             }
         }
 
@@ -119,7 +115,7 @@ namespace S6Patcher.Source.Patcher
             Dictionary<long, byte[]> Mapping = GlobalMappings.GetZoomLevelMapping(Level, Distance);
             foreach (var Element in Mapping)
             {
-                Helpers.Helpers.WriteBytes(GlobalStream, Element.Key, Element.Value);
+                WriteBytes(Element.Key, Element.Value);
             }
         }
 
@@ -130,7 +126,7 @@ namespace S6Patcher.Source.Patcher
             Dictionary<long, byte[]> Entries = GlobalMappings.GetModloaderMapping();
             foreach (var Entry in Entries)
             {
-                Helpers.Helpers.WriteBytes(GlobalStream, Entry.Key, Entry.Value);
+                WriteBytes(Entry.Key, Entry.Value);
             }
 
             IOFileHandler.Instance.CreateModLoader(GlobalStream, GlobalID);
@@ -160,7 +156,7 @@ namespace S6Patcher.Source.Patcher
             Int16 Flag = Reader.ReadInt16();
             if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
             {
-                Helpers.Helpers.WriteBytes(GlobalStream, CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
+                WriteBytes(CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
             }
 
             Logger.Instance.Log("SetLargeAddressAwareFlag(): Finished successfully.");
@@ -170,7 +166,7 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("SetLuaScriptBugFixes(): Called.");
 
-            Helpers.Helpers.GetUserScriptDirectories().ForEach(Element =>
+            IOFileHandler.Instance.GetUserScriptDirectories().ForEach(Element =>
             {
                 string CurrentPath = Path.Combine(Element, "Script");
                 try
@@ -194,6 +190,19 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("SetEntryInOptionsFile(): Called with " + Entry + " - Value: " + Checked.ToString());
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked);
+        }
+
+        private void WriteBytes(long Position, byte[] Bytes)
+        {
+            GlobalStream.Position = (GlobalID == execID.OV_OFFSET) ? Position - GlobalOffset : Position;
+            try
+            {
+                GlobalStream.Write(Bytes, 0, Bytes.Length);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+            }
         }
     }
 }

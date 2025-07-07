@@ -13,7 +13,7 @@ namespace S6Patcher.Source.Forms
     {
         private void mainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CloseFileStream();
+            CloseFileStream(GlobalStream);
         }
         private void mainFrm_Load(object sender, EventArgs e)
         {
@@ -33,11 +33,14 @@ namespace S6Patcher.Source.Forms
 
         private void cbKnightSelection_CheckedChanged(object sender, EventArgs e)
         {
+            /*
             cbSpecialKnightsAvailable.Enabled = cbKnightSelection.Checked;
             if (!cbKnightSelection.Checked)
             {
                 cbSpecialKnightsAvailable.Checked = false;
             }
+            */
+            return;
         }
         private void cbModloader_CheckedChanged(object sender, EventArgs e)
         {
@@ -53,7 +56,7 @@ namespace S6Patcher.Source.Forms
         }
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
-            txtResolution.Enabled = cbHighTextures.Checked && (CurrentID != execID.ED);
+            txtResolution.Enabled = cbHighTextures.Checked && (Validator.ID != execID.ED);
         }
         private void cbScriptBugFixes_CheckedChanged(object sender, EventArgs e)
         {
@@ -71,8 +74,6 @@ namespace S6Patcher.Source.Forms
 
         private void btnBugfixMod_Click(object sender, EventArgs e)
         {
-            // Start Thread, download and install mod files
-            // Patcher.Mod Mod = new Patcher.Mod(String.Empty, String.Empty);
             return;
         }
 
@@ -83,7 +84,7 @@ namespace S6Patcher.Source.Forms
             string Name = GlobalStream.Name;
             long Size = GlobalStream.Length;
 
-            SelectPatchFeatures(); // Execute Patching
+            ExecutePatch(); // Execute Patching
             ResetForm(); // Close FileStream and reset form controls
 
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
@@ -95,24 +96,13 @@ namespace S6Patcher.Source.Forms
                 return;
             }
 
-            uint CheckSum = UpdatePEHeaderFileCheckSum(Name, Size);
-            FileStream CurrentStream = IOFileHandler.Instance.OpenFileStream(Name);
-            if (GlobalStream == null)
-            {
-                Logger.Instance.Log(Resources.ErrorInvalidExecutable);
-                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            WriteBytes(CurrentStream, 0x168, BitConverter.GetBytes(CheckSum));
-            CurrentStream.Close();
-            CurrentStream.Dispose();
+            IOFileHandler.Instance.WritePEHeaderFileCheckSum(Name, Size);
 
             DialogResult Result;
             Result = MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (Result == DialogResult.Yes)
             {
-                if (CurrentID == execID.HE_UBISOFT || CurrentID == execID.HE_STEAM && !Name.Contains("extra1"))
+                if (Validator.ID == execID.HE_UBISOFT || Validator.ID == execID.HE_STEAM && !Name.Contains("extra1"))
                 {
                     CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
                     CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
@@ -140,7 +130,7 @@ namespace S6Patcher.Source.Forms
         private void btnAbort_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnAbort_Click(): Exiting application ...");
-            CloseFileStream();
+            CloseFileStream(GlobalStream);
             Environment.Exit(0);
         }
 
@@ -184,11 +174,11 @@ namespace S6Patcher.Source.Forms
                     return;
                 }
 
-                uint ValidExecutable = SetCurrentExecutableID(GlobalStream);
-                if (ValidExecutable != 0)
+                Validator = new Patcher.Validator(GlobalStream);
+                if (Validator.ID == execID.NONE || Validator.IsExecutableUnpacked == false)
                 {
-                    CloseFileStream();
-                    string Error = (ValidExecutable == 1) ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
+                    CloseFileStream(GlobalStream);
+                    string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
                     Logger.Instance.Log(Error);
                     MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;

@@ -96,6 +96,7 @@
     <Compile Include="Source\Patcher\Mod.cs" />
     <Compile Include="Source\Patcher\Patcher.cs" />
     <Compile Include="Source\Helpers\Helpers.cs" />
+    <Compile Include="Source\Patcher\Validator.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Forms\mainFrm.cs">

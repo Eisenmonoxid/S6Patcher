@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using static S6Patcher.Source.Helpers.Helpers;
 
 namespace S6Patcher.Source.Forms
 {
     public partial class mainFrm : Form
     {
+        private Patcher.Validator Validator;
+        private Patcher.Patcher Patcher;
+
         private FileStream GlobalStream = null;
         private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
         public mainFrm()
@@ -29,7 +31,7 @@ namespace S6Patcher.Source.Forms
             }
             else if (Control == txtZoom)
             {
-                if (CurrentID == execID.HE_UBISOFT || CurrentID == execID.HE_STEAM)
+                if (Validator.ID == execID.HE_UBISOFT || Validator.ID == execID.HE_STEAM)
                 {
                     txtZoom.Text = Reader.ReadSingle().ToString();
                 }
@@ -46,15 +48,15 @@ namespace S6Patcher.Source.Forms
         private void InitializeControls()
         {
             BinaryReader Reader = new BinaryReader(GlobalStream);
-            switch (CurrentID)
+            switch (Validator.ID)
             {
                 case execID.OV:
                     SetControlValueFromStream(ref Reader, 0x545400, txtZoom);
                     SetControlValueFromStream(ref Reader, 0x2BE177, txtResolution);
                     break;
                 case execID.OV_OFFSET:
-                    SetControlValueFromStream(ref Reader, 0x545400 - GlobalOffset, txtZoom);
-                    SetControlValueFromStream(ref Reader, 0x2BE177 - GlobalOffset, txtResolution);
+                    SetControlValueFromStream(ref Reader, 0x545400 - Patcher.GlobalOffset, txtZoom);
+                    SetControlValueFromStream(ref Reader, 0x2BE177 - Patcher.GlobalOffset, txtResolution);
                     break;
                 case execID.HE_UBISOFT:
                     SetControlValueFromStream(ref Reader, 0xC4EC4C, txtZoom);
@@ -85,7 +87,7 @@ namespace S6Patcher.Source.Forms
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
 
-            if (CurrentID != execID.ED)
+            if (Validator.ID != execID.ED)
             {
                 ToggleEditorControls(true);
                 AskForRecommendedSettings();
@@ -120,7 +122,7 @@ namespace S6Patcher.Source.Forms
                 txtZoom.Text = "14000";
                 txtResolution.Text = "4096";
 
-                if (CurrentID == execID.HE_STEAM || CurrentID == execID.HE_UBISOFT)
+                if (Validator.ID == execID.HE_STEAM || Validator.ID == execID.HE_UBISOFT)
                 {
                     cbAutosave.Checked = true;
                     txtAutosave.Text = "30";
@@ -139,12 +141,11 @@ namespace S6Patcher.Source.Forms
 
             return Boxes.Select(Element => Element.Name).ToList();
         }
-        private void SelectPatchFeatures()
+        private void ExecutePatch()
         {
-            Patcher.Patcher Patcher;
             try
             {
-                Patcher = new Patcher.Patcher(CurrentID, GlobalStream);
+                Patcher = new Patcher.Patcher(Validator.ID, GlobalStream);
             }
             catch (Exception ex)
             {
@@ -160,7 +161,7 @@ namespace S6Patcher.Source.Forms
             {
                 Patcher.SetZoomLevel(txtZoom.Text);
             }
-            if (cbHighTextures.Checked && CurrentID != execID.ED) // Editor has no custom texture resolution
+            if (cbHighTextures.Checked && Validator.ID != execID.ED) // Editor has no custom texture resolution
             {
                 Patcher.SetHighResolutionTextures(txtResolution.Text);
             }
@@ -175,7 +176,7 @@ namespace S6Patcher.Source.Forms
             if (cbScriptBugFixes.Checked)
             {
                 Patcher.SetLuaScriptBugFixes();
-                SetEntriesInOptionsFileByCheckBox(Patcher);
+                SetEntriesInOptionsFileByCheckBox();
             }
             if (cbModloader.Checked)
             {
@@ -183,7 +184,7 @@ namespace S6Patcher.Source.Forms
             }
         }
 
-        private void SetEntriesInOptionsFileByCheckBox(Patcher.Patcher Patcher)
+        private void SetEntriesInOptionsFileByCheckBox()
         {
             Patcher.SetEntryInOptionsFile(GlobalOptions[0], cbKnightSelection.Checked);
 
@@ -198,8 +199,7 @@ namespace S6Patcher.Source.Forms
 
         private void ResetForm()
         {
-            CloseFileStream();
-
+            CloseFileStream(GlobalStream);
             new List<GroupBox> {gbAll, gbHE, gbEditor}.ForEach(Control =>
             {
                 Control.Enabled = false;
@@ -224,12 +224,12 @@ namespace S6Patcher.Source.Forms
             Logger.Instance.Log("ResetForm(): Form successfully reset!");
         }
 
-        private void CloseFileStream()
+        private void CloseFileStream(FileStream Stream)
         {
-            if (GlobalStream != null && GlobalStream.CanRead == true) // Close Filestream if not already done
+            if (Stream != null && Stream.CanRead == true)
             {
-                GlobalStream.Close();
-                GlobalStream.Dispose();
+                Stream.Close();
+                Stream.Dispose();
             }
         }
     }
