@@ -280,14 +280,13 @@ if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.Di
 		local EntityID = GUI.GetSelectedEntity();
 		
 		if EntityID == nil 
-			or Logic.IsBuilding(EntityID) == 0 
+			or Logic.IsEntityInCategory(EntityID, EntityCategories.CityBuilding) == 0
+			or Logic.IsEntityInCategory(EntityID, EntityCategories.OuterRimBuilding) == 0
 			or Logic.IsConstructionComplete(EntityID) == 0 
 			or Logic.IsBurning(EntityID) == true
 			or Logic.CanCancelKnockDownBuilding(EntityID) == true
-			or Logic.IsEntityInCategory(EntityID, EntityCategories.Cathedrals) == 1
 			or Logic.GetEntityHealth(EntityID) < Logic.GetEntityMaxHealth(EntityID)
 			or Logic.GetUpgradeLevel(EntityID) < Logic.GetMaxUpgradeLevel(EntityID)
-			or Logic.GetEntityType(EntityID) == Entities.B_TableBeer
 		then
 			XGUIEng.ShowWidget(CurrentWidgetID, 0);
 			return;
@@ -376,7 +375,31 @@ GameCallback_GUI_SelectionChanged = function(_Source)
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
 	end
 end
+-- ************************************************************************************************************************************************************* --
+-- Override Multiselection																																 		 --
+-- ************************************************************************************************************************************************************* --
+if not S6Patcher.DisableFeatures then
+	S6Patcher.AmmunitionCartTableIndex = nil;
+	if S6Patcher.SelectAllPlayerUnitsClicked == nil then
+		S6Patcher.SelectAllPlayerUnitsClicked = GUI_MultiSelection.SelectAllPlayerUnitsClicked;
+	end
+	GUI_MultiSelection.SelectAllPlayerUnitsClicked = function()
+		if S6Patcher.AmmunitionCartTableIndex ~= nil then
+			LeaderSortOrder[S6Patcher.AmmunitionCartTableIndex] = nil;
+			S6Patcher.AmmunitionCartTableIndex = nil;
+		end
 
+		if XGUIEng.IsModifierPressed(Keys.ModifierShift) == true then
+			S6Patcher.AmmunitionCartTableIndex = #LeaderSortOrder + 1;
+			LeaderSortOrder[S6Patcher.AmmunitionCartTableIndex] = Entities.U_AmmunitionCart;
+		end
+
+		S6Patcher.SelectAllPlayerUnitsClicked();
+	end
+end
+-- ************************************************************************************************************************************************************* --
+-- Some Helpers																																 					 --
+-- ************************************************************************************************************************************************************* --
 if S6Patcher.SetNameAndDescription == nil then
 	S6Patcher.SetNameAndDescription = GUI_Tooltip.SetNameAndDescription;
 end
