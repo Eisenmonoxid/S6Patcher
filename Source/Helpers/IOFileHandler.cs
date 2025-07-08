@@ -2,7 +2,6 @@
 using S6Patcher.Properties;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
@@ -326,11 +325,11 @@ namespace S6Patcher.Source.Helpers
             {
                 using (MemoryMappedViewAccessor View = Mapping.CreateViewAccessor())
                 {
-                    CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
+                    CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum); // This will only work on Windows
                 };
             };
 
-            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Finished successfully. New CheckSum: " + CheckSum.ToString());
+            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Finished successfully. New CheckSum: 0x" + $"{CheckSum.ToString():X}");
             return CheckSum;
         }
 

@@ -380,6 +380,8 @@ end
 -- ************************************************************************************************************************************************************* --
 if not S6Patcher.DisableFeatures then
 	S6Patcher.AmmunitionCartTableIndex = nil;
+	S6Patcher.ThiefInSelection = true;
+	
 	if S6Patcher.SelectAllPlayerUnitsClicked == nil then
 		S6Patcher.SelectAllPlayerUnitsClicked = GUI_MultiSelection.SelectAllPlayerUnitsClicked;
 	end
@@ -392,6 +394,23 @@ if not S6Patcher.DisableFeatures then
 		if XGUIEng.IsModifierPressed(Keys.ModifierShift) == true then
 			S6Patcher.AmmunitionCartTableIndex = #LeaderSortOrder + 1;
 			LeaderSortOrder[S6Patcher.AmmunitionCartTableIndex] = Entities.U_AmmunitionCart;
+		end
+		
+		if XGUIEng.IsModifierPressed(Keys.ModifierControl) then
+			if S6Patcher.ThiefInSelection then
+				for Key, Value in pairs(LeaderSortOrder) do
+					if Value == Entities.U_Thief then
+						LeaderSortOrder[Key] = nil;
+						S6Patcher.ThiefInSelection = false;
+						break;
+					end		
+				end
+			end
+		else
+			if not S6Patcher.ThiefInSelection then
+				LeaderSortOrder[#LeaderSortOrder + 1] = Entities.U_Thief;
+				S6Patcher.ThiefInSelection = true;
+			end
 		end
 
 		S6Patcher.SelectAllPlayerUnitsClicked();

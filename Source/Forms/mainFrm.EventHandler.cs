@@ -91,7 +91,7 @@ namespace S6Patcher.Source.Forms
 
             if (Program.IsMono)
             {
-                Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut.");
+                Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut and PE Header update.");
                 MessageBox.Show(Resources.FinishedMono, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }

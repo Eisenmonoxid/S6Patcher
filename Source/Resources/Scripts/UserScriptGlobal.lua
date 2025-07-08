@@ -95,6 +95,10 @@ end
 				return true;
 			end
 		end
+	elseif Campaign == "c00" and Map == "c00_m15_Vestholm" then
+		local Entity = Logic.GetEntityIDByName("ReinforcementSpawn");
+		local posX, posY = Logic.GetEntityPosition(Entity);
+		Logic.DEBUG_SetSettlerPosition(Entity, posX + 250, posY);
 	end
 end)();
 -- ************************************************************************************************************************************************************* --
