@@ -280,8 +280,7 @@ if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.Di
 		local EntityID = GUI.GetSelectedEntity();
 		
 		if EntityID == nil 
-			or Logic.IsEntityInCategory(EntityID, EntityCategories.CityBuilding) == 0
-			or Logic.IsEntityInCategory(EntityID, EntityCategories.OuterRimBuilding) == 0
+			or (Logic.IsEntityInCategory(EntityID, EntityCategories.CityBuilding) == 0 and Logic.IsEntityInCategory(EntityID, EntityCategories.OuterRimBuilding) == 0)
 			or Logic.IsConstructionComplete(EntityID) == 0 
 			or Logic.IsBurning(EntityID) == true
 			or Logic.CanCancelKnockDownBuilding(EntityID) == true
@@ -379,38 +378,34 @@ end
 -- Override Multiselection																																 		 --
 -- ************************************************************************************************************************************************************* --
 if not S6Patcher.DisableFeatures then
-	S6Patcher.AmmunitionCartTableIndex = nil;
-	S6Patcher.ThiefInSelection = true;
+	S6Patcher.LeaderSortOrderOriginal = {unpack(LeaderSortOrder)};
+	S6Patcher.LeaderSortOrderAmmunition = {unpack(LeaderSortOrder)};
+	S6Patcher.LeaderSortOrderThiefAmmunition = {unpack(LeaderSortOrder)};
+	S6Patcher.LeaderSortOrderNoThief = {unpack(LeaderSortOrder)};
 	
+	S6Patcher.LeaderSortOrderThiefAmmunition[#S6Patcher.LeaderSortOrderThiefAmmunition + 1] = Entities.U_AmmunitionCart;
+	for Key, Value in pairs(S6Patcher.LeaderSortOrderNoThief) do
+		if Value == Entities.U_Thief then
+			S6Patcher.LeaderSortOrderNoThief[Key] = nil;
+			S6Patcher.LeaderSortOrderAmmunition[Key] = Entities.U_AmmunitionCart;
+		end
+	end
+
 	if S6Patcher.SelectAllPlayerUnitsClicked == nil then
 		S6Patcher.SelectAllPlayerUnitsClicked = GUI_MultiSelection.SelectAllPlayerUnitsClicked;
 	end
 	GUI_MultiSelection.SelectAllPlayerUnitsClicked = function()
-		if S6Patcher.AmmunitionCartTableIndex ~= nil then
-			LeaderSortOrder[S6Patcher.AmmunitionCartTableIndex] = nil;
-			S6Patcher.AmmunitionCartTableIndex = nil;
-		end
-
-		if XGUIEng.IsModifierPressed(Keys.ModifierShift) == true then
-			S6Patcher.AmmunitionCartTableIndex = #LeaderSortOrder + 1;
-			LeaderSortOrder[S6Patcher.AmmunitionCartTableIndex] = Entities.U_AmmunitionCart;
-		end
+		local Shift = XGUIEng.IsModifierPressed(Keys.ModifierShift) == true;
+		local Control = XGUIEng.IsModifierPressed(Keys.ModifierControl) == true;
 		
-		if XGUIEng.IsModifierPressed(Keys.ModifierControl) then
-			if S6Patcher.ThiefInSelection then
-				for Key, Value in pairs(LeaderSortOrder) do
-					if Value == Entities.U_Thief then
-						LeaderSortOrder[Key] = nil;
-						S6Patcher.ThiefInSelection = false;
-						break;
-					end		
-				end
-			end
+		if Shift and Control then
+			LeaderSortOrder = S6Patcher.LeaderSortOrderAmmunition;
+		elseif Shift and not Control then
+			LeaderSortOrder = S6Patcher.LeaderSortOrderThiefAmmunition;
+		elseif not Shift and Control then
+			LeaderSortOrder = S6Patcher.LeaderSortOrderNoThief;
 		else
-			if not S6Patcher.ThiefInSelection then
-				LeaderSortOrder[#LeaderSortOrder + 1] = Entities.U_Thief;
-				S6Patcher.ThiefInSelection = true;
-			end
+			LeaderSortOrder = S6Patcher.LeaderSortOrderOriginal;
 		end
 
 		S6Patcher.SelectAllPlayerUnitsClicked();
