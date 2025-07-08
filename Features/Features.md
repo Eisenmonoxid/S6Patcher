@@ -60,10 +60,14 @@ This excerpt should highlight some of the key features of the S6Patcher:
 - The Large Address Aware flag can be set, allowing the game to use more virtual memory.
 - The Development Mode can be activated. (Necessary for e.g. the LuaDebugger to work).
 - Makes it possible to mod the game without having to modify the existing game files (Sideloading).
+- The PE Header file CheckSum is now recalculated correctly. This should fix the issue with the game not starting on some systems.
+- When pressing `SHIFT` when selecting all units, ammunition carts will now also be selected.
+- When pressing `CTRL` when selecting all units, Thiefs will now no longer be selected.
 - Base Game campaign fixes:
   - Mission 16: The allied knights now have their correct names and entity types instead of Marcus.
   - Mission 3: The harbour now has the correct name.
   - Mission 11: The victory message by the Red Prince now has the correct portrait and voice message.
+  - Mission 15: The reinforcements are now correctly spawned.
 
 ### Original Release
 - The parental control check is disabled. This caused the game to fail to launch when a certain Win32 DLL file was missing on the system.
