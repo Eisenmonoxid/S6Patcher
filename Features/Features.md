@@ -1,5 +1,5 @@
 # Key Features
-This excerpt should highlight some of the key features of the S6Patcher. For a full feature list, take a look at the [ReadME](https://github.com/Eisenmonoxid/S6Patcher/blob/master/README.md).
+This excerpt should highlight some of the key features of the S6Patcher:
 
 ---
 ## All Versions: Higher Zoom Level

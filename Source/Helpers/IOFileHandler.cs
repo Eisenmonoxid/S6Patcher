@@ -25,6 +25,7 @@ namespace S6Patcher.Source.Helpers
         public static string[] ScriptFiles => Scripts.Keys.ToArray();
         public static byte[][] ScriptResources => Scripts.Values.ToArray();
         private string MonoGlobalDocumentsPath = String.Empty;
+        public string InitialDirectory = String.Empty;
 
         public FileStream OpenFileStream(string Path)
         {
@@ -52,7 +53,7 @@ namespace S6Patcher.Source.Helpers
                 ShowHelp = false,
                 CheckPathExists = true,
                 DereferenceLinks = true,
-                InitialDirectory = Environment.GetFolderPath(Folder),
+                InitialDirectory = (InitialDirectory == String.Empty || Folder == Environment.SpecialFolder.MyDocuments) ? Environment.GetFolderPath(Folder) : InitialDirectory,
                 Multiselect = false,
                 ShowReadOnly = false,
                 Filter = Filter

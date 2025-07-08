@@ -185,6 +185,7 @@ namespace S6Patcher.Source.Forms
                 }
 
                 // File is valid
+                IOFileHandler.Instance.InitialDirectory = Path.GetDirectoryName(GlobalStream.Name);
                 txtExecutablePath.Text = GlobalStream.Name;
                 InitializeControls();
             }
