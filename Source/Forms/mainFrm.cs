@@ -15,6 +15,7 @@ namespace S6Patcher.Source.Forms
 
         private FileStream GlobalStream = null;
         private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
+
         public mainFrm()
         {
             InitializeComponent();
@@ -22,7 +23,7 @@ namespace S6Patcher.Source.Forms
             Logger.Instance.Log("Startup successful! " + this.Text + " - Mono: " + Program.IsMono.ToString());
             new Updater(true).CheckForUpdates();
         }
-        private void SetControlValueFromStream(ref BinaryReader Reader, long Position, TextBox Control)
+        private void SetControlValueFromStream(BinaryReader Reader, long Position, TextBox Control)
         {
             Reader.BaseStream.Position = Position;
             if (Control == txtResolution)
@@ -51,23 +52,23 @@ namespace S6Patcher.Source.Forms
             switch (Validator.ID)
             {
                 case execID.OV:
-                    SetControlValueFromStream(ref Reader, 0x545400, txtZoom);
-                    SetControlValueFromStream(ref Reader, 0x2BE177, txtResolution);
+                    SetControlValueFromStream(Reader, 0x545400, txtZoom);
+                    SetControlValueFromStream(Reader, 0x2BE177, txtResolution);
                     break;
                 case execID.OV_OFFSET:
-                    SetControlValueFromStream(ref Reader, 0x545400 - Patcher.GlobalOffset, txtZoom);
-                    SetControlValueFromStream(ref Reader, 0x2BE177 - Patcher.GlobalOffset, txtResolution);
+                    SetControlValueFromStream(Reader, (0x545400 - 0x3F0000), txtZoom);
+                    SetControlValueFromStream(Reader, (0x2BE177 - 0x3F0000), txtResolution);
                     break;
                 case execID.HE_UBISOFT:
-                    SetControlValueFromStream(ref Reader, 0xC4EC4C, txtZoom);
-                    SetControlValueFromStream(ref Reader, 0x2D4188, txtResolution);
-                    SetControlValueFromStream(ref Reader, 0xEB83C0, txtAutosave);
+                    SetControlValueFromStream(Reader, 0xC4EC4C, txtZoom);
+                    SetControlValueFromStream(Reader, 0x2D4188, txtResolution);
+                    SetControlValueFromStream(Reader, 0xEB83C0, txtAutosave);
                     gbHE.Enabled = true;
                     break;
                 case execID.HE_STEAM:
-                    SetControlValueFromStream(ref Reader, 0xC4F9EC, txtZoom);
-                    SetControlValueFromStream(ref Reader, 0x2D4D74, txtResolution);
-                    SetControlValueFromStream(ref Reader, 0xEB95C0, txtAutosave);
+                    SetControlValueFromStream(Reader, 0xC4F9EC, txtZoom);
+                    SetControlValueFromStream(Reader, 0x2D4D74, txtResolution);
+                    SetControlValueFromStream(Reader, 0xEB95C0, txtAutosave);
                     gbHE.Enabled = true;
                     break;
                 case execID.ED:

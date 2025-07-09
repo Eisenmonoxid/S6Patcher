@@ -26,7 +26,7 @@ namespace S6Patcher.Source.Patcher
         {
             if (Stream == null || Stream.CanRead == false)
             {
-                throw new ArgumentException("Validator: Erroneous arguments!");
+                throw new ArgumentException("Validator: Erroneous arguments to Validator ctor.");
             }
 
             ID = ValidateExecutableID(Stream);

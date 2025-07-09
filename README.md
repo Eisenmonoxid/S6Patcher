@@ -44,4 +44,4 @@ The S6Patcher features a simple Modloader, which can be used to create mods with
 ## Linux Support
 The S6Patcher is developed using .NET Framework 4.8 with C# 7.3 and WinForms. Linux support has been tested using [Mono](https://www.mono-project.com/download/stable/).   
 [libgdiplus](https://www.mono-project.com/docs/gui/libgdiplus/) may also be needed to run the application on your Linux distribution.   
-On Linux, you will need to provide the path to the `Options.ini` file manually, as the application cannot find it automatically. Make sure that it was not moved manually to another folder beforehand.
+On Linux, you will need to provide the path to the `Options.ini` file, as the application cannot find it automatically. Make sure that the file was not moved manually to another folder beforehand.

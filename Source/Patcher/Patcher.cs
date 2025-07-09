@@ -13,7 +13,7 @@ namespace S6Patcher.Source.Patcher
         private readonly FileStream GlobalStream = null;
         private readonly MappingBase GlobalMappings = null;
         private readonly execID GlobalID = execID.NONE;
-        public uint GlobalOffset {get;} = 0x3F0000;
+        private const uint GlobalOffset = 0x3F0000;
 
         public Patcher(execID ID, FileStream Stream)
         {

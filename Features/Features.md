@@ -1,5 +1,5 @@
 # Key Features
-This excerpt should highlight some of the key features of the S6Patcher:
+This excerpt should highlight some of the key features of the S6Patcher. Find a full feature list below.
 
 ---
 ## All Versions: Higher Zoom Level
@@ -85,12 +85,10 @@ This excerpt should highlight some of the key features of the S6Patcher:
 
 ---
 # Recommendation: DXVK
-Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 
+Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) repository and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 
 This wrapper will translate the Direct3D 9.0c commands to Vulkan, which is a much more modern graphics API. In the [configuration file](https://github.com/doitsujin/dxvk/blob/master/dxvk.conf), i recommend to use the following flags:
 ```
-dxgi.syncInterval = 1
 d3d9.presentInterval = 1
 d3d9.samplerAnisotropy = 16
-d3d9.forceSwapchainMSAA = 8
 ```
-The first two options enable vertical synchronisation (without it, the game runs at an unlimited framerate), the second one sets the anisotropic filtering level and the last one enables Multi Sample Antialiasing. This requires a strong PC, of course.
+The first option enables vertical synchronisation (without it, the game runs at an unlimited framerate), the second one sets the anisotropic filtering level.
