@@ -50,12 +50,16 @@ if S6Patcher.BuildingNameUpdate == nil then
 	S6Patcher.BuildingNameUpdate = GUI_BuildingInfo.BuildingNameUpdate;
 end
 GUI_BuildingInfo.BuildingNameUpdate = function()
-	S6Patcher.BuildingNameUpdate();
-
-	local WidgetID = XGUIEng.GetCurrentWidgetID();
-	if XGUIEng.GetText(WidgetID) == "{center}B_Cathedral_Big" then		
-		local Text = S6Patcher.GetLocalizedText({de = "{center}Kathedrale", en = "{center}Cathedral"});
-		XGUIEng.SetText(WidgetID, Text);
+	local EntityID = GUI.GetSelectedEntity();
+	if EntityID == 0 or EntityID == nil then
+		return;
+	end
+	
+	local Type = Logic.GetEntityType(EntityID);
+	if Type == Entities.B_Cathedral_Big then
+		XGUIEng.SetText(XGUIEng.GetCurrentWidgetID(), "{center}" .. XGUIEng.GetStringTableText("Names/" .. Logic.GetEntityTypeName(Type)));
+	else
+		S6Patcher.BuildingNameUpdate();
 	end
 end
 -- ************************************************************************************************************************************************************* --
@@ -272,7 +276,12 @@ if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.Di
 		
 		Sound.FXPlay2DSound("ui\\menu_click");
 		GUI.DeselectEntity(EntityID);
-		GUI.SendScriptCommand("Logic.HurtEntity(" .. tostring(EntityID) .. ", " .. tostring(math.ceil(Value)) .. ");");
+		GUI.SendScriptCommand([[
+			local ID = ]] .. tostring(EntityID) .. [[;
+			local posX, posY = Logic.GetEntityPosition(ID);
+			Logic.Lightning(posX, posY);
+			Logic.HurtEntity(ID, ]] .. tostring(math.ceil(Value)) .. [[);
+		]]);
 	end
 
 	GUI_BuildingButtons.GateOpenCloseUpdate = function()
@@ -422,12 +431,12 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 		if _OptionalTextKeyName == "DowngradeButton" then
 			local Title = {de = "Rückbau", en = "Downgrade"};
 			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
-			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText(Title), S6Patcher.GetLocalizedText(Text));
 			return;
 		elseif XGUIEng.GetCurrentWidgetID() == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") and S6Patcher.CanDisplayDismissButton() then
-			local Title = {de = "Entlassen", en = "Dismiss"};
+			local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center"); -- "Mitglied entlassen"
 			local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
-			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText(Text));
 			return;
 		end	
 	end
@@ -435,8 +444,8 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 	return S6Patcher.SetNameAndDescription(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean);	
 end
 S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _Title, _Text)
-	XGUIEng.SetText(_TooltipNameWidget, "{center}" .. S6Patcher.GetLocalizedText(_Title));
-	XGUIEng.SetText(_TooltipDescriptionWidget, S6Patcher.GetLocalizedText(_Text));
+	XGUIEng.SetText(_TooltipNameWidget, "{center}" .. _Title);
+	XGUIEng.SetText(_TooltipDescriptionWidget, _Text);
 
 	local Height = XGUIEng.GetTextHeight(_TooltipDescriptionWidget, true)
 	local W, H = XGUIEng.GetWidgetSize(_TooltipDescriptionWidget)
