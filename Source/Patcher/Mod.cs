@@ -15,6 +15,7 @@ namespace S6Patcher.Source.Patcher
             GlobalDestinationDirectoryPath = DestinationDirectoryPath ?? throw new ArgumentNullException(nameof(DestinationDirectoryPath), "Destination directory path cannot be null.");
         }
 
+        // Initial Commit
         // TODO: Ask user if mod package should be downloaded and display download size beforehand (e.g. 4 KB will be downloaded)
         // Download + Extraction async to not stall gui thread
         // Use max compression for zip folder
