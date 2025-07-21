@@ -200,6 +200,15 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/Gamefiles/Modfiles.zip.
+        /// </summary>
+        internal static string ModLink {
+            get {
+                return ResourceManager.GetString("ModLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please provide the path to the &quot;Options.ini&quot; configuration file that the game has created!.
         /// </summary>
         internal static string MonoOptionsFile {

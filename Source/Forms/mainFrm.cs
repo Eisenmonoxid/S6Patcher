@@ -23,6 +23,7 @@ namespace S6Patcher.Source.Forms
             Logger.Instance.Log("Startup successful! " + this.Text + " - Mono: " + Program.IsMono.ToString());
             new Updater(true).CheckForUpdates();
         }
+
         private void SetControlValueFromStream(BinaryReader Reader, long Position, TextBox Control)
         {
             Reader.BaseStream.Position = Position;
@@ -46,39 +47,42 @@ namespace S6Patcher.Source.Forms
                 txtAutosave.Text = (Reader.ReadDouble() / 60000).ToString();
             }
         }
+
         private void InitializeControls()
         {
-            BinaryReader Reader = new BinaryReader(GlobalStream);
-            switch (Validator.ID)
+            using (BinaryReader Reader = new BinaryReader(GlobalStream))
             {
-                case execID.OV:
-                    SetControlValueFromStream(Reader, 0x545400, txtZoom);
-                    SetControlValueFromStream(Reader, 0x2BE177, txtResolution);
-                    break;
-                case execID.OV_OFFSET:
-                    SetControlValueFromStream(Reader, (0x545400 - 0x3F0000), txtZoom);
-                    SetControlValueFromStream(Reader, (0x2BE177 - 0x3F0000), txtResolution);
-                    break;
-                case execID.HE_UBISOFT:
-                    SetControlValueFromStream(Reader, 0xC4EC4C, txtZoom);
-                    SetControlValueFromStream(Reader, 0x2D4188, txtResolution);
-                    SetControlValueFromStream(Reader, 0xEB83C0, txtAutosave);
-                    gbHE.Enabled = true;
-                    break;
-                case execID.HE_STEAM:
-                    SetControlValueFromStream(Reader, 0xC4F9EC, txtZoom);
-                    SetControlValueFromStream(Reader, 0x2D4D74, txtResolution);
-                    SetControlValueFromStream(Reader, 0xEB95C0, txtAutosave);
-                    gbHE.Enabled = true;
-                    break;
-                case execID.ED:
-                    gbEditor.Enabled = true;
-                    ToggleEditorControls(false);
-                    break;
-                case execID.NONE:
-                    return;
-                default:
-                    return;
+                switch (Validator.ID)
+                {
+                    case execID.OV:
+                        SetControlValueFromStream(Reader, 0x545400, txtZoom);
+                        SetControlValueFromStream(Reader, 0x2BE177, txtResolution);
+                        break;
+                    case execID.OV_OFFSET:
+                        SetControlValueFromStream(Reader, (0x545400 - 0x3F0000), txtZoom);
+                        SetControlValueFromStream(Reader, (0x2BE177 - 0x3F0000), txtResolution);
+                        break;
+                    case execID.HE_UBISOFT:
+                        SetControlValueFromStream(Reader, 0xC4EC4C, txtZoom);
+                        SetControlValueFromStream(Reader, 0x2D4188, txtResolution);
+                        SetControlValueFromStream(Reader, 0xEB83C0, txtAutosave);
+                        gbHE.Enabled = true;
+                        break;
+                    case execID.HE_STEAM:
+                        SetControlValueFromStream(Reader, 0xC4F9EC, txtZoom);
+                        SetControlValueFromStream(Reader, 0x2D4D74, txtResolution);
+                        SetControlValueFromStream(Reader, 0xEB95C0, txtAutosave);
+                        gbHE.Enabled = true;
+                        break;
+                    case execID.ED:
+                        gbEditor.Enabled = true;
+                        ToggleEditorControls(false);
+                        break;
+                    case execID.NONE:
+                        return;
+                    default:
+                        return;
+                }
             }
 
             gbAll.Enabled = true;
@@ -94,6 +98,7 @@ namespace S6Patcher.Source.Forms
                 AskForRecommendedSettings();
             }
         }
+
         private void ToggleEditorControls(bool Enable)
         {
             cbZoom.Enabled = Enable;
@@ -103,6 +108,7 @@ namespace S6Patcher.Source.Forms
             cbModloader.Enabled = Enable;
             cbScriptBugFixes.Enabled = Enable;
         }
+
         private void AskForRecommendedSettings()
         {
             DialogResult Result = MessageBox.Show(Resources.WelcomeMessage, "Preselect Recommended Settings ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -130,6 +136,7 @@ namespace S6Patcher.Source.Forms
                 }
             }
         }
+
         private List<string> GetPatchFeaturesByControls(List<GroupBox> Controls)
         {
             IEnumerable<CheckBox> Boxes = null;

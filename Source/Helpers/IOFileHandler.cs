@@ -226,13 +226,18 @@ namespace S6Patcher.Source.Helpers
             return true;
         }
 
-        public void CreateModLoader(FileStream GlobalStream, execID GlobalID)
+        public string GetModloaderPath(FileStream GlobalStream, execID GlobalID)
         {
             char Separator = Path.DirectorySeparatorChar;
             uint DirectoryDepth = (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET) ? 2U : 3U;
             string ModPath = Helpers.GetRootDirectory(GlobalStream.Name, DirectoryDepth);
             ModPath += (Separator + "modloader");
+            return ModPath;
+        }
 
+        public void CreateModLoader(FileStream GlobalStream, execID GlobalID)
+        {
+            string ModPath = GetModloaderPath(GlobalStream, GlobalID);
             try
             {
                 Directory.CreateDirectory(ModPath);
@@ -248,13 +253,13 @@ namespace S6Patcher.Source.Helpers
 
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
             {
-                ModPath += (Separator + "shr");
+                ModPath += (Path.DirectorySeparatorChar + "shr");
                 Directory.CreateDirectory(ModPath);
                 Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
             }
             else
             {
-                ModPath += (Separator + "bba" + Separator);
+                ModPath += (Path.DirectorySeparatorChar + "bba" + Path.DirectorySeparatorChar);
                 Directory.CreateDirectory(ModPath);
                 try
                 {

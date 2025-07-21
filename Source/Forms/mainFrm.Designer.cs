@@ -278,14 +278,12 @@
             // 
             // btnBugfixMod
             // 
-            this.btnBugfixMod.Enabled = false;
             this.btnBugfixMod.Location = new System.Drawing.Point(158, 200);
             this.btnBugfixMod.Name = "btnBugfixMod";
             this.btnBugfixMod.Size = new System.Drawing.Size(137, 24);
             this.btnBugfixMod.TabIndex = 20;
             this.btnBugfixMod.Text = "Install Bugfix Mod";
             this.btnBugfixMod.UseVisualStyleBackColor = true;
-            this.btnBugfixMod.Visible = false;
             this.btnBugfixMod.Click += new System.EventHandler(this.btnBugfixMod_Click);
             // 
             // gbUserscriptOptions

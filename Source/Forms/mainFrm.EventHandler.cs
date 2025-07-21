@@ -74,7 +74,7 @@ namespace S6Patcher.Source.Forms
 
         private void btnBugfixMod_Click(object sender, EventArgs e)
         {
-            return;
+            new Patcher.Mod(IOFileHandler.Instance.GetModloaderPath(GlobalStream, Validator.ID)).DownloadZipArchive();
         }
 
         private void btnPatch_Click(object sender, EventArgs e)
