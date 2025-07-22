@@ -54,6 +54,7 @@ namespace S6Patcher.Source.Patcher
                     }
                     else
                     {
+                        // TODO: ALL FILE NAMES IN BB ARCHIVE FILES MUST BE LOWERCASE, OTHERWISE IT WILL NOT BE LOADED BY BB::CFILESYSTEMMANAGER!!!
                         Archive.GetEntry("mod.bba").ExtractToFile(Path.Combine(ArchiveFilePath, ArchiveFileName), true);
                     }
                 }
