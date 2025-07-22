@@ -41,20 +41,6 @@ namespace S6Patcher.Source.Helpers
             Logger.Instance.Log("CreateDesktopShortcut(): Creating shortcut successful! Link: " + Link);
         }
 
-        public static string GetRootDirectory(string Filepath, uint Depth)
-        {
-            Logger.Instance.Log("GetRootPathFromFile(): Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
-
-            DirectoryInfo Info = new DirectoryInfo(Path.GetDirectoryName(Filepath));
-            for (; Depth > 0; Depth--)
-            {
-                Info = Info.Parent;
-            }
-
-            Logger.Instance.Log("GetRootPathFromFile(): Returning Path: " + Info.FullName);
-            return Info.FullName;
-        }
-
         public static string IsPlayLauncherExecutable(string Filepath)
         {
             string CurrentPath = Path.GetFileNameWithoutExtension(Filepath);

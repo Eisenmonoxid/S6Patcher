@@ -1,11 +1,8 @@
-﻿using Microsoft.Win32.SafeHandles;
-using S6Patcher.Properties;
+﻿using S6Patcher.Source.Patcher;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Helpers
@@ -15,16 +12,6 @@ namespace S6Patcher.Source.Helpers
         private static readonly IOFileHandler _instance = new IOFileHandler();
         private IOFileHandler() {}
         public static IOFileHandler Instance => _instance;
-
-        private static readonly Dictionary<string, byte[]> Scripts = new Dictionary<string, byte[]>()
-        {
-            {"UserScriptLocal.lua", Resources.UserScriptLocal},
-            {"EMXBinData.s6patcher", Resources.EMXBinData},
-            {"UserScriptGlobal.lua", Resources.UserScriptGlobal}
-        };
-        public static string[] ScriptFiles => Scripts.Keys.ToArray();
-        public static byte[][] ScriptResources => Scripts.Values.ToArray();
-        private string MonoGlobalDocumentsPath = String.Empty;
         public string InitialDirectory = String.Empty;
 
         public FileStream OpenFileStream(string Path)
@@ -83,13 +70,13 @@ namespace S6Patcher.Source.Helpers
 
         private void DeleteUserConfiguration(string[] Options)
         {
-            GetUserScriptDirectories().ForEach(Element =>
+            UserScriptHandler.GetUserScriptDirectories().ForEach(Element =>
             {
                 DeleteSectionFromOptions(Path.Combine(Element, "Config"), Options);
                 string ScriptPath = Path.Combine(Element, "Script");
                 if (Directory.Exists(ScriptPath) == true)
                 {
-                    foreach (string Entry in ScriptFiles)
+                    foreach (string Entry in UserScriptHandler.ScriptFiles)
                     {
                         try
                         {
@@ -179,7 +166,7 @@ namespace S6Patcher.Source.Helpers
         public bool UpdateEntryInOptionsFile(string Section, string Key, bool Entry)
         {
             string Name = "Options.ini";
-            List<string> Directories = IOFileHandler.Instance.GetUserScriptDirectories();
+            List<string> Directories = UserScriptHandler.GetUserScriptDirectories();
             foreach (string Element in Directories)
             {
                 string CurrentPath = Path.Combine(Element, "Config", Name);
@@ -226,136 +213,23 @@ namespace S6Patcher.Source.Helpers
             return true;
         }
 
-        public string GetModloaderPath(FileStream GlobalStream, execID GlobalID)
+        public string GetRootDirectory(string Filepath, uint Depth)
         {
-            char Separator = Path.DirectorySeparatorChar;
-            uint DirectoryDepth = (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET) ? 2U : 3U;
-            string ModPath = Helpers.GetRootDirectory(GlobalStream.Name, DirectoryDepth);
-            ModPath += (Separator + "modloader");
-            return ModPath;
-        }
+            Logger.Instance.Log("GetRootPathFromFile(): Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
 
-        public void CreateModLoader(FileStream GlobalStream, execID GlobalID)
-        {
-            string ModPath = GetModloaderPath(GlobalStream, GlobalID);
-            try
+            DirectoryInfo Info = new DirectoryInfo(Path.GetDirectoryName(Filepath));
+            for (; Depth > 0; Depth--)
             {
-                Directory.CreateDirectory(ModPath);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                Info = Info.Parent;
             }
 
-            Logger.Instance.Log("SetModLoader(): Directory created or already existed: " + ModPath);
-
-            if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
-            {
-                ModPath += (Path.DirectorySeparatorChar + "shr");
-                Directory.CreateDirectory(ModPath);
-                Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
-            }
-            else
-            {
-                ModPath += (Path.DirectorySeparatorChar + "bba" + Path.DirectorySeparatorChar);
-                Directory.CreateDirectory(ModPath);
-                try
-                {
-                    File.WriteAllBytes(ModPath + "mod.bba", Resources.mod);
-                    Logger.Instance.Log("SetModLoader(): Written mod.bba to Path " + ModPath);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            Logger.Instance.Log("GetRootPathFromFile(): Returning Path: " + Info.FullName);
+            return Info.FullName;
         }
 
         private string GetBackupPath(string Filepath)
         {
             return Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + ".backup");
-        }
-
-        public List<string> GetUserScriptDirectories()
-        {
-            // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
-            // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
-            string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            if (Program.IsMono)
-            {
-                if (MonoGlobalDocumentsPath == String.Empty)
-                {
-                    MessageBox.Show(Resources.MonoOptionsFile, "Select Options.ini file ...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    OpenFileDialog ofd = CreateOFDialog("Configuration file|*.ini", Environment.SpecialFolder.MyDocuments);
-
-                    if (ofd.ShowDialog() == DialogResult.OK)
-                    {
-                        DirectoryInfo Info = new DirectoryInfo(ofd.FileName);
-                        MonoGlobalDocumentsPath = Info.Parent.Parent.Parent.FullName;
-                    }
-                    else
-                    {
-                        Logger.Instance.Log("GetUserScriptDirectories(): User did not select a file! Aborting ...");
-                        ofd.Dispose();
-                        return new List<string>();
-                    }
-                    ofd.Dispose();
-                }
-
-                DocumentsPath = MonoGlobalDocumentsPath;
-            }
-
-            return SelectUserScriptDirectories(DocumentsPath);
-        }
-
-        private List<string> SelectUserScriptDirectories(string DocumentsPath)
-        {
-            return Directory.GetDirectories(DocumentsPath)
-                .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
-                .Select(Element => {Element = Path.Combine(DocumentsPath, Element); return Element;})
-                .ToList();
-        }
-
-        [DllImport("imagehlp.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern int CheckSumMappedFile(SafeMemoryMappedViewHandle BaseAddress, uint FileLength, ref uint HeaderSum, ref uint CheckSum);
-        private uint UpdatePEHeaderFileCheckSum(string Path, long Size)
-        {
-            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Called.");
-
-            uint CheckSum = 0x0;
-            uint HeaderSum = 0x0;
-            using (MemoryMappedFile Mapping = MemoryMappedFile.CreateFromFile(Path))
-            {
-                using (MemoryMappedViewAccessor View = Mapping.CreateViewAccessor())
-                {
-                    CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum); // This will only work on Windows
-                };
-            };
-
-            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Finished successfully. New CheckSum: 0x" + $"{CheckSum.ToString():X}");
-            return CheckSum;
-        }
-
-        public void WritePEHeaderFileCheckSum(string Path, long Size)
-        {
-            uint CheckSum = UpdatePEHeaderFileCheckSum(Path, Size);
-            FileStream CurrentStream = OpenFileStream(Path);
-            if (CurrentStream == null)
-            {
-                Logger.Instance.Log(Resources.ErrorInvalidExecutable);
-                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            byte[] CheckSumByte = BitConverter.GetBytes(CheckSum);
-            CurrentStream.Position = 0x168;
-            CurrentStream.Write(CheckSumByte, 0, CheckSumByte.Length);
-            
-            CurrentStream.Close();
-            CurrentStream.Dispose();
         }
     }
 }

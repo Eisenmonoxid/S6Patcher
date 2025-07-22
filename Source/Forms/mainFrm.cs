@@ -12,6 +12,7 @@ namespace S6Patcher.Source.Forms
     {
         private Patcher.Validator Validator;
         private Patcher.Patcher Patcher;
+        private Patcher.Mod Mod;
 
         private FileStream GlobalStream = null;
         private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
@@ -50,6 +51,7 @@ namespace S6Patcher.Source.Forms
 
         private void InitializeControls()
         {
+            // Validator & Patcher have been successfully initialized
             using (BinaryReader Reader = new BinaryReader(GlobalStream))
             {
                 switch (Validator.ID)
@@ -91,6 +93,7 @@ namespace S6Patcher.Source.Forms
             txtAutosave.Enabled = false;
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
+            txtExecutablePath.Text = GlobalStream.Name;
 
             if (Validator.ID != execID.ED)
             {
@@ -149,19 +152,9 @@ namespace S6Patcher.Source.Forms
 
             return Boxes.Select(Element => Element.Name).ToList();
         }
+
         private void ExecutePatch()
         {
-            try
-            {
-                Patcher = new Patcher.Patcher(Validator.ID, GlobalStream);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbHE, gbEditor});
             Patcher.PatchByControlFeatures(Features);
 
@@ -228,6 +221,10 @@ namespace S6Patcher.Source.Forms
             btnBackup.Enabled = false;
             txtExecutablePath.Text = string.Empty;
             this.ActiveControl = null;
+
+            Validator = null;
+            Patcher = null;
+            Mod = null;
 
             Logger.Instance.Log("ResetForm(): Form successfully reset!");
         }

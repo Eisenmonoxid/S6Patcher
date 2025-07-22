@@ -74,7 +74,7 @@ namespace S6Patcher.Source.Forms
 
         private void btnBugfixMod_Click(object sender, EventArgs e)
         {
-            new Patcher.Mod(IOFileHandler.Instance.GetModloaderPath(GlobalStream, Validator.ID)).DownloadZipArchive();
+            Mod.DownloadZipArchive();
         }
 
         private void btnPatch_Click(object sender, EventArgs e)
@@ -96,7 +96,7 @@ namespace S6Patcher.Source.Forms
                 return;
             }
 
-            IOFileHandler.Instance.WritePEHeaderFileCheckSum(Name, Size);
+            new Patcher.CheckSumCalculator().WritePEHeaderFileCheckSum(Name, Size);
 
             DialogResult Result;
             Result = MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
@@ -186,7 +186,20 @@ namespace S6Patcher.Source.Forms
 
                 // File is valid
                 IOFileHandler.Instance.InitialDirectory = Path.GetDirectoryName(GlobalStream.Name);
-                txtExecutablePath.Text = GlobalStream.Name;
+                try
+                {
+                    Mod = new Patcher.Mod(Validator.ID, GlobalStream);
+                    Patcher = new Patcher.Patcher(Validator.ID, GlobalStream, Mod);
+                }
+                catch (Exception ex)
+                {
+                    CloseFileStream(GlobalStream);
+                    Logger.Instance.Log(ex.ToString());
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Everything has been initialized successfully
                 InitializeControls();
             }
             else

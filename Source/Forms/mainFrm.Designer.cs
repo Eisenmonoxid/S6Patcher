@@ -278,6 +278,7 @@
             // 
             // btnBugfixMod
             // 
+            this.btnBugfixMod.Enabled = false;
             this.btnBugfixMod.Location = new System.Drawing.Point(158, 200);
             this.btnBugfixMod.Name = "btnBugfixMod";
             this.btnBugfixMod.Size = new System.Drawing.Size(137, 24);

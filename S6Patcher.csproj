@@ -88,6 +88,7 @@
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
     <Compile Include="Source\Helpers\Logger.cs" />
     <Compile Include="Source\Helpers\Updater.cs" />
+    <Compile Include="Source\Patcher\CheckSumCalculator.cs" />
     <Compile Include="Source\Patcher\Mappings\MappingBase.cs" />
     <Compile Include="Source\Patcher\Mappings\ED.cs" />
     <Compile Include="Source\Patcher\Mappings\HE_Ubi.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Source\Patcher\Mod.cs" />
     <Compile Include="Source\Patcher\Patcher.cs" />
     <Compile Include="Source\Helpers\Helpers.cs" />
+    <Compile Include="Source\Patcher\UserScriptHandler.cs" />
     <Compile Include="Source\Patcher\Validator.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -150,8 +152,7 @@
     <Content Include="Version.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Source\Resources\Gamefiles\HE\" />
-    <Folder Include="Source\Resources\Gamefiles\OV\" />
+    <Folder Include="Source\Resources\Gamefiles\" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">

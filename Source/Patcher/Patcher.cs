@@ -12,10 +12,11 @@ namespace S6Patcher.Source.Patcher
     {
         private readonly FileStream GlobalStream = null;
         private readonly MappingBase GlobalMappings = null;
+        private readonly Mod GlobalMod = null;
         private readonly execID GlobalID = execID.NONE;
         private const uint GlobalOffset = 0x3F0000;
 
-        public Patcher(execID ID, FileStream Stream)
+        public Patcher(execID ID, FileStream Stream, Mod Mod)
         {
             if (ID == execID.NONE || Stream == null || Stream.CanWrite == false)
             {
@@ -24,6 +25,7 @@ namespace S6Patcher.Source.Patcher
 
             GlobalID = ID;
             GlobalStream = Stream;
+            GlobalMod = Mod;
             GlobalMappings = MappingBase.GetMappingsByID(GlobalID);
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
@@ -129,7 +131,7 @@ namespace S6Patcher.Source.Patcher
                 WriteBytes(Entry.Key, Entry.Value);
             }
 
-            IOFileHandler.Instance.CreateModLoader(GlobalStream, GlobalID);
+            GlobalMod.CreateModLoader(GlobalStream, GlobalID);
         }
 
         public void SetLargeAddressAwareFlag()
@@ -166,16 +168,16 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("SetLuaScriptBugFixes(): Called.");
 
-            IOFileHandler.Instance.GetUserScriptDirectories().ForEach(Element =>
+            UserScriptHandler.GetUserScriptDirectories().ForEach(Element =>
             {
                 string CurrentPath = Path.Combine(Element, "Script");
                 try
                 {
                     Directory.CreateDirectory(CurrentPath);
-                    for (uint i = 0; i < IOFileHandler.ScriptFiles.Length; i++)
+                    for (uint i = 0; i < UserScriptHandler.ScriptFiles.Length; i++)
                     {
-                        File.WriteAllBytes(Path.Combine(CurrentPath, IOFileHandler.ScriptFiles[i]), IOFileHandler.ScriptResources[i]);
-                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfile named " + IOFileHandler.ScriptFiles[i] + " to " + CurrentPath);
+                        File.WriteAllBytes(Path.Combine(CurrentPath, UserScriptHandler.ScriptFiles[i]), UserScriptHandler.ScriptResources[i]);
+                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfile named " + UserScriptHandler.ScriptFiles[i] + " to " + CurrentPath);
                     }
                 }
                 catch (Exception ex)
