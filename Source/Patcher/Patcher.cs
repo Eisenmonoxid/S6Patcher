@@ -131,7 +131,7 @@ namespace S6Patcher.Source.Patcher
                 WriteBytes(Entry.Key, Entry.Value);
             }
 
-            GlobalMod.CreateModLoader(GlobalStream, GlobalID);
+            GlobalMod.CreateModLoader();
         }
 
         public void SetLargeAddressAwareFlag()

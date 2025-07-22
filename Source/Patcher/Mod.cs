@@ -3,6 +3,7 @@ using S6Patcher.Source.Helpers;
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 
@@ -12,6 +13,10 @@ namespace S6Patcher.Source.Patcher
     {
         private readonly Uri GlobalDownloadURL = new Uri(Resources.ModLink);
         private readonly string GlobalDestinationDirectoryPath;
+        private readonly string ArchiveFilePath;
+        private readonly string BaseDirectoryPath;
+        private const string ArchiveFileName = "mod.bba";
+
         private readonly execID GlobalID = execID.NONE;
         private readonly FileStream GlobalStream = null;
 
@@ -19,18 +24,41 @@ namespace S6Patcher.Source.Patcher
         {
             GlobalID = ID;
             GlobalStream = Stream;
+            GlobalDestinationDirectoryPath = GetModloaderPath();
+            ArchiveFilePath = Path.Combine(GlobalDestinationDirectoryPath, "bba");
+            BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         }
 
-        // Initial Commit
-        // Check ShadowMapSize & ReflectionQuality in Code
-        // TODO: Ask user if mod package should be downloaded and display download size beforehand (e.g. 4 KB will be downloaded)
-        // Download + Extraction async to not stall gui thread
-        // Use max compression for zip folder
         public bool ExtractZipArchive(string ZipPath)
         {
             try
             {
-                ZipFile.ExtractToDirectory(ZipPath, GlobalDestinationDirectoryPath);
+                using (ZipArchive Archive = ZipFile.OpenRead(ZipPath))
+                {
+                    if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
+                    {
+                        var Entries = (from Entry in Archive.Entries
+                                      where !Entry.FullName.Contains(ArchiveFileName)
+                                      where !String.IsNullOrEmpty(Entry.Name)
+                                      select Entry);
+
+                        foreach (ZipArchiveEntry Entry in Entries)
+                        {
+                            string FullPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName));
+                            if (Directory.Exists(FullPath) == false)
+                            {
+                                Directory.CreateDirectory(FullPath);
+                            }
+                            Entry.ExtractToFile(Path.Combine(BaseDirectoryPath, Entry.FullName), true);
+                        }
+                    }
+                    else
+                    {
+                        Archive.GetEntry("mod.bba").ExtractToFile(Path.Combine(ArchiveFilePath, ArchiveFileName), true);
+                    }
+                }
+
+                File.Delete(ZipPath);
             }
             catch (Exception ex)
             {
@@ -78,58 +106,31 @@ namespace S6Patcher.Source.Patcher
             else
             {
                 Logger.Instance.Log("Download completed successfully.");
-                CreateModloaderFolder();
+                CreateModLoader();
                 ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
         }
 
-        private void CreateModloaderFolder()
-        {
-            string Path = GetModloaderPath(GlobalStream, GlobalID);
-            if (Directory.Exists(Path) == false)
-            {
-                CreateModLoader(GlobalStream, GlobalID);
-            }
-        }
-
-        public string GetModloaderPath(FileStream GlobalStream, execID GlobalID)
+        public string GetModloaderPath()
         {
             uint Depth = (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET) ? 2U : 3U;
-            string ModPath = IOFileHandler.Instance.GetRootDirectory(GlobalStream.Name, Depth);
-            ModPath += (Path.DirectorySeparatorChar + "modloader");
-            return ModPath;
+            return IOFileHandler.Instance.GetRootDirectory(GlobalStream.Name, Depth) + Path.DirectorySeparatorChar + "modloader";
         }
 
-        public void CreateModLoader(FileStream GlobalStream, execID GlobalID)
+        public void CreateModLoader()
         {
-            string ModPath = GetModloaderPath(GlobalStream, GlobalID);
-            try
-            {
-                Directory.CreateDirectory(ModPath);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            Logger.Instance.Log("SetModLoader(): Directory created or already existed: " + ModPath);
-
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
             {
-                ModPath += (Path.DirectorySeparatorChar + "shr");
-                Directory.CreateDirectory(ModPath);
-                Logger.Instance.Log("SetModLoader(): Directory created " + ModPath);
+                Directory.CreateDirectory(BaseDirectoryPath);
+                Logger.Instance.Log("SetModLoader(): Directory created " + BaseDirectoryPath);
             }
             else
             {
-                ModPath += (Path.DirectorySeparatorChar + "bba" + Path.DirectorySeparatorChar);
-                Directory.CreateDirectory(ModPath);
+                Directory.CreateDirectory(ArchiveFilePath);
                 try
                 {
-                    File.WriteAllBytes(ModPath + "mod.bba", Resources.mod);
-                    Logger.Instance.Log("SetModLoader(): Written mod.bba to Path " + ModPath);
+                    File.WriteAllBytes(Path.Combine(ArchiveFilePath, ArchiveFileName), Resources.mod);
+                    Logger.Instance.Log("SetModLoader(): Written " + ArchiveFileName + " to Path " + ArchiveFilePath);
                 }
                 catch (Exception ex)
                 {
