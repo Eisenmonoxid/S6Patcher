@@ -44,7 +44,7 @@ namespace S6Patcher.Source.Forms
         }
         private void cbModloader_CheckedChanged(object sender, EventArgs e)
         {
-            btnBugfixMod.Enabled = cbModloader.Checked;
+            cbBugfixMod.Enabled = cbModloader.Checked;
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
@@ -70,11 +70,6 @@ namespace S6Patcher.Source.Forms
                     .Select(Element => {Element.Checked = false; return Element;})
                     .ToArray();
             }
-        }
-
-        private void btnBugfixMod_Click(object sender, EventArgs e)
-        {
-            Mod.DownloadZipArchive();
         }
 
         private void btnPatch_Click(object sender, EventArgs e)
@@ -188,8 +183,7 @@ namespace S6Patcher.Source.Forms
                 IOFileHandler.Instance.InitialDirectory = Path.GetDirectoryName(GlobalStream.Name);
                 try
                 {
-                    Mod = new Patcher.Mod(Validator.ID, GlobalStream);
-                    Patcher = new Patcher.Patcher(Validator.ID, GlobalStream, Mod);
+                    Patcher = new Patcher.Patcher(Validator.ID, GlobalStream);
                 }
                 catch (Exception ex)
                 {

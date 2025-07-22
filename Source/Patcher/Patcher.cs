@@ -16,7 +16,7 @@ namespace S6Patcher.Source.Patcher
         private readonly execID GlobalID = execID.NONE;
         private const uint GlobalOffset = 0x3F0000;
 
-        public Patcher(execID ID, FileStream Stream, Mod Mod)
+        public Patcher(execID ID, FileStream Stream)
         {
             if (ID == execID.NONE || Stream == null || Stream.CanWrite == false)
             {
@@ -25,7 +25,7 @@ namespace S6Patcher.Source.Patcher
 
             GlobalID = ID;
             GlobalStream = Stream;
-            GlobalMod = Mod;
+            GlobalMod = new Mod(ID, Stream);
             GlobalMappings = MappingBase.GetMappingsByID(GlobalID);
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
@@ -121,7 +121,7 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        public void SetModLoader()
+        public void SetModLoader(bool UseBugFixMod)
         {
             Logger.Instance.Log("SetModLoader(): Called.");
 
@@ -131,7 +131,7 @@ namespace S6Patcher.Source.Patcher
                 WriteBytes(Entry.Key, Entry.Value);
             }
 
-            GlobalMod.CreateModLoader();
+            GlobalMod.CreateModLoader(UseBugFixMod);
         }
 
         public void SetLargeAddressAwareFlag()

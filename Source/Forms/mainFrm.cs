@@ -12,7 +12,6 @@ namespace S6Patcher.Source.Forms
     {
         private Patcher.Validator Validator;
         private Patcher.Patcher Patcher;
-        private Patcher.Mod Mod;
 
         private FileStream GlobalStream = null;
         private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
@@ -52,39 +51,37 @@ namespace S6Patcher.Source.Forms
         private void InitializeControls()
         {
             // Validator & Patcher have been successfully initialized
-            using (BinaryReader Reader = new BinaryReader(GlobalStream))
+            BinaryReader Reader = new BinaryReader(GlobalStream);
+            switch (Validator.ID)
             {
-                switch (Validator.ID)
-                {
-                    case execID.OV:
-                        SetControlValueFromStream(Reader, 0x545400, txtZoom);
-                        SetControlValueFromStream(Reader, 0x2BE177, txtResolution);
-                        break;
-                    case execID.OV_OFFSET:
-                        SetControlValueFromStream(Reader, (0x545400 - 0x3F0000), txtZoom);
-                        SetControlValueFromStream(Reader, (0x2BE177 - 0x3F0000), txtResolution);
-                        break;
-                    case execID.HE_UBISOFT:
-                        SetControlValueFromStream(Reader, 0xC4EC4C, txtZoom);
-                        SetControlValueFromStream(Reader, 0x2D4188, txtResolution);
-                        SetControlValueFromStream(Reader, 0xEB83C0, txtAutosave);
-                        gbHE.Enabled = true;
-                        break;
-                    case execID.HE_STEAM:
-                        SetControlValueFromStream(Reader, 0xC4F9EC, txtZoom);
-                        SetControlValueFromStream(Reader, 0x2D4D74, txtResolution);
-                        SetControlValueFromStream(Reader, 0xEB95C0, txtAutosave);
-                        gbHE.Enabled = true;
-                        break;
-                    case execID.ED:
-                        gbEditor.Enabled = true;
-                        ToggleEditorControls(false);
-                        break;
-                    case execID.NONE:
-                        return;
-                    default:
-                        return;
-                }
+                case execID.OV:
+                    SetControlValueFromStream(Reader, 0x545400, txtZoom);
+                    SetControlValueFromStream(Reader, 0x2BE177, txtResolution);
+                    break;
+                case execID.OV_OFFSET:
+                    SetControlValueFromStream(Reader, (0x545400 - 0x3F0000), txtZoom);
+                    SetControlValueFromStream(Reader, (0x2BE177 - 0x3F0000), txtResolution);
+                    break;
+                case execID.HE_UBISOFT:
+                    SetControlValueFromStream(Reader, 0xC4EC4C, txtZoom);
+                    SetControlValueFromStream(Reader, 0x2D4188, txtResolution);
+                    SetControlValueFromStream(Reader, 0xEB83C0, txtAutosave);
+                    gbHE.Enabled = true;
+                    break;
+                case execID.HE_STEAM:
+                    SetControlValueFromStream(Reader, 0xC4F9EC, txtZoom);
+                    SetControlValueFromStream(Reader, 0x2D4D74, txtResolution);
+                    SetControlValueFromStream(Reader, 0xEB95C0, txtAutosave);
+                    gbHE.Enabled = true;
+                    break;
+                case execID.ED:
+                    gbEditor.Enabled = true;
+                    ToggleEditorControls(false);
+                    break;
+                case execID.NONE:
+                    return;
+                default:
+                    return;
             }
 
             gbAll.Enabled = true;
@@ -181,7 +178,7 @@ namespace S6Patcher.Source.Forms
             }
             if (cbModloader.Checked)
             {
-                Patcher.SetModLoader();
+                Patcher.SetModLoader(cbBugfixMod.Enabled);
             }
         }
 
@@ -224,7 +221,6 @@ namespace S6Patcher.Source.Forms
 
             Validator = null;
             Patcher = null;
-            Mod = null;
 
             Logger.Instance.Log("ResetForm(): Form successfully reset!");
         }

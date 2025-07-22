@@ -29,7 +29,7 @@ namespace S6Patcher.Source.Patcher
             BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         }
 
-        public bool ExtractZipArchive(string ZipPath)
+        private bool ExtractZipArchive(string ZipPath)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace S6Patcher.Source.Patcher
             return true;
         }
 
-        public void DownloadZipArchive()
+        private void DownloadZipArchive()
         {
             try
             {
@@ -106,7 +106,6 @@ namespace S6Patcher.Source.Patcher
             else
             {
                 Logger.Instance.Log("Download completed successfully.");
-                CreateModLoader();
                 ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
         }
@@ -117,7 +116,7 @@ namespace S6Patcher.Source.Patcher
             return IOFileHandler.Instance.GetRootDirectory(GlobalStream.Name, Depth) + Path.DirectorySeparatorChar + "modloader";
         }
 
-        public void CreateModLoader()
+        public void CreateModLoader(bool UseBugfixMod)
         {
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
             {
@@ -129,7 +128,7 @@ namespace S6Patcher.Source.Patcher
                 Directory.CreateDirectory(ArchiveFilePath);
                 try
                 {
-                    File.WriteAllBytes(Path.Combine(ArchiveFilePath, ArchiveFileName), Resources.mod);
+                    File.WriteAllBytes(Path.Combine(ArchiveFilePath, ArchiveFileName), Resources.mod); // Always do this in case the download fails
                     Logger.Instance.Log("SetModLoader(): Written " + ArchiveFileName + " to Path " + ArchiveFilePath);
                 }
                 catch (Exception ex)
@@ -137,6 +136,11 @@ namespace S6Patcher.Source.Patcher
                     Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+
+            if (UseBugfixMod)
+            {
+                DownloadZipArchive();
             }
         }
     }

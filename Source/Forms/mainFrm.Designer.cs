@@ -46,7 +46,6 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
-            this.btnBugfixMod = new System.Windows.Forms.Button();
             this.gbUserscriptOptions = new System.Windows.Forms.GroupBox();
             this.cbSpecialKnightsAvailable = new System.Windows.Forms.CheckBox();
             this.cbDayNightCycle = new System.Windows.Forms.CheckBox();
@@ -63,6 +62,7 @@
             this.btnChooseFile = new System.Windows.Forms.Button();
             this.txtExecutablePath = new System.Windows.Forms.TextBox();
             this.lblSelectFile = new System.Windows.Forms.Label();
+            this.cbBugfixMod = new System.Windows.Forms.CheckBox();
             this.gbEditor.SuspendLayout();
             this.gbHE.SuspendLayout();
             this.gbAll.SuspendLayout();
@@ -253,7 +253,7 @@
             // 
             // gbAll
             // 
-            this.gbAll.Controls.Add(this.btnBugfixMod);
+            this.gbAll.Controls.Add(this.cbBugfixMod);
             this.gbAll.Controls.Add(this.gbUserscriptOptions);
             this.gbAll.Controls.Add(this.cbModloader);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
@@ -275,17 +275,6 @@
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
-            // 
-            // btnBugfixMod
-            // 
-            this.btnBugfixMod.Enabled = false;
-            this.btnBugfixMod.Location = new System.Drawing.Point(158, 200);
-            this.btnBugfixMod.Name = "btnBugfixMod";
-            this.btnBugfixMod.Size = new System.Drawing.Size(137, 24);
-            this.btnBugfixMod.TabIndex = 20;
-            this.btnBugfixMod.Text = "Install Bugfix Mod";
-            this.btnBugfixMod.UseVisualStyleBackColor = true;
-            this.btnBugfixMod.Click += new System.EventHandler(this.btnBugfixMod_Click);
             // 
             // gbUserscriptOptions
             // 
@@ -455,6 +444,17 @@
             this.lblSelectFile.TabIndex = 22;
             this.lblSelectFile.Text = "Select executable:";
             // 
+            // cbBugfixMod
+            // 
+            this.cbBugfixMod.AutoSize = true;
+            this.cbBugfixMod.Enabled = false;
+            this.cbBugfixMod.Location = new System.Drawing.Point(152, 203);
+            this.cbBugfixMod.Name = "cbBugfixMod";
+            this.cbBugfixMod.Size = new System.Drawing.Size(203, 20);
+            this.cbBugfixMod.TabIndex = 20;
+            this.cbBugfixMod.Text = "Download + Install Bugfix Mod";
+            this.cbBugfixMod.UseVisualStyleBackColor = true;
+            // 
             // mainFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -532,7 +532,7 @@
         private System.Windows.Forms.CheckBox cbUseDowngrade;
         private System.Windows.Forms.CheckBox cbUseSingleStop;
         private System.Windows.Forms.CheckBox cbDayNightCycle;
-        private System.Windows.Forms.Button btnBugfixMod;
         private System.Windows.Forms.CheckBox cbSpecialKnightsAvailable;
+        private System.Windows.Forms.CheckBox cbBugfixMod;
     }
 }
