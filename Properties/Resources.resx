@@ -130,6 +130,10 @@
   <data name="ErrorBackupFail" xml:space="preserve">
     <value>Could not restore backup! Aborting ...</value>
   </data>
+  <data name="ErrorClosingWhenPatching" xml:space="preserve">
+    <value>Patching is currently in progress.
+Do you want to exit?</value>
+  </data>
   <data name="ErrorInvalidExecutable" xml:space="preserve">
     <value>Invalid executable has been choosen! Aborting ...</value>
   </data>
@@ -163,6 +167,10 @@ Create desktop shortcut to the patched file?</value>
   </data>
   <data name="mod" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Source\Resources\Mod\mod.bba;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ModDownloadMessage" xml:space="preserve">
+    <value>%x KB will be downloaded from the GitHub repository.
+Continue?</value>
   </data>
   <data name="ModLink" xml:space="preserve">
     <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/Gamefiles/Modfiles.zip</value>

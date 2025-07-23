@@ -86,6 +86,7 @@
     <Compile Include="Source\Forms\aboutBox.Designer.cs">
       <DependentUpon>aboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Helpers\Backup.cs" />
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
     <Compile Include="Source\Helpers\Logger.cs" />
     <Compile Include="Source\Helpers\Updater.cs" />

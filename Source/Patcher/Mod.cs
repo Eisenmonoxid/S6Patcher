@@ -54,7 +54,6 @@ namespace S6Patcher.Source.Patcher
                     }
                     else
                     {
-                        // TODO: ALL FILE NAMES IN BB ARCHIVE FILES MUST BE LOWERCASE, OTHERWISE IT WILL NOT BE LOADED BY BB::CFILESYSTEMMANAGER!!!
                         Archive.GetEntry("mod.bba").ExtractToFile(Path.Combine(ArchiveFilePath, ArchiveFileName), true);
                     }
                 }
@@ -63,7 +62,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
-                Logger.Instance.Log(ex.ToString());
+                Logger.Instance.Log("ExtractZipArchive(): " + ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -78,10 +77,14 @@ namespace S6Patcher.Source.Patcher
             {
                 using (WebClient Client = new WebClient())
                 {
-                    // SecurityPoint TLS
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
                     Client.OpenRead(GlobalDownloadURL);
                     Int64 Size = Convert.ToInt64(Client.ResponseHeaders["Content-Length"]);
-                    if (MessageBox.Show((Size / 1024).ToString() + " KB", "Size", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    string ConvertedSize = (Size / (float)1024).ToString("0.00");
+                    Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
+
+                    if (MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", 
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                     {
                         return;
                     }
@@ -92,7 +95,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
-                Logger.Instance.Log(ex.ToString());
+                Logger.Instance.Log("DownloadZipArchive():\n" + ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -106,7 +109,7 @@ namespace S6Patcher.Source.Patcher
             }
             else
             {
-                Logger.Instance.Log("Download completed successfully.");
+                Logger.Instance.Log("DownloadZipFileCompleted(): Download completed successfully.");
                 ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
         }
@@ -129,7 +132,7 @@ namespace S6Patcher.Source.Patcher
                 Directory.CreateDirectory(ArchiveFilePath);
                 try
                 {
-                    File.WriteAllBytes(Path.Combine(ArchiveFilePath, ArchiveFileName), Resources.mod); // Always do this in case the download fails
+                    File.WriteAllBytes(Path.Combine(ArchiveFilePath, ArchiveFileName), Resources.mod); // Always do this in case the download fails or user cancels
                     Logger.Instance.Log("SetModLoader(): Written " + ArchiveFileName + " to Path " + ArchiveFilePath);
                 }
                 catch (Exception ex)

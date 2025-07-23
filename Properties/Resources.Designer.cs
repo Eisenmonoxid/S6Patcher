@@ -98,6 +98,16 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Patching is currently in progress.
+        ///Do you want to exit?.
+        /// </summary>
+        internal static string ErrorClosingWhenPatching {
+            get {
+                return ResourceManager.GetString("ErrorClosingWhenPatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid executable has been choosen! Aborting ....
         /// </summary>
         internal static string ErrorInvalidExecutable {
@@ -196,6 +206,16 @@ namespace S6Patcher.Properties {
             get {
                 object obj = ResourceManager.GetObject("mod", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %x KB will be downloaded from the GitHub repository.
+        ///Continue?.
+        /// </summary>
+        internal static string ModDownloadMessage {
+            get {
+                return ResourceManager.GetString("ModDownloadMessage", resourceCulture);
             }
         }
         

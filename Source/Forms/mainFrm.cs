@@ -76,7 +76,6 @@ namespace S6Patcher.Source.Forms
                     break;
                 case execID.ED:
                     gbEditor.Enabled = true;
-                    ToggleEditorControls(false);
                     break;
                 case execID.NONE:
                     return;
@@ -85,19 +84,13 @@ namespace S6Patcher.Source.Forms
             }
 
             gbAll.Enabled = true;
-            gbModloader.Enabled = true;
             txtResolution.Enabled = false;
             txtZoom.Enabled = false;
             txtAutosave.Enabled = false;
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
             txtExecutablePath.Text = GlobalStream.Name;
-
-            if (Validator.ID != execID.ED)
-            {
-                ToggleEditorControls(true);
-                AskForRecommendedSettings();
-            }
+            ToggleEditorControls(Validator.ID != execID.ED);
         }
 
         private void ToggleEditorControls(bool Enable)
@@ -106,8 +99,14 @@ namespace S6Patcher.Source.Forms
             lblZoomAngle.Enabled = Enable;
             lblTextureRes.Enabled = Enable;
             cbLimitedEdition.Enabled = Enable;
+            gbModloader.Enabled = Enable;
             cbModloader.Enabled = Enable;
             cbScriptBugFixes.Enabled = Enable;
+
+            if (Enable)
+            {
+                AskForRecommendedSettings();
+            }
         }
 
         private void AskForRecommendedSettings()
@@ -151,6 +150,18 @@ namespace S6Patcher.Source.Forms
             return Boxes.Select(Element => Element.Name).ToList();
         }
 
+        private void ExecutePatchWrapper()
+        {
+            btnAbort.Enabled = false;
+            IsBusyPatching = true;
+
+            ExecutePatch(); // Execute Patching
+            ResetForm(); // Close FileStream and reset form controls
+
+            IsBusyPatching = false;
+            btnAbort.Enabled = true;
+        }
+
         private void ExecutePatch()
         {
             List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor});
@@ -179,7 +190,7 @@ namespace S6Patcher.Source.Forms
             }
             if (cbModloader.Checked)
             {
-                Patcher.SetModLoader(cbBugfixMod.Enabled);
+                Patcher.SetModLoader(cbBugfixMod.Checked);
             }
         }
 

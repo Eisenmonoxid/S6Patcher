@@ -11,8 +11,18 @@ namespace S6Patcher.Source.Forms
 {
     public partial class mainFrm
     {
+        private bool IsBusyPatching = false;
         private void mainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (IsBusyPatching && e.CloseReason == CloseReason.UserClosing)
+            {
+                if (MessageBox.Show(Resources.ErrorClosingWhenPatching, "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
             CloseFileStream(GlobalStream);
         }
         private void mainFrm_Load(object sender, EventArgs e)
@@ -79,8 +89,7 @@ namespace S6Patcher.Source.Forms
             string Name = GlobalStream.Name;
             long Size = GlobalStream.Length;
 
-            ExecutePatch(); // Execute Patching
-            ResetForm(); // Close FileStream and reset form controls
+            ExecutePatchWrapper(); // Main patching logic is executed here
 
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
 
@@ -132,7 +141,7 @@ namespace S6Patcher.Source.Forms
         private void btnBackup_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnBackup_Click(): Restoring backup ...");
-            bool Result = IOFileHandler.Instance.RestoreBackup(GlobalStream, GlobalOptions);
+            bool Result = Backup.RestoreBackup(GlobalStream, GlobalOptions);
             ResetForm();
 
             if (Result == false)
@@ -154,7 +163,7 @@ namespace S6Patcher.Source.Forms
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 string FileName = IsPlayLauncherExecutable(ofd.FileName);
-                if (IOFileHandler.Instance.CreateBackup(FileName) == false)
+                if (Backup.CreateBackup(FileName) == false)
                 {
                     Logger.Instance.Log(Resources.ErrorBackup);
                     MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
