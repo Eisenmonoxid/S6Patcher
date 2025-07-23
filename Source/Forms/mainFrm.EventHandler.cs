@@ -55,6 +55,10 @@ namespace S6Patcher.Source.Forms
         private void cbModloader_CheckedChanged(object sender, EventArgs e)
         {
             cbBugfixMod.Enabled = cbModloader.Checked;
+            if (!cbModloader.Checked)
+            {
+                cbBugfixMod.Enabled = false;
+            }
         }
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
