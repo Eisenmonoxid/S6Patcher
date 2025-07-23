@@ -85,6 +85,7 @@ namespace S6Patcher.Source.Forms
             }
 
             gbAll.Enabled = true;
+            gbModloader.Enabled = true;
             txtResolution.Enabled = false;
             txtZoom.Enabled = false;
             txtAutosave.Enabled = false;
@@ -152,7 +153,7 @@ namespace S6Patcher.Source.Forms
 
         private void ExecutePatch()
         {
-            List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbHE, gbEditor});
+            List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor});
             Patcher.PatchByControlFeatures(Features);
 
             if (cbZoom.Checked)
@@ -198,7 +199,7 @@ namespace S6Patcher.Source.Forms
         private void ResetForm()
         {
             CloseFileStream(GlobalStream);
-            new List<GroupBox> {gbAll, gbHE, gbEditor}.ForEach(Control =>
+            new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor}.ForEach(Control =>
             {
                 Control.Enabled = false;
                 foreach (var Element in Control.Controls)

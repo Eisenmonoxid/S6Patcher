@@ -46,6 +46,7 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.cbBugfixMod = new System.Windows.Forms.CheckBox();
             this.gbUserscriptOptions = new System.Windows.Forms.GroupBox();
             this.cbSpecialKnightsAvailable = new System.Windows.Forms.CheckBox();
             this.cbDayNightCycle = new System.Windows.Forms.CheckBox();
@@ -62,11 +63,12 @@
             this.btnChooseFile = new System.Windows.Forms.Button();
             this.txtExecutablePath = new System.Windows.Forms.TextBox();
             this.lblSelectFile = new System.Windows.Forms.Label();
-            this.cbBugfixMod = new System.Windows.Forms.CheckBox();
+            this.gbModloader = new System.Windows.Forms.GroupBox();
             this.gbEditor.SuspendLayout();
             this.gbHE.SuspendLayout();
             this.gbAll.SuspendLayout();
             this.gbUserscriptOptions.SuspendLayout();
+            this.gbModloader.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbLAAFlag
@@ -103,7 +105,7 @@
             // 
             this.btnPatch.Enabled = false;
             this.btnPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPatch.Location = new System.Drawing.Point(12, 467);
+            this.btnPatch.Location = new System.Drawing.Point(12, 513);
             this.btnPatch.Name = "btnPatch";
             this.btnPatch.Size = new System.Drawing.Size(642, 47);
             this.btnPatch.TabIndex = 3;
@@ -172,7 +174,7 @@
             // btnAbort
             // 
             this.btnAbort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAbort.Location = new System.Drawing.Point(12, 573);
+            this.btnAbort.Location = new System.Drawing.Point(12, 619);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(642, 47);
             this.btnAbort.TabIndex = 10;
@@ -230,7 +232,7 @@
             this.gbEditor.Controls.Add(this.cbAllEntities);
             this.gbEditor.Enabled = false;
             this.gbEditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbEditor.Location = new System.Drawing.Point(12, 336);
+            this.gbEditor.Location = new System.Drawing.Point(12, 382);
             this.gbEditor.Name = "gbEditor";
             this.gbEditor.Size = new System.Drawing.Size(642, 125);
             this.gbEditor.TabIndex = 16;
@@ -244,7 +246,7 @@
             this.gbHE.Controls.Add(this.lblAutosave);
             this.gbHE.Enabled = false;
             this.gbHE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbHE.Location = new System.Drawing.Point(12, 281);
+            this.gbHE.Location = new System.Drawing.Point(12, 327);
             this.gbHE.Name = "gbHE";
             this.gbHE.Size = new System.Drawing.Size(642, 49);
             this.gbHE.TabIndex = 17;
@@ -253,9 +255,7 @@
             // 
             // gbAll
             // 
-            this.gbAll.Controls.Add(this.cbBugfixMod);
             this.gbAll.Controls.Add(this.gbUserscriptOptions);
-            this.gbAll.Controls.Add(this.cbModloader);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
             this.gbAll.Controls.Add(this.cbKnightSelection);
             this.gbAll.Controls.Add(this.cbScriptBugFixes);
@@ -271,10 +271,21 @@
             this.gbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbAll.Location = new System.Drawing.Point(12, 42);
             this.gbAll.Name = "gbAll";
-            this.gbAll.Size = new System.Drawing.Size(642, 233);
+            this.gbAll.Size = new System.Drawing.Size(642, 203);
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
+            // 
+            // cbBugfixMod
+            // 
+            this.cbBugfixMod.AutoSize = true;
+            this.cbBugfixMod.Enabled = false;
+            this.cbBugfixMod.Location = new System.Drawing.Point(6, 42);
+            this.cbBugfixMod.Name = "cbBugfixMod";
+            this.cbBugfixMod.Size = new System.Drawing.Size(219, 20);
+            this.cbBugfixMod.TabIndex = 20;
+            this.cbBugfixMod.Text = "Download and Install Bugfix Mod";
+            this.cbBugfixMod.UseVisualStyleBackColor = true;
             // 
             // gbUserscriptOptions
             // 
@@ -284,7 +295,7 @@
             this.gbUserscriptOptions.Controls.Add(this.cbUseDowngrade);
             this.gbUserscriptOptions.Controls.Add(this.cbUseSingleStop);
             this.gbUserscriptOptions.Enabled = false;
-            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 74);
+            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 44);
             this.gbUserscriptOptions.Name = "gbUserscriptOptions";
             this.gbUserscriptOptions.Size = new System.Drawing.Size(200, 153);
             this.gbUserscriptOptions.TabIndex = 19;
@@ -345,7 +356,8 @@
             // cbModloader
             // 
             this.cbModloader.AutoSize = true;
-            this.cbModloader.Location = new System.Drawing.Point(6, 203);
+            this.cbModloader.Enabled = false;
+            this.cbModloader.Location = new System.Drawing.Point(6, 19);
             this.cbModloader.Name = "cbModloader";
             this.cbModloader.Size = new System.Drawing.Size(143, 20);
             this.cbModloader.TabIndex = 18;
@@ -407,7 +419,7 @@
             // 
             this.btnBackup.Enabled = false;
             this.btnBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBackup.Location = new System.Drawing.Point(12, 520);
+            this.btnBackup.Location = new System.Drawing.Point(12, 566);
             this.btnBackup.Name = "btnBackup";
             this.btnBackup.Size = new System.Drawing.Size(642, 47);
             this.btnBackup.TabIndex = 19;
@@ -444,16 +456,18 @@
             this.lblSelectFile.TabIndex = 22;
             this.lblSelectFile.Text = "Select executable:";
             // 
-            // cbBugfixMod
+            // gbModloader
             // 
-            this.cbBugfixMod.AutoSize = true;
-            this.cbBugfixMod.Enabled = false;
-            this.cbBugfixMod.Location = new System.Drawing.Point(152, 203);
-            this.cbBugfixMod.Name = "cbBugfixMod";
-            this.cbBugfixMod.Size = new System.Drawing.Size(203, 20);
-            this.cbBugfixMod.TabIndex = 20;
-            this.cbBugfixMod.Text = "Download + Install Bugfix Mod";
-            this.cbBugfixMod.UseVisualStyleBackColor = true;
+            this.gbModloader.Controls.Add(this.cbBugfixMod);
+            this.gbModloader.Controls.Add(this.cbModloader);
+            this.gbModloader.Enabled = false;
+            this.gbModloader.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.gbModloader.Location = new System.Drawing.Point(12, 251);
+            this.gbModloader.Name = "gbModloader";
+            this.gbModloader.Size = new System.Drawing.Size(642, 70);
+            this.gbModloader.TabIndex = 23;
+            this.gbModloader.TabStop = false;
+            this.gbModloader.Text = "Modloader";
             // 
             // mainFrm
             // 
@@ -461,7 +475,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(665, 630);
+            this.ClientSize = new System.Drawing.Size(665, 677);
+            this.Controls.Add(this.gbModloader);
             this.Controls.Add(this.lblSelectFile);
             this.Controls.Add(this.txtExecutablePath);
             this.Controls.Add(this.btnChooseFile);
@@ -474,9 +489,9 @@
             this.DoubleBuffered = true;
             this.HelpButton = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(681, 669);
+            this.MaximumSize = new System.Drawing.Size(681, 716);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(681, 669);
+            this.MinimumSize = new System.Drawing.Size(681, 716);
             this.Name = "mainFrm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -492,6 +507,8 @@
             this.gbAll.PerformLayout();
             this.gbUserscriptOptions.ResumeLayout(false);
             this.gbUserscriptOptions.PerformLayout();
+            this.gbModloader.ResumeLayout(false);
+            this.gbModloader.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -534,5 +551,6 @@
         private System.Windows.Forms.CheckBox cbDayNightCycle;
         private System.Windows.Forms.CheckBox cbSpecialKnightsAvailable;
         private System.Windows.Forms.CheckBox cbBugfixMod;
+        private System.Windows.Forms.GroupBox gbModloader;
     }
 }
