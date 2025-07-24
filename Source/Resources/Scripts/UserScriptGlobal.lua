@@ -102,6 +102,50 @@ end
 	end
 end)();
 -- ************************************************************************************************************************************************************* --
+-- Fix Bandit Fireplace crashing the game																										  				 --
+-- ************************************************************************************************************************************************************* --
+ActivateFireplaceforBanditPack = function(_CampID)
+	local BanditsPlayerID = Logic.EntityGetPlayer(_CampID);
+
+	if g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire == nil then
+		local ApX, ApY = Logic.GetBuildingApproachPosition(_CampID);
+		local PosX, PosY = Logic.GetEntityPosition(_CampID);
+
+		local x = (ApX - PosX) * 1.3 + ApX;
+		local y = (ApY - PosY) * 1.3 + ApY;
+
+		local FireplaceType = Entities.D_X_Fireplace01;
+		if Logic.IsEntityInCategory(_CampID, EntityCategories.Storehouse) == 1 then
+			FireplaceType = Entities.D_X_Fireplace02;
+		end
+
+		g_Outlaws.Players[BanditsPlayerID][_CampID].CampFireType = FireplaceType;
+		Logic.DestroyEntity(g_Outlaws.Players[BanditsPlayerID][_CampID].ExtinguishedFire);
+		g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire = Logic.CreateEntityOnUnblockedLand(FireplaceType, x, y, 0, 0);
+		return true;
+	end
+
+	return false;
+end
+DisableFireplaceforBanditPack = function(_CampID)
+	local BanditsPlayerID = Logic.EntityGetPlayer(_CampID);
+
+	if g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire ~= nil then      
+		local x, y = Logic.GetEntityPosition(g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire);      
+		Logic.DestroyEntity(g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire);
+
+		if g_Outlaws.ReplaceCampType == nil then
+			g_Outlaws.ReplaceCampType = {};
+			g_Outlaws.ReplaceCampType[Entities.D_X_Fireplace01] = Entities.D_X_Fireplace01_Expired;
+			g_Outlaws.ReplaceCampType[Entities.D_X_Fireplace02] = Entities.D_X_Fireplace02_Expired;
+		end
+		
+		local FireplaceType = g_Outlaws.ReplaceCampType[g_Outlaws.Players[BanditsPlayerID][_CampID].CampFireType];
+		g_Outlaws.Players[BanditsPlayerID][_CampID].ExtinguishedFire = Logic.CreateEntityOnUnblockedLand(FireplaceType, x, y, 0, 0);
+		g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire = nil;
+	end
+end
+-- ************************************************************************************************************************************************************* --
 -- Special Knight Abilities																										 								 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.AbilityEffectsOnMap = {};
