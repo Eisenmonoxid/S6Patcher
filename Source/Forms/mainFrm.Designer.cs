@@ -46,24 +46,25 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
-            this.cbBugfixMod = new System.Windows.Forms.CheckBox();
             this.gbUserscriptOptions = new System.Windows.Forms.GroupBox();
             this.cbSpecialKnightsAvailable = new System.Windows.Forms.CheckBox();
             this.cbDayNightCycle = new System.Windows.Forms.CheckBox();
             this.cbUseMilitaryRelease = new System.Windows.Forms.CheckBox();
             this.cbUseDowngrade = new System.Windows.Forms.CheckBox();
             this.cbUseSingleStop = new System.Windows.Forms.CheckBox();
-            this.cbModloader = new System.Windows.Forms.CheckBox();
             this.cbLimitedEdition = new System.Windows.Forms.CheckBox();
             this.cbKnightSelection = new System.Windows.Forms.CheckBox();
             this.cbScriptBugFixes = new System.Windows.Forms.CheckBox();
             this.lblTextureRes = new System.Windows.Forms.Label();
             this.txtResolution = new System.Windows.Forms.TextBox();
+            this.cbBugfixMod = new System.Windows.Forms.CheckBox();
+            this.cbModloader = new System.Windows.Forms.CheckBox();
             this.btnBackup = new System.Windows.Forms.Button();
             this.btnChooseFile = new System.Windows.Forms.Button();
             this.txtExecutablePath = new System.Windows.Forms.TextBox();
             this.lblSelectFile = new System.Windows.Forms.Label();
             this.gbModloader = new System.Windows.Forms.GroupBox();
+            this.pbProgress = new System.Windows.Forms.ProgressBar();
             this.gbEditor.SuspendLayout();
             this.gbHE.SuspendLayout();
             this.gbAll.SuspendLayout();
@@ -276,17 +277,6 @@
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
             // 
-            // cbBugfixMod
-            // 
-            this.cbBugfixMod.AutoSize = true;
-            this.cbBugfixMod.Enabled = false;
-            this.cbBugfixMod.Location = new System.Drawing.Point(6, 42);
-            this.cbBugfixMod.Name = "cbBugfixMod";
-            this.cbBugfixMod.Size = new System.Drawing.Size(219, 20);
-            this.cbBugfixMod.TabIndex = 20;
-            this.cbBugfixMod.Text = "Download and Install Bugfix Mod";
-            this.cbBugfixMod.UseVisualStyleBackColor = true;
-            // 
             // gbUserscriptOptions
             // 
             this.gbUserscriptOptions.Controls.Add(this.cbSpecialKnightsAvailable);
@@ -353,18 +343,6 @@
             this.cbUseSingleStop.Text = "Single Stop Button";
             this.cbUseSingleStop.UseVisualStyleBackColor = true;
             // 
-            // cbModloader
-            // 
-            this.cbModloader.AutoSize = true;
-            this.cbModloader.Enabled = false;
-            this.cbModloader.Location = new System.Drawing.Point(6, 19);
-            this.cbModloader.Name = "cbModloader";
-            this.cbModloader.Size = new System.Drawing.Size(143, 20);
-            this.cbModloader.TabIndex = 18;
-            this.cbModloader.Text = "Activate Modloader";
-            this.cbModloader.UseVisualStyleBackColor = true;
-            this.cbModloader.CheckedChanged += new System.EventHandler(this.cbModloader_CheckedChanged);
-            // 
             // cbLimitedEdition
             // 
             this.cbLimitedEdition.AutoSize = true;
@@ -414,6 +392,29 @@
             this.txtResolution.Name = "txtResolution";
             this.txtResolution.Size = new System.Drawing.Size(142, 22);
             this.txtResolution.TabIndex = 13;
+            // 
+            // cbBugfixMod
+            // 
+            this.cbBugfixMod.AutoSize = true;
+            this.cbBugfixMod.Enabled = false;
+            this.cbBugfixMod.Location = new System.Drawing.Point(6, 42);
+            this.cbBugfixMod.Name = "cbBugfixMod";
+            this.cbBugfixMod.Size = new System.Drawing.Size(219, 20);
+            this.cbBugfixMod.TabIndex = 20;
+            this.cbBugfixMod.Text = "Download and Install Bugfix Mod";
+            this.cbBugfixMod.UseVisualStyleBackColor = true;
+            // 
+            // cbModloader
+            // 
+            this.cbModloader.AutoSize = true;
+            this.cbModloader.Enabled = false;
+            this.cbModloader.Location = new System.Drawing.Point(6, 19);
+            this.cbModloader.Name = "cbModloader";
+            this.cbModloader.Size = new System.Drawing.Size(143, 20);
+            this.cbModloader.TabIndex = 18;
+            this.cbModloader.Text = "Activate Modloader";
+            this.cbModloader.UseVisualStyleBackColor = true;
+            this.cbModloader.CheckedChanged += new System.EventHandler(this.cbModloader_CheckedChanged);
             // 
             // btnBackup
             // 
@@ -469,13 +470,22 @@
             this.gbModloader.TabStop = false;
             this.gbModloader.Text = "Modloader";
             // 
+            // pbProgress
+            // 
+            this.pbProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.pbProgress.Location = new System.Drawing.Point(12, 672);
+            this.pbProgress.Name = "pbProgress";
+            this.pbProgress.Size = new System.Drawing.Size(642, 47);
+            this.pbProgress.TabIndex = 24;
+            // 
             // mainFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(665, 677);
+            this.ClientSize = new System.Drawing.Size(665, 731);
+            this.Controls.Add(this.pbProgress);
             this.Controls.Add(this.gbModloader);
             this.Controls.Add(this.lblSelectFile);
             this.Controls.Add(this.txtExecutablePath);
@@ -489,9 +499,9 @@
             this.DoubleBuffered = true;
             this.HelpButton = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(681, 716);
+            this.MaximumSize = new System.Drawing.Size(681, 770);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(681, 716);
+            this.MinimumSize = new System.Drawing.Size(681, 770);
             this.Name = "mainFrm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -552,5 +562,6 @@
         private System.Windows.Forms.CheckBox cbSpecialKnightsAvailable;
         private System.Windows.Forms.CheckBox cbBugfixMod;
         private System.Windows.Forms.GroupBox gbModloader;
+        private System.Windows.Forms.ProgressBar pbProgress;
     }
 }

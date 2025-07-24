@@ -29,7 +29,7 @@ namespace S6Patcher.Source.Patcher
             BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         }
 
-        private bool ExtractZipArchive(string ZipPath)
+        private void ExtractZipArchive(string ZipPath)
         {
             try
             {
@@ -64,11 +64,9 @@ namespace S6Patcher.Source.Patcher
             {
                 Logger.Instance.Log("ExtractZipArchive(): " + ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
             }
 
             Logger.Instance.Log("ExtractZipArchive(): Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);
-            return true;
         }
 
         private void DownloadZipArchive()
@@ -90,7 +88,7 @@ namespace S6Patcher.Source.Patcher
                     }
 
                     Client.DownloadFileCompleted += DownloadZipFileCompleted;
-                    Client.DownloadFileAsync(GlobalDownloadURL, GlobalDestinationDirectoryPath + ".zip");
+                    Client.DownloadFile(GlobalDownloadURL, GlobalDestinationDirectoryPath + ".zip");
                 }
             }
             catch (Exception ex)

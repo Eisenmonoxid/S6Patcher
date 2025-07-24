@@ -1,9 +1,11 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Helpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using static S6Patcher.Source.Helpers.Helpers;
 
@@ -11,18 +13,8 @@ namespace S6Patcher.Source.Forms
 {
     public partial class mainFrm
     {
-        private bool IsBusyPatching = false;
         private void mainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (IsBusyPatching && e.CloseReason == CloseReason.UserClosing)
-            {
-                if (MessageBox.Show(Resources.ErrorClosingWhenPatching, "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                {
-                    e.Cancel = true;
-                    return;
-                }
-            }
-
             CloseFileStream(GlobalStream);
         }
         private void mainFrm_Load(object sender, EventArgs e)
@@ -88,45 +80,17 @@ namespace S6Patcher.Source.Forms
 
         private void btnPatch_Click(object sender, EventArgs e)
         {
+            Enabled = false;
+            pbProgress.Style = ProgressBarStyle.Marquee;
+            pbProgress.MarqueeAnimationSpeed = 60;
             Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
 
-            string Name = GlobalStream.Name;
-            long Size = GlobalStream.Length;
-
-            ExecutePatchWrapper(); // Main patching logic is executed here
-
-            Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
-
-            if (Program.IsMono)
+            List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor});
+            Thread Worker = new Thread(() => ExecutePatchWrapper(Features, GlobalStream.Name, GlobalStream.Length)) // Main patching logic is executed here
             {
-                Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut and PE Header update.");
-                MessageBox.Show(Resources.FinishedMono, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            new Patcher.CheckSumCalculator().WritePEHeaderFileCheckSum(Name, Size);
-
-            DialogResult Result;
-            Result = MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (Result == DialogResult.Yes)
-            {
-                if (Validator.ID == execID.HE_UBISOFT || Validator.ID == execID.HE_STEAM && !Name.Contains("extra1"))
-                {
-                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
-                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
-                }
-                else
-                {
-                    if (Name.Contains("extra1"))
-                    {
-                        CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
-                    }
-                    else
-                    {
-                        CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
-                    }
-                }
-            }
+                IsBackground = true
+            };
+            Worker.Start();
         }
 
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)

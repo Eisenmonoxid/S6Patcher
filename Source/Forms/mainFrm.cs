@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static S6Patcher.Source.Helpers.Helpers;
 
 namespace S6Patcher.Source.Forms
 {
@@ -90,6 +91,8 @@ namespace S6Patcher.Source.Forms
             btnPatch.Enabled = true;
             btnBackup.Enabled = true;
             txtExecutablePath.Text = GlobalStream.Name;
+            btnPatch.Focus();
+
             ToggleEditorControls(Validator.ID != execID.ED);
         }
 
@@ -117,6 +120,7 @@ namespace S6Patcher.Source.Forms
                 cbZoom.Checked = true;
                 cbScriptBugFixes.Checked = true;
                 cbModloader.Checked = true;
+                cbBugfixMod.Checked = true;
                 cbHighTextures.Checked = true;
                 cbLAAFlag.Checked = true;
                 cbKnightSelection.Checked = true;
@@ -126,7 +130,7 @@ namespace S6Patcher.Source.Forms
                 cbUseMilitaryRelease.Checked = true;
                 cbDayNightCycle.Checked = true;
 
-                txtZoom.Text = "14000";
+                txtZoom.Text = "12000";
                 txtResolution.Text = "4096";
 
                 if (Validator.ID == execID.HE_STEAM || Validator.ID == execID.HE_UBISOFT)
@@ -150,23 +154,58 @@ namespace S6Patcher.Source.Forms
             return Boxes.Select(Element => Element.Name).ToList();
         }
 
-        private void ExecutePatchWrapper()
+        private void FinishPatchingProcess(string StreamName, long StreamSize)
         {
-            btnAbort.Enabled = false;
-            IsBusyPatching = true;
+            Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
 
-            ExecutePatch(); // Execute Patching
-            ResetForm(); // Close FileStream and reset form controls
+            if (Program.IsMono)
+            {
+                Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut and PE Header update.");
+                MessageBox.Show(Resources.FinishedMono, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
-            IsBusyPatching = false;
-            btnAbort.Enabled = true;
+            new Patcher.CheckSumCalculator().WritePEHeaderFileCheckSum(StreamName, StreamSize);
+
+            DialogResult Result;
+            Result = MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (Result == DialogResult.Yes)
+            {
+                if (Validator.ID == execID.HE_UBISOFT || Validator.ID == execID.HE_STEAM && !Name.Contains("extra1"))
+                {
+                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
+                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
+                }
+                else
+                {
+                    if (Name.Contains("extra1"))
+                    {
+                        CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
+                    }
+                    else
+                    {
+                        CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
+                    }
+                }
+            }
         }
 
-        private void ExecutePatch()
+        private void ExecutePatchWrapper(List<string> Features, string StreamName, long StreamSize)
         {
-            List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor});
-            Patcher.PatchByControlFeatures(Features);
+            ExecutePatch(Features); // Execute Patching
+            Invoke((MethodInvoker)delegate
+            {
+                ResetForm(); // Close FileStream and reset form controls
+                FinishPatchingProcess(StreamName, StreamSize);
+                pbProgress.Style = ProgressBarStyle.Blocks;
+                pbProgress.Value = 0;
+                Enabled = true;
+            });
+        }
 
+        private void ExecutePatch(List<string> Features)
+        {
+            Patcher.PatchByControlFeatures(Features);
             if (cbZoom.Checked)
             {
                 Patcher.SetZoomLevel(txtZoom.Text);
