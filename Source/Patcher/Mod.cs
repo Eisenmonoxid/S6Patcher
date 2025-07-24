@@ -57,8 +57,6 @@ namespace S6Patcher.Source.Patcher
                         Archive.GetEntry("mod.bba").ExtractToFile(Path.Combine(ArchiveFilePath, ArchiveFileName), true);
                     }
                 }
-
-                File.Delete(ZipPath);
             }
             catch (Exception ex)
             {
@@ -79,37 +77,27 @@ namespace S6Patcher.Source.Patcher
                     Client.OpenRead(GlobalDownloadURL);
                     Int64 Size = Convert.ToInt64(Client.ResponseHeaders["Content-Length"]);
                     string ConvertedSize = (Size / (float)1024).ToString("0.00");
-                    Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
 
+                    Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
                     if (MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", 
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                     {
                         return;
                     }
 
-                    Client.DownloadFileCompleted += DownloadZipFileCompleted;
                     Client.DownloadFile(GlobalDownloadURL, GlobalDestinationDirectoryPath + ".zip");
+                    // Blocks calling thread until the download is completed
                 }
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log("DownloadZipArchive():\n" + ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-        }
 
-        private void DownloadZipFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                Logger.Instance.Log(e.Error.ToString());
-                MessageBox.Show(e.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                Logger.Instance.Log("DownloadZipFileCompleted(): Download completed successfully.");
-                ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
-            }
+            Logger.Instance.Log("DownloadZipFileCompleted(): Download completed successfully.");
+            ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
         }
 
         public string GetModloaderPath()

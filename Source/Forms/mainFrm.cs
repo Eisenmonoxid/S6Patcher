@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using static S6Patcher.Source.Helpers.Helpers;
 
@@ -190,20 +191,7 @@ namespace S6Patcher.Source.Forms
             }
         }
 
-        private void ExecutePatchWrapper(List<string> Features, string StreamName, long StreamSize)
-        {
-            ExecutePatch(Features); // Execute Patching
-            Invoke((MethodInvoker)delegate
-            {
-                ResetForm(); // Close FileStream and reset form controls
-                FinishPatchingProcess(StreamName, StreamSize);
-                pbProgress.Style = ProgressBarStyle.Blocks;
-                pbProgress.Value = 0;
-                Enabled = true;
-            });
-        }
-
-        private void ExecutePatch(List<string> Features)
+        private void ExecutePatch(List<string> Features, string StreamName, long StreamSize)
         {
             Patcher.PatchByControlFeatures(Features);
             if (cbZoom.Checked)
@@ -227,10 +215,27 @@ namespace S6Patcher.Source.Forms
                 Patcher.SetLuaScriptBugFixes();
                 SetEntriesInOptionsFileByCheckBox();
             }
-            if (cbModloader.Checked)
+
+            Thread Context = new Thread(() =>
             {
-                Patcher.SetModLoader(cbBugfixMod.Checked);
-            }
+                if ((bool)Invoke((Func<bool>)(() => cbModloader.Checked)))
+                {
+                    Patcher.SetModLoader((bool)Invoke((Func<bool>)(() => cbBugfixMod.Checked)));
+                };
+
+                Invoke((MethodInvoker)delegate
+                {
+                    ResetForm(); // Close FileStream and reset form controls
+                    FinishPatchingProcess(StreamName, StreamSize);
+                    pbProgress.Style = ProgressBarStyle.Blocks;
+                    pbProgress.Value = 0;
+                    Enabled = true;
+                });
+            })
+            {
+                IsBackground = true
+            };
+            Context.Start();
         }
 
         private void SetEntriesInOptionsFileByCheckBox()
