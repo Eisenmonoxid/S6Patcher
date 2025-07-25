@@ -83,6 +83,18 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - Enables walls and wall gates from all climate zones in all climate zones.
 - Can open map files that have been protected with the "S6Tools".
 
+### Bugfix Mod
+- Two Pass Alpha Blending and Shadows are enabled for the following ship models:
+  - `D_X_Kogge`
+  - `D_X_Dragonboat01`
+  - `D_X_Dragonboat02`
+  - `D_X_VikingBoat`   
+
+- This will also fix the problem with `D_X_VikingBoat` not being rendered correctly in the game.   
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/f93c4140ad422dd49f9109154c4fa031f4f3ace5/Features/Reflection_Final.jpg_" width="60%" height="60%" alt="Reflection"/>
+
+- An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
+- Middle Europe NPC barracks will now correctly spawn soldiers as intended (This is now also directly fixed in the configuration file).
 ---
 # Recommendation: DXVK
 Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) repository and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 
