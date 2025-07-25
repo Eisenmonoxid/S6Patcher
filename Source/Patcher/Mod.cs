@@ -60,7 +60,10 @@ namespace S6Patcher.Source.Patcher
             catch (Exception ex)
             {
                 Logger.Instance.Log("ExtractZipArchive(): " + ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!Program.IsMono)
+                {
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             Logger.Instance.Log("ExtractZipArchive(): Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);
@@ -99,7 +102,10 @@ namespace S6Patcher.Source.Patcher
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (!Program.IsMono)
+                    {
+                        MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
 

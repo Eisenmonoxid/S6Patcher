@@ -247,13 +247,28 @@ namespace S6Patcher.Source.Forms
             });
         }
 
+        private void DisplayMessage(string Message, string Title, MessageBoxButtons Buttons, MessageBoxIcon Icon)
+        {
+            if (Program.IsMono)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    MessageBox.Show(Message, Title, Buttons, Icon);
+                });
+            }
+            else
+            {
+                MessageBox.Show(Message, Title, Buttons, Icon);
+            }
+        }
+
         private bool OpenExecutableFile(string FileName)
         {
             FileName = IsPlayLauncherExecutable(FileName);
             if (Backup.CreateBackup(FileName) == false)
             {
                 Logger.Instance.Log(Resources.ErrorBackup);
-                MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DisplayMessage(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 
@@ -261,7 +276,7 @@ namespace S6Patcher.Source.Forms
             if (GlobalStream == null)
             {
                 Logger.Instance.Log(Resources.ErrorInvalidExecutable);
-                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DisplayMessage(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 
@@ -271,7 +286,7 @@ namespace S6Patcher.Source.Forms
                 CloseFileStream(GlobalStream);
                 string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
                 Logger.Instance.Log(Error);
-                MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DisplayMessage(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 
@@ -285,7 +300,7 @@ namespace S6Patcher.Source.Forms
             {
                 CloseFileStream(GlobalStream);
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayMessage(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

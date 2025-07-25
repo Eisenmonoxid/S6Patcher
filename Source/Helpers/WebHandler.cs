@@ -26,10 +26,13 @@ namespace S6Patcher.Source.Helpers
                 string ConvertedSize = (Size / (float)1024).ToString("0.00");
 
                 Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
-                if (MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                if (!Program.IsMono) // Mono will crash since cross-thread message box calls are not supported :(
                 {
-                    return false;
+                    DialogResult Result = MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (Result != DialogResult.Yes)
+                    {
+                        return false;
+                    }
                 }
 
                 GlobalClient.DownloadFile(DonwloadURL, DestinationDirectoryPath + ".zip");
@@ -38,7 +41,10 @@ namespace S6Patcher.Source.Helpers
             catch (Exception ex)
             {
                 Logger.Instance.Log("DownloadZipArchive():\n" + ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!Program.IsMono)
+                {
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 return false;
             }
 

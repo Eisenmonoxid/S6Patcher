@@ -83,7 +83,7 @@ namespace S6Patcher.Source.Forms
         {
             Enabled = false;
             pbProgress.Style = ProgressBarStyle.Marquee;
-            pbProgress.MarqueeAnimationSpeed = 60;
+            pbProgress.MarqueeAnimationSpeed = Program.IsMono ? 20 : 60;
             Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
 
             List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor});
