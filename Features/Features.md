@@ -18,8 +18,8 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 
 ## All Versions: Single Stop, Downgrade & Military Release
 - These new buttons (originally introduced in the NEP by Netsurfer in 2009) were rewritten and are now available in campaign and singleplayer. 
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Downgrade_Final.png" width="60%" height="60%" alt="Downgrade"/>
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Military_Release_Final.png" width="60%" height="60%" alt="Military_Release"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Downgrade_Final.png" width="40%" height="40%" alt="Downgrade"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Military_Release_Final.png" width="40%" height="40%" alt="Military_Release"/>
 
 ## All Versions: Day/Night Cycle
 - A day/night cycle similar to the one in Settlers 7. This is entirely cosmetic and has no impact on the gameplay. 
@@ -63,6 +63,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - The PE Header file CheckSum is now recalculated correctly. This should fix the issue with the game not starting on some systems.
 - When pressing `SHIFT` when selecting all units, ammunition carts will now also be selected.
 - When pressing `CTRL` when selecting all units, Thiefs will now no longer be selected.
+- Campfires from bandit camps can now no longer crash the game under certain circumstances.
 - Base Game campaign fixes:
   - Mission 16: The allied knights now have their correct names and entity types instead of Marcus.
   - Mission 3: The harbour now has the correct name.
@@ -84,14 +85,14 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - Can open map files that have been protected with the "S6Tools".
 
 ### Bugfix Mod
-- Two Pass Alpha Blending and Shadows are enabled for the following ship models:
+- Two Pass Alpha Blending (Reflections) and Shadows are enabled for the following ship models:
   - `D_X_Kogge`
   - `D_X_Dragonboat01`
   - `D_X_Dragonboat02`
   - `D_X_VikingBoat`   
 
 - This will also fix the problem with `D_X_VikingBoat` not being rendered correctly in the game.   
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/4cbc1c78b6e9040b2be28783a1045ca5f392f723/Features/Reflection_Final.jpg" width="60%" height="60%" alt="Reflection"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/4cbc1c78b6e9040b2be28783a1045ca5f392f723/Features/Reflection_Final.jpg" width="40%" height="40%" alt="Reflection"/>
 
 - An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
 - Middle Europe NPC barracks will now correctly spawn soldiers as intended (This is now also directly fixed in the configuration file).
