@@ -47,7 +47,7 @@ namespace S6Patcher.Source.Helpers
             };
         }
 
-        public bool UpdateEntryInOptionsFile(string Section, string Key, bool Entry)
+        public bool UpdateEntryInOptionsFile(string Section, string Key, uint Entry)
         {
             string Name = "Options.ini";
             List<string> Directories = UserScriptHandler.GetUserScriptDirectories();
@@ -78,7 +78,7 @@ namespace S6Patcher.Source.Helpers
                 {
                     Lines.Add(Section);
                 }
-                Lines.Insert(Lines.IndexOf(Section) + 1, Key + "=" + ((Entry == true) ? "1" : "0"));
+                Lines.Insert(Lines.IndexOf(Section) + 1, Key + "=" + Entry.ToString());
 
                 try
                 {

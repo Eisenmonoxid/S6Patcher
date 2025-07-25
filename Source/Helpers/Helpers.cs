@@ -1,8 +1,4 @@
-﻿using IWshRuntimeLibrary;
-using System;
-using System.IO;
-using System.Windows.Forms;
-
+﻿using System.IO;
 namespace S6Patcher.Source.Helpers
 {
     public enum execID
@@ -17,30 +13,6 @@ namespace S6Patcher.Source.Helpers
 
     public static class Helpers
     {
-        public static void CreateDesktopShortcut(string Filepath, string LinkName, string Arguments)
-        {
-            string Link = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            Link += @"\" + LinkName + " - Patched.lnk";
-
-            try
-            {
-                WshShell Shell = new WshShell();
-                IWshShortcut PatchedShortcut = (IWshShortcut)Shell.CreateShortcut(Link);
-                PatchedShortcut.Description = "Launches patched " + LinkName;
-                PatchedShortcut.TargetPath = Filepath;
-                PatchedShortcut.Arguments = Arguments;
-                PatchedShortcut.Save();
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            Logger.Instance.Log("CreateDesktopShortcut(): Creating shortcut successful! Link: " + Link);
-        }
-
         public static string IsPlayLauncherExecutable(string Filepath)
         {
             string CurrentPath = Path.GetFileNameWithoutExtension(Filepath);
@@ -48,10 +20,11 @@ namespace S6Patcher.Source.Helpers
             {
                 Logger.Instance.Log("IsPlayLauncherExecutable(): Found Launcher!");
 
+                string Version = CurrentPath.Contains("Eastern") ? "extra1" : "base";
                 CurrentPath = Path.GetDirectoryName(Filepath);
-                CurrentPath = Path.Combine(CurrentPath, CurrentPath.Contains("Eastern") ? "extra1" : "base", "bin", "Settlers6.exe");
+                CurrentPath = Path.Combine(CurrentPath, Version, "bin", "Settlers6.exe");
 
-                if (System.IO.File.Exists(CurrentPath) == true)
+                if (File.Exists(CurrentPath) == true)
                 {
                     Logger.Instance.Log("IsPlayLauncherExecutable(): Redirecting Path to " + CurrentPath);
                     Filepath = CurrentPath;

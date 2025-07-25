@@ -164,16 +164,6 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Finished successfully!.
         /// </summary>
-        internal static string FinishedMono {
-            get {
-                return ResourceManager.GetString("FinishedMono", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Finished successfully!
-        ///Create desktop shortcut to the patched file?.
-        /// </summary>
         internal static string FinishedSuccess {
             get {
                 return ResourceManager.GetString("FinishedSuccess", resourceCulture);

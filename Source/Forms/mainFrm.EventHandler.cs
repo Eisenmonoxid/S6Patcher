@@ -49,6 +49,7 @@ namespace S6Patcher.Source.Forms
             cbBugfixMod.Enabled = cbModloader.Checked;
             if (!cbModloader.Checked)
             {
+                cbBugfixMod.Checked = false;
                 cbBugfixMod.Enabled = false;
             }
         }

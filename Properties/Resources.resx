@@ -152,12 +152,8 @@ Do you want to exit?</value>
   <data name="FinishedBackup" xml:space="preserve">
     <value>Backup has been successfully restored!</value>
   </data>
-  <data name="FinishedMono" xml:space="preserve">
-    <value>Finished successfully!</value>
-  </data>
   <data name="FinishedSuccess" xml:space="preserve">
-    <value>Finished successfully!
-Create desktop shortcut to the patched file?</value>
+    <value>Finished successfully!</value>
   </data>
   <data name="GithubMainLink" xml:space="preserve">
     <value>https://github.com/Eisenmonoxid/S6Patcher</value>

@@ -160,36 +160,15 @@ namespace S6Patcher.Source.Forms
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
             ResetForm(); // Close FileStream and reset form controls
 
+            MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
             if (Program.IsMono)
             {
                 Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut and PE Header update.");
-                MessageBox.Show(Resources.FinishedMono, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             new Patcher.CheckSumCalculator().WritePEHeaderFileCheckSum(StreamName, StreamSize);
-
-            DialogResult Result;
-            Result = MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (Result == DialogResult.Yes)
-            {
-                if (Validator.ID == execID.HE_UBISOFT || Validator.ID == execID.HE_STEAM && !Name.Contains("extra1"))
-                {
-                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
-                    CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
-                }
-                else
-                {
-                    if (Name.Contains("extra1"))
-                    {
-                        CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name) + " - The Eastern Realm", "-extra1");
-                    }
-                    else
-                    {
-                        CreateDesktopShortcut(Name, Path.GetFileNameWithoutExtension(Name), String.Empty);
-                    }
-                }
-            }
+            Logger.Instance.Log("btnPatch_Click(): Updated PEHeaderFileCheckSum! Finished.");
         }
 
         private void ExecutePatch(List<string> Features, string StreamName, long StreamSize)

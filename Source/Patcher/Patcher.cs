@@ -71,6 +71,9 @@ namespace S6Patcher.Source.Patcher
             {
                 WriteBytes(Element.Key, Element.Value);
             }
+
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "TextureResolution", 3);
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "Terrain", 2);
         }
 
         public void SetAutosaveTimer(string AutosaveText)
@@ -191,7 +194,7 @@ namespace S6Patcher.Source.Patcher
         public void SetEntryInOptionsFile(string Entry, bool Checked)
         {
             Logger.Instance.Log("SetEntryInOptionsFile(): Called with " + Entry + " - Value: " + Checked.ToString());
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked);
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
         }
 
         private void WriteBytes(long Position, byte[] Bytes)
