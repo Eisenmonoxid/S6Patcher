@@ -472,7 +472,6 @@
             // 
             // pbProgress
             // 
-            this.pbProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.pbProgress.Location = new System.Drawing.Point(12, 672);
             this.pbProgress.Name = "pbProgress";
             this.pbProgress.Size = new System.Drawing.Size(642, 47);

@@ -128,7 +128,7 @@ namespace S6Patcher.Source.Forms
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Enabled = false;
-                Thread Context = new Thread(() => OpenExecutableFile(ofd.FileName))
+                Thread Context = new Thread(() => OpenExecutableFileWrapper(ofd.FileName))
                 {
                     IsBackground = true,
                 };

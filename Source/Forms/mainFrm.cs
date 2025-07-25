@@ -234,14 +234,27 @@ namespace S6Patcher.Source.Forms
                 });
         }
 
-        private void OpenExecutableFile(string FileName)
+        private void OpenExecutableFileWrapper(string FileName)
+        {
+            bool Result = OpenExecutableFile(FileName);
+            Invoke((MethodInvoker)delegate
+            {
+                Enabled = true;
+                if (Result == true)
+                {
+                    InitializeControls();
+                }
+            });
+        }
+
+        private bool OpenExecutableFile(string FileName)
         {
             FileName = IsPlayLauncherExecutable(FileName);
             if (Backup.CreateBackup(FileName) == false)
             {
                 Logger.Instance.Log(Resources.ErrorBackup);
                 MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                return false;
             }
 
             GlobalStream = IOFileHandler.Instance.OpenFileStream(FileName);
@@ -249,7 +262,7 @@ namespace S6Patcher.Source.Forms
             {
                 Logger.Instance.Log(Resources.ErrorInvalidExecutable);
                 MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                return false;
             }
 
             Validator = new Patcher.Validator(GlobalStream);
@@ -259,7 +272,7 @@ namespace S6Patcher.Source.Forms
                 string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
                 Logger.Instance.Log(Error);
                 MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                return false;
             }
 
             // File is valid
@@ -273,15 +286,11 @@ namespace S6Patcher.Source.Forms
                 CloseFileStream(GlobalStream);
                 Logger.Instance.Log(ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
             // Everything has been initialized successfully
-            Invoke((MethodInvoker)delegate
-            {
-                Enabled = true;
-                InitializeControls();
-            });
+            return true;
         }
 
         private void ResetForm()
