@@ -162,7 +162,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finished successfully!.
+        ///   Looks up a localized string similar to Patching process finished successfully!.
         /// </summary>
         internal static string FinishedSuccess {
             get {

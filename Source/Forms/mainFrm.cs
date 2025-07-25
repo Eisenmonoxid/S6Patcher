@@ -155,23 +155,31 @@ namespace S6Patcher.Source.Forms
             return Boxes.Select(Element => Element.Name).ToList();
         }
 
-        private void FinishPatchingProcess(string StreamName, long StreamSize)
+        private void FinishPatchingProcess()
         {
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
-            ResetForm(); // Close FileStream and reset form controls
+            string StreamName = GlobalStream.Name;
+            long StreamSize = GlobalStream.Length;
 
-            MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ResetForm(); // Close FileStream and reset form controls
+            pbProgress.Style = ProgressBarStyle.Blocks;
+            pbProgress.Value = 0;
+            Enabled = true;
+            Focus();
+
             if (Program.IsMono)
             {
+                MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Logger.Instance.Log("btnPatch_Click(): MONO found! Returning without desktop shortcut and PE Header update.");
                 return;
             }
 
             new Patcher.CheckSumCalculator().WritePEHeaderFileCheckSum(StreamName, StreamSize);
+            MessageBox.Show(Resources.FinishedSuccess, "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Logger.Instance.Log("btnPatch_Click(): Updated PEHeaderFileCheckSum! Finished.");
         }
 
-        private void ExecutePatch(List<string> Features, string StreamName, long StreamSize)
+        private void ExecutePatch(List<string> Features)
         {
             Patcher.PatchByControlFeatures(Features);
             if (cbZoom.Checked)
@@ -205,10 +213,7 @@ namespace S6Patcher.Source.Forms
 
                 Invoke((MethodInvoker)delegate
                 {
-                    FinishPatchingProcess(StreamName, StreamSize);
-                    pbProgress.Style = ProgressBarStyle.Blocks;
-                    pbProgress.Value = 0;
-                    Enabled = true;
+                    FinishPatchingProcess();
                 });
             })
             {
@@ -301,7 +306,7 @@ namespace S6Patcher.Source.Forms
             btnPatch.Enabled = false;
             btnBackup.Enabled = false;
             txtExecutablePath.Text = string.Empty;
-            this.ActiveControl = null;
+            ActiveControl = null;
 
             Validator = null;
             Patcher = null;

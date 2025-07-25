@@ -87,7 +87,7 @@ namespace S6Patcher.Source.Forms
             Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
 
             List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor});
-            ExecutePatch(Features, GlobalStream.Name, GlobalStream.Length); // Main patching logic is executed here
+            ExecutePatch(Features); // Main patching logic is executed here
         }
 
         private void mainFrm_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
