@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
@@ -69,35 +68,11 @@ namespace S6Patcher.Source.Patcher
 
         private void DownloadZipArchive()
         {
-            try
+            bool Result = WebHandler.Instance.DownloadZipArchive(GlobalDownloadURL, GlobalDestinationDirectoryPath);
+            if (Result)
             {
-                using (WebClient Client = new WebClient())
-                {
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
-                    Client.OpenRead(GlobalDownloadURL);
-                    Int64 Size = Convert.ToInt64(Client.ResponseHeaders["Content-Length"]);
-                    string ConvertedSize = (Size / (float)1024).ToString("0.00");
-
-                    Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
-                    if (MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", 
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-                    {
-                        return;
-                    }
-
-                    Client.DownloadFile(GlobalDownloadURL, GlobalDestinationDirectoryPath + ".zip");
-                    // Blocks calling thread until the download is completed
-                }
+                ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log("DownloadZipArchive():\n" + ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            Logger.Instance.Log("DownloadZipFileCompleted(): Download completed successfully.");
-            ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
         }
 
         public string GetModloaderPath()

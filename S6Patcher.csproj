@@ -89,7 +89,7 @@
     <Compile Include="Source\Helpers\Backup.cs" />
     <Compile Include="Source\Helpers\IOFileHandler.cs" />
     <Compile Include="Source\Helpers\Logger.cs" />
-    <Compile Include="Source\Helpers\Updater.cs" />
+    <Compile Include="Source\Helpers\WebHandler.cs" />
     <Compile Include="Source\Patcher\CheckSumCalculator.cs" />
     <Compile Include="Source\Patcher\Mappings\MappingBase.cs" />
     <Compile Include="Source\Patcher\Mappings\ED.cs" />

@@ -126,48 +126,12 @@ namespace S6Patcher.Source.Forms
             OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Executable file|*.exe", Environment.SpecialFolder.ProgramFiles);
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                string FileName = IsPlayLauncherExecutable(ofd.FileName);
-                if (Backup.CreateBackup(FileName) == false)
+                Enabled = false;
+                Thread Context = new Thread(() => OpenExecutableFile(ofd.FileName))
                 {
-                    Logger.Instance.Log(Resources.ErrorBackup);
-                    MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                GlobalStream = IOFileHandler.Instance.OpenFileStream(FileName);
-                if (GlobalStream == null)
-                {
-                    Logger.Instance.Log(Resources.ErrorInvalidExecutable);
-                    MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                Validator = new Patcher.Validator(GlobalStream);
-                if (Validator.ID == execID.NONE || Validator.IsExecutableUnpacked == false)
-                {
-                    CloseFileStream(GlobalStream);
-                    string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
-                    Logger.Instance.Log(Error);
-                    MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                // File is valid
-                IOFileHandler.Instance.InitialDirectory = Path.GetDirectoryName(GlobalStream.Name);
-                try
-                {
-                    Patcher = new Patcher.Patcher(Validator.ID, GlobalStream);
-                }
-                catch (Exception ex)
-                {
-                    CloseFileStream(GlobalStream);
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Everything has been initialized successfully
-                InitializeControls();
+                    IsBackground = true,
+                };
+                Context.Start();
             }
             else
             {

@@ -23,7 +23,7 @@ namespace S6Patcher.Source.Forms
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;
             Logger.Instance.Log("Startup successful! " + this.Text + " - Mono: " + Program.IsMono.ToString());
-            new Updater(true).CheckForUpdates();
+            WebHandler.Instance.CheckForUpdates(true);
         }
 
         private void SetControlValueFromStream(BinaryReader Reader, long Position, TextBox Control)
@@ -158,6 +158,7 @@ namespace S6Patcher.Source.Forms
         private void FinishPatchingProcess(string StreamName, long StreamSize)
         {
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
+            ResetForm(); // Close FileStream and reset form controls
 
             if (Program.IsMono)
             {
@@ -225,7 +226,6 @@ namespace S6Patcher.Source.Forms
 
                 Invoke((MethodInvoker)delegate
                 {
-                    ResetForm(); // Close FileStream and reset form controls
                     FinishPatchingProcess(StreamName, StreamSize);
                     pbProgress.Style = ProgressBarStyle.Blocks;
                     pbProgress.Value = 0;
@@ -241,7 +241,6 @@ namespace S6Patcher.Source.Forms
         private void SetEntriesInOptionsFileByCheckBox()
         {
             Patcher.SetEntryInOptionsFile(GlobalOptions[0], cbKnightSelection.Checked);
-
             (from Entry in gbUserscriptOptions.Controls.OfType<CheckBox>()
                 from Name in GlobalOptions
                 where Name == Entry.Name.Remove(0, "cb".Length)
@@ -249,6 +248,56 @@ namespace S6Patcher.Source.Forms
                 {
                     Patcher.SetEntryInOptionsFile(Element.Name.Remove(0, "cb".Length), Element.Checked);
                 });
+        }
+
+        private void OpenExecutableFile(string FileName)
+        {
+            FileName = IsPlayLauncherExecutable(FileName);
+            if (Backup.CreateBackup(FileName) == false)
+            {
+                Logger.Instance.Log(Resources.ErrorBackup);
+                MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            GlobalStream = IOFileHandler.Instance.OpenFileStream(FileName);
+            if (GlobalStream == null)
+            {
+                Logger.Instance.Log(Resources.ErrorInvalidExecutable);
+                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Validator = new Patcher.Validator(GlobalStream);
+            if (Validator.ID == execID.NONE || Validator.IsExecutableUnpacked == false)
+            {
+                CloseFileStream(GlobalStream);
+                string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
+                Logger.Instance.Log(Error);
+                MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // File is valid
+            IOFileHandler.Instance.InitialDirectory = Path.GetDirectoryName(GlobalStream.Name);
+            try
+            {
+                Patcher = new Patcher.Patcher(Validator.ID, GlobalStream);
+            }
+            catch (Exception ex)
+            {
+                CloseFileStream(GlobalStream);
+                Logger.Instance.Log(ex.ToString());
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Everything has been initialized successfully
+            Invoke((MethodInvoker)delegate
+            {
+                Enabled = true;
+                InitializeControls();
+            });
         }
 
         private void ResetForm()
