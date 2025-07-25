@@ -91,7 +91,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
   - `D_X_VikingBoat`   
 
 - This will also fix the problem with `D_X_VikingBoat` not being rendered correctly in the game.   
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/f93c4140ad422dd49f9109154c4fa031f4f3ace5/Features/Reflection_Final.jpg_" width="60%" height="60%" alt="Reflection"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/4cbc1c78b6e9040b2be28783a1045ca5f392f723/Features/Reflection_Final.jpg" width="60%" height="60%" alt="Reflection"/>
 
 - An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
 - Middle Europe NPC barracks will now correctly spawn soldiers as intended (This is now also directly fixed in the configuration file).
