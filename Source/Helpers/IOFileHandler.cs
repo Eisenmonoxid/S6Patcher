@@ -24,7 +24,6 @@ namespace S6Patcher.Source.Helpers
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return null;
             }
 
@@ -91,7 +90,7 @@ namespace S6Patcher.Source.Helpers
                     return false;
                 }
 
-                Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file " + CurrentPath);
+                Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file " + CurrentPath + " with Section " + Section + " and Key " + Key);
             }
 
             return true;

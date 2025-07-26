@@ -49,6 +49,7 @@ namespace S6Patcher.Source.Patcher
                                 Directory.CreateDirectory(FullPath);
                             }
                             Entry.ExtractToFile(Path.Combine(BaseDirectoryPath, Entry.FullName), true);
+                            Logger.Instance.Log("ExtractZipArchive(): Extracted " + Path.Combine(BaseDirectoryPath, Entry.FullName));
                         }
                     }
                     else
@@ -59,11 +60,12 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
-                Logger.Instance.Log("ExtractZipArchive(): " + ex.ToString());
+                Logger.Instance.Log(ex.ToString());
                 if (!Program.IsMono)
                 {
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                return;
             }
 
             Logger.Instance.Log("ExtractZipArchive(): Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);

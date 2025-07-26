@@ -1,13 +1,17 @@
 # S6Patcher
-A simple application that fixes some bugs and adds new features in the various editions of "Settlers 6 - Rise of an Empire". 
+A simple application that fixes some bugs and adds new features in the various editions of "The Settlers 6 - Rise of an Empire". 
 <p align="center">
 	<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/53acfce6ab42f9d2ee6f38f1699d6a8742013e4c/Features/Header.jpg" width="80%" height="80%" alt="Header"/>
 </p>
 
 ---
+## Features
+#### Find a comprehensive list of all features in the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
+
+---
 ## Download
 Find the latest release of the application [here](https://github.com/Eisenmonoxid/S6Patcher/releases/latest).  
-Other download sources could potentially offer outdated versions!
+_Warning:_ Other download sources could potentially offer outdated versions!
 
 ---
 ## Usage
@@ -28,11 +32,7 @@ previously patched .exe file and use the button `Restore Backup`.
 
 ---
 ## Modloader
-The S6Patcher features a simple Modloader, which can be used to create mods without having to modify the existing game files. Look [here](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md).
-
----
-## Features
-#### Find a comprehensive list of all current features in the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
+The S6Patcher features a simple [Modloader](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md), which can be used to create mods without having to modify the existing game files.
 
 ---
 ## Tech
@@ -43,7 +43,9 @@ The S6Patcher features a simple Modloader, which can be used to create mods with
 - The option "Download and Install Bugfix Mod" will download the zip compressed folder `Modfiles.zip` from the repository directory `/Source/Resources/Gamefiles` and extract
 it into the `modloader` folder. 
 
+---
 ## Linux Support
-The S6Patcher is developed using .NET Framework 4.8 with C# 7.3 and WinForms. Linux support has been tested using [Mono](https://www.mono-project.com/download/stable/).   
+The S6Patcher is developed using .NET Framework 4.8 with C# 7.3 and WinForms. Linux is supported using [Mono](https://www.mono-project.com/download/stable/).   
+It is recommended to install `mono-complete` to ensure that all necessary libraries are available.
 [libgdiplus](https://www.mono-project.com/docs/gui/libgdiplus/) may also be needed to run the application on your Linux distribution.   
 On Linux, you will need to provide the path to the `Options.ini` file, as the application cannot find it automatically. Make sure that the file was not moved manually to another folder beforehand.

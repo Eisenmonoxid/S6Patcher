@@ -21,7 +21,6 @@ namespace S6Patcher.Source.Helpers
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
                 }
             }

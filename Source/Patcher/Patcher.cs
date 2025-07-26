@@ -193,7 +193,6 @@ namespace S6Patcher.Source.Patcher
 
         public void SetEntryInOptionsFile(string Entry, bool Checked)
         {
-            Logger.Instance.Log("SetEntryInOptionsFile(): Called with " + Entry + " - Value: " + Checked.ToString());
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
         }
 
