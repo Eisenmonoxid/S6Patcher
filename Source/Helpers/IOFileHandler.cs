@@ -31,6 +31,17 @@ namespace S6Patcher.Source.Helpers
             return Stream;
         }
 
+        public void CloseFileStream(FileStream Stream)
+        {
+            if (Stream != null && (Stream.CanRead == true || Stream.CanWrite == true))
+            {
+                Stream.Close();
+                Stream.Dispose();
+
+                Logger.Instance.Log("CloseFileStream(): FileStream has been closed.");
+            }
+        }
+
         public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder)
         {
             return new OpenFileDialog

@@ -283,7 +283,7 @@ namespace S6Patcher.Source.Forms
             Validator = new Patcher.Validator(GlobalStream);
             if (Validator.ID == execID.NONE || Validator.IsExecutableUnpacked == false)
             {
-                CloseFileStream(GlobalStream);
+                IOFileHandler.Instance.CloseFileStream(GlobalStream);
                 string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
                 Logger.Instance.Log(Error);
                 DisplayMessage(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -298,7 +298,7 @@ namespace S6Patcher.Source.Forms
             }
             catch (Exception ex)
             {
-                CloseFileStream(GlobalStream);
+                IOFileHandler.Instance.CloseFileStream(GlobalStream);
                 Logger.Instance.Log(ex.ToString());
                 DisplayMessage(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -310,7 +310,7 @@ namespace S6Patcher.Source.Forms
 
         private void ResetForm()
         {
-            CloseFileStream(GlobalStream);
+            IOFileHandler.Instance.CloseFileStream(GlobalStream);
             new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor}.ForEach(Control =>
             {
                 Control.Enabled = false;
@@ -336,15 +336,6 @@ namespace S6Patcher.Source.Forms
             Patcher = null;
 
             Logger.Instance.Log("ResetForm(): Form successfully reset!");
-        }
-
-        private void CloseFileStream(FileStream Stream)
-        {
-            if (Stream != null && Stream.CanRead == true)
-            {
-                Stream.Close();
-                Stream.Dispose();
-            }
         }
     }
 }

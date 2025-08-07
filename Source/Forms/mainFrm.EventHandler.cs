@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
-using static S6Patcher.Source.Helpers.Helpers;
 
 namespace S6Patcher.Source.Forms
 {
@@ -15,7 +14,7 @@ namespace S6Patcher.Source.Forms
     {
         private void mainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CloseFileStream(GlobalStream);
+            IOFileHandler.Instance.CloseFileStream(GlobalStream);
         }
         private void mainFrm_Load(object sender, EventArgs e)
         {
@@ -98,7 +97,7 @@ namespace S6Patcher.Source.Forms
         private void btnAbort_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnAbort_Click(): Exiting application ...");
-            CloseFileStream(GlobalStream);
+            IOFileHandler.Instance.CloseFileStream(GlobalStream);
             Environment.Exit(0);
         }
 

@@ -46,8 +46,7 @@ namespace S6Patcher.Source.Patcher
             CurrentStream.Position = 0x168;
             CurrentStream.Write(CheckSumByte, 0, CheckSumByte.Length);
 
-            CurrentStream.Close();
-            CurrentStream.Dispose();
+            IOFileHandler.Instance.CloseFileStream(CurrentStream);
         }
     }
 }
