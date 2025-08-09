@@ -13,7 +13,7 @@ namespace S6Patcher.Source.Helpers
         ~WebHandler() {GlobalClient.Dispose();}
         public static WebHandler Instance => _instance;
 
-        private static readonly WebClientWithTimeout GlobalClient = new WebClientWithTimeout(8000) {Encoding = Encoding.UTF8};
+        private static readonly WebClientWithTimeout GlobalClient = new WebClientWithTimeout(8000) {Encoding = Encoding.UTF8, Headers = {"User-Agent: Other"}};
         private bool Startup = true;
         private bool EventHandlerRegistered = false;
 

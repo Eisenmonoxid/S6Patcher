@@ -6,63 +6,55 @@ namespace S6Patcher.Source.Helpers
 {
     public sealed class Logger
     {
-        private static readonly string CurrentFilepath = Assembly.GetExecutingAssembly().Location;
-        private static readonly string CurrentLogFile = CurrentFilepath.Replace(Path.GetFileName(CurrentFilepath), "") + Path.DirectorySeparatorChar + "S6Patcher_Output.log";
-        private static bool FileCreated = false;
-        private static StreamWriter LogWriter = null;
+        private static readonly string GlobalFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "S6Patcher.log");
 
+        private static StreamWriter Writer = null;
+        private static readonly object Lock = new object();
         private static readonly Logger _instance = new Logger();
         private Logger() {}
         public static Logger Instance => _instance;
-        ~Logger() 
+
+        ~Logger()
         {
-            try
+            if (Writer != null)
             {
-                LogWriter.Close();
-                LogWriter.Dispose();
-                LogWriter = null;
-            }
-            catch
-            {
-                return;
+                Writer.Close();
+                Writer.Dispose();
             }
         }
 
-        public bool CreateOutputLogFile()
+        private void EnsureLogWriter()
         {
-            try
+            lock (Lock)
             {
-                LogWriter = File.CreateText(CurrentLogFile);
-                FileCreated = true;
+                try
+                {
+                    Writer = File.CreateText(GlobalFile);
+                }
+                catch (Exception ex)
+                {
+                    Writer = null;
+                }
             }
-            catch
-            {
-                return false;
-            }
-
-            return true;
         }
 
         public void Log(string Message)
         {
-            if (FileCreated == false || LogWriter == null)
+            if (Writer == null)
             {
-                if (CreateOutputLogFile() == false)
-                {
-                    return;
-                }
+                EnsureLogWriter();
+                if (Writer == null) {return;};
             }
 
-            string Line = DateTime.Now.ToString() + ": " + Message;
             try
             {
-                LogWriter.WriteLine(Line);
-                LogWriter.Flush();
+                lock (Lock)
+                {
+                    Writer.WriteLine($"{DateTime.Now}: {Message}");
+                    Writer.Flush();
+                }
             }
-            catch
-            {
-                return;
-            }
+            catch {};
         }
     }
 }

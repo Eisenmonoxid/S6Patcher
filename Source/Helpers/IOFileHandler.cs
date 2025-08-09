@@ -57,6 +57,20 @@ namespace S6Patcher.Source.Helpers
             };
         }
 
+        public string IsPlayLauncherExecutable(string Filepath)
+        {
+            string CurrentPath = Path.GetFileNameWithoutExtension(Filepath);
+            if (!CurrentPath.StartsWith("Play")) {return Filepath;};
+
+            Logger.Instance.Log("IsPlayLauncherExecutable(): Found Launcher!");
+
+            string Version = CurrentPath.Contains("Eastern") ? "extra1" : "base";
+            string NewPath = Path.Combine(Path.GetDirectoryName(Filepath), Version, "bin", "Settlers6.exe");
+
+            Logger.Instance.Log("IsPlayLauncherExecutable(): Trying to redirect Filepath to " + NewPath);
+            return File.Exists(NewPath) ? NewPath : Filepath;
+        }
+
         public bool UpdateEntryInOptionsFile(string Section, string Key, uint Entry)
         {
             string Name = "Options.ini";

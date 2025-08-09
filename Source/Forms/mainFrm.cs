@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using static S6Patcher.Source.Helpers.Helpers;
 
 namespace S6Patcher.Source.Forms
 {
@@ -264,7 +263,7 @@ namespace S6Patcher.Source.Forms
 
         private bool OpenExecutableFile(string FileName)
         {
-            FileName = IsPlayLauncherExecutable(FileName);
+            FileName = IOFileHandler.Instance.IsPlayLauncherExecutable(FileName);
             if (Backup.CreateBackup(FileName) == false)
             {
                 Logger.Instance.Log(Resources.ErrorBackup);
