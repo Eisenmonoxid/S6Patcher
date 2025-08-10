@@ -17,7 +17,7 @@ namespace S6Patcher.Source.Helpers
         private bool Startup = true;
         private bool EventHandlerRegistered = false;
 
-        public bool DownloadZipArchive(Uri DonwloadURL, string DestinationDirectoryPath)
+        public bool DownloadZipArchive(Forms.mainFrm BaseForm, Uri DonwloadURL, string DestinationDirectoryPath)
         {
             try
             {
@@ -26,13 +26,13 @@ namespace S6Patcher.Source.Helpers
                 string ConvertedSize = (Size / (float)1024).ToString("0.00");
 
                 Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
-                if (!Program.IsMono) // Mono will crash since cross-thread message box calls are not supported :(
+
+                DialogResult Result = (DialogResult)BaseForm.Invoke(new Func<DialogResult>(() => 
+                    MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question)));
+                
+                if (Result != DialogResult.Yes)
                 {
-                    DialogResult Result = MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (Result != DialogResult.Yes)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
 
                 GlobalClient.DownloadFile(DonwloadURL, DestinationDirectoryPath + ".zip");

@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
@@ -18,9 +19,11 @@ namespace S6Patcher.Source.Patcher
 
         private readonly execID GlobalID = execID.NONE;
         private readonly FileStream GlobalStream = null;
+        private readonly Forms.mainFrm GlobalBaseForm;
 
-        public Mod(execID ID, FileStream Stream)
+        public Mod(Forms.mainFrm Base, execID ID, FileStream Stream)
         {
+            GlobalBaseForm = Base;
             GlobalID = ID;
             GlobalStream = Stream;
             GlobalDestinationDirectoryPath = GetModloaderPath();
@@ -61,10 +64,7 @@ namespace S6Patcher.Source.Patcher
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                if (!Program.IsMono)
-                {
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                GlobalBaseForm.Invoke(new Action(() => MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)));
                 return;
             }
 
@@ -73,11 +73,13 @@ namespace S6Patcher.Source.Patcher
 
         private void DownloadZipArchive()
         {
-            bool Result = WebHandler.Instance.DownloadZipArchive(GlobalDownloadURL, GlobalDestinationDirectoryPath);
+            bool Result = WebHandler.Instance.DownloadZipArchive(GlobalBaseForm, GlobalDownloadURL, GlobalDestinationDirectoryPath);           
             if (Result)
             {
                 ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
+
+            GlobalBaseForm.Invoke(new Action(() => GlobalBaseForm.FinishPatchingProcess()));
         }
 
         public string GetModloaderPath()
@@ -104,16 +106,17 @@ namespace S6Patcher.Source.Patcher
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    if (!Program.IsMono)
-                    {
-                        MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
             if (UseBugfixMod)
             {
-                DownloadZipArchive();
+                Thread Context = new Thread(() => DownloadZipArchive())
+                {
+                    IsBackground = true
+                };
+                Context.Start();
             }
         }
     }

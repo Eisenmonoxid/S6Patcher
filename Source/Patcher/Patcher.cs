@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
@@ -16,7 +17,7 @@ namespace S6Patcher.Source.Patcher
         private readonly execID GlobalID = execID.NONE;
         private const uint GlobalOffset = 0x3F0000;
 
-        public Patcher(execID ID, FileStream Stream)
+        public Patcher(Forms.mainFrm Base, execID ID, FileStream Stream)
         {
             if (ID == execID.NONE || Stream == null || Stream.CanWrite == false)
             {
@@ -25,7 +26,7 @@ namespace S6Patcher.Source.Patcher
 
             GlobalID = ID;
             GlobalStream = Stream;
-            GlobalMod = new Mod(ID, Stream);
+            GlobalMod = new Mod(Base, ID, Stream);
             GlobalMappings = MappingBase.GetMappingsByID(GlobalID);
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);

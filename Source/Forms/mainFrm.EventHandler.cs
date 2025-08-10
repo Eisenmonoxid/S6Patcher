@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Forms
@@ -125,12 +124,10 @@ namespace S6Patcher.Source.Forms
             OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Executable file|*.exe", Environment.SpecialFolder.ProgramFiles);
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                Enabled = false;
-                Thread Context = new Thread(() => OpenExecutableFileWrapper(ofd.FileName))
+                if (OpenExecutableFile(ofd.FileName) == true)
                 {
-                    IsBackground = true,
-                };
-                Context.Start();
+                    InitializeControls();
+                }
             }
             else
             {

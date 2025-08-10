@@ -16,7 +16,7 @@ namespace S6Patcher.Source.Helpers
 
         ~Logger()
         {
-            if (Writer != null)
+            if (Writer != null && Writer.BaseStream.CanRead == true)
             {
                 Writer.Close();
                 Writer.Dispose();
@@ -31,7 +31,7 @@ namespace S6Patcher.Source.Helpers
                 {
                     Writer = File.CreateText(GlobalFile);
                 }
-                catch (Exception ex)
+                catch
                 {
                     Writer = null;
                 }

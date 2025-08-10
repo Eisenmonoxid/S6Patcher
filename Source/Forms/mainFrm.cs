@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Forms
@@ -154,7 +153,7 @@ namespace S6Patcher.Source.Forms
             return Boxes.Select(Element => Element.Name).ToList();
         }
 
-        private void FinishPatchingProcess()
+        public void FinishPatchingProcess()
         {
             Logger.Instance.Log("btnPatch_Click(): Finished patching file ...");
             string StreamName = GlobalStream.Name;
@@ -202,23 +201,16 @@ namespace S6Patcher.Source.Forms
                 Patcher.SetLuaScriptBugFixes();
                 SetEntriesInOptionsFileByCheckBox();
             }
-
-            Thread Context = new Thread(() =>
+            if (cbModloader.Checked)
             {
-                if ((bool)Invoke((Func<bool>)(() => cbModloader.Checked)))
-                {
-                    Patcher.SetModLoader((bool)Invoke((Func<bool>)(() => cbBugfixMod.Checked)));
-                };
+                Patcher.SetModLoader(cbBugfixMod.Checked);
+            }
 
-                Invoke((MethodInvoker)delegate
-                {
-                    FinishPatchingProcess();
-                });
-            })
+            // Finish with UI update
+            if (!cbBugfixMod.Checked)
             {
-                IsBackground = true
-            };
-            Context.Start();
+                FinishPatchingProcess();
+            }
         }
 
         private void SetEntriesInOptionsFileByCheckBox()
@@ -233,41 +225,13 @@ namespace S6Patcher.Source.Forms
                 });
         }
 
-        private void OpenExecutableFileWrapper(string FileName)
-        {
-            bool Result = OpenExecutableFile(FileName);
-            Invoke((MethodInvoker)delegate
-            {
-                Enabled = true;
-                if (Result == true)
-                {
-                    InitializeControls();
-                }
-            });
-        }
-
-        private void DisplayMessage(string Message, string Title, MessageBoxButtons Buttons, MessageBoxIcon Icon)
-        {
-            if (Program.IsMono)
-            {
-                Invoke((MethodInvoker)delegate
-                {
-                    MessageBox.Show(Message, Title, Buttons, Icon);
-                });
-            }
-            else
-            {
-                MessageBox.Show(Message, Title, Buttons, Icon);
-            }
-        }
-
         private bool OpenExecutableFile(string FileName)
         {
             FileName = IOFileHandler.Instance.IsPlayLauncherExecutable(FileName);
             if (Backup.CreateBackup(FileName) == false)
             {
                 Logger.Instance.Log(Resources.ErrorBackup);
-                DisplayMessage(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Resources.ErrorBackup, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 
@@ -275,7 +239,7 @@ namespace S6Patcher.Source.Forms
             if (GlobalStream == null)
             {
                 Logger.Instance.Log(Resources.ErrorInvalidExecutable);
-                DisplayMessage(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 
@@ -285,7 +249,7 @@ namespace S6Patcher.Source.Forms
                 IOFileHandler.Instance.CloseFileStream(GlobalStream);
                 string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
                 Logger.Instance.Log(Error);
-                DisplayMessage(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 
@@ -293,13 +257,13 @@ namespace S6Patcher.Source.Forms
             IOFileHandler.Instance.InitialDirectory = Path.GetDirectoryName(GlobalStream.Name);
             try
             {
-                Patcher = new Patcher.Patcher(Validator.ID, GlobalStream);
+                Patcher = new Patcher.Patcher(this, Validator.ID, GlobalStream);
             }
             catch (Exception ex)
             {
                 IOFileHandler.Instance.CloseFileStream(GlobalStream);
                 Logger.Instance.Log(ex.ToString());
-                DisplayMessage(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
