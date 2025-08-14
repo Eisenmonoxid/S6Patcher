@@ -64,7 +64,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             {0x25E376, new byte[] {0x72}}, // Return to original loader after mod
             {0x25E3A6, new byte[] {0x20}}, // Return to original loader after mod
             {0x25E3AB, new byte[] {0x7A, 0x68, 0x5A}}, // Return to original loader after mod
-            {0x25E3D1, new byte[] {0xEB, 0x53, 0x66, 0x90, 0x90, 0x90, 0x90}}, // Return to original loader after mod
+            {0x25E3D1, new byte[] {0xEB, 0x53, 0x90, 0x90, 0x90}}, // Return to original loader after mod
         };
 
         public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution)
