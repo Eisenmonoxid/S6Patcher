@@ -52,12 +52,9 @@ namespace S6Patcher.Source.Patcher
             return SelectUserScriptDirectories(DocumentsPath);
         }
 
-        private static List<string> SelectUserScriptDirectories(string DocumentsPath)
-        {
-            return Directory.GetDirectories(DocumentsPath)
+        private static List<string> SelectUserScriptDirectories(string Documents) => Directory.GetDirectories(Documents)
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
-                .Select(Element => {Element = Path.Combine(DocumentsPath, Element); return Element;})
+                .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})
                 .ToList();
-        }
     }
 }

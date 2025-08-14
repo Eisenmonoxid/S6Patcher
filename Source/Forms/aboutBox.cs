@@ -21,8 +21,8 @@ namespace S6Patcher.Source.Forms
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
-            this.Close();
-            this.Dispose();
+            Close();
+            Dispose();
         }
         private void lblGit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -78,7 +78,7 @@ namespace S6Patcher.Source.Forms
                 MessageBox.Show(ex.ToString());
             }
 
-            this.WindowState = FormWindowState.Minimized;
+            WindowState = FormWindowState.Minimized;
             CurrentLabel.LinkVisited = true;
         }
         private void aboutBox_Load(object sender, EventArgs e)
@@ -87,8 +87,8 @@ namespace S6Patcher.Source.Forms
             {
                 using (Stream IconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Source.Resources.favicon.ico"))
                 {
-                    this.Icon = new System.Drawing.Icon(IconStream);
-                    this.ShowIcon = true;
+                    Icon = new System.Drawing.Icon(IconStream);
+                    ShowIcon = true;
                 }
             }
             catch {}

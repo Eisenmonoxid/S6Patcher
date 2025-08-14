@@ -13,7 +13,8 @@ namespace S6Patcher.Source.Helpers
         ~WebHandler() {GlobalClient.Dispose();}
         public static WebHandler Instance => _instance;
 
-        private static readonly WebClientWithTimeout GlobalClient = new WebClientWithTimeout(8000) {Encoding = Encoding.UTF8, Headers = {"User-Agent: Other"}};
+        private static readonly WebClientWithTimeout GlobalClient = new WebClientWithTimeout(8000) 
+            {Encoding = Encoding.UTF8, Headers = {"User-Agent: Other"}};
         private bool Startup = true;
         private bool EventHandlerRegistered = false;
 
@@ -28,7 +29,8 @@ namespace S6Patcher.Source.Helpers
                 Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
 
                 DialogResult Result = (DialogResult)BaseForm.Invoke(new Func<DialogResult>(() => 
-                    MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question)));
+                    MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question)));
                 
                 if (Result != DialogResult.Yes)
                 {

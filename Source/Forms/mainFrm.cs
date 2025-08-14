@@ -14,7 +14,8 @@ namespace S6Patcher.Source.Forms
         private Patcher.Patcher Patcher;
 
         private FileStream GlobalStream = null;
-        private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
+        private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", 
+            "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
 
         public mainFrm()
         {

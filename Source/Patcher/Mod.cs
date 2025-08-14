@@ -13,7 +13,8 @@ namespace S6Patcher.Source.Patcher
     {
         private readonly Uri GlobalDownloadURL = new Uri(Resources.ModLink);
         private readonly string GlobalDestinationDirectoryPath;
-        private readonly string ArchiveFilePath;
+        private readonly string ArchiveFilePathBase;
+        private readonly string ArchiveFilePathExtra1;
         private readonly string BaseDirectoryPath;
         private const string ArchiveFileName = "mod.bba";
 
@@ -27,7 +28,8 @@ namespace S6Patcher.Source.Patcher
             GlobalID = ID;
             GlobalStream = Stream;
             GlobalDestinationDirectoryPath = GetModloaderPath();
-            ArchiveFilePath = Path.Combine(GlobalDestinationDirectoryPath, "bba");
+            ArchiveFilePathBase = Path.Combine(GlobalDestinationDirectoryPath, "base");
+            ArchiveFilePathExtra1 = Path.Combine(GlobalDestinationDirectoryPath, "extra1");
             BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         }
 
@@ -57,7 +59,9 @@ namespace S6Patcher.Source.Patcher
                     }
                     else
                     {
-                        Archive.GetEntry("mod.bba").ExtractToFile(Path.Combine(ArchiveFilePath, ArchiveFileName), true);
+                        ZipArchiveEntry Entry = Archive.GetEntry("mod.bba");
+                        Entry.ExtractToFile(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
+                        Entry.ExtractToFile(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
                     }
                 }
             }
@@ -90,24 +94,28 @@ namespace S6Patcher.Source.Patcher
 
         public void CreateModLoader(bool UseBugfixMod)
         {
-            if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
+            try
             {
-                Directory.CreateDirectory(BaseDirectoryPath);
-                Logger.Instance.Log("SetModLoader(): Directory created " + BaseDirectoryPath);
+                if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
+                {
+                    Directory.CreateDirectory(BaseDirectoryPath);
+                    Logger.Instance.Log("SetModLoader(): Directory created " + BaseDirectoryPath);
+                }
+                else
+                {
+                    Directory.CreateDirectory(ArchiveFilePathBase);
+                    Directory.CreateDirectory(ArchiveFilePathExtra1);
+                    // Always do this in case the download fails or user cancels
+                    File.WriteAllBytes(Path.Combine(ArchiveFilePathBase, ArchiveFileName), Resources.mod);
+                    File.WriteAllBytes(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
+                    Logger.Instance.Log("SetModLoader(): Written " + ArchiveFileName + " to Paths "
+                        + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Directory.CreateDirectory(ArchiveFilePath);
-                try
-                {
-                    File.WriteAllBytes(Path.Combine(ArchiveFilePath, ArchiveFileName), Resources.mod); // Always do this in case the download fails or user cancels
-                    Logger.Instance.Log("SetModLoader(): Written " + ArchiveFileName + " to Path " + ArchiveFilePath);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Logger.Instance.Log(ex.ToString());
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             if (UseBugfixMod)

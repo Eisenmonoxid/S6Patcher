@@ -124,9 +124,7 @@ namespace S6Patcher.Source.Helpers
             return true;
         }
 
-        private static string GetBackupPath(string Filepath)
-        {
-            return Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + ".backup");
-        }
+        private static string GetBackupPath(string Filepath) => 
+            Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + ".backup");
     }
 }

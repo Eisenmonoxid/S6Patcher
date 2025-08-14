@@ -23,7 +23,8 @@ namespace S6Patcher.Source.Patcher
             {
                 using (MemoryMappedViewAccessor View = Mapping.CreateViewAccessor())
                 {
-                    CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum); // This will only work on Windows
+                    // This will only work on Windows
+                    CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
                 };
             };
 

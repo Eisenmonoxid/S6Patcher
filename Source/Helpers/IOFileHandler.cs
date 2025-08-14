@@ -42,20 +42,17 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
-        public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder)
+        public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder) => new OpenFileDialog
         {
-            return new OpenFileDialog
-            {
-                CheckFileExists = true,
-                ShowHelp = false,
-                CheckPathExists = true,
-                DereferenceLinks = true,
-                InitialDirectory = (InitialDirectory == String.Empty || Folder == Environment.SpecialFolder.MyDocuments) ? Environment.GetFolderPath(Folder) : InitialDirectory,
-                Multiselect = false,
-                ShowReadOnly = false,
-                Filter = Filter
-            };
-        }
+            CheckFileExists = true,
+            ShowHelp = false,
+            CheckPathExists = true,
+            DereferenceLinks = true,
+            InitialDirectory = (InitialDirectory == String.Empty || Folder == Environment.SpecialFolder.MyDocuments) ? Environment.GetFolderPath(Folder) : InitialDirectory,
+            Multiselect = false,
+            ShowReadOnly = false,
+            Filter = Filter
+        };
 
         public string IsPlayLauncherExecutable(string Filepath)
         {
