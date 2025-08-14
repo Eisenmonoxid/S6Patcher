@@ -83,9 +83,9 @@ namespace S6Patcher.Source.Patcher.Mappings
         {
             {0xC4F9EC, BitConverter.GetBytes(ClutterFarDistance)}, // This is not an error, the HE uses the zoomlevel as single instead of double like in the OV ...
             {0x270E73, new byte[] {0xC7, 0x45, 0xF0}},
-            {0x270E76, BitConverter.GetBytes(ClutterFarDistance + 4800)},
+            {0x270E76, BitConverter.GetBytes(ClutterFarDistance + 4800f)},
             {0x270E7A, new byte[] {0xC7, 0x45, 0xF4}},
-            {0x270E7D, BitConverter.GetBytes(3700)},
+            {0x270E7D, BitConverter.GetBytes(3700f)},
             {0x270E81, new byte[] {0x90}},
             {0x270E87, new byte[] {0x90, 0x90, 0x90}},
             {0x2540B8, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 
