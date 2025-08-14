@@ -17,12 +17,19 @@ namespace S6Patcher.Source.Forms
         private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", 
             "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
 
-        public mainFrm()
+        private readonly bool UseEasyDebug = false;
+
+        public mainFrm(string[] args)
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;
             Logger.Instance.Log("Startup successful! " + this.Text + " - Mono: " + Program.IsMono.ToString());
             WebHandler.Instance.CheckForUpdates(true);
+
+            if (args.Contains("-DEBUG"))
+            {
+                UseEasyDebug = true;
+            }
         }
 
         private void SetControlValueFromStream(BinaryReader Reader, long Position, TextBox Control)
@@ -203,7 +210,11 @@ namespace S6Patcher.Source.Forms
                 Patcher.SetLuaScriptBugFixes();
                 SetEntriesInOptionsFileByCheckBox();
             }
-            if (cbModloader.Checked)
+            if (UseEasyDebug)
+            {
+                Patcher.SetEasyDebug();
+            }
+            if (cbModloader.Checked) // Has to be last because of thread start
             {
                 Patcher.SetModLoader(ModDownload);
             }

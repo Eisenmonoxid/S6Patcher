@@ -8,11 +8,11 @@ namespace S6Patcher.Source
     {
         internal static bool IsMono {get;} = Type.GetType("Mono.Runtime") != null;
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new mainFrm());
+            Application.Run(new mainFrm(args));
         }
     }
 }

@@ -50,7 +50,7 @@ namespace S6Patcher.Source.Helpers
             {
                 lock (Lock)
                 {
-                    Writer.WriteLine($"{DateTime.Now}: {Message}");
+                    Writer.WriteLine($"{Message}");
                     Writer.Flush();
                 }
             }

@@ -196,6 +196,15 @@ namespace S6Patcher.Source.Patcher
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
         }
 
+        public void SetEasyDebug()
+        {
+            Dictionary<long, byte[]> Mapping = GlobalMappings.GetEasyDebugMapping();
+            foreach (var Entry in Mapping)
+            {
+                WriteBytes(Entry.Key, Entry.Value);
+            }
+        }
+
         private void WriteBytes(long Position, byte[] Bytes)
         {
             GlobalStream.Position = (GlobalID == execID.OV_OFFSET) ? Position - GlobalOffset : Position;

@@ -48,15 +48,12 @@ namespace S6Patcher.Source.Patcher.Mappings
                     {0x23D655, new byte[] {0x90, 0x90}}, // Override JNZ, always set Special Edition to 1
                 }
             },
-            new PatchEntry
-            {
-                Name = "cbEasyDebug",
-                Mapping = new Dictionary<long, byte[]>()
-                {
-                    {0x00BC4E, new byte[] {0x90, 0x90}}, // Override JGE, show no data folder found MessageBox (halt thread)
-                    {0x00BCB5, new byte[] {0xEB, 0x03, 0x90, 0x90, 0x90}}, // Jump to original instruction
-                }
-            }
+        };
+
+        public override Dictionary<long, byte[]> GetEasyDebugMapping() => new Dictionary<long, byte[]>()
+        {
+            {0x00BC4E, new byte[] {0x90, 0x90}}, // Override JGE, show no data folder found MessageBox (halt thread)
+            {0x00BCB5, new byte[] {0xEB, 0x03, 0x90, 0x90, 0x90}}, // Jump to original instruction
         };
 
         public override Dictionary<long, byte[]> GetModloaderMapping() => new Dictionary<long, byte[]>()
