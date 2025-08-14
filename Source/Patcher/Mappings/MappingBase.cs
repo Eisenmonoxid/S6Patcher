@@ -25,9 +25,9 @@ namespace S6Patcher.Source.Patcher.Mappings
                 case execID.OV_OFFSET:
                     return new OV();
                 case execID.HE_UBISOFT:
-                    return new HE_Ubi();
+                    return new HEUbi();
                 case execID.HE_STEAM:
-                    return new HE_Steam();
+                    return new HESteam();
                 case execID.ED:
                     return new ED();
                 default:

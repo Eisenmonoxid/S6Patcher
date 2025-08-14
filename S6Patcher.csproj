@@ -92,8 +92,8 @@
     <Compile Include="Source\Patcher\CheckSumCalculator.cs" />
     <Compile Include="Source\Patcher\Mappings\MappingBase.cs" />
     <Compile Include="Source\Patcher\Mappings\ED.cs" />
-    <Compile Include="Source\Patcher\Mappings\HE_Ubi.cs" />
-    <Compile Include="Source\Patcher\Mappings\HE_Steam.cs" />
+    <Compile Include="Source\Patcher\Mappings\HEUbi.cs" />
+    <Compile Include="Source\Patcher\Mappings\HESteam.cs" />
     <Compile Include="Source\Patcher\Mappings\OV.cs" />
     <Compile Include="Source\Patcher\Mod.cs" />
     <Compile Include="Source\Patcher\Patcher.cs" />

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
-    internal class HE_Steam : MappingBase
+    internal class HESteam : MappingBase
     {
         public override List<PatchEntry> GetMapping()
         {
@@ -39,24 +39,37 @@ namespace S6Patcher.Source.Patcher.Mappings
                         {0x25D4D5, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
                         {0x25D4DB, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
                     }
+                },
+                new PatchEntry
+                {
+                    Name = "cbEasyDebug",
+                    Mapping = new Dictionary<long, byte[]>()
+                    {
+                        {0x1E09E1, new byte[] {0x90, 0x90}}, // Override JGE, show no data folder found MessageBox (halt thread)
+                        {0x1E0A5C, new byte[] {0xEB, 0x03, 0x90, 0x90, 0x90}}, // Jump to original instruction
+                    }
                 }
             };
         }
 
         public override Dictionary<long, byte[]> GetModloaderMapping()
         {
-            byte[] CurrentPath = Encoding.ASCII.GetBytes("..\\modloader\\shr\0\0");
             return new Dictionary<long, byte[]>()
             { 
                 // .data segment
-                {0xC50A14, Encoding.ASCII.GetBytes("ModLoader: Adding primary directory.\n\0\0")}, // Print to log
-                {0xC50A58, CurrentPath}, // Add primary directory path
-                {0xC50A44, CurrentPath}, // Add primary directory path
+                {0xC50A14, Encoding.ASCII.GetBytes("S6Patcher: Adding ModLoader Directories...\n\0\0")}, // Print to log
+                {0xC50A44, Encoding.ASCII.GetBytes("..\\ModLoader\\base\\shr\0")}, // Add directory path
+                {0xC50A5A, Encoding.ASCII.GetBytes("..\\ModLoader\\extra1\\shr\0")}, // Add directory path
+                {0xC50A72, Encoding.ASCII.GetBytes("..\\ModLoader\\shr\0\0")}, // Add directory path
                 // .text segment -> Check what loading method to use
                 {0x25E2D0, new byte[] {0xEB}}, // Always jump to ModelViewer
-                {0x25E304, new byte[] {0xE8, 0x41, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90}}, // Return to original loader after mod
+                {0x25E2D4, new byte[] {0xEB}}, // Always jump to ModelViewer
+                {0x25E304, new byte[] {0xE8, 0x41, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90}}, // Call ModelViewer method
                 // .text segment -> Override the ModelViewer func
-                {0x25E3AA, new byte[] {0xEB, 0x7A}}, // Return to original loader after mod
+                {0x25E376, new byte[] {0x72}}, // Return to original loader after mod
+                {0x25E3A6, new byte[] {0x20}}, // Return to original loader after mod
+                {0x25E3AB, new byte[] {0x7A, 0x68, 0x5A}}, // Return to original loader after mod
+                {0x25E3D1, new byte[] {0xEB, 0x53, 0x66, 0x90, 0x90, 0x90, 0x90}}, // Return to original loader after mod
             };
         }
 

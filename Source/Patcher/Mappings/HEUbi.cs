@@ -4,7 +4,7 @@ using System.Text;
 
 namespace S6Patcher.Source.Patcher.Mappings
 {
-    internal class HE_Ubi : MappingBase
+    internal class HEUbi : MappingBase
     {
         public override List<PatchEntry> GetMapping()
         {
