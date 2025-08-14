@@ -179,6 +179,7 @@ namespace S6Patcher.Source.Forms
 
         private void ExecutePatch(List<string> Features)
         {
+            bool ModDownload = cbBugfixMod.Checked;
             Patcher.PatchByControlFeatures(Features);
             if (cbZoom.Checked)
             {
@@ -203,11 +204,11 @@ namespace S6Patcher.Source.Forms
             }
             if (cbModloader.Checked)
             {
-                Patcher.SetModLoader(cbBugfixMod.Checked);
+                Patcher.SetModLoader(ModDownload);
             }
 
             // Finish with UI update
-            if (!cbBugfixMod.Checked)
+            if (!ModDownload)
             {
                 FinishPatchingProcess();
             }
