@@ -33,14 +33,11 @@ namespace S6Patcher.Source.Forms
 
         private void cbKnightSelection_CheckedChanged(object sender, EventArgs e)
         {
-            /*
             cbSpecialKnightsAvailable.Enabled = cbKnightSelection.Checked;
             if (!cbKnightSelection.Checked)
             {
                 cbSpecialKnightsAvailable.Checked = false;
             }
-            */
-            return;
         }
         private void cbModloader_CheckedChanged(object sender, EventArgs e)
         {

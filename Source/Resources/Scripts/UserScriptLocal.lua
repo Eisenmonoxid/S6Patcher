@@ -175,7 +175,7 @@ S6Patcher.EnableSpecialKnights = function()
 		if KnightType == Entities.U_KnightSabatta then
 			return Abilities.AbilityConvert, {11, 6};
 		elseif KnightType == Entities.U_KnightRedPrince then
-			return Abilities.AbilityTorch, {2, 10};
+			return Abilities.AbilitySendHawk, {2, 10};
 		else
 			return S6Patcher.GetKnightAbilityAndIcons(_KnightID);
 		end
@@ -196,6 +196,51 @@ S6Patcher.EnableSpecialKnights = function()
 			return S6Patcher.StartAbilityClicked(_Ability);
 		end
 	end
+	
+	S6Patcher.GameCallback_Feedback_EntityHurt = GameCallback_Feedback_EntityHurt;
+	GameCallback_Feedback_EntityHurt = function(_HurtPlayerID, _HurtEntityID, _HurtingPlayerID, _HurtingEntityID, _DamageReceived, _DamageDealt)
+		local Type = Logic.GetEntityType(_HurtingEntityID);
+		if Type == Entities.U_KnightSabatta then
+			if Logic.GetHeadquarters(_HurtPlayerID) ~= 0 then
+				StartKnightVoiceForActionSpecialAbility(Type);
+			end
+		end
+		
+		S6Patcher.GameCallback_Feedback_EntityHurt(_HurtPlayerID, _HurtEntityID, _HurtingPlayerID, _HurtingEntityID, _DamageReceived, _DamageDealt);
+	end
+	
+	S6Patcher.StartAbilityUpdate = GUI_Knight.StartAbilityUpdate;
+	GUI_Knight.StartAbilityUpdate = function()
+		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
+
+        local KnightID = GUI.GetSelectedEntity();
+        if (KnightID == nil) or (Logic.GetEntityType(KnightID) ~= Entities.U_KnightRedPrince) then
+			return S6Patcher.StartAbilityUpdate();
+        end
+    
+        local Ability, IconPosition = GUI_Knight.GetKnightAbilityAndIcons(KnightID);
+        SetIcon(CurrentWidgetID, IconPosition);
+    
+        local RechargeTime = Logic.KnightGetAbilityRechargeTime(KnightID, Ability);
+        local TimeLeft = Logic.KnightGetAbiltityChargeSeconds(KnightID, Ability);
+
+		if TimeLeft < RechargeTime then
+			DisableButton(CurrentWidgetID);
+			return;
+		end
+
+		--[[
+		if Logic.KnightTributeIsPossible(KnightID) == false then
+			DisableButton(CurrentWidgetID);
+			return;
+		else
+			StartKnightVoiceForActionSpecialAbility(Entities.U_KnightRedPrince, true);
+		end
+		--]]
+
+		EnableButton(CurrentWidgetID);
+		return;
+    end
 end
 
 if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
@@ -438,6 +483,13 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
 			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText(Text));
 			return;
+		elseif _OptionalTextKeyName == "AbilityConvert" then
+			local EntityID = GUI.GetSelectedEntity();
+			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightSabatta) then
+				local Title = string.gsub(XGUIEng.GetStringTableText("UI_ObjectNames/" .. _OptionalTextKeyName), "Hakim", "Sabatt");	
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, XGUIEng.GetStringTableText("UI_ObjectDescription/".. _OptionalTextKeyName));
+				return;
+			end
 		end	
 	end
 	
