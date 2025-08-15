@@ -59,9 +59,12 @@ namespace S6Patcher.Source.Patcher.Mappings
             {0x25D55A, new byte[] {0xE8, 0x41, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90}}, // Call ModelViewer method
             // .text segment -> Override the ModelViewer func
             {0x25D5CC, new byte[] {0xD2}}, // Return to original loader after mod
-            {0x25D5FC, new byte[] {0x20}}, // Return to original loader after mod
-            {0x25D601, new byte[] {0x7A, 0x68, 0xBA}}, // Return to original loader after mod
-            {0x25D627, new byte[] {0xEB, 0x53, 0x90, 0x90, 0x90}}, // Return to original loader after mod
+            {0x25D5FA, new byte[] {0xEB, 0x7D, 0x83, 0x7D, 0x20,
+                0x01, 0x75, 0xB7, 0x68, 0xBA, 0x20, 0x05, 0x01, 
+                0xEB, 0xB5, 0x90}}, // Return to original loader after mod        
+            {0x25D5AF, new byte[] {0xEB, 0x4B, 0xE8, 0xA0, 0x12,
+                0x9A, 0xFF, 0x90, 0x90, 0x90}}, // Return to original loader after mod
+            {0x25D679, new byte[] {0x90, 0x59, 0x59}}, // Return to original loader after mod
         };
 
         public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution)
