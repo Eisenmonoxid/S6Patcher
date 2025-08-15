@@ -61,7 +61,8 @@ namespace S6Patcher.Source.Patcher
                     {
                         ZipArchiveEntry Entry = Archive.GetEntry("mod.bba");
                         Entry.ExtractToFile(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
-                        Entry.ExtractToFile(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
+                        //Entry.ExtractToFile(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
+                        // Not necessary right now
                     }
                 }
             }
@@ -99,7 +100,9 @@ namespace S6Patcher.Source.Patcher
                 if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
                 {
                     Directory.CreateDirectory(BaseDirectoryPath);
-                    Logger.Instance.Log("SetModLoader(): Directory created " + BaseDirectoryPath);
+                    Directory.CreateDirectory(Path.Combine(GlobalDestinationDirectoryPath, "base", "shr"));
+                    Directory.CreateDirectory(Path.Combine(GlobalDestinationDirectoryPath, "extra1", "shr"));
+                    Logger.Instance.Log("SetModLoader(): Directories created.");
                 }
                 else
                 {

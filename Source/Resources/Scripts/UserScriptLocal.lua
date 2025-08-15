@@ -162,7 +162,19 @@ S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	return false;
 end
 
+S6Patcher.RedPrinceAbilityRechargeTime = 150;
+S6Patcher.RedPrinceAbilityCoolDown = S6Patcher.RedPrinceAbilityRechargeTime;
+S6Patcher.CounterRedPrinceAbility = function()
+	if S6Patcher.RedPrinceAbilityCoolDown < S6Patcher.RedPrinceAbilityRechargeTime then
+		S6Patcher.RedPrinceAbilityCoolDown = S6Patcher.RedPrinceAbilityCoolDown + 1;
+	end
+end
+
 S6Patcher.EnableSpecialKnights = function()
+	if S6Patcher.RedPrinceAbilityJob == nil then
+		S6Patcher.RedPrinceAbilityJob = StartSimpleJobEx(S6Patcher.CounterRedPrinceAbility);
+	end
+
 	g_MilitaryFeedback.Knights[Entities.U_KnightSabatta] = "H_Knight_Sabatt";
 	g_HeroAbilityFeedback.Knights[Entities.U_KnightSabatta] = "Sabatta";
 
@@ -189,6 +201,8 @@ S6Patcher.EnableSpecialKnights = function()
 		end
 		
 		if Logic.GetEntityType(KnightID) == Entities.U_KnightRedPrince then
+			StartKnightVoiceForActionSpecialAbility(Entities.U_KnightRedPrince);
+			S6Patcher.RedPrinceAbilityCoolDown = 0;
 			GUI.SendScriptCommand([[S6Patcher.KnightRedPrinceAbility(]] .. tostring(GUI.GetPlayerID()) .. [[)]]);
 			Sound.FXPlay2DSound("ui\\menu_click");
 			HeroAbilityFeedback(KnightID);
@@ -209,6 +223,19 @@ S6Patcher.EnableSpecialKnights = function()
 		S6Patcher.GameCallback_Feedback_EntityHurt(_HurtPlayerID, _HurtEntityID, _HurtingPlayerID, _HurtingEntityID, _DamageReceived, _DamageDealt);
 	end
 	
+	S6Patcher.StartKnightVoiceForPermanentSpecialAbility = StartKnightVoiceForPermanentSpecialAbility;
+	StartKnightVoiceForPermanentSpecialAbility = function(_KnightType)	
+		local Type = Logic.GetEntityType(Logic.GetKnightID(GUI.GetPlayerID()));
+		
+		if _KnightType == Entities.U_KnightPlunder and Type == Entities.U_KnightRedPrince then
+			_KnightType = Entities.U_KnightRedPrince;
+		elseif _KnightType == Entities.U_KnightTrading and Type == Entities.U_KnightSabatta then
+			_KnightType = Entities.U_KnightSabatta;
+		end
+		
+		return S6Patcher.StartKnightVoiceForPermanentSpecialAbility(_KnightType);
+	end
+
 	S6Patcher.StartAbilityUpdate = GUI_Knight.StartAbilityUpdate;
 	GUI_Knight.StartAbilityUpdate = function()
 		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
@@ -221,26 +248,57 @@ S6Patcher.EnableSpecialKnights = function()
         local Ability, IconPosition = GUI_Knight.GetKnightAbilityAndIcons(KnightID);
         SetIcon(CurrentWidgetID, IconPosition);
     
-        local RechargeTime = Logic.KnightGetAbilityRechargeTime(KnightID, Ability);
-        local TimeLeft = Logic.KnightGetAbiltityChargeSeconds(KnightID, Ability);
-
-		if TimeLeft < RechargeTime then
+		if S6Patcher.RedPrinceAbilityCoolDown < S6Patcher.RedPrinceAbilityRechargeTime then
 			DisableButton(CurrentWidgetID);
-			return;
-		end
-
-		--[[
-		if Logic.KnightTributeIsPossible(KnightID) == false then
-			DisableButton(CurrentWidgetID);
-			return;
 		else
-			StartKnightVoiceForActionSpecialAbility(Entities.U_KnightRedPrince, true);
+			EnableButton(CurrentWidgetID);
 		end
-		--]]
-
-		EnableButton(CurrentWidgetID);
-		return;
     end
+	
+	S6Patcher.AbilityProgressUpdate = GUI_Knight.AbilityProgressUpdate();
+	GUI_Knight.AbilityProgressUpdate = function()
+		local CurrentWidgetID =  XGUIEng.GetCurrentWidgetID();
+		local PlayerID = GUI.GetPlayerID();
+		local KnightID = Logic.GetKnightID(PlayerID);
+
+		if KnightID == 0 then
+			return;
+		end
+		
+		if Logic.GetEntityType(KnightID) ~= Entities.U_KnightRedPrince then
+			return S6Patcher.AbilityProgressUpdate();
+		end
+		
+		if S6Patcher.RedPrinceAbilityCoolDown == S6Patcher.RedPrinceAbilityRechargeTime then
+			XGUIEng.SetMaterialColor(CurrentWidgetID, 0, 255, 255, 255, 0);
+		else
+			XGUIEng.SetMaterialColor(CurrentWidgetID, 0, 255, 255, 255, 150);
+			local Progress = math.floor((S6Patcher.RedPrinceAbilityCoolDown / S6Patcher.RedPrinceAbilityRechargeTime) * 100);
+			XGUIEng.SetProgressBarValues(CurrentWidgetID, Progress + 10, 110);
+		end
+	end
+	
+	S6Patcher.StartAbilityMouseOver = GUI_Knight.StartAbilityMouseOver;
+	GUI_Knight.StartAbilityMouseOver = function()
+		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
+		local KnightID = GUI.GetSelectedEntity();
+		local Ability = GUI_Knight.GetKnightAbilityAndIcons(KnightID);
+		
+		if Logic.GetEntityType(KnightID) ~= Entities.U_KnightRedPrince then
+			return S6Patcher.StartAbilityMouseOver();
+		end
+
+		if XGUIEng.IsButtonDisabled(CurrentWidgetID) == 1 then
+			local DisabledTooltipTextKey = "AbilitySendHawk"
+			if S6Patcher.RedPrinceAbilityCoolDown < S6Patcher.RedPrinceAbilityRechargeTime then
+				DisabledTooltipTextKey = "AbilityNotReady"
+			end
+
+			GUI_Tooltip.TooltipNormal("AbilitySendHawk", DisabledTooltipTextKey)
+		else
+			GUI_Tooltip.TooltipNormal("AbilitySendHawk")
+		end
+	end
 end
 
 if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
@@ -478,16 +536,27 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
 			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText(Title), S6Patcher.GetLocalizedText(Text));
 			return;
-		elseif XGUIEng.GetCurrentWidgetID() == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") and S6Patcher.CanDisplayDismissButton() then
-			local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center"); -- "Mitglied entlassen"
-			local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
-			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText(Text));
-			return;
+		elseif XGUIEng.GetCurrentWidgetID() == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
+			if S6Patcher.CanDisplayDismissButton() then
+				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center"); -- "Mitglied entlassen"
+				local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText(Text));
+				return;
+			end
 		elseif _OptionalTextKeyName == "AbilityConvert" then
 			local EntityID = GUI.GetSelectedEntity();
 			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightSabatta) then
-				local Title = string.gsub(XGUIEng.GetStringTableText("UI_ObjectNames/" .. _OptionalTextKeyName), "Hakim", "Sabatt");	
-				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, XGUIEng.GetStringTableText("UI_ObjectDescription/".. _OptionalTextKeyName));
+				local Title = string.gsub(XGUIEng.GetStringTableText("UI_ObjectNames/" .. _OptionalTextKeyName), "Hakim", "Sabatt");
+				local Text = XGUIEng.GetStringTableText("UI_ObjectDescription/".. _OptionalTextKeyName);
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+				return;
+			end
+		elseif _OptionalTextKeyName == "AbilitySendHawk" then
+			local EntityID = GUI.GetSelectedEntity();
+			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightRedPrince) then
+				local Title = XGUIEng.GetStringTableText("UI_ObjectNames/AbilityPlagueRedPrince");
+				local Text = XGUIEng.GetStringTableText("UI_ObjectDescription/AbilityPlagueRedPrince");
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
 				return;
 			end
 		end	
