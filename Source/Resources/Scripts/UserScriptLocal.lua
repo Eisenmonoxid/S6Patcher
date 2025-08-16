@@ -149,16 +149,17 @@ S6Patcher.OverrideGlobalScript = function()
 end
 
 S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
+	local Base = (Framework.GetGameExtraNo() < 1) == true;
 	local Name = Framework.GetCurrentMapName();
 	local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
 
 	if Type == 0 or Type == 3 then -- Singleplayer and Usermap
 		local Names = {Framework.GetValidKnightNames(Name, Type)};
-		if #Names == 0 then -- No custom ValidKnightNames in info.xml
+		if (#Names == 0) or (Base and #Names == 6) then -- No custom ValidKnightNames in info.xml
 			return true;
 		end
 	end
-
+	
 	return false;
 end
 
@@ -239,10 +240,13 @@ end
 
 if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
 	and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0
-	and (Framework.GetGameExtraNo() >= 1)
 	and (not Framework.IsNetworkGame())
 	and (not S6Patcher.GlobalScriptOverridden)
 	and (S6Patcher.SelectedKnight ~= nil) then
+	
+	if Framework.GetGameExtraNo() < 1 then
+		table.remove(S6Patcher.DefaultKnightNames, 1);
+	end
 	
 	if Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0 then
 		S6Patcher.EnableSpecialKnights();

@@ -52,6 +52,25 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.SetKnightSelection(true);
 		S6Patcher.KnightSelection.OpenCustomGameDialog();
 	end
+	if S6Patcher.CustomGame_FillHeroComboBox == nil then
+		S6Patcher.CustomGame_FillHeroComboBox = CustomGame_FillHeroComboBox;
+	end
+	CustomGame_FillHeroComboBox = function(_TryToKeepSelectedKnight)
+		S6Patcher.CustomGame_FillHeroComboBox(_TryToKeepSelectedKnight);
+		
+		if Framework.GetGameExtraNo() < 1 then
+			if S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.SelectedMap, CustomGame.SelectedMapType) then
+				local HeroComboBoxID = XGUIEng.GetWidgetID(CustomGame.Widget.KnightsList);
+				XGUIEng.ListBoxPopAll(HeroComboBoxID);
+				
+				for i = 1, #CustomGame.KnightTypes do
+					XGUIEng.ListBoxPushItem(HeroComboBoxID, XGUIEng.GetStringTableText("Names/" .. CustomGame.KnightTypes[i]));
+				end
+				
+				-- No _TryToKeepSelectedKnight ... meh, whatever
+			end
+		end
+	end
 end
 S6Patcher.KnightSelection.SetKnightSelection = function(_showKnights)
 	local Context = S6Patcher.KnightSelection;
@@ -61,17 +80,33 @@ S6Patcher.KnightSelection.SetKnightSelection = function(_showKnights)
 	RemapKnightID = (_showKnights) and Context.OverrideRemapKnightID or Context.RemapKnightID;
 end
 S6Patcher.KnightSelection.OverrideRemapKnightID = function(_ID)
-	if _ID > 7 then return "" end;
-	return ((_ID == 1) and 7) or (_ID - 1);
+	local Base = (Framework.GetGameExtraNo() < 1) == true;
+	local Nr = Base and 6 or 7;
+	if _ID > Nr then return "" end;
+	return (Base and _ID) or (((_ID == 1) and 7) or (_ID - 1));
 end
 S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _selectedMapType)
-	local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};	
-	return ((_selectedMapType == 0 or _selectedMapType == 3) and #Names == 0);
+	local Base = (Framework.GetGameExtraNo() < 1) == true;
+	local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};
+	
+	local FirstCondition;
+	if Base then
+		FirstCondition = (_selectedMapType == 0 and (#Names == 0 or #Names == 6)) == true;
+	else
+		FirstCondition = (_selectedMapType == 0 and (#Names == 0)) == true;
+	end
+	
+	local SecondCondition = (_selectedMapType == 3 and #Names == 0) == true;
+	return FirstCondition or SecondCondition;
 end
-if Framework.GetGameExtraNo() >= 1 and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
+if Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedKnightID = -1;
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
 	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
+	
+	if Framework.GetGameExtraNo() < 1 then
+		table.remove(S6Patcher.KnightSelection.NewKnightTypes, 1);
+	end
 	
 	if Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0 then
 		S6Patcher.KnightSelection.NewKnightTypes[#S6Patcher.KnightSelection.NewKnightTypes + 1] = "U_KnightSabatta";
