@@ -74,8 +74,8 @@ if Options.GetIntValue("S6Patcher", "DayNightCycle", 0) ~= 0 and (not S6Patcher.
 	GameCallback_Feedback_EndOfMonth = function(_LastMonth, _NewMonth)
 		S6Patcher.GameCallback_Feedback_EndOfMonth(_LastMonth, _NewMonth);
 		
-		local Month = 5; -- August
-		local Duration = 180; -- 3 minutes (ingame time, not real time)
+		local Month = 3; -- May
+		local Duration = 160; -- 2:40 minutes (ingame time, not real time)
 		
 		if (_NewMonth == Month) and (S6Patcher.UseDayNightCycle) and (not Logic.IsWeatherEventActive()) then
 			if S6Patcher.DayNightCycleEnvironmentSet == nil then
@@ -255,7 +255,7 @@ S6Patcher.EnableSpecialKnights = function()
 		end
     end
 	
-	S6Patcher.AbilityProgressUpdate = GUI_Knight.AbilityProgressUpdate();
+	S6Patcher.AbilityProgressUpdate = GUI_Knight.AbilityProgressUpdate;
 	GUI_Knight.AbilityProgressUpdate = function()
 		local CurrentWidgetID =  XGUIEng.GetCurrentWidgetID();
 		local PlayerID = GUI.GetPlayerID();
@@ -303,7 +303,7 @@ end
 
 if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
 	and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0
-	and (Framework.GetGameExtraNo() >= 1) 
+	--and (Framework.GetGameExtraNo() >= 1) --> Special Knights also in the base game
 	and (not Framework.IsNetworkGame())
 	and (not S6Patcher.GlobalScriptOverridden)
 	and (S6Patcher.SelectedKnight ~= nil) then
@@ -548,7 +548,13 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightSabatta) then
 				local Title = string.gsub(XGUIEng.GetStringTableText("UI_ObjectNames/" .. _OptionalTextKeyName), "Hakim", "Sabatt");
 				local Text = XGUIEng.GetStringTableText("UI_ObjectDescription/".. _OptionalTextKeyName);
-				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+				
+				local Disabled = "";
+				if _OptionalDisabledTextKeyName ~= nil then
+					Disabled = "{cr}" .. XGUIEng.GetStringTableText("UI_ButtonDisabled/" .. _OptionalDisabledTextKeyName);
+				end
+				
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text .. "{cr}{@color:220, 0, 0}" .. Disabled .. "{@color:none}");
 				return;
 			end
 		elseif _OptionalTextKeyName == "AbilitySendHawk" then
@@ -556,7 +562,13 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightRedPrince) then
 				local Title = XGUIEng.GetStringTableText("UI_ObjectNames/AbilityPlagueRedPrince");
 				local Text = XGUIEng.GetStringTableText("UI_ObjectDescription/AbilityPlagueRedPrince");
-				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text);
+				
+				local Disabled = "";
+				if _OptionalDisabledTextKeyName ~= nil then
+					Disabled = "{cr}" .. XGUIEng.GetStringTableText("UI_ButtonDisabled/" .. _OptionalDisabledTextKeyName);
+				end
+				
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text .. "{@color:220, 0, 0}" .. Disabled .. "{@color:none}");
 				return;
 			end
 		end	

@@ -46,6 +46,7 @@
             this.gbEditor = new System.Windows.Forms.GroupBox();
             this.gbHE = new System.Windows.Forms.GroupBox();
             this.gbAll = new System.Windows.Forms.GroupBox();
+            this.cbEasyDebug = new System.Windows.Forms.CheckBox();
             this.gbUserscriptOptions = new System.Windows.Forms.GroupBox();
             this.cbSpecialKnightsAvailable = new System.Windows.Forms.CheckBox();
             this.cbDayNightCycle = new System.Windows.Forms.CheckBox();
@@ -75,10 +76,9 @@
             // cbLAAFlag
             // 
             this.cbLAAFlag.AutoSize = true;
-            this.cbLAAFlag.Location = new System.Drawing.Point(8, 58);
-            this.cbLAAFlag.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbLAAFlag.Location = new System.Drawing.Point(6, 47);
             this.cbLAAFlag.Name = "cbLAAFlag";
-            this.cbLAAFlag.Size = new System.Drawing.Size(295, 24);
+            this.cbLAAFlag.Size = new System.Drawing.Size(237, 20);
             this.cbLAAFlag.TabIndex = 0;
             this.cbLAAFlag.Text = "Activate Large Address Aware Flag";
             this.cbLAAFlag.UseVisualStyleBackColor = true;
@@ -86,10 +86,9 @@
             // cbZoom
             // 
             this.cbZoom.AutoSize = true;
-            this.cbZoom.Location = new System.Drawing.Point(8, 90);
-            this.cbZoom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbZoom.Location = new System.Drawing.Point(6, 73);
             this.cbZoom.Name = "cbZoom";
-            this.cbZoom.Size = new System.Drawing.Size(162, 24);
+            this.cbZoom.Size = new System.Drawing.Size(131, 20);
             this.cbZoom.TabIndex = 1;
             this.cbZoom.Text = "Max. Zoom Level:";
             this.cbZoom.UseVisualStyleBackColor = true;
@@ -98,21 +97,19 @@
             // txtZoom
             // 
             this.txtZoom.Enabled = false;
-            this.txtZoom.Location = new System.Drawing.Point(191, 87);
-            this.txtZoom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtZoom.Location = new System.Drawing.Point(143, 71);
             this.txtZoom.MaxLength = 8;
             this.txtZoom.Name = "txtZoom";
-            this.txtZoom.Size = new System.Drawing.Size(201, 26);
+            this.txtZoom.Size = new System.Drawing.Size(152, 22);
             this.txtZoom.TabIndex = 2;
             // 
             // btnPatch
             // 
             this.btnPatch.Enabled = false;
             this.btnPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPatch.Location = new System.Drawing.Point(16, 631);
-            this.btnPatch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPatch.Location = new System.Drawing.Point(12, 538);
             this.btnPatch.Name = "btnPatch";
-            this.btnPatch.Size = new System.Drawing.Size(856, 58);
+            this.btnPatch.Size = new System.Drawing.Size(642, 47);
             this.btnPatch.TabIndex = 3;
             this.btnPatch.Text = "Patch File";
             this.btnPatch.UseVisualStyleBackColor = true;
@@ -121,20 +118,18 @@
             // lblZoomAngle
             // 
             this.lblZoomAngle.AutoSize = true;
-            this.lblZoomAngle.Location = new System.Drawing.Point(401, 91);
-            this.lblZoomAngle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblZoomAngle.Location = new System.Drawing.Point(301, 74);
             this.lblZoomAngle.Name = "lblZoomAngle";
-            this.lblZoomAngle.Size = new System.Drawing.Size(109, 20);
+            this.lblZoomAngle.Size = new System.Drawing.Size(83, 16);
             this.lblZoomAngle.TabIndex = 4;
             this.lblZoomAngle.Text = "Default: 7200";
             // 
             // cbAutosave
             // 
             this.cbAutosave.AutoSize = true;
-            this.cbAutosave.Location = new System.Drawing.Point(8, 27);
-            this.cbAutosave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbAutosave.Location = new System.Drawing.Point(6, 22);
             this.cbAutosave.Name = "cbAutosave";
-            this.cbAutosave.Size = new System.Drawing.Size(191, 24);
+            this.cbAutosave.Size = new System.Drawing.Size(152, 20);
             this.cbAutosave.TabIndex = 5;
             this.cbAutosave.Text = "Autosave Time (min):";
             this.cbAutosave.UseVisualStyleBackColor = true;
@@ -143,10 +138,9 @@
             // cbAllEntities
             // 
             this.cbAllEntities.AutoSize = true;
-            this.cbAllEntities.Location = new System.Drawing.Point(8, 122);
-            this.cbAllEntities.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbAllEntities.Location = new System.Drawing.Point(6, 99);
             this.cbAllEntities.Name = "cbAllEntities";
-            this.cbAllEntities.Size = new System.Drawing.Size(326, 24);
+            this.cbAllEntities.Size = new System.Drawing.Size(255, 20);
             this.cbAllEntities.TabIndex = 6;
             this.cbAllEntities.Text = "Show All Entities and Textures in Editor";
             this.cbAllEntities.UseVisualStyleBackColor = true;
@@ -154,30 +148,27 @@
             // txtAutosave
             // 
             this.txtAutosave.Enabled = false;
-            this.txtAutosave.Location = new System.Drawing.Point(219, 25);
-            this.txtAutosave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtAutosave.Location = new System.Drawing.Point(164, 20);
             this.txtAutosave.MaxLength = 5;
             this.txtAutosave.Name = "txtAutosave";
-            this.txtAutosave.Size = new System.Drawing.Size(179, 26);
+            this.txtAutosave.Size = new System.Drawing.Size(135, 22);
             this.txtAutosave.TabIndex = 7;
             // 
             // lblAutosave
             // 
             this.lblAutosave.AutoSize = true;
-            this.lblAutosave.Location = new System.Drawing.Point(407, 28);
-            this.lblAutosave.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAutosave.Location = new System.Drawing.Point(305, 23);
             this.lblAutosave.Name = "lblAutosave";
-            this.lblAutosave.Size = new System.Drawing.Size(91, 20);
+            this.lblAutosave.Size = new System.Drawing.Size(69, 16);
             this.lblAutosave.TabIndex = 8;
             this.lblAutosave.Text = "Default: 15";
             // 
             // cbDevMode
             // 
             this.cbDevMode.AutoSize = true;
-            this.cbDevMode.Location = new System.Drawing.Point(8, 122);
-            this.cbDevMode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbDevMode.Location = new System.Drawing.Point(6, 99);
             this.cbDevMode.Name = "cbDevMode";
-            this.cbDevMode.Size = new System.Drawing.Size(338, 24);
+            this.cbDevMode.Size = new System.Drawing.Size(274, 20);
             this.cbDevMode.TabIndex = 9;
             this.cbDevMode.Text = "Activate Development Mode Permanently";
             this.cbDevMode.UseVisualStyleBackColor = true;
@@ -185,10 +176,9 @@
             // btnAbort
             // 
             this.btnAbort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAbort.Location = new System.Drawing.Point(16, 762);
-            this.btnAbort.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAbort.Location = new System.Drawing.Point(12, 644);
             this.btnAbort.Name = "btnAbort";
-            this.btnAbort.Size = new System.Drawing.Size(856, 58);
+            this.btnAbort.Size = new System.Drawing.Size(642, 47);
             this.btnAbort.TabIndex = 10;
             this.btnAbort.Text = "Exit";
             this.btnAbort.UseVisualStyleBackColor = true;
@@ -197,10 +187,9 @@
             // cbHighTextures
             // 
             this.cbHighTextures.AutoSize = true;
-            this.cbHighTextures.Location = new System.Drawing.Point(8, 26);
-            this.cbHighTextures.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbHighTextures.Location = new System.Drawing.Point(6, 21);
             this.cbHighTextures.Name = "cbHighTextures";
-            this.cbHighTextures.Size = new System.Drawing.Size(236, 24);
+            this.cbHighTextures.Size = new System.Drawing.Size(186, 20);
             this.cbHighTextures.TabIndex = 12;
             this.cbHighTextures.Tag = "";
             this.cbHighTextures.Text = "High - Resolution Textures:";
@@ -210,10 +199,9 @@
             // cbEntityLimits
             // 
             this.cbEntityLimits.AutoSize = true;
-            this.cbEntityLimits.Location = new System.Drawing.Point(8, 90);
-            this.cbEntityLimits.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbEntityLimits.Location = new System.Drawing.Point(6, 73);
             this.cbEntityLimits.Name = "cbEntityLimits";
-            this.cbEntityLimits.Size = new System.Drawing.Size(179, 24);
+            this.cbEntityLimits.Size = new System.Drawing.Size(138, 20);
             this.cbEntityLimits.TabIndex = 13;
             this.cbEntityLimits.Text = "Higher Entity Limits";
             this.cbEntityLimits.UseVisualStyleBackColor = true;
@@ -221,10 +209,9 @@
             // cbScalingPlacing
             // 
             this.cbScalingPlacing.AutoSize = true;
-            this.cbScalingPlacing.Location = new System.Drawing.Point(8, 58);
-            this.cbScalingPlacing.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbScalingPlacing.Location = new System.Drawing.Point(6, 47);
             this.cbScalingPlacing.Name = "cbScalingPlacing";
-            this.cbScalingPlacing.Size = new System.Drawing.Size(297, 24);
+            this.cbScalingPlacing.Size = new System.Drawing.Size(236, 20);
             this.cbScalingPlacing.TabIndex = 14;
             this.cbScalingPlacing.Text = "Free Scaling and Placing of Entities";
             this.cbScalingPlacing.UseVisualStyleBackColor = true;
@@ -232,10 +219,9 @@
             // cbMapBorder
             // 
             this.cbMapBorder.AutoSize = true;
-            this.cbMapBorder.Location = new System.Drawing.Point(8, 26);
-            this.cbMapBorder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbMapBorder.Location = new System.Drawing.Point(6, 21);
             this.cbMapBorder.Name = "cbMapBorder";
-            this.cbMapBorder.Size = new System.Drawing.Size(223, 24);
+            this.cbMapBorder.Size = new System.Drawing.Size(181, 20);
             this.cbMapBorder.TabIndex = 15;
             this.cbMapBorder.Text = "Usable Black Map Border";
             this.cbMapBorder.UseVisualStyleBackColor = true;
@@ -248,11 +234,9 @@
             this.gbEditor.Controls.Add(this.cbAllEntities);
             this.gbEditor.Enabled = false;
             this.gbEditor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbEditor.Location = new System.Drawing.Point(16, 470);
-            this.gbEditor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbEditor.Location = new System.Drawing.Point(12, 407);
             this.gbEditor.Name = "gbEditor";
-            this.gbEditor.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.gbEditor.Size = new System.Drawing.Size(856, 154);
+            this.gbEditor.Size = new System.Drawing.Size(642, 125);
             this.gbEditor.TabIndex = 16;
             this.gbEditor.TabStop = false;
             this.gbEditor.Text = "Mapeditor";
@@ -264,17 +248,16 @@
             this.gbHE.Controls.Add(this.lblAutosave);
             this.gbHE.Enabled = false;
             this.gbHE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbHE.Location = new System.Drawing.Point(16, 402);
-            this.gbHE.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbHE.Location = new System.Drawing.Point(12, 352);
             this.gbHE.Name = "gbHE";
-            this.gbHE.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.gbHE.Size = new System.Drawing.Size(856, 60);
+            this.gbHE.Size = new System.Drawing.Size(642, 49);
             this.gbHE.TabIndex = 17;
             this.gbHE.TabStop = false;
             this.gbHE.Text = "History Edition";
             // 
             // gbAll
             // 
+            this.gbAll.Controls.Add(this.cbEasyDebug);
             this.gbAll.Controls.Add(this.gbUserscriptOptions);
             this.gbAll.Controls.Add(this.cbLimitedEdition);
             this.gbAll.Controls.Add(this.cbKnightSelection);
@@ -289,14 +272,22 @@
             this.gbAll.Controls.Add(this.lblZoomAngle);
             this.gbAll.Enabled = false;
             this.gbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbAll.Location = new System.Drawing.Point(16, 52);
-            this.gbAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbAll.Location = new System.Drawing.Point(12, 42);
             this.gbAll.Name = "gbAll";
-            this.gbAll.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.gbAll.Size = new System.Drawing.Size(856, 250);
+            this.gbAll.Size = new System.Drawing.Size(642, 228);
             this.gbAll.TabIndex = 18;
             this.gbAll.TabStop = false;
             this.gbAll.Text = "General Options";
+            // 
+            // cbEasyDebug
+            // 
+            this.cbEasyDebug.AutoSize = true;
+            this.cbEasyDebug.Location = new System.Drawing.Point(6, 203);
+            this.cbEasyDebug.Name = "cbEasyDebug";
+            this.cbEasyDebug.Size = new System.Drawing.Size(147, 20);
+            this.cbEasyDebug.TabIndex = 20;
+            this.cbEasyDebug.Text = "Enable Easy Debug";
+            this.cbEasyDebug.UseVisualStyleBackColor = true;
             // 
             // gbUserscriptOptions
             // 
@@ -306,11 +297,9 @@
             this.gbUserscriptOptions.Controls.Add(this.cbUseDowngrade);
             this.gbUserscriptOptions.Controls.Add(this.cbUseSingleStop);
             this.gbUserscriptOptions.Enabled = false;
-            this.gbUserscriptOptions.Location = new System.Drawing.Point(581, 54);
-            this.gbUserscriptOptions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbUserscriptOptions.Location = new System.Drawing.Point(436, 69);
             this.gbUserscriptOptions.Name = "gbUserscriptOptions";
-            this.gbUserscriptOptions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.gbUserscriptOptions.Size = new System.Drawing.Size(267, 188);
+            this.gbUserscriptOptions.Size = new System.Drawing.Size(200, 153);
             this.gbUserscriptOptions.TabIndex = 19;
             this.gbUserscriptOptions.TabStop = false;
             this.gbUserscriptOptions.Text = "Gameplay Options";
@@ -318,10 +307,10 @@
             // cbSpecialKnightsAvailable
             // 
             this.cbSpecialKnightsAvailable.AutoSize = true;
-            this.cbSpecialKnightsAvailable.Location = new System.Drawing.Point(8, 154);
-            this.cbSpecialKnightsAvailable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbSpecialKnightsAvailable.Enabled = false;
+            this.cbSpecialKnightsAvailable.Location = new System.Drawing.Point(6, 125);
             this.cbSpecialKnightsAvailable.Name = "cbSpecialKnightsAvailable";
-            this.cbSpecialKnightsAvailable.Size = new System.Drawing.Size(203, 24);
+            this.cbSpecialKnightsAvailable.Size = new System.Drawing.Size(164, 20);
             this.cbSpecialKnightsAvailable.TabIndex = 4;
             this.cbSpecialKnightsAvailable.Text = "Enable Special Knights";
             this.cbSpecialKnightsAvailable.UseVisualStyleBackColor = true;
@@ -329,10 +318,9 @@
             // cbDayNightCycle
             // 
             this.cbDayNightCycle.AutoSize = true;
-            this.cbDayNightCycle.Location = new System.Drawing.Point(8, 122);
-            this.cbDayNightCycle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbDayNightCycle.Location = new System.Drawing.Point(6, 99);
             this.cbDayNightCycle.Name = "cbDayNightCycle";
-            this.cbDayNightCycle.Size = new System.Drawing.Size(152, 24);
+            this.cbDayNightCycle.Size = new System.Drawing.Size(123, 20);
             this.cbDayNightCycle.TabIndex = 3;
             this.cbDayNightCycle.Text = "Day/Night Cycle";
             this.cbDayNightCycle.UseVisualStyleBackColor = true;
@@ -340,10 +328,9 @@
             // cbUseMilitaryRelease
             // 
             this.cbUseMilitaryRelease.AutoSize = true;
-            this.cbUseMilitaryRelease.Location = new System.Drawing.Point(8, 90);
-            this.cbUseMilitaryRelease.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbUseMilitaryRelease.Location = new System.Drawing.Point(6, 73);
             this.cbUseMilitaryRelease.Name = "cbUseMilitaryRelease";
-            this.cbUseMilitaryRelease.Size = new System.Drawing.Size(205, 24);
+            this.cbUseMilitaryRelease.Size = new System.Drawing.Size(163, 20);
             this.cbUseMilitaryRelease.TabIndex = 2;
             this.cbUseMilitaryRelease.Text = "Military Release Button";
             this.cbUseMilitaryRelease.UseVisualStyleBackColor = true;
@@ -351,10 +338,9 @@
             // cbUseDowngrade
             // 
             this.cbUseDowngrade.AutoSize = true;
-            this.cbUseDowngrade.Location = new System.Drawing.Point(8, 58);
-            this.cbUseDowngrade.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbUseDowngrade.Location = new System.Drawing.Point(6, 47);
             this.cbUseDowngrade.Name = "cbUseDowngrade";
-            this.cbUseDowngrade.Size = new System.Drawing.Size(170, 24);
+            this.cbUseDowngrade.Size = new System.Drawing.Size(136, 20);
             this.cbUseDowngrade.TabIndex = 1;
             this.cbUseDowngrade.Text = "Downgrade Button";
             this.cbUseDowngrade.UseVisualStyleBackColor = true;
@@ -362,10 +348,9 @@
             // cbUseSingleStop
             // 
             this.cbUseSingleStop.AutoSize = true;
-            this.cbUseSingleStop.Location = new System.Drawing.Point(8, 26);
-            this.cbUseSingleStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbUseSingleStop.Location = new System.Drawing.Point(6, 21);
             this.cbUseSingleStop.Name = "cbUseSingleStop";
-            this.cbUseSingleStop.Size = new System.Drawing.Size(170, 24);
+            this.cbUseSingleStop.Size = new System.Drawing.Size(135, 20);
             this.cbUseSingleStop.TabIndex = 0;
             this.cbUseSingleStop.Text = "Single Stop Button";
             this.cbUseSingleStop.UseVisualStyleBackColor = true;
@@ -373,10 +358,9 @@
             // cbLimitedEdition
             // 
             this.cbLimitedEdition.AutoSize = true;
-            this.cbLimitedEdition.Location = new System.Drawing.Point(8, 218);
-            this.cbLimitedEdition.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbLimitedEdition.Location = new System.Drawing.Point(6, 177);
             this.cbLimitedEdition.Name = "cbLimitedEdition";
-            this.cbLimitedEdition.Size = new System.Drawing.Size(267, 24);
+            this.cbLimitedEdition.Size = new System.Drawing.Size(214, 20);
             this.cbLimitedEdition.TabIndex = 17;
             this.cbLimitedEdition.Text = "Activate Limited/Special Edition";
             this.cbLimitedEdition.UseVisualStyleBackColor = true;
@@ -385,10 +369,9 @@
             // 
             this.cbKnightSelection.AutoSize = true;
             this.cbKnightSelection.Enabled = false;
-            this.cbKnightSelection.Location = new System.Drawing.Point(8, 186);
-            this.cbKnightSelection.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbKnightSelection.Location = new System.Drawing.Point(6, 151);
             this.cbKnightSelection.Name = "cbKnightSelection";
-            this.cbKnightSelection.Size = new System.Drawing.Size(364, 24);
+            this.cbKnightSelection.Size = new System.Drawing.Size(292, 20);
             this.cbKnightSelection.TabIndex = 16;
             this.cbKnightSelection.Text = "Enable base game Knights in Eastern Realm";
             this.cbKnightSelection.UseVisualStyleBackColor = true;
@@ -397,10 +380,9 @@
             // cbScriptBugFixes
             // 
             this.cbScriptBugFixes.AutoSize = true;
-            this.cbScriptBugFixes.Location = new System.Drawing.Point(8, 154);
-            this.cbScriptBugFixes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbScriptBugFixes.Location = new System.Drawing.Point(6, 125);
             this.cbScriptBugFixes.Name = "cbScriptBugFixes";
-            this.cbScriptBugFixes.Size = new System.Drawing.Size(286, 24);
+            this.cbScriptBugFixes.Size = new System.Drawing.Size(227, 20);
             this.cbScriptBugFixes.TabIndex = 15;
             this.cbScriptBugFixes.Text = "Activate Script and Code Bugfixes";
             this.cbScriptBugFixes.UseVisualStyleBackColor = true;
@@ -409,42 +391,39 @@
             // lblTextureRes
             // 
             this.lblTextureRes.AutoSize = true;
-            this.lblTextureRes.Location = new System.Drawing.Point(461, 27);
-            this.lblTextureRes.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTextureRes.Location = new System.Drawing.Point(346, 22);
             this.lblTextureRes.Name = "lblTextureRes";
-            this.lblTextureRes.Size = new System.Drawing.Size(100, 20);
+            this.lblTextureRes.Size = new System.Drawing.Size(76, 16);
             this.lblTextureRes.TabIndex = 14;
             this.lblTextureRes.Text = "Default: 512";
             // 
             // txtResolution
             // 
-            this.txtResolution.Location = new System.Drawing.Point(264, 23);
-            this.txtResolution.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtResolution.Location = new System.Drawing.Point(198, 19);
             this.txtResolution.MaxLength = 4;
             this.txtResolution.Name = "txtResolution";
-            this.txtResolution.Size = new System.Drawing.Size(188, 26);
+            this.txtResolution.Size = new System.Drawing.Size(142, 22);
             this.txtResolution.TabIndex = 13;
             // 
             // cbBugfixMod
             // 
             this.cbBugfixMod.AutoSize = true;
             this.cbBugfixMod.Enabled = false;
-            this.cbBugfixMod.Location = new System.Drawing.Point(8, 52);
-            this.cbBugfixMod.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbBugfixMod.Location = new System.Drawing.Point(6, 42);
             this.cbBugfixMod.Name = "cbBugfixMod";
-            this.cbBugfixMod.Size = new System.Drawing.Size(275, 24);
+            this.cbBugfixMod.Size = new System.Drawing.Size(219, 20);
             this.cbBugfixMod.TabIndex = 20;
             this.cbBugfixMod.Text = "Download and Install Bugfix Mod";
             this.cbBugfixMod.UseVisualStyleBackColor = true;
+            this.cbBugfixMod.CheckedChanged += new System.EventHandler(this.cbBugfixMod_CheckedChanged);
             // 
             // cbModloader
             // 
             this.cbModloader.AutoSize = true;
             this.cbModloader.Enabled = false;
-            this.cbModloader.Location = new System.Drawing.Point(8, 23);
-            this.cbModloader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbModloader.Location = new System.Drawing.Point(6, 19);
             this.cbModloader.Name = "cbModloader";
-            this.cbModloader.Size = new System.Drawing.Size(174, 24);
+            this.cbModloader.Size = new System.Drawing.Size(143, 20);
             this.cbModloader.TabIndex = 18;
             this.cbModloader.Text = "Activate Modloader";
             this.cbModloader.UseVisualStyleBackColor = true;
@@ -454,10 +433,9 @@
             // 
             this.btnBackup.Enabled = false;
             this.btnBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBackup.Location = new System.Drawing.Point(16, 697);
-            this.btnBackup.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnBackup.Location = new System.Drawing.Point(12, 591);
             this.btnBackup.Name = "btnBackup";
-            this.btnBackup.Size = new System.Drawing.Size(856, 58);
+            this.btnBackup.Size = new System.Drawing.Size(642, 47);
             this.btnBackup.TabIndex = 19;
             this.btnBackup.Text = "Restore Backup";
             this.btnBackup.UseVisualStyleBackColor = true;
@@ -466,10 +444,9 @@
             // btnChooseFile
             // 
             this.btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChooseFile.Location = new System.Drawing.Point(731, 7);
-            this.btnChooseFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnChooseFile.Location = new System.Drawing.Point(548, 6);
             this.btnChooseFile.Name = "btnChooseFile";
-            this.btnChooseFile.Size = new System.Drawing.Size(141, 34);
+            this.btnChooseFile.Size = new System.Drawing.Size(106, 28);
             this.btnChooseFile.TabIndex = 20;
             this.btnChooseFile.Text = "Choose File ...";
             this.btnChooseFile.UseVisualStyleBackColor = true;
@@ -477,21 +454,19 @@
             // 
             // txtExecutablePath
             // 
-            this.txtExecutablePath.Location = new System.Drawing.Point(181, 12);
-            this.txtExecutablePath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtExecutablePath.Location = new System.Drawing.Point(136, 10);
             this.txtExecutablePath.Name = "txtExecutablePath";
             this.txtExecutablePath.ReadOnly = true;
-            this.txtExecutablePath.Size = new System.Drawing.Size(540, 22);
+            this.txtExecutablePath.Size = new System.Drawing.Size(406, 20);
             this.txtExecutablePath.TabIndex = 21;
             // 
             // lblSelectFile
             // 
             this.lblSelectFile.AutoSize = true;
             this.lblSelectFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSelectFile.Location = new System.Drawing.Point(16, 14);
-            this.lblSelectFile.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSelectFile.Location = new System.Drawing.Point(12, 11);
             this.lblSelectFile.Name = "lblSelectFile";
-            this.lblSelectFile.Size = new System.Drawing.Size(146, 20);
+            this.lblSelectFile.Size = new System.Drawing.Size(117, 16);
             this.lblSelectFile.TabIndex = 22;
             this.lblSelectFile.Text = "Select executable:";
             // 
@@ -501,30 +476,27 @@
             this.gbModloader.Controls.Add(this.cbModloader);
             this.gbModloader.Enabled = false;
             this.gbModloader.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.gbModloader.Location = new System.Drawing.Point(16, 309);
-            this.gbModloader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbModloader.Location = new System.Drawing.Point(12, 276);
             this.gbModloader.Name = "gbModloader";
-            this.gbModloader.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.gbModloader.Size = new System.Drawing.Size(856, 86);
+            this.gbModloader.Size = new System.Drawing.Size(642, 70);
             this.gbModloader.TabIndex = 23;
             this.gbModloader.TabStop = false;
             this.gbModloader.Text = "Modloader";
             // 
             // pbProgress
             // 
-            this.pbProgress.Location = new System.Drawing.Point(16, 827);
-            this.pbProgress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pbProgress.Location = new System.Drawing.Point(12, 697);
             this.pbProgress.Name = "pbProgress";
-            this.pbProgress.Size = new System.Drawing.Size(856, 58);
+            this.pbProgress.Size = new System.Drawing.Size(642, 33);
             this.pbProgress.TabIndex = 24;
             // 
             // mainFrm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(884, 890);
+            this.ClientSize = new System.Drawing.Size(664, 740);
             this.Controls.Add(this.pbProgress);
             this.Controls.Add(this.gbModloader);
             this.Controls.Add(this.lblSelectFile);
@@ -538,11 +510,10 @@
             this.Controls.Add(this.btnPatch);
             this.DoubleBuffered = true;
             this.HelpButton = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(902, 937);
+            this.MaximumSize = new System.Drawing.Size(680, 779);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(902, 937);
+            this.MinimumSize = new System.Drawing.Size(680, 779);
             this.Name = "mainFrm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -604,5 +575,6 @@
         private System.Windows.Forms.CheckBox cbBugfixMod;
         private System.Windows.Forms.GroupBox gbModloader;
         private System.Windows.Forms.ProgressBar pbProgress;
+        private System.Windows.Forms.CheckBox cbEasyDebug;
     }
 }

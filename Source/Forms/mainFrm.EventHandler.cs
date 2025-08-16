@@ -31,14 +31,24 @@ namespace S6Patcher.Source.Forms
             }
         }
 
-        private void cbKnightSelection_CheckedChanged(object sender, EventArgs e)
+        private void CheckSpecialKnightBox()
         {
-            cbSpecialKnightsAvailable.Enabled = cbKnightSelection.Checked;
-            if (!cbKnightSelection.Checked)
+            if (!cbKnightSelection.Checked || !cbBugfixMod.Checked)
             {
                 cbSpecialKnightsAvailable.Checked = false;
+                cbSpecialKnightsAvailable.Enabled = false;
+            }
+            else
+            {
+                cbSpecialKnightsAvailable.Enabled = true;
             }
         }
+
+        private void cbKnightSelection_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckSpecialKnightBox();
+        }
+
         private void cbModloader_CheckedChanged(object sender, EventArgs e)
         {
             cbBugfixMod.Enabled = cbModloader.Checked;
@@ -48,18 +58,22 @@ namespace S6Patcher.Source.Forms
                 cbBugfixMod.Enabled = false;
             }
         }
+
         private void cbZoom_CheckedChanged(object sender, EventArgs e)
         {
             txtZoom.Enabled = cbZoom.Checked;
         }
+
         private void cbAutosave_CheckedChanged(object sender, EventArgs e)
         {
             txtAutosave.Enabled = cbAutosave.Checked;
         }
+
         private void cbHighTextures_CheckedChanged(object sender, EventArgs e)
         {
             txtResolution.Enabled = cbHighTextures.Checked && (Validator.ID != execID.ED);
         }
+
         private void cbScriptBugFixes_CheckedChanged(object sender, EventArgs e)
         {
             cbKnightSelection.Enabled = cbScriptBugFixes.Checked;
@@ -72,6 +86,11 @@ namespace S6Patcher.Source.Forms
                     .Select(Element => {Element.Checked = false; return Element;})
                     .ToArray();
             }
+        }
+
+        private void cbBugfixMod_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckSpecialKnightBox();
         }
 
         private void btnPatch_Click(object sender, EventArgs e)
