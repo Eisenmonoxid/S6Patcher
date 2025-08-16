@@ -152,14 +152,18 @@ S6Patcher.AbilityEffectsOnMap = {};
 S6Patcher.EffectCleanupJob = nil;
 S6Patcher.KnightRedPrinceAbility = function(_playerID)
 	local EffectTime = 15;
-	local Area = 8000;
+	local Area = 5000;
 	local KnightID = Logic.GetKnightID(_playerID);
 	local posX, posY, posZ = Logic.EntityGetPos(KnightID);
 	local Entries = {Logic.GetEntitiesInArea(0, posX, posY, Area, 16)};
 	
-	if Entries[1] <= 0 then
+	if Entries[1] <= 0 or Logic.GetEntityType(KnightID) ~= Entities.U_KnightRedPrince then
 		return;
 	end
+	
+	local Position = {Logic.EntityGetPos(KnightID)};
+	local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_HealingFX, Position[1], Position[2], 0, 1);
+	table.insert(S6Patcher.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + 5});
 	
 	for i = 2, Entries[1] do
 		if Logic.IsEntityTypeInCategory(Logic.GetEntityType(Entries[i]), EntityCategories.Worker) == 1 and not Logic.IsIll(Entries[i]) then
@@ -182,5 +186,15 @@ S6Patcher.CleanupKnightEffects = function()
 			S6Patcher.AbilityEffectsOnMap[Key] = nil;
 		end
 	end
+end
+if S6Patcher.GameCallback_KnightAbilityUsed == nil then
+	S6Patcher.GameCallback_KnightAbilityUsed = GameCallback_KnightAbilityUsed;
+end
+GameCallback_KnightAbilityUsed = function(_PlayerID, _KnightType)
+	if _KnightType == Entities.U_KnightRedPrince then
+		S6Patcher.KnightRedPrinceAbility(_PlayerID);
+	end
+
+	S6Patcher.GameCallback_KnightAbilityUsed(_PlayerID, _KnightType);
 end
 -- #EOF
