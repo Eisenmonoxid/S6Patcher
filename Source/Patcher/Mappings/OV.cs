@@ -52,6 +52,8 @@ namespace S6Patcher.Source.Patcher.Mappings
 
         public override Dictionary<long, byte[]> GetEasyDebugMapping() => new Dictionary<long, byte[]>()
         {
+            {0x4FD128, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
+            {0x4FD170, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
             {0x00BC4E, new byte[] {0x90, 0x90}}, // Override JGE, show no data folder found MessageBox (halt thread)
             {0x00BCB5, new byte[] {0xEB, 0x03, 0x90, 0x90, 0x90}}, // Jump to original instruction
         };
