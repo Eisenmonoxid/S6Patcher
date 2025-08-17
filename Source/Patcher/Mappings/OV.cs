@@ -37,6 +37,8 @@ namespace S6Patcher.Source.Patcher.Mappings
                     {0x4FD5BD, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                     {0x00BA9F, new byte[] {0xEB, 0x27}}, // Disable parental control check, start multiple instances at the same time and enable remote session game start
                     {0x01A9E5, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
+                    {0x09BCE1, new byte[] {0x90, 0x90}}, // Enable GUI.SendScriptCommand in Multiplayer
+                    {0x09BCF3, new byte[] {0x90, 0x90}}, // Theoretically, you could also use Logic.AllowSendScript(true) ;)
                 }
             },
             new PatchEntry

@@ -27,6 +27,8 @@ namespace S6Patcher.Source.Patcher.Mappings
                     {0xC3E661, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
                     {0xC3E675, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
                     {0x1C577C, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
+                    {0x36B743, new byte[] {0x90, 0x90}}, // Enable GUI.SendScriptCommand in Multiplayer
+                    {0x36B74D, new byte[] {0x90, 0x90}}, // Theoretically, you could also use Logic.AllowSendScript(true) ;)
                 }
             },
             new PatchEntry
