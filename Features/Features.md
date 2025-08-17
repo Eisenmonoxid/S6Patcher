@@ -19,7 +19,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 ## All Versions: Special Knights (Crimson Sabatt & Red Prince)
 - The antagonistic knights "Crimson Sabatt" and the "Red Prince" can be selected in singleplayer maps in the base game and additionally in the "Eastern Realm" expansion pack.
 **Caution:** The stories of some maps might not really make sense when playing as these knights.
-- <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/1049a0b3f046736ab442cc2fc132046d75013445/Features/SpecialKnights_Final.jpg" width="45%" height="45%" alt="SpecialKnights"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/1049a0b3f046736ab442cc2fc132046d75013445/Features/SpecialKnights_Final.jpg" width="45%" height="45%" alt="SpecialKnights"/>
 
 ## All Versions: Single Stop, Downgrade & Military Release
 - These new buttons (originally introduced in the NEP by Netsurfer in 2009) were rewritten and are now available in campaign and singleplayer. 
