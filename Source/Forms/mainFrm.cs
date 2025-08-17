@@ -17,7 +17,7 @@ namespace S6Patcher.Source.Forms
         private readonly string[] GlobalOptions = {"ExtendedKnightSelection", "UseSingleStop", "UseDowngrade", 
             "UseMilitaryRelease", "DayNightCycle", "SpecialKnightsAvailable"};
 
-        public mainFrm(string[] args)
+        public mainFrm()
         {
             InitializeComponent();
             this.Text = "S6Patcher - v" + Application.ProductVersion;
@@ -246,8 +246,6 @@ namespace S6Patcher.Source.Forms
             GlobalStream = IOFileHandler.Instance.OpenFileStream(FileName);
             if (GlobalStream == null)
             {
-                Logger.Instance.Log(Resources.ErrorInvalidExecutable);
-                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
 

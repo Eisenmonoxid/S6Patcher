@@ -43,10 +43,7 @@ namespace S6Patcher.Source.Helpers
             catch (Exception ex)
             {
                 Logger.Instance.Log("DownloadZipArchive():\n" + ex.ToString());
-                if (!Program.IsMono)
-                {
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                BaseForm.Invoke(new Action(() => MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)));
                 return false;
             }
 

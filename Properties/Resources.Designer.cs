@@ -108,7 +108,16 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid executable has been choosen! Aborting ....
+        ///   Looks up a localized string similar to Could not open File! Aborting ....
+        /// </summary>
+        internal static string ErrorCouldNotOpenStream {
+            get {
+                return ResourceManager.GetString("ErrorCouldNotOpenStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid executable has been chosen! Aborting ....
         /// </summary>
         internal static string ErrorInvalidExecutable {
             get {
@@ -210,7 +219,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/Gamefiles/Modfiles.zip.
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/modloader/Source/Resources/Gamefiles/Modfiles.zip.
         /// </summary>
         internal static string ModLink {
             get {
@@ -248,7 +257,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/Eisenmonoxid/S6Patcher/refs/heads/master/Version.txt.
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/modloader/Version.txt.
         /// </summary>
         internal static string VersionFileLink {
             get {

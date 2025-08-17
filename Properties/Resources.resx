@@ -134,8 +134,11 @@
     <value>Patching is currently in progress.
 Do you want to exit?</value>
   </data>
+  <data name="ErrorCouldNotOpenStream" xml:space="preserve">
+    <value>Could not open File! Aborting ...</value>
+  </data>
   <data name="ErrorInvalidExecutable" xml:space="preserve">
-    <value>Invalid executable has been choosen! Aborting ...</value>
+    <value>Invalid executable has been chosen! Aborting ...</value>
   </data>
   <data name="ErrorInvalidExecutableSteam" xml:space="preserve">
     <value>Steam executable invalid, has to be unpacked with the tool "Steamless" before using the S6Patcher!</value>
@@ -169,7 +172,7 @@ Do you want to exit?</value>
 Continue?</value>
   </data>
   <data name="ModLink" xml:space="preserve">
-    <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/Gamefiles/Modfiles.zip</value>
+    <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/modloader/Source/Resources/Gamefiles/Modfiles.zip</value>
   </data>
   <data name="MonoOptionsFile" xml:space="preserve">
     <value>Please provide the path to the "Options.ini" configuration file that the game has created!</value>
@@ -181,7 +184,7 @@ Continue?</value>
     <value>..\Source\Resources\Scripts\UserScriptLocal.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="VersionFileLink" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/Eisenmonoxid/S6Patcher/refs/heads/master/Version.txt</value>
+    <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/modloader/Version.txt</value>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
     <value>Select recommended settings or customize manually?</value>

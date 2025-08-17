@@ -1,4 +1,5 @@
-﻿using S6Patcher.Source.Patcher;
+﻿using S6Patcher.Properties;
+using S6Patcher.Source.Patcher;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,7 @@ namespace S6Patcher.Source.Helpers
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return null;
             }
 

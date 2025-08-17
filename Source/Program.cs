@@ -12,7 +12,7 @@ namespace S6Patcher.Source
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new mainFrm(args));
+            Application.Run(new mainFrm());
         }
     }
 }
