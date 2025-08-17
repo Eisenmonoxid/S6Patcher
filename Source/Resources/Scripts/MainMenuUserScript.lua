@@ -86,18 +86,16 @@ S6Patcher.KnightSelection.OverrideRemapKnightID = function(_ID)
 	return (Base and _ID) or (((_ID == 1) and 7) or (_ID - 1));
 end
 S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _selectedMapType)
-	local Base = (Framework.GetGameExtraNo() < 1) == true;
-	local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};
+	if _selectedMapType == 0 or _selectedMapType == 3 then -- Singleplayer and Usermap
+		local Base = (Framework.GetGameExtraNo() < 1) == true;
+		local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};
+		
+		if (#Names == 0) or (Base and #Names == 6) then -- No custom ValidKnightNames in info.xml
+			return true;
+		end
+	end	
 	
-	local FirstCondition;
-	if Base then
-		FirstCondition = (_selectedMapType == 0 and (#Names == 0 or #Names == 6)) == true;
-	else
-		FirstCondition = (_selectedMapType == 0 and (#Names == 0)) == true;
-	end
-	
-	local SecondCondition = (_selectedMapType == 3 and #Names == 0) == true;
-	return FirstCondition or SecondCondition;
+	return false;
 end
 if Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedKnightID = -1;

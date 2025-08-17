@@ -98,12 +98,18 @@ namespace S6Patcher.Source.Helpers
             DeleteUserConfiguration(Options); // Delete Userscript & Config Section from Documents folder
 
             string FilePath = Stream.Name;
-            string FinalPath = GetBackupPath(FilePath);
+            string FinalPath = GetOldBackupPath(FilePath);
 
             if (File.Exists(FinalPath) == false)
             {
-                Logger.Instance.Log("RestoreBackup(): File " + FinalPath + " NOT found!");
-                return false;
+                Logger.Instance.Log("RestoreBackup(): OLD File " + FinalPath + " NOT found! Retry ...");
+
+                FinalPath = GetBackupPath(FilePath);
+                if (File.Exists(FinalPath) == false)
+                {
+                    Logger.Instance.Log("RestoreBackup(): NEW File " + FinalPath + " NOT found! Aborting ...");
+                    return false;
+                }
             }
 
             Stream.Close();
@@ -126,5 +132,8 @@ namespace S6Patcher.Source.Helpers
 
         private static string GetBackupPath(string Filepath) => 
             Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + ".backup");
+
+        private static string GetOldBackupPath(string Filepath) =>
+            Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + "_BACKUP.exe");
     }
 }
