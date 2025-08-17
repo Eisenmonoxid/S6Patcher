@@ -16,6 +16,11 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 **Caution:** Some audio feedback lines regarding the "Eastern Realm" features (Tradepost, Well, Geologist) are missing and the stories of some maps might not really make sense (e.g. "Kestrals Wedding" when playing as Kestral).
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/28b561a3ac6f39ad59e13dd84a3cb77610fad7fd/Features/Knights_Final.png" width="35%" height="35%" alt="Knights"/>
 
+## All Versions: Special Knights (Crimson Sabatt & Red Prince)
+- The antagonistic knights "Crimson Sabatt" and the "Red Prince" can be selected in singleplayer maps in the base game and additionally in the "Eastern Realm" expansion pack.
+**Caution:** The stories of some maps might not really make sense when playing as these knights.
+- <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/1049a0b3f046736ab442cc2fc132046d75013445/Features/SpecialKnights_Final.jpg" width="45%" height="45%" alt="SpecialKnights"/>
+
 ## All Versions: Single Stop, Downgrade & Military Release
 - These new buttons (originally introduced in the NEP by Netsurfer in 2009) were rewritten and are now available in campaign and singleplayer. 
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/726e73400338b8228e0ca2b5aa93ec96d26a963b/Features/Downgrade_Final.png" width="40%" height="40%" alt="Downgrade"/>
@@ -61,6 +66,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - The Development Mode can be activated. (Necessary for e.g. the LuaDebugger to work).
 - Makes it possible to mod the game without having to modify the existing game files (Sideloading).
 - The PE Header file CheckSum is now recalculated correctly. This should fix the issue with the game not starting on some systems.
+- Added an Easy Debug mode, which halts the main thread on boot up and allows to attach a debugger easily.
 - When pressing `SHIFT` when selecting all units, ammunition carts will now also be selected.
 - When pressing `CTRL` when selecting all units, Thiefs will now no longer be selected.
 - Campfires from bandit camps can now no longer crash the game under certain circumstances.
@@ -77,6 +83,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 
 ### History Edition
 - The autosave can be disabled or set to a custom timer interval.
+- `GUI.SendScriptCommand` is now fully working in the Multiplayer.
 
 ### Mapeditor
 - Free placing and moving of entities, walls and wall gates (all blocking is ignored).
