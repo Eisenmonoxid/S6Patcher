@@ -113,6 +113,12 @@ namespace S6Patcher.Source.Patcher
                     File.WriteAllBytes(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
                     Logger.Instance.Log("SetModLoader(): Written " + ArchiveFileName + " to Paths "
                         + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
+
+                    string OldModLoaderPath = Path.Combine(GlobalDestinationDirectoryPath, "bba");
+                    if (Directory.Exists(OldModLoaderPath))
+                    {
+                        Directory.Delete(OldModLoaderPath, true);
+                    }
                 }
             }
             catch (Exception ex)
