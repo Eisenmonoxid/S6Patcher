@@ -9,29 +9,13 @@ using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
 {
-    internal class Mod
+    internal class Mod(Forms.mainFrm GlobalBaseForm, execID GlobalID, FileStream GlobalStream, string GlobalDestinationDirectoryPath)
     {
         private readonly Uri GlobalDownloadURL = new(Resources.ModLink);
-        private readonly string GlobalDestinationDirectoryPath;
-        private readonly string ArchiveFilePathBase;
-        private readonly string ArchiveFilePathExtra1;
-        private readonly string BaseDirectoryPath;
+        private readonly string ArchiveFilePathBase = Path.Combine(GlobalDestinationDirectoryPath, "base");
+        private readonly string ArchiveFilePathExtra1 = Path.Combine(GlobalDestinationDirectoryPath, "extra1");
+        private readonly string BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         private const string ArchiveFileName = "mod.bba";
-
-        private readonly execID GlobalID = execID.NONE;
-        private readonly FileStream GlobalStream = null;
-        private readonly Forms.mainFrm GlobalBaseForm;
-
-        public Mod(Forms.mainFrm Base, execID ID, FileStream Stream)
-        {
-            GlobalBaseForm = Base;
-            GlobalID = ID;
-            GlobalStream = Stream;
-            GlobalDestinationDirectoryPath = GetModloaderPath();
-            ArchiveFilePathBase = Path.Combine(GlobalDestinationDirectoryPath, "base");
-            ArchiveFilePathExtra1 = Path.Combine(GlobalDestinationDirectoryPath, "extra1");
-            BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
-        }
 
         private void ExtractZipArchive(string ZipPath)
         {
@@ -67,7 +51,8 @@ namespace S6Patcher.Source.Patcher
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                GlobalBaseForm.Invoke(new Action(() => MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)));
+                GlobalBaseForm.Invoke(new Action(() => MessageBox.Show(ex.ToString(), "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error)));
                 return;
             }
 
@@ -83,12 +68,6 @@ namespace S6Patcher.Source.Patcher
             }
 
             GlobalBaseForm.Invoke(new Action(() => GlobalBaseForm.FinishPatchingProcess()));
-        }
-
-        public string GetModloaderPath()
-        {
-            uint Depth = (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET) ? 2U : 3U;
-            return IOFileHandler.Instance.GetRootDirectory(GlobalStream.Name, Depth) + Path.DirectorySeparatorChar + "modloader";
         }
 
         public void CreateModLoader(bool UseBugfixMod)

@@ -25,8 +25,11 @@ namespace S6Patcher.Source.Patcher
 
             GlobalID = ID;
             GlobalStream = Stream;
-            GlobalMod = new Mod(Base, ID, Stream);
             GlobalMappings = MappingBase.GetMappingsByID(GlobalID);
+
+            uint Depth = (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET) ? 2U : 3U;
+            string Directory = IOFileHandler.Instance.GetRootDirectory(GlobalStream.Name, Depth) + Path.DirectorySeparatorChar + "modloader";
+            GlobalMod = new Mod(Base, ID, Stream, Directory);
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
@@ -34,11 +37,11 @@ namespace S6Patcher.Source.Patcher
         public void PatchByControlFeatures(List<string> Names)
         {
             List<MappingBase.PatchEntry> Entries = GlobalMappings.GetMapping();
-            var Result = (
-                from Entry in Entries
+            List<Dictionary<long, byte[]>> Result = 
+                [.. from Entry in Entries
                 from Name in Names
                 where Name == Entry.Name
-                select Entry.Mapping).ToList();
+                select Entry.Mapping];
 
             Result.ForEach(Element =>
             {
@@ -144,7 +147,7 @@ namespace S6Patcher.Source.Patcher
             // Partially adapted from:
             // https://stackoverflow.com/questions/9054469/how-to-check-if-exe-is-set-as-largeaddressaware
             const int IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
-            BinaryReader Reader = new BinaryReader(GlobalStream);
+            BinaryReader Reader = new(GlobalStream);
 
             Reader.BaseStream.Position = 0x3C;
             Reader.BaseStream.Position = Reader.ReadInt32();
@@ -179,8 +182,10 @@ namespace S6Patcher.Source.Patcher
                     Directory.CreateDirectory(CurrentPath);
                     for (uint i = 0; i < UserScriptHandler.ScriptFiles.Length; i++)
                     {
-                        File.WriteAllBytes(Path.Combine(CurrentPath, UserScriptHandler.ScriptFiles[i]), UserScriptHandler.ScriptResources[i]);
-                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfile named " + UserScriptHandler.ScriptFiles[i] + " to " + CurrentPath);
+                        File.WriteAllBytes(Path.Combine(CurrentPath, UserScriptHandler.ScriptFiles[i]), 
+                            UserScriptHandler.ScriptResources[i]);
+                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfile " +
+                            "named " + UserScriptHandler.ScriptFiles[i] + " to " + CurrentPath);
                     }
                 }
                 catch (Exception ex)

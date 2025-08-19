@@ -47,14 +47,15 @@ namespace S6Patcher.Source.Patcher
             {
                 if (Stream.Length < Element.Key)
                 {
-                    Logger.Instance.Log("ValidateExecutableID(): " + Element.Value.ToString() + " Stream Length smaller than Mapping Index: " + Stream.Length.ToString());
+                    Logger.Instance.Log("ValidateExecutableID(): " + Element.Value.ToString() + " Stream " +
+                        "Length smaller than Mapping Index: " + Stream.Length.ToString());
                     continue;
                 }
 
                 Stream.Position = Element.Key;
                 Stream.Read(Result, 0, Result.Length);
 
-                string Version = Encoding.Unicode.GetString(Result).Substring(0, ExpectedVersion.Length);
+                string Version = Encoding.Unicode.GetString(Result)[..ExpectedVersion.Length];
                 Logger.Instance.Log("ValidateExecutableID(): Read from File: " + Version);
 
                 if (Version == ExpectedVersion)

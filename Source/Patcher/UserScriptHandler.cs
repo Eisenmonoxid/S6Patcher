@@ -22,34 +22,37 @@ namespace S6Patcher.Source.Patcher
 
         public static List<string> GetUserScriptDirectories()
         {
-            // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
+            // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua
+            // are always loaded by the game when a map is started!
             // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
-            string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            if (Program.IsMono)
+            string DocumentsPath = Program.IsMono ? GetMonoDocumentsPath() : 
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            return DocumentsPath == null ? [] : SelectUserScriptDirectories(DocumentsPath);
+        }
+
+        private static string GetMonoDocumentsPath()
+        {
+            if (MonoGlobalDocumentsPath != String.Empty)
             {
-                if (MonoGlobalDocumentsPath == String.Empty)
-                {
-                    MessageBox.Show(Resources.MonoOptionsFile, "Select Options.ini file ...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Configuration file|*.ini", Environment.SpecialFolder.MyDocuments);
+                return MonoGlobalDocumentsPath;
+            };
 
-                    if (ofd.ShowDialog() == DialogResult.OK)
-                    {
-                        DirectoryInfo Info = new DirectoryInfo(ofd.FileName);
-                        MonoGlobalDocumentsPath = Info.Parent.Parent.Parent.FullName;
-                    }
-                    else
-                    {
-                        Logger.Instance.Log("GetUserScriptDirectories(): User did not select a file! Aborting ...");
-                        ofd.Dispose();
-                        return [];
-                    }
-                    ofd.Dispose();
-                }
+            MessageBox.Show(Resources.MonoOptionsFile, "Select Options.ini file ...",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Configuration file|*.ini",
+                Environment.SpecialFolder.MyDocuments);
 
-                DocumentsPath = MonoGlobalDocumentsPath;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                DirectoryInfo Info = new(ofd.FileName);
+                MonoGlobalDocumentsPath = Info.Parent.Parent.Parent.FullName;
+                return MonoGlobalDocumentsPath;
             }
-
-            return SelectUserScriptDirectories(DocumentsPath);
+            else
+            {
+                Logger.Instance.Log("GetUserScriptDirectories(): User did not select a file! Aborting ...");
+                return null;
+            }
         }
 
         private static List<string> SelectUserScriptDirectories(string Documents) => [.. Directory.GetDirectories(Documents)
