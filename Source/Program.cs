@@ -8,7 +8,7 @@ namespace S6Patcher.Source
     {
         internal static bool IsMono {get;} = Type.GetType("Mono.Runtime") != null;
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -9,10 +9,10 @@ namespace S6Patcher.Source.Helpers
         private static readonly string GlobalFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "S6Patcher.log");
 
         private static StreamWriter Writer = null;
-        private static readonly object Lock = new object();
-        private static readonly Logger _instance = new Logger();
+        private static readonly object Lock = new();
+
         private Logger() {}
-        public static Logger Instance => _instance;
+        public static Logger Instance {get;} = new();
 
         ~Logger()
         {

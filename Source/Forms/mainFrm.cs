@@ -52,7 +52,7 @@ namespace S6Patcher.Source.Forms
         private void InitializeControls()
         {
             // Validator & Patcher have been successfully initialized
-            BinaryReader Reader = new BinaryReader(GlobalStream);
+            BinaryReader Reader = new(GlobalStream);
             switch (Validator.ID)
             {
                 case execID.OV:
@@ -153,7 +153,7 @@ namespace S6Patcher.Source.Forms
                         .Concat(Boxes ?? Enumerable.Empty<CheckBox>());
             });
 
-            return Boxes.Select(Element => Element.Name).ToList();
+            return [.. Boxes.Select(Element => Element.Name)];
         }
 
         public void FinishPatchingProcess()
@@ -263,7 +263,7 @@ namespace S6Patcher.Source.Forms
             IOFileHandler.Instance.InitialDirectory = Path.GetDirectoryName(GlobalStream.Name);
             try
             {
-                Patcher = new Patcher.Patcher(this, Validator.ID, GlobalStream);
+                Patcher = new(this, Validator.ID, GlobalStream);
             }
             catch (Exception ex)
             {

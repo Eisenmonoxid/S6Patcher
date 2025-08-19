@@ -6,8 +6,8 @@ namespace S6Patcher.Source.Patcher.Mappings
 {
     internal class HEUbi : MappingBase
     {
-        public override List<PatchEntry> GetMapping() => new List<PatchEntry>
-        {
+        public override List<PatchEntry> GetMapping() =>
+        [
             new PatchEntry
             {
                 Name = "cbDevMode",
@@ -40,9 +40,9 @@ namespace S6Patcher.Source.Patcher.Mappings
                     {0x25C700, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
                 }
             },
-        };
+        ];
 
-        public override Dictionary<long, byte[]> GetEasyDebugMapping() => new Dictionary<long, byte[]>()
+        public override Dictionary<long, byte[]> GetEasyDebugMapping() => new()
         {
             {0xC413E0, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
             {0xC41388, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
@@ -50,7 +50,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             {0x1E064A, new byte[] {0xEB, 0x03, 0x90, 0x90, 0x90}}, // Jump to original instruction
         };
 
-        public override Dictionary<long, byte[]> GetModloaderMapping() => new Dictionary<long, byte[]>()
+        public override Dictionary<long, byte[]> GetModloaderMapping() => new()
         { 
             // .data segment
             {0xC4FC74, Encoding.ASCII.GetBytes("S6Patcher: Adding ModLoader Directories...\n\0\0")}, // Print to log
@@ -73,7 +73,7 @@ namespace S6Patcher.Source.Patcher.Mappings
 
         public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution)
         {
-            Dictionary<long, byte[]> Mapping = new Dictionary<long, byte[]>();
+            Dictionary<long, byte[]> Mapping = [];
             uint i = 0;
             foreach (var Element in new uint[] {0x2D4188, 0x2D418F, 0x2D4196})
             {
@@ -83,7 +83,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             return Mapping;
         }
 
-        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance) => new Dictionary<long, byte[]>()
+        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance) => new()
         {
             {0xC4EC4C, BitConverter.GetBytes(ClutterFarDistance)}, // This is not an error, the HE uses the zoomlevel as single instead of double like in the OV ...
             {0x270311, new byte[] {0xC7, 0x45, 0xF0}},
@@ -96,9 +96,9 @@ namespace S6Patcher.Source.Patcher.Mappings
                 0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}},
         };
 
-        public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time) => new Dictionary<long, byte[]>()
+        public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time) => new()
         {
-            {0x1C5F2A, (Time == 0.0) ? new byte[] {0xEB} : new byte[] {0x76}}, // Switch autosave on or off
+            {0x1C5F2A, (Time == 0.0) ? [0xEB] : [0x76]}, // Switch autosave on or off
             {0xEB83C0, BitConverter.GetBytes(Time * 60000)},
         };
     }

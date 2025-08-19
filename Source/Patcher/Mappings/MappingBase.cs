@@ -17,23 +17,14 @@ namespace S6Patcher.Source.Patcher.Mappings
         public abstract Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance);
         public abstract Dictionary<long, byte[]> GetAutoSaveMapping(double Time);
         public abstract Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution);
-        public static MappingBase GetMappingsByID(execID ID)
+        public static MappingBase GetMappingsByID(execID ID) => ID switch
         {
-            switch (ID)
-            {
-                case execID.OV:
-                    return new OV();
-                case execID.OV_OFFSET:
-                    return new OV();
-                case execID.HE_UBISOFT:
-                    return new HEUbi();
-                case execID.HE_STEAM:
-                    return new HESteam();
-                case execID.ED:
-                    return new ED();
-                default:
-                    throw new NotImplementedException("Error: No valid execID passed!");
-            }
-        }
+            execID.OV => new OV(),
+            execID.OV_OFFSET => new OV(),
+            execID.HE_UBISOFT => new HEUbi(),
+            execID.HE_STEAM => new HESteam(),
+            execID.ED => new ED(),
+            _ => throw new NotImplementedException("Error: No valid execID passed!"),
+        };
     }
 }

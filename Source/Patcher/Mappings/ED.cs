@@ -5,8 +5,8 @@ namespace S6Patcher.Source.Patcher.Mappings
 {
     internal class ED : MappingBase
     {
-        public override List<PatchEntry> GetMapping() => new List<PatchEntry>
-        {
+        public override List<PatchEntry> GetMapping() =>
+        [
             new PatchEntry
             {
                 Name = "cbHighTextures",
@@ -82,7 +82,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                     {0x24F05, new byte[] {0x90, 0x90, 0x90, 0x90, 0x90, 0x90}}, // Show all Textures in the texture placement window
                 }
             }
-        };
+        ];
 
         public override Dictionary<long, byte[]> GetEasyDebugMapping() => throw new NotImplementedException();  
         public override Dictionary<long, byte[]> GetModloaderMapping() => throw new NotImplementedException();

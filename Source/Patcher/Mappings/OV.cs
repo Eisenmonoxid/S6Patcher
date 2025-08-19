@@ -6,8 +6,8 @@ namespace S6Patcher.Source.Patcher.Mappings
 {
     internal class OV : MappingBase
     {
-        public override List<PatchEntry> GetMapping() => new List<PatchEntry>
-        {
+        public override List<PatchEntry> GetMapping() =>
+        [
             new PatchEntry
             {
                 Name = "cbHighTextures",
@@ -50,9 +50,9 @@ namespace S6Patcher.Source.Patcher.Mappings
                     {0x23D655, new byte[] {0x90, 0x90}}, // Override JNZ, always set Special Edition to 1
                 }
             },
-        };
+        ];
 
-        public override Dictionary<long, byte[]> GetEasyDebugMapping() => new Dictionary<long, byte[]>()
+        public override Dictionary<long, byte[]> GetEasyDebugMapping() => new()
         {
             {0x4FD128, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
             {0x4FD170, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
@@ -60,7 +60,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             {0x00BCB5, new byte[] {0xEB, 0x03, 0x90, 0x90, 0x90}}, // Jump to original instruction
         };
 
-        public override Dictionary<long, byte[]> GetModloaderMapping() => new Dictionary<long, byte[]>()
+        public override Dictionary<long, byte[]> GetModloaderMapping() => new()
         {
             // .data segment
             {0x53F5BC, Encoding.ASCII.GetBytes("modloader\\base\\mod.bba\0")}, // Add base mod.bba file path
@@ -89,7 +89,7 @@ namespace S6Patcher.Source.Patcher.Mappings
 
         public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution)
         {
-            Dictionary<long, byte[]> Mapping = new Dictionary<long, byte[]>();
+            Dictionary<long, byte[]> Mapping = [];
             uint i = 0;
             foreach (var Element in new uint[] {0x2BE177, 0x2BE17E, 0x2BE185})
             {
@@ -99,7 +99,7 @@ namespace S6Patcher.Source.Patcher.Mappings
             return Mapping;
         }
 
-        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance) => new Dictionary<long, byte[]>()
+        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance) => new()
         {
             {0x545400, BitConverter.GetBytes(ZoomLevel)},
             {0x2B334E, new byte[] {0xC7, 0x45, 0x64}},

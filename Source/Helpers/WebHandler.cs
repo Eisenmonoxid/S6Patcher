@@ -8,12 +8,11 @@ namespace S6Patcher.Source.Helpers
 {
     public sealed class WebHandler
     {
-        private static readonly WebHandler _instance = new WebHandler();
         private WebHandler() {ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;}
         ~WebHandler() {GlobalClient.Dispose();}
-        public static WebHandler Instance => _instance;
+        public static WebHandler Instance {get;} = new();
 
-        private static readonly WebClientWithTimeout GlobalClient = new WebClientWithTimeout(8000) 
+        private static readonly WebClientWithTimeout GlobalClient = new(8000) 
             {Encoding = Encoding.UTF8, Headers = {"User-Agent: Other"}};
         private bool Startup = true;
         private bool EventHandlerRegistered = false;
@@ -109,18 +108,12 @@ namespace S6Patcher.Source.Helpers
         }
     }
 
-    public class WebClientWithTimeout : WebClient
+    public class WebClientWithTimeout(int Time = 30000) : WebClient
     {
-        private readonly int Timeout;
-        public WebClientWithTimeout(int Time = 30000)
-        {
-            Timeout = Time;
-        }
-
         protected override WebRequest GetWebRequest(Uri URL)
         {
             WebRequest Request = base.GetWebRequest(URL);
-            Request.Timeout = Timeout;
+            Request.Timeout = Time;
             return Request;
         }
     }

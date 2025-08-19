@@ -67,7 +67,7 @@ namespace S6Patcher.Source.Helpers
             List<string> Lines;
             try
             {
-                Lines = File.ReadAllLines(CurrentPath).ToList();
+                Lines = [.. File.ReadAllLines(CurrentPath)];
             }
             catch (Exception ex)
             {
