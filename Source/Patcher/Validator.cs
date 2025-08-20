@@ -16,7 +16,6 @@ namespace S6Patcher.Source.Patcher
         private readonly Dictionary<UInt32, execID> Mapping = new()
         {
             {0x6ECADC, execID.OV},
-            {0x2FCADC, execID.OV_OFFSET},
             {0xF531A4, execID.HE_UBISOFT},
             {0xF545A4, execID.HE_STEAM},
             {0x6D06A8, execID.ED},

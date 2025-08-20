@@ -59,10 +59,6 @@ namespace S6Patcher.Source.Forms
                     SetControlValueFromStream(Reader, 0x545400, txtZoom);
                     SetControlValueFromStream(Reader, 0x2BE177, txtResolution);
                     break;
-                case execID.OV_OFFSET:
-                    SetControlValueFromStream(Reader, (0x545400 - 0x3F0000), txtZoom);
-                    SetControlValueFromStream(Reader, (0x2BE177 - 0x3F0000), txtResolution);
-                    break;
                 case execID.HE_UBISOFT:
                     SetControlValueFromStream(Reader, 0xC4EC4C, txtZoom);
                     SetControlValueFromStream(Reader, 0x2D4188, txtResolution);
@@ -211,7 +207,7 @@ namespace S6Patcher.Source.Forms
             }
             if (cbModloader.Checked) // Has to be last because of thread start
             {
-                Patcher.SetModLoader(ModDownload);
+                ModDownload = Patcher.SetModLoader(ModDownload);
             }
 
             // Finish with UI update

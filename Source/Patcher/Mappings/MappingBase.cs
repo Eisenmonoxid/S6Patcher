@@ -20,7 +20,6 @@ namespace S6Patcher.Source.Patcher.Mappings
         public static MappingBase GetMappingsByID(execID ID) => ID switch
         {
             execID.OV => new OV(),
-            execID.OV_OFFSET => new OV(),
             execID.HE_UBISOFT => new HEUbi(),
             execID.HE_STEAM => new HESteam(),
             execID.ED => new ED(),

@@ -27,18 +27,18 @@ namespace S6Patcher.Source.Patcher
             GlobalStream = Stream;
             GlobalMappings = MappingBase.GetMappingsByID(GlobalID);
 
-            uint Depth = (GlobalID == execID.OV || GlobalID == execID.OV_OFFSET) ? 2U : 3U;
-            string Directory = IOFileHandler.Instance.GetRootDirectory(GlobalStream.Name, Depth) + Path.DirectorySeparatorChar + "modloader";
-            GlobalMod = new Mod(Base, ID, Stream, Directory);
+            uint Depth = (GlobalID == execID.OV) ? 2U : 3U;
+            string Directory = IOFileHandler.Instance.GetRootDirectory(GlobalStream.Name, Depth) 
+                + Path.DirectorySeparatorChar + "modloader";
+            GlobalMod = new Mod(Base, ID, Directory);
 
             Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
 
         public void PatchByControlFeatures(List<string> Names)
         {
-            List<MappingBase.PatchEntry> Entries = GlobalMappings.GetMapping();
             List<Dictionary<long, byte[]>> Result = 
-                [.. from Entry in Entries
+                [.. from Entry in GlobalMappings.GetMapping()
                 from Name in Names
                 where Name == Entry.Name
                 select Entry.Mapping];
@@ -69,8 +69,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetTextureResolutionMapping(Resolution);
-            foreach (var Element in Mapping)
+            foreach (var Element in GlobalMappings.GetTextureResolutionMapping(Resolution))
             {
                 WriteBytes(Element.Key, Element.Value);
             }
@@ -95,8 +94,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetAutoSaveMapping(Timer);
-            foreach (var Element in Mapping)
+            foreach (var Element in GlobalMappings.GetAutoSaveMapping(Timer))
             {
                 WriteBytes(Element.Key, Element.Value);
             }
@@ -120,24 +118,22 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetZoomLevelMapping(Level, Distance);
-            foreach (var Element in Mapping)
+            foreach (var Element in GlobalMappings.GetZoomLevelMapping(Level, Distance))
             {
                 WriteBytes(Element.Key, Element.Value);
             }
         }
 
-        public void SetModLoader(bool UseBugFixMod)
+        public bool SetModLoader(bool UseBugFixMod)
         {
             Logger.Instance.Log("SetModLoader(): Called.");
 
-            Dictionary<long, byte[]> Entries = GlobalMappings.GetModloaderMapping();
-            foreach (var Entry in Entries)
+            foreach (var Entry in GlobalMappings.GetModloaderMapping())
             {
                 WriteBytes(Entry.Key, Entry.Value);
             }
 
-            GlobalMod.CreateModLoader(UseBugFixMod);
+            return GlobalMod.CreateModLoader(UseBugFixMod);
         }
 
         public void SetLargeAddressAwareFlag()
@@ -203,8 +199,7 @@ namespace S6Patcher.Source.Patcher
 
         public void SetEasyDebug()
         {
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetEasyDebugMapping();
-            foreach (var Entry in Mapping)
+            foreach (var Entry in GlobalMappings.GetEasyDebugMapping())
             {
                 WriteBytes(Entry.Key, Entry.Value);
             }
@@ -212,7 +207,7 @@ namespace S6Patcher.Source.Patcher
 
         private void WriteBytes(long Position, byte[] Bytes)
         {
-            GlobalStream.Position = (GlobalID == execID.OV_OFFSET) ? Position - GlobalOffset : Position;
+            GlobalStream.Position = Position;
             try
             {
                 GlobalStream.Write(Bytes, 0, Bytes.Length);

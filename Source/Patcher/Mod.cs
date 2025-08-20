@@ -1,6 +1,7 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Helpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
 {
-    internal class Mod(Forms.mainFrm GlobalBaseForm, execID GlobalID, FileStream GlobalStream, string GlobalDestinationDirectoryPath)
+    internal class Mod(Forms.mainFrm GlobalBaseForm, execID GlobalID, string GlobalDestinationDirectoryPath)
     {
         private readonly Uri GlobalDownloadURL = new(Resources.ModLink);
         private readonly string ArchiveFilePathBase = Path.Combine(GlobalDestinationDirectoryPath, "base");
@@ -24,10 +25,10 @@ namespace S6Patcher.Source.Patcher
                 using ZipArchive Archive = ZipFile.OpenRead(ZipPath);
                 if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
                 {
-                    var Entries = (from Entry in Archive.Entries
+                    List<ZipArchiveEntry> Entries = [.. from Entry in Archive.Entries
                                    where !Entry.FullName.Contains(ArchiveFileName)
                                    where !String.IsNullOrEmpty(Entry.Name)
-                                   select Entry);
+                                   select Entry];
 
                     foreach (ZipArchiveEntry Entry in Entries)
                     {
@@ -67,10 +68,10 @@ namespace S6Patcher.Source.Patcher
                 ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
 
-            GlobalBaseForm.Invoke(new Action(() => GlobalBaseForm.FinishPatchingProcess()));
+            GlobalBaseForm.Invoke(new Action(GlobalBaseForm.FinishPatchingProcess));
         }
 
-        public void CreateModLoader(bool UseBugfixMod)
+        public bool CreateModLoader(bool UseBugfixMod)
         {
             try
             {
@@ -102,16 +103,19 @@ namespace S6Patcher.Source.Patcher
             {
                 Logger.Instance.Log(ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
 
             if (UseBugfixMod)
             {
-                Thread Context = new(() => DownloadZipArchive())
+                Thread Context = new(DownloadZipArchive)
                 {
                     IsBackground = true
                 };
                 Context.Start();
             }
+
+            return true;
         }
     }
 }
