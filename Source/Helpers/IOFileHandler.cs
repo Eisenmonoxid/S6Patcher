@@ -1,5 +1,4 @@
-﻿using S6Patcher.Properties;
-using S6Patcher.Source.Patcher;
+﻿using S6Patcher.Source.Patcher;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,9 +9,8 @@ namespace S6Patcher.Source.Helpers
 {
     public sealed class IOFileHandler
     {
-        private static readonly IOFileHandler _instance = new IOFileHandler();
         private IOFileHandler() {}
-        public static IOFileHandler Instance => _instance;
+        public static IOFileHandler Instance {get;} = new();
         public string InitialDirectory = String.Empty;
 
         public FileStream OpenFileStream(string Path)
@@ -44,7 +42,7 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
-        public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder) => new OpenFileDialog
+        public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder) => new()
         {
             CheckFileExists = true,
             ShowHelp = false,
@@ -87,7 +85,7 @@ namespace S6Patcher.Source.Helpers
                 List<string> Lines;
                 try
                 {
-                    Lines = File.ReadAllLines(CurrentPath).ToList();
+                    Lines = [.. File.ReadAllLines(CurrentPath)];
                 }
                 catch (Exception ex)
                 {
@@ -124,7 +122,7 @@ namespace S6Patcher.Source.Helpers
         {
             Logger.Instance.Log("GetRootPathFromFile(): Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
 
-            DirectoryInfo Info = new DirectoryInfo(Path.GetDirectoryName(Filepath));
+            DirectoryInfo Info = new(Path.GetDirectoryName(Filepath));
             for (; Depth > 0; Depth--)
             {
                 Info = Info.Parent;

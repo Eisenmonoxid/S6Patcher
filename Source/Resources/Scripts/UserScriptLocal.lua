@@ -90,7 +90,8 @@ end
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.GlobalScriptOverridden = false;
-S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong", "U_KnightSabatta", "U_KnightRedPrince"};
+S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", 
+	"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong", "U_KnightSabatta", "U_KnightRedPrince"};
 S6Patcher.OverrideGlobalScript = function()
 	Framework.SetOnGameStartLuaCommand("return;"); -- free memory
 	local Knight = Entities[S6Patcher.DefaultKnightNames[S6Patcher.SelectedKnight]];
@@ -109,10 +110,6 @@ S6Patcher.OverrideGlobalScript = function()
 			local PlayerID = Logic.EntityGetPlayer(_knightID);
 			local Orientation = Logic.GetEntityOrientation(_knightID);
 			local ScriptName = Logic.GetEntityName(_knightID);
-			
-			if ScriptName ~= ("Player" .. PlayerID .. "Knight") then
-				return nil;
-			end
 
 			local ID = Logic.CreateEntity(_newType, posX, posY, Orientation, PlayerID);
 			Logic.SetEntityName(ID, ScriptName);
@@ -164,7 +161,10 @@ S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 end
 
 S6Patcher.ShownFirstAbilityMessage = false;
+S6Patcher.UseSpecialKnights = false;
 S6Patcher.EnableSpecialKnights = function()
+	S6Patcher.UseSpecialKnights = true;
+
 	g_MilitaryFeedback.Knights[Entities.U_KnightSabatta] = "H_Knight_Sabatt";
 	g_HeroAbilityFeedback.Knights[Entities.U_KnightSabatta] = "Sabatta";
 
@@ -483,7 +483,11 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText(Text));
 				return;
 			end
-		elseif _OptionalTextKeyName == "AbilityConvert" then
+		end
+	end
+	
+	if S6Patcher.UseSpecialKnights then
+		if _OptionalTextKeyName == "AbilityConvert" then
 			local EntityID = GUI.GetSelectedEntity();
 			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightSabatta) then
 				local Title = string.gsub(XGUIEng.GetStringTableText("UI_ObjectNames/" .. _OptionalTextKeyName), "Hakim", "Sabatt");

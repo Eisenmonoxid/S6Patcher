@@ -17,16 +17,13 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Called.");
 
+            // This will only work on Windows
             uint CheckSum = 0x0;
             uint HeaderSum = 0x0;
-            using (MemoryMappedFile Mapping = MemoryMappedFile.CreateFromFile(Path))
-            {
-                using (MemoryMappedViewAccessor View = Mapping.CreateViewAccessor())
-                {
-                    // This will only work on Windows
-                    CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
-                };
-            };
+            using MemoryMappedFile Mapping = MemoryMappedFile.CreateFromFile(Path);
+            using MemoryMappedViewAccessor View = Mapping.CreateViewAccessor();
+
+            CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
 
             Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Finished successfully. New CheckSum: 0x" + $"{CheckSum.ToString():X}");
             return CheckSum;

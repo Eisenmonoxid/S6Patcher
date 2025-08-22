@@ -151,8 +151,8 @@ end
 S6Patcher.AbilityEffectsOnMap = {};
 S6Patcher.EffectCleanupJob = nil;
 S6Patcher.KnightRedPrinceAbility = function(_playerID)
-	local EffectTime = 15;
-	local Area = 5000;
+	local EffectTime = 12;
+	local Area = 4500;
 	local KnightID = Logic.GetKnightID(_playerID);
 	local posX, posY, posZ = Logic.EntityGetPos(KnightID);
 	local Entries = {Logic.GetEntitiesInArea(0, posX, posY, Area, 16)};
@@ -165,12 +165,18 @@ S6Patcher.KnightRedPrinceAbility = function(_playerID)
 	local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_HealingFX, Position[1], Position[2], 0, 1);
 	table.insert(S6Patcher.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + 5});
 	
+	local Counter = 0;
 	for i = 2, Entries[1] do
 		if Logic.IsEntityTypeInCategory(Logic.GetEntityType(Entries[i]), EntityCategories.Worker) == 1 and not Logic.IsIll(Entries[i]) then
 			Logic.MakeSettlerIll(Entries[i], true);
 			local Position = {Logic.EntityGetPos(Entries[i])};
 			local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_SickBuilding, Position[1], Position[2], 0, 1);
-			table.insert(S6Patcher.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + EffectTime})
+			table.insert(S6Patcher.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + EffectTime});
+			
+			Counter = Counter + 1;
+			if Counter >= 16 then
+				break;
+			end
 		end
 	end
 	

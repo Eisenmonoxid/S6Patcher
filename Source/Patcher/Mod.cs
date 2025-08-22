@@ -11,7 +11,7 @@ namespace S6Patcher.Source.Patcher
 {
     internal class Mod
     {
-        private readonly Uri GlobalDownloadURL = new Uri(Resources.ModLink);
+        private readonly Uri GlobalDownloadURL = new(Resources.ModLink);
         private readonly string GlobalDestinationDirectoryPath;
         private readonly string ArchiveFilePathBase;
         private readonly string ArchiveFilePathExtra1;
@@ -37,33 +37,31 @@ namespace S6Patcher.Source.Patcher
         {
             try
             {
-                using (ZipArchive Archive = ZipFile.OpenRead(ZipPath))
+                using ZipArchive Archive = ZipFile.OpenRead(ZipPath);
+                if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
                 {
-                    if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
-                    {
-                        var Entries = (from Entry in Archive.Entries
-                                      where !Entry.FullName.Contains(ArchiveFileName)
-                                      where !String.IsNullOrEmpty(Entry.Name)
-                                      select Entry);
+                    var Entries =  from Entry in Archive.Entries
+                                   where !Entry.FullName.Contains(ArchiveFileName)
+                                   where !String.IsNullOrEmpty(Entry.Name)
+                                   select Entry;
 
-                        foreach (ZipArchiveEntry Entry in Entries)
-                        {
-                            string FullPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName));
-                            if (Directory.Exists(FullPath) == false)
-                            {
-                                Directory.CreateDirectory(FullPath);
-                            }
-                            Entry.ExtractToFile(Path.Combine(BaseDirectoryPath, Entry.FullName), true);
-                            Logger.Instance.Log("ExtractZipArchive(): Extracted " + Path.Combine(BaseDirectoryPath, Entry.FullName));
-                        }
-                    }
-                    else
+                    foreach (ZipArchiveEntry Entry in Entries)
                     {
-                        ZipArchiveEntry Entry = Archive.GetEntry("mod.bba");
-                        Entry.ExtractToFile(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
-                        //Entry.ExtractToFile(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
-                        // Not necessary right now
+                        string FullPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName));
+                        if (Directory.Exists(FullPath) == false)
+                        {
+                            Directory.CreateDirectory(FullPath);
+                        }
+                        Entry.ExtractToFile(Path.Combine(BaseDirectoryPath, Entry.FullName), true);
+                        Logger.Instance.Log("ExtractZipArchive(): Extracted " + Path.Combine(BaseDirectoryPath, Entry.FullName));
                     }
+                }
+                else
+                {
+                    ZipArchiveEntry Entry = Archive.GetEntry("mod.bba");
+                    Entry.ExtractToFile(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
+                    //Entry.ExtractToFile(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
+                    // Not necessary right now
                 }
             }
             catch (Exception ex)
@@ -84,7 +82,7 @@ namespace S6Patcher.Source.Patcher
                 ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
 
-            GlobalBaseForm.Invoke(new Action(() => GlobalBaseForm.FinishPatchingProcess()));
+            GlobalBaseForm.Invoke(new Action(GlobalBaseForm.FinishPatchingProcess));
         }
 
         public string GetModloaderPath()
@@ -129,7 +127,7 @@ namespace S6Patcher.Source.Patcher
 
             if (UseBugfixMod)
             {
-                Thread Context = new Thread(() => DownloadZipArchive())
+                Thread Context = new(DownloadZipArchive)
                 {
                     IsBackground = true
                 };

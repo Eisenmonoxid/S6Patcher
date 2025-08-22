@@ -10,14 +10,14 @@ namespace S6Patcher.Source.Patcher
 {
     public static class UserScriptHandler
     {
-        private static readonly Dictionary<string, byte[]> Scripts = new Dictionary<string, byte[]>()
+        private static readonly Dictionary<string, byte[]> Scripts = new()
         {
             {"UserScriptLocal.lua", Resources.UserScriptLocal},
             {"EMXBinData.s6patcher", Resources.EMXBinData},
             {"UserScriptGlobal.lua", Resources.UserScriptGlobal}
         };
-        public static string[] ScriptFiles => Scripts.Keys.ToArray();
-        public static byte[][] ScriptResources => Scripts.Values.ToArray();
+        public static string[] ScriptFiles => [.. Scripts.Keys];
+        public static byte[][] ScriptResources => [.. Scripts.Values];
         private static string MonoGlobalDocumentsPath = String.Empty;
 
         public static List<string> GetUserScriptDirectories()
@@ -29,19 +29,21 @@ namespace S6Patcher.Source.Patcher
             {
                 if (MonoGlobalDocumentsPath == String.Empty)
                 {
-                    MessageBox.Show(Resources.MonoOptionsFile, "Select Options.ini file ...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Configuration file|*.ini", Environment.SpecialFolder.MyDocuments);
+                    MessageBox.Show(Resources.MonoOptionsFile, "Select Options.ini file ...", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Configuration file|*.ini", 
+                        Environment.SpecialFolder.MyDocuments);
 
                     if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        DirectoryInfo Info = new DirectoryInfo(ofd.FileName);
+                        DirectoryInfo Info = new(ofd.FileName);
                         MonoGlobalDocumentsPath = Info.Parent.Parent.Parent.FullName;
                     }
                     else
                     {
                         Logger.Instance.Log("GetUserScriptDirectories(): User did not select a file! Aborting ...");
                         ofd.Dispose();
-                        return new List<string>();
+                        return [];
                     }
                     ofd.Dispose();
                 }
@@ -52,9 +54,8 @@ namespace S6Patcher.Source.Patcher
             return SelectUserScriptDirectories(DocumentsPath);
         }
 
-        private static List<string> SelectUserScriptDirectories(string Documents) => Directory.GetDirectories(Documents)
+        private static List<string> SelectUserScriptDirectories(string Documents) => [.. Directory.GetDirectories(Documents)
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
-                .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})
-                .ToList();
+                .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})];
     }
 }

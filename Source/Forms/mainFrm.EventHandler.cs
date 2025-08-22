@@ -19,11 +19,9 @@ namespace S6Patcher.Source.Forms
         {
             try
             {
-                using (Stream IconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Source.Resources.favicon.ico"))
-                {
-                    this.Icon = new System.Drawing.Icon(IconStream);
-                    this.ShowIcon = true;
-                }
+                using Stream IconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Source.Resources.favicon.ico");
+                this.Icon = new System.Drawing.Icon(IconStream);
+                this.ShowIcon = true;
             }
             finally
             {
@@ -99,7 +97,7 @@ namespace S6Patcher.Source.Forms
             pbProgress.Style = ProgressBarStyle.Marquee;
             Logger.Instance.Log("btnPatch_Click(): Going to patch file ...");
 
-            List<string> Features = GetPatchFeaturesByControls(new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor});
+            List<string> Features = GetPatchFeaturesByControls([gbAll, gbModloader, gbHE, gbEditor]);
             ExecutePatch(Features); // Main patching logic is executed here
         }
 

@@ -52,7 +52,7 @@ namespace S6Patcher.Source.Forms
         private void InitializeControls()
         {
             // Validator & Patcher have been successfully initialized
-            BinaryReader Reader = new BinaryReader(GlobalStream);
+            BinaryReader Reader = new(GlobalStream);
             switch (Validator.ID)
             {
                 case execID.OV:
@@ -115,7 +115,8 @@ namespace S6Patcher.Source.Forms
 
         private void AskForRecommendedSettings()
         {
-            DialogResult Result = MessageBox.Show(Resources.WelcomeMessage, "Preselect Recommended Settings ...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult Result = MessageBox.Show(Resources.WelcomeMessage, "Preselect Recommended Settings ...", 
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (Result == DialogResult.Yes)
             {
                 cbZoom.Checked = true;
@@ -150,10 +151,10 @@ namespace S6Patcher.Source.Forms
             {
                 Boxes = Box.Controls.OfType<CheckBox>()
                         .Where(Element => Element.Checked)
-                        .Concat(Boxes ?? Enumerable.Empty<CheckBox>());
+                        .Concat(Boxes ?? []);
             });
 
-            return Boxes.Select(Element => Element.Name).ToList();
+            return [.. Boxes.Select(Element => Element.Name)];
         }
 
         public void FinishPatchingProcess()
@@ -226,10 +227,10 @@ namespace S6Patcher.Source.Forms
             Patcher.SetEntryInOptionsFile(GlobalOptions[0], cbKnightSelection.Checked);
             (from Entry in gbUserscriptOptions.Controls.OfType<CheckBox>()
                 from Name in GlobalOptions
-                where Name == Entry.Name.Remove(0, "cb".Length)
+                where Name == Entry.Name["cb".Length..]
                 select Entry).ToList().ForEach(Element =>
                 {
-                    Patcher.SetEntryInOptionsFile(Element.Name.Remove(0, "cb".Length), Element.Checked);
+                    Patcher.SetEntryInOptionsFile(Element.Name["cb".Length..], Element.Checked);
                 });
         }
 
