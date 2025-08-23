@@ -63,7 +63,6 @@ namespace S6Patcher.Source.Helpers
 
             try
             {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
                 GlobalClient.DownloadStringAsync(new Uri(Resources.VersionFileLink));
             }
             catch (Exception ex)
@@ -82,7 +81,8 @@ namespace S6Patcher.Source.Helpers
             {
                 if (string.Compare(Application.ProductVersion, e.Result, true) != 0)
                 {
-                    string Message = "A newer version of the S6Patcher is available on GitHub!\n\nCurrent Version: " + Application.ProductVersion + "\nNew Version: " + e.Result;
+                    string Message = "A newer version of the S6Patcher is available on GitHub!\n\nCurrent Version: " + 
+                        Application.ProductVersion + "\nNew Version: " + e.Result;
                     Logger.Instance.Log(Message);
                     MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

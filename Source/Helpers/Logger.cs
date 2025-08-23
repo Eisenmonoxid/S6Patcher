@@ -17,11 +17,8 @@ namespace S6Patcher.Source.Helpers
 
         ~Logger()
         {
-            if (Writer != null && Writer.BaseStream.CanRead == true)
-            {
-                Writer.Close();
-                Writer.Dispose();
-            }
+            IOFileHandler.Instance.CloseStream(Writer.BaseStream);
+            Writer = null;
         }
 
         private void EnsureLogWriter()

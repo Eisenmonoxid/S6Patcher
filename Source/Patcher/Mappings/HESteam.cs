@@ -13,9 +13,9 @@ namespace S6Patcher.Source.Patcher.Mappings
                 Name = "cbDevMode",
                 Mapping = new Dictionary<long, byte[]>()
                 {
-                    {0x1E0C94, new byte[] {0xEB, 0x19}}, // Enable Development-Mode without command line argument -DevM
-                    {0x205250, new byte[] {0xC6, 0x05}}, // Set global DevMachine to 1
-                    {0x205256, new byte[] {0x01}}, // Set global DevMachine to 1
+                    {0x1E0C94, [0xEB, 0x19]}, // Enable Development-Mode without command line argument -DevM
+                    {0x205250, [0xC6, 0x05]}, // Set global DevMachine to 1
+                    {0x205256, [0x01]}, // Set global DevMachine to 1
                 }
             },
             new PatchEntry
@@ -23,12 +23,12 @@ namespace S6Patcher.Source.Patcher.Mappings
                 Name = "cbScriptBugFixes",
                 Mapping = new Dictionary<long, byte[]>()
                 {
-                    {0x33D6D7, new byte[] {0x08}}, // Crash fix when dismissing entertainer, push EntityID on stack
+                    {0x33D6D7, [0x08]}, // Crash fix when dismissing entertainer, push EntityID on stack
                     {0xC3F081, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
-                    {0xC3F095, new byte[] {0x00, 0x00, 0x00}}, // Make game load .s6patcher binary file in MAINMENU lua state
-                    {0x1C5897, new byte[] {0x90, 0x90}}, // Always load userscript, even when not in dev mode
-                    {0x36C6FF, new byte[] {0x90, 0x90}}, // Enable GUI.SendScriptCommand in Multiplayer
-                    {0x36C709, new byte[] {0x90, 0x90}}, // Theoretically, you could also use Logic.AllowSendScript(true) ;)
+                    {0xC3F095, [0x00, 0x00, 0x00]}, // Make game load .s6patcher binary file in MAINMENU lua state
+                    {0x1C5897, [0x90, 0x90]}, // Always load userscript, even when not in dev mode
+                    {0x36C6FF, [0x90, 0x90]}, // Enable GUI.SendScriptCommand in Multiplayer
+                    {0x36C709, [0x90, 0x90]}, // Theoretically, you could also use Logic.AllowSendScript(true) ;)
                 }
             },
             new PatchEntry
@@ -36,8 +36,8 @@ namespace S6Patcher.Source.Patcher.Mappings
                 Name = "cbLimitedEdition",
                 Mapping = new Dictionary<long, byte[]>()
                 {
-                    {0x25D4D5, new byte[] {0x90, 0x90}}, // Override JZ, always set Special Edition to 1
-                    {0x25D4DB, new byte[] {0x90, 0x90, 0xFF, 0xC3}}, // Override JNZ, always set Special Edition to 1
+                    {0x25D4D5, [0x90, 0x90]}, // Override JZ, always set Special Edition to 1
+                    {0x25D4DB, [0x90, 0x90, 0xFF, 0xC3]}, // Override JNZ, always set Special Edition to 1
                 }
             },
         ];
@@ -46,8 +46,8 @@ namespace S6Patcher.Source.Patcher.Mappings
         {
             {0xC41E00, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
             {0xC41DA8, Encoding.ASCII.GetBytes("Attach your Debugger here.\0\0")}, // Message Text
-            {0x1E09E1, new byte[] {0x90, 0x90}}, // Override JGE, show no data folder found MessageBox (halt thread)
-            {0x1E0A5C, new byte[] {0xEB, 0x03, 0x90, 0x90, 0x90}}, // Jump to original instruction
+            {0x1E09E1, [0x90, 0x90]}, // Override JGE, show no data folder found MessageBox (halt thread)
+            {0x1E0A5C, [0xEB, 0x03, 0x90, 0x90, 0x90]}, // Jump to original instruction
         };
 
         public override Dictionary<long, byte[]> GetModloaderMapping() => new()
@@ -58,17 +58,17 @@ namespace S6Patcher.Source.Patcher.Mappings
             {0xC50A5A, Encoding.ASCII.GetBytes("..\\ModLoader\\extra1\\shr\0")}, // Add directory path
             {0xC50A72, Encoding.ASCII.GetBytes("..\\ModLoader\\shr\0\0")}, // Add directory path
             // .text segment -> Check what loading method to use
-            {0x25E2D0, new byte[] {0xEB}}, // Always jump to ModelViewer
-            {0x25E2D4, new byte[] {0xEB}}, // Always jump to ModelViewer
-            {0x25E304, new byte[] {0xE8, 0x41, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90}}, // Call ModelViewer method
+            {0x25E2D0, [0xEB]}, // Always jump to ModelViewer
+            {0x25E2D4, [0xEB]}, // Always jump to ModelViewer
+            {0x25E304, [0xE8, 0x41, 0x00, 0x00, 0x00, 0xEB, 0xC7, 0x90]}, // Call ModelViewer method
             // .text segment -> Override the ModelViewer func
-            {0x25E376, new byte[] {0x72}}, // Return to original loader after mod
-            {0x25E3A4, new byte[] {0xEB, 0x7D, 0x83, 0x7D, 0x20, 
-                0x01, 0x75, 0xB7, 0x68, 0x5A, 0x24, 0x05, 0x01, 
-                0xEB, 0xB5, 0x90}}, // Return to original loader after mod
-            {0x25E359, new byte[] {0xEB, 0x4B, 0xE8, 0xA0, 0x12, 
-                0x9A, 0xFF, 0x90, 0x90, 0x90}}, // Return to original loader after mod
-            {0x25E423, new byte[] {0x90, 0x59, 0x59}}, // Return to original loader after mod
+            {0x25E376, [0x72]}, // Return to original loader after mod
+            {0x25E3A4, [0xEB, 0x7D, 0x83, 0x7D, 0x20,
+                0x01, 0x75, 0xB7, 0x68, 0x5A, 0x24, 0x05, 0x01,
+                0xEB, 0xB5, 0x90]}, // Return to original loader after mod
+            {0x25E359, [0xEB, 0x4B, 0xE8, 0xA0, 0x12,
+                0x9A, 0xFF, 0x90, 0x90, 0x90]}, // Return to original loader after mod
+            {0x25E423, [0x90, 0x59, 0x59]}, // Return to original loader after mod
         };
 
         public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution)
@@ -85,21 +85,22 @@ namespace S6Patcher.Source.Patcher.Mappings
 
         public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance) => new()
         {
-            {0xC4F9EC, BitConverter.GetBytes(ClutterFarDistance)}, // This is not an error, the HE uses the zoomlevel as single instead of double like in the OV ...
-            {0x270E73, new byte[] {0xC7, 0x45, 0xF0}},
+            {0xC4F9EC, BitConverter.GetBytes(ClutterFarDistance)}, // This is not an error, the HE uses the
+                                                                    // zoomlevel as single instead of double like in the OV ...
+            {0x270E73, [0xC7, 0x45, 0xF0]},
             {0x270E76, BitConverter.GetBytes(ClutterFarDistance + 4800f)},
-            {0x270E7A, new byte[] {0xC7, 0x45, 0xF4}},
+            {0x270E7A, [0xC7, 0x45, 0xF4]},
             {0x270E7D, BitConverter.GetBytes(3700f)},
-            {0x270E81, new byte[] {0x90}},
-            {0x270E87, new byte[] {0x90, 0x90, 0x90}},
-            {0x2540B8, new byte[] {0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81, 
-                0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90}},
+            {0x270E81, [0x90]},
+            {0x270E87, [0x90, 0x90, 0x90]},
+            {0x2540B8, [0x50, 0xB8, 0x00, 0x40, 0x9C, 0xC5, 0x89, 0x81,
+                0x9C, 0x00, 0x00, 0x00, 0x58, 0xC6, 0x81, 0x98, 0x00, 0x00, 0x00, 0x01, 0x90, 0x90]},
         };
 
         public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time) => new()
         {
             {0x1C6045, (Time == 0.0) ? [0xEB] : [0x76]}, // Switch autosave on or off
             {0xEB95C0, BitConverter.GetBytes(Time * 60000)},
-        }; 
+        };
     }
 }

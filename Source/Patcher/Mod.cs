@@ -40,10 +40,10 @@ namespace S6Patcher.Source.Patcher
                 using ZipArchive Archive = ZipFile.OpenRead(ZipPath);
                 if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
                 {
-                    var Entries =  from Entry in Archive.Entries
-                                   where !Entry.FullName.Contains(ArchiveFileName)
-                                   where !String.IsNullOrEmpty(Entry.Name)
-                                   select Entry;
+                    var Entries = from Entry in Archive.Entries
+                                  where !Entry.FullName.Contains(ArchiveFileName)
+                                  where !String.IsNullOrEmpty(Entry.Name)
+                                  select Entry;
 
                     foreach (ZipArchiveEntry Entry in Entries)
                     {

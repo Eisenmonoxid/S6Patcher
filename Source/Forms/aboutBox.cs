@@ -63,7 +63,7 @@ namespace S6Patcher.Source.Forms
         private void OpenLink(string Link, LinkLabel CurrentLabel)
         {
             Logger.Instance.Log("OpenLink(): " + Link);
-            ProcessStartInfo Info = new ProcessStartInfo(Link)
+            ProcessStartInfo Info = new(Link)
             {
                 UseShellExecute = true
             };
@@ -85,11 +85,9 @@ namespace S6Patcher.Source.Forms
         {
             try
             {
-                using (Stream IconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Source.Resources.favicon.ico"))
-                {
-                    Icon = new System.Drawing.Icon(IconStream);
-                    ShowIcon = true;
-                }
+                using Stream IconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Source.Resources.favicon.ico");
+                Icon = new System.Drawing.Icon(IconStream);
+                ShowIcon = true;
             }
             catch {}
         }

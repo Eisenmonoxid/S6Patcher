@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Helpers
@@ -112,8 +111,7 @@ namespace S6Patcher.Source.Helpers
                 }
             }
 
-            Stream.Close();
-            Stream.Dispose();
+            IOFileHandler.Instance.CloseStream(Stream);
 
             try
             {

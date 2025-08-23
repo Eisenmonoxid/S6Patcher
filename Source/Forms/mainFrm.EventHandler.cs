@@ -13,7 +13,7 @@ namespace S6Patcher.Source.Forms
     {
         private void mainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            IOFileHandler.Instance.CloseFileStream(GlobalStream);
+            IOFileHandler.Instance.CloseStream(GlobalStream);
         }
         private void mainFrm_Load(object sender, EventArgs e)
         {
@@ -110,7 +110,7 @@ namespace S6Patcher.Source.Forms
         private void btnAbort_Click(object sender, EventArgs e)
         {
             Logger.Instance.Log("btnAbort_Click(): Exiting application ...");
-            IOFileHandler.Instance.CloseFileStream(GlobalStream);
+            IOFileHandler.Instance.CloseStream(GlobalStream);
             Environment.Exit(0);
         }
 

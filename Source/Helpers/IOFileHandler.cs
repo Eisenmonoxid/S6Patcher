@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace S6Patcher.Source.Helpers
@@ -31,14 +30,13 @@ namespace S6Patcher.Source.Helpers
             return Stream;
         }
 
-        public void CloseFileStream(FileStream Stream)
+        public void CloseStream(Stream Stream)
         {
-            if (Stream != null && (Stream.CanRead == true || Stream.CanWrite == true))
+            if (Stream != null)
             {
                 Stream.Close();
                 Stream.Dispose();
-
-                Logger.Instance.Log("CloseFileStream(): FileStream has been closed.");
+                Logger.Instance.Log("CloseStream(): Stream has been closed.");
             }
         }
 
@@ -48,7 +46,8 @@ namespace S6Patcher.Source.Helpers
             ShowHelp = false,
             CheckPathExists = true,
             DereferenceLinks = true,
-            InitialDirectory = (InitialDirectory == String.Empty || Folder == Environment.SpecialFolder.MyDocuments) ? Environment.GetFolderPath(Folder) : InitialDirectory,
+            InitialDirectory = (InitialDirectory == String.Empty || Folder == Environment.SpecialFolder.MyDocuments) ? 
+                Environment.GetFolderPath(Folder) : InitialDirectory,
             Multiselect = false,
             ShowReadOnly = false,
             Filter = Filter
@@ -68,11 +67,12 @@ namespace S6Patcher.Source.Helpers
             return File.Exists(NewPath) ? NewPath : Filepath;
         }
 
-        public bool UpdateEntryInOptionsFile(string Section, string Key, uint Entry)
+        public void UpdateEntryInOptionsFile(string Section, string Key, uint Entry)
         {
+            Logger.Instance.Log("UpdateEntryInOptionsFile(): Called.");
+
             string Name = "Options.ini";
-            List<string> Directories = UserScriptHandler.GetUserScriptDirectories();
-            foreach (string Element in Directories)
+            foreach (string Element in UserScriptHandler.GetUserScriptDirectories())
             {
                 string CurrentPath = Path.Combine(Element, "Config", Name);
                 if (File.Exists(CurrentPath) == false)
@@ -91,7 +91,7 @@ namespace S6Patcher.Source.Helpers
                 {
                     Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
+                    continue;
                 }
 
                 Lines.RemoveAll(Line => Line.Contains(Key));
@@ -109,13 +109,35 @@ namespace S6Patcher.Source.Helpers
                 {
                     Logger.Instance.Log(ex.ToString());
                     MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
+                    continue;
                 }
 
-                Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file " + CurrentPath + " with Section " + Section + " and Key " + Key);
+                Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file with Section " + Section + " and Key " + Key);
             }
+        }
 
-            return true;
+        public void CreateUserScriptFiles()
+        {
+            foreach (string Element in UserScriptHandler.GetUserScriptDirectories())
+            {
+                string CurrentPath = Path.Combine(Element, "Script");
+                try
+                {
+                    Directory.CreateDirectory(CurrentPath);
+                    for (uint i = 0; i < UserScriptHandler.ScriptFiles.Length; i++)
+                    {
+                        File.WriteAllBytes(Path.Combine(CurrentPath, UserScriptHandler.ScriptFiles[i]), 
+                            UserScriptHandler.ScriptResources[i]);
+                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing ScriptFile named " + 
+                            UserScriptHandler.ScriptFiles[i] + " to " + CurrentPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Log(ex.ToString());
+                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         public string GetRootDirectory(string Filepath, uint Depth)

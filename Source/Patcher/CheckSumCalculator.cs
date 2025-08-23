@@ -12,7 +12,9 @@ namespace S6Patcher.Source.Patcher
     internal class CheckSumCalculator
     {
         [DllImport("imagehlp.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        private static extern int CheckSumMappedFile(SafeMemoryMappedViewHandle BaseAddress, uint FileLength, ref uint HeaderSum, ref uint CheckSum);
+        private static extern int CheckSumMappedFile(SafeMemoryMappedViewHandle BaseAddress, uint FileLength, 
+            ref uint HeaderSum, ref uint CheckSum);
+
         private uint UpdatePEHeaderFileCheckSum(string Path, long Size)
         {
             Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Called.");
@@ -25,7 +27,7 @@ namespace S6Patcher.Source.Patcher
 
             CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
 
-            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Finished successfully. New CheckSum: 0x" + $"{CheckSum.ToString():X}");
+            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): New CheckSum: 0x" + $"{CheckSum.ToString():X}");
             return CheckSum;
         }
 
@@ -44,7 +46,7 @@ namespace S6Patcher.Source.Patcher
             CurrentStream.Position = 0x168;
             CurrentStream.Write(CheckSumByte, 0, CheckSumByte.Length);
 
-            IOFileHandler.Instance.CloseFileStream(CurrentStream);
+            IOFileHandler.Instance.CloseStream(CurrentStream);
         }
     }
 }

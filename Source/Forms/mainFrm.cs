@@ -52,16 +52,13 @@ namespace S6Patcher.Source.Forms
         private void InitializeControls()
         {
             // Validator & Patcher have been successfully initialized
+            int Offset = (Validator.ID == execID.OV_OFFSET) ? 0x3F0000 : 0x0;
             BinaryReader Reader = new(GlobalStream);
             switch (Validator.ID)
             {
-                case execID.OV:
-                    SetControlValueFromStream(Reader, 0x545400, txtZoom);
-                    SetControlValueFromStream(Reader, 0x2BE177, txtResolution);
-                    break;
-                case execID.OV_OFFSET:
-                    SetControlValueFromStream(Reader, (0x545400 - 0x3F0000), txtZoom);
-                    SetControlValueFromStream(Reader, (0x2BE177 - 0x3F0000), txtResolution);
+                case execID.OV or execID.OV_OFFSET:
+                    SetControlValueFromStream(Reader, 0x545400 - Offset, txtZoom);
+                    SetControlValueFromStream(Reader, 0x2BE177 - Offset, txtResolution);
                     break;
                 case execID.HE_UBISOFT:
                     SetControlValueFromStream(Reader, 0xC4EC4C, txtZoom);
@@ -225,13 +222,17 @@ namespace S6Patcher.Source.Forms
         private void SetEntriesInOptionsFileByCheckBox()
         {
             Patcher.SetEntryInOptionsFile(GlobalOptions[0], cbKnightSelection.Checked);
-            (from Entry in gbUserscriptOptions.Controls.OfType<CheckBox>()
-                from Name in GlobalOptions
-                where Name == Entry.Name["cb".Length..]
-                select Entry).ToList().ForEach(Element =>
-                {
-                    Patcher.SetEntryInOptionsFile(Element.Name["cb".Length..], Element.Checked);
-                });
+
+            List<CheckBox> Entries = 
+                [.. from Entry in gbUserscriptOptions.Controls.OfType<CheckBox>()
+                    from Name in GlobalOptions
+                    where Name == Entry.Name["cb".Length..]
+                    select Entry];
+
+            foreach (var Element in Entries)
+            {
+                Patcher.SetEntryInOptionsFile(Element.Name["cb".Length..], Element.Checked);
+            }
         }
 
         private bool OpenExecutableFile(string FileName)
@@ -253,7 +254,7 @@ namespace S6Patcher.Source.Forms
             Validator = new Patcher.Validator(GlobalStream);
             if (Validator.ID == execID.NONE || Validator.IsExecutableUnpacked == false)
             {
-                IOFileHandler.Instance.CloseFileStream(GlobalStream);
+                IOFileHandler.Instance.CloseStream(GlobalStream);
                 string Error = Validator.IsExecutableUnpacked ? Resources.ErrorInvalidExecutable : Resources.ErrorInvalidExecutableSteam;
                 Logger.Instance.Log(Error);
                 MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -268,7 +269,7 @@ namespace S6Patcher.Source.Forms
             }
             catch (Exception ex)
             {
-                IOFileHandler.Instance.CloseFileStream(GlobalStream);
+                IOFileHandler.Instance.CloseStream(GlobalStream);
                 Logger.Instance.Log(ex.ToString());
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -280,7 +281,7 @@ namespace S6Patcher.Source.Forms
 
         private void ResetForm()
         {
-            IOFileHandler.Instance.CloseFileStream(GlobalStream);
+            IOFileHandler.Instance.CloseStream(GlobalStream);
             new List<GroupBox> {gbAll, gbModloader, gbHE, gbEditor}.ForEach(Control =>
             {
                 Control.Enabled = false;

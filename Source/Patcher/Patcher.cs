@@ -33,21 +33,16 @@ namespace S6Patcher.Source.Patcher
 
         public void PatchByControlFeatures(List<string> Names)
         {
-            List<MappingBase.PatchEntry> Entries = GlobalMappings.GetMapping();
-            var Result = (
-                from Entry in Entries
-                from Name in Names
-                where Name == Entry.Name
-                select Entry.Mapping).ToList();
+            List<Dictionary<long, byte[]>> Results = 
+                [.. from Entry in GlobalMappings.GetMapping()
+                    from Name in Names
+                    where Name == Entry.Name
+                    select Entry.Mapping];
 
-            Result.ForEach(Element =>
+            foreach (var Element in Results)
             {
-                foreach (var Entry in Element)
-                {
-                    WriteBytes(Entry.Key, Entry.Value);
-                    Logger.Instance.Log("PatchByControlFeatures(): Patching Element: 0x" + $"{Entry.Key:X}");
-                }
-            });
+                WriteMappingToFile(Element);
+            }
         }
 
         public void SetHighResolutionTextures(string ResolutionText)
@@ -66,12 +61,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetTextureResolutionMapping(Resolution);
-            foreach (var Element in Mapping)
-            {
-                WriteBytes(Element.Key, Element.Value);
-            }
-
+            WriteMappingToFile(GlobalMappings.GetTextureResolutionMapping(Resolution));
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "TextureResolution", 3);
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "Terrain", 2);
         }
@@ -92,11 +82,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetAutoSaveMapping(Timer);
-            foreach (var Element in Mapping)
-            {
-                WriteBytes(Element.Key, Element.Value);
-            }
+            WriteMappingToFile(GlobalMappings.GetAutoSaveMapping(Timer));
         }
 
         public void SetZoomLevel(string ZoomText)
@@ -117,23 +103,13 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetZoomLevelMapping(Level, Distance);
-            foreach (var Element in Mapping)
-            {
-                WriteBytes(Element.Key, Element.Value);
-            }
+            WriteMappingToFile(GlobalMappings.GetZoomLevelMapping(Level, Distance));
         }
 
         public void SetModLoader(bool UseBugFixMod)
         {
             Logger.Instance.Log("SetModLoader(): Called.");
-
-            Dictionary<long, byte[]> Entries = GlobalMappings.GetModloaderMapping();
-            foreach (var Entry in Entries)
-            {
-                WriteBytes(Entry.Key, Entry.Value);
-            }
-
+            WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             GlobalMod.CreateModLoader(UseBugFixMod);
         }
 
@@ -143,8 +119,9 @@ namespace S6Patcher.Source.Patcher
 
             // Partially adapted from:
             // https://stackoverflow.com/questions/9054469/how-to-check-if-exe-is-set-as-largeaddressaware
+
             const int IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
-            BinaryReader Reader = new BinaryReader(GlobalStream);
+            BinaryReader Reader = new(GlobalStream);
 
             Reader.BaseStream.Position = 0x3C;
             Reader.BaseStream.Position = Reader.ReadInt32();
@@ -167,41 +144,16 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("SetLargeAddressAwareFlag(): Finished successfully.");
         }
 
-        public void SetLuaScriptBugFixes()
-        {
-            Logger.Instance.Log("SetLuaScriptBugFixes(): Called.");
+        public void SetEntryInOptionsFile(string Entry, bool Checked) => IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
+        public void SetEasyDebug() => WriteMappingToFile(GlobalMappings.GetEasyDebugMapping());
+        public void SetLuaScriptBugFixes() => IOFileHandler.Instance.CreateUserScriptFiles();
 
-            UserScriptHandler.GetUserScriptDirectories().ForEach(Element =>
-            {
-                string CurrentPath = Path.Combine(Element, "Script");
-                try
-                {
-                    Directory.CreateDirectory(CurrentPath);
-                    for (uint i = 0; i < UserScriptHandler.ScriptFiles.Length; i++)
-                    {
-                        File.WriteAllBytes(Path.Combine(CurrentPath, UserScriptHandler.ScriptFiles[i]), UserScriptHandler.ScriptResources[i]);
-                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing Scriptfile named " + UserScriptHandler.ScriptFiles[i] + " to " + CurrentPath);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            });
-        }
-
-        public void SetEntryInOptionsFile(string Entry, bool Checked)
+        private void WriteMappingToFile(Dictionary<long, byte[]> Mapping)
         {
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
-        }
-
-        public void SetEasyDebug()
-        {
-            Dictionary<long, byte[]> Mapping = GlobalMappings.GetEasyDebugMapping();
             foreach (var Entry in Mapping)
             {
                 WriteBytes(Entry.Key, Entry.Value);
+                Logger.Instance.Log("WriteMappingToFile(): Patching Element: 0x" + $"{Entry.Key:X}");
             }
         }
 
