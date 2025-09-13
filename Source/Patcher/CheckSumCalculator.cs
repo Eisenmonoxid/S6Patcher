@@ -1,11 +1,9 @@
 ﻿using Microsoft.Win32.SafeHandles;
-using S6Patcher.Properties;
 using S6Patcher.Source.Helpers;
 using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -34,19 +32,17 @@ namespace S6Patcher.Source.Patcher
         public void WritePEHeaderFileCheckSum(string Path, long Size)
         {
             uint CheckSum = UpdatePEHeaderFileCheckSum(Path, Size);
-            FileStream CurrentStream = IOFileHandler.Instance.OpenFileStream(Path);
-            if (CurrentStream == null)
+            FileStream Stream = IOFileHandler.Instance.OpenFileStream(Path);
+            if (Stream == null)
             {
-                Logger.Instance.Log("WritePEHeaderFileCheckSum():" + Resources.ErrorInvalidExecutable);
-                MessageBox.Show(Resources.ErrorInvalidExecutable, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             byte[] CheckSumByte = BitConverter.GetBytes(CheckSum);
-            CurrentStream.Position = 0x168;
-            CurrentStream.Write(CheckSumByte, 0, CheckSumByte.Length);
+            Stream.Position = 0x168;
+            Stream.Write(CheckSumByte, 0, CheckSumByte.Length);
 
-            IOFileHandler.Instance.CloseStream(CurrentStream);
+            IOFileHandler.Instance.CloseStream(Stream);
         }
     }
 }

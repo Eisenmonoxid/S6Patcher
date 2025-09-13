@@ -1,0 +1,97 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
+		x:Class="S6Patcher.Source.View.MainWindow"
+		Title="S6Patcher"
+		SizeToContent="WidthAndHeight"
+		Icon="/Resources/favicon.ico"
+		Name="wndMain"
+		WindowStartupLocation="CenterScreen"
+		CanResize="false">
+
+	<Grid Name="grdMain">
+		<Grid.Styles>
+			<Style>
+				<Style Selector="HeaderedContentControl">
+					<Setter Property="Margin" Value="10"/>
+				</Style>
+				<Style Selector="Button">
+					<Setter Property="HorizontalAlignment" Value="Center"/>
+					<Setter Property="FontFeatures" Value="Center"/>
+					<Setter Property="HorizontalContentAlignment" Value="Center"/>
+				</Style>
+			</Style>
+		</Grid.Styles>
+		
+		<Grid RowDefinitions="Auto Auto Auto Auto Auto Auto Auto" ColumnDefinitions="Auto Auto Auto" Name="grdForm" 
+			  Background="{DynamicResource SystemControlBackgroundAltHighBrush}">		
+			
+			<HeaderedContentControl Grid.Row="0" Name="hccSelect" Header="Select Game/Editor Executable">
+				<Grid RowDefinitions="* *">
+					<Button Margin="0 5" Grid.Row="1" Name="btnChoose" Click="btnChoose_Click" HorizontalAlignment="Right">Choose File</Button>
+					<TextBox Grid.Row="0" TextWrapping="NoWrap" Name="txtPath" IsReadOnly="True" HorizontalAlignment="Stretch">...</TextBox>
+				</Grid>
+			</HeaderedContentControl>
+
+			<HeaderedContentControl Grid.Row="1" Name="hccMain" Header="Choose Features">
+				<TabControl Name="tcMain">
+					<TabItem Name="tiGeneral" Header="General">
+						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto" RowDefinitions="Auto Auto Auto Auto Auto Auto">
+							<CheckBox Grid.Row="0" Grid.Column="0" Name="cbHighTextures">High Resolution Textures:</CheckBox>
+							<TextBox Grid.Row="0" Margin="10 0" VerticalAlignment="Center" Grid.Column="1" Name="txtResolution" HorizontalAlignment="Center" MaxLength="4">4096</TextBox>
+							<Label Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Standard: 512</Label>
+							<CheckBox Grid.Row="1" Name="cbLAAFlag">Activate Large Address Aware Flag</CheckBox>
+							<CheckBox Grid.Row="2" Name="cbZoom">Max. Zoom Level:</CheckBox>
+							<TextBox Grid.Row="2" Margin="10 0" VerticalAlignment="Center" Grid.Column="1" Name="txtZoom" HorizontalAlignment="Center" MaxLength="5">12000</TextBox>
+							<Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Standard: 7200</Label>
+							<CheckBox Grid.Row="3" Name="cbLimitedEdition">Activate Limited/Special Edition</CheckBox>
+							<CheckBox Grid.Row="4" Name="cbScriptBugFixes">Activate Script and Code Bugfixes</CheckBox>
+						</Grid>
+					</TabItem>
+					<TabItem Name="tiHistory" Header="History Edition">
+						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto">
+							<CheckBox Grid.Column="0" Name="cbAutosave">Autosave Time (min):</CheckBox>
+							<TextBox Margin="10 0" Name="txtAutosave" Grid.Column="1" MaxLength="4">30</TextBox>
+							<Label VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Standard: 15</Label>
+						</Grid>
+					</TabItem>
+					<TabItem Name="tiMod" Header="ModLoader">
+						<Grid Margin="15"  RowDefinitions="Auto Auto" ColumnDefinitions="Auto Auto">
+							<CheckBox Grid.Row="0" Name="cbModLoader">Activate ModLoader</CheckBox>
+							<CheckBox Grid.Row="1" Name="cbModDownload">Download and Install Bugfix Mod</CheckBox>
+							<Label Foreground="Blue" HorizontalContentAlignment="Right" Name="lblDownloadSize" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Content="Download Size: Fetching ..." Grid.Row="1" Grid.Column="1"></Label>
+						</Grid>
+					</TabItem>
+					<TabItem Name="tiDev" Header="Development">
+						<Grid Margin="15" RowDefinitions="* *">
+							<CheckBox Name="cbDevMode" Grid.Row="0">Activate Development Mode Permanently</CheckBox>
+							<CheckBox Name="cbEasyDebug" Grid.Row="1">Enable Easy Debug</CheckBox>
+						</Grid>
+					</TabItem>
+					<TabItem Name="tiEditor" Header="Mapeditor">
+						<Grid Margin="15" RowDefinitions="* * * *">
+							<CheckBox Grid.Row="0" Name="cbAllEntities">Show All Entities and Textures in Editor</CheckBox>
+							<CheckBox Grid.Row="1" Name="cbEntityLimits">Higher Entity Limits</CheckBox>
+							<CheckBox Grid.Row="2" Name="cbScalingPlacing">Free Scaling and Placing of Entities</CheckBox>
+							<CheckBox Grid.Row="3" Name="cbMapBorder">Usable Black Map Border</CheckBox>
+						</Grid>
+					</TabItem>
+				</TabControl>
+			</HeaderedContentControl>
+			
+			<Grid Grid.Row="2" Margin="10" Name="grdButtons" VerticalAlignment="Bottom" 
+				  HorizontalAlignment="Center" RowDefinitions="* * * * *">
+				<!--<ProgressBar Name="pbWorking" Grid.Row="0" Margin="0 10" Height="20" Width="{Binding #hccEditor.Bounds.Width}"/>-->
+				<Button Margin="0 5" HorizontalAlignment="Stretch" Grid.Row="1" Name="btnPatch" Click="btnPatch_Click">Patch File</Button>
+				<Button Margin="0 5" HorizontalAlignment="Stretch" Grid.Row="2" Name="btnBackup" Click="btnBackup_Click">Restore Backup</Button>
+				<Button Margin="0 5" HorizontalAlignment="Stretch" Grid.Row="3" Name="btnUpdate" Click="btnUpdate_Click">Check for Updates</Button>
+				<Button Margin="0 5" HorizontalAlignment="Stretch" Grid.Row="4" Name="btnExit" Click="btnExit_Click">Exit Application</Button>
+			</Grid>
+			<Grid Grid.Row="2" Margin="10" Name="grdBoxes" VerticalAlignment="Top" HorizontalAlignment="Right">
+				<CheckBox IsCheckedChanged="cbUpdater_Checked" VerticalAlignment="Top" Margin="20 5" HorizontalAlignment="Left" Name="cbUpdater">Only Update Scriptfiles and Modfiles</CheckBox>
+			</Grid>
+		</Grid>		
+	</Grid>
+</Window>

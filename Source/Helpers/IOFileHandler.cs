@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 
 namespace S6Patcher.Source.Helpers
 {
@@ -10,23 +9,25 @@ namespace S6Patcher.Source.Helpers
     {
         private IOFileHandler() {}
         public static IOFileHandler Instance {get;} = new();
-        public string InitialDirectory = String.Empty;
+        private readonly Dictionary<Stream, uint> Streams = [];
+        private uint StreamID = 0;
 
-        public FileStream OpenFileStream(string Path)
+        public FileStream OpenFileStream(string Path, bool WithException = false)
         {
             FileStream Stream;
             try
             {
-                Stream = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                Stream = new FileStream(Path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (WithException) {throw;};
                 return null;
             }
 
-            Logger.Instance.Log("OpenFileStream(): Returning Stream: " + Stream.Name);
+            Streams.Add(Stream, StreamID);
+            Logger.Instance.Log("OpenFileStream(): Returning Stream with ID " + StreamID++.ToString() + " and Path " + Stream.Name);
             return Stream;
         }
 
@@ -36,22 +37,14 @@ namespace S6Patcher.Source.Helpers
             {
                 Stream.Close();
                 Stream.Dispose();
-                Logger.Instance.Log("CloseStream(): Stream has been closed.");
+
+                if (Streams.TryGetValue(Stream, out uint Key))
+                {
+                    Streams.Remove(Stream);
+                    Logger.Instance.Log("CloseStream(): Stream with ID " + Key.ToString() + " has been closed.");
+                }
             }
         }
-
-        public OpenFileDialog CreateOFDialog(string Filter, Environment.SpecialFolder Folder) => new()
-        {
-            CheckFileExists = true,
-            ShowHelp = false,
-            CheckPathExists = true,
-            DereferenceLinks = true,
-            InitialDirectory = (InitialDirectory == String.Empty || Folder == Environment.SpecialFolder.MyDocuments) ? 
-                Environment.GetFolderPath(Folder) : InitialDirectory,
-            Multiselect = false,
-            ShowReadOnly = false,
-            Filter = Filter
-        };
 
         public string IsPlayLauncherExecutable(string Filepath)
         {
@@ -69,10 +62,8 @@ namespace S6Patcher.Source.Helpers
 
         public void UpdateEntryInOptionsFile(string Section, string Key, uint Entry)
         {
-            Logger.Instance.Log("UpdateEntryInOptionsFile(): Called.");
-
             string Name = "Options.ini";
-            foreach (string Element in UserScriptHandler.GetUserScriptDirectories())
+            foreach (string Element in UserScriptHandler.Instance.GetUserScriptDirectories())
             {
                 string CurrentPath = Path.Combine(Element, "Config", Name);
                 if (File.Exists(CurrentPath) == false)
@@ -90,7 +81,6 @@ namespace S6Patcher.Source.Helpers
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     continue;
                 }
 
@@ -108,7 +98,6 @@ namespace S6Patcher.Source.Helpers
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     continue;
                 }
 
@@ -116,33 +105,15 @@ namespace S6Patcher.Source.Helpers
             }
         }
 
-        public void CreateUserScriptFiles()
+        public string GetModLoaderDirectory(execID ID, string Filepath)
         {
-            foreach (string Element in UserScriptHandler.GetUserScriptDirectories())
-            {
-                string CurrentPath = Path.Combine(Element, "Script");
-                try
-                {
-                    Directory.CreateDirectory(CurrentPath);
-                    for (uint i = 0; i < UserScriptHandler.ScriptFiles.Length; i++)
-                    {
-                        File.WriteAllBytes(Path.Combine(CurrentPath, UserScriptHandler.ScriptFiles[i]), 
-                            UserScriptHandler.ScriptResources[i]);
-                        Logger.Instance.Log("SetLuaScriptBugFixes(): Finished writing ScriptFile named " + 
-                            UserScriptHandler.ScriptFiles[i] + " to " + CurrentPath);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            uint Depth = ID == execID.OV ? 2U : 3U;
+            return GetRootDirectory(Filepath, Depth) + Path.DirectorySeparatorChar + "modloader";
         }
 
-        public string GetRootDirectory(string Filepath, uint Depth)
+        private string GetRootDirectory(string Filepath, uint Depth)
         {
-            Logger.Instance.Log("GetRootPathFromFile(): Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
+            Logger.Instance.Log("GetRootDirectory(): Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
 
             DirectoryInfo Info = new(Path.GetDirectoryName(Filepath));
             for (; Depth > 0; Depth--)
@@ -150,7 +121,7 @@ namespace S6Patcher.Source.Helpers
                 Info = Info.Parent;
             }
 
-            Logger.Instance.Log("GetRootPathFromFile(): Returning Path: " + Info.FullName);
+            Logger.Instance.Log("GetRootDirectory(): Returning Path: " + Info.FullName);
             return Info.FullName;
         }
     }

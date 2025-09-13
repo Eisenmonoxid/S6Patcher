@@ -1,120 +1,119 @@
 ﻿using S6Patcher.Properties;
 using System;
-using System.Net;
-using System.Text;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Helpers
 {
     public sealed class WebHandler
     {
-        private WebHandler() {ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;}
-        ~WebHandler() {GlobalClient.Dispose();}
+        private WebHandler() {}
+        public void Dispose() {GlobalClient.Dispose();}
         public static WebHandler Instance {get;} = new();
 
-        private static readonly WebClientWithTimeout GlobalClient = new(8000) 
-            {Encoding = Encoding.UTF8, Headers = {"User-Agent: Other"}};
-        private bool Startup = true;
-        private bool EventHandlerRegistered = false;
-
-        public bool DownloadZipArchive(Forms.mainFrm BaseForm, Uri DonwloadURL, string DestinationDirectoryPath)
+        private static readonly HttpClient GlobalClient = new()
         {
+            Timeout = TimeSpan.FromMilliseconds(8000),
+            DefaultRequestHeaders = {{"User-Agent", "Other"}},
+        };
+
+        private static readonly Uri GlobalMod = new(Resources.RepoBasePath + "Gamefiles/Modfiles.zip");
+        private static readonly Uri GlobalVersion = new(Resources.VersionFileLink);
+
+        public async Task<string> GetModfileDownloadSize()
+        {
+            string DownloadSize;
             try
             {
-                GlobalClient.OpenRead(DonwloadURL);
-                Int64 Size = Convert.ToInt64(GlobalClient.ResponseHeaders["Content-Length"]);
-                string ConvertedSize = (Size / (float)1024).ToString("0.00");
-
-                Logger.Instance.Log("DownloadZipArchive(): Download size: " + ConvertedSize);
-
-                DialogResult Result = (DialogResult)BaseForm.Invoke(new Func<DialogResult>(() => 
-                    MessageBox.Show(Resources.ModDownloadMessage.Replace("%x", ConvertedSize), "Download Bugfix Mod ...", 
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question)));
-                
-                if (Result != DialogResult.Yes)
-                {
-                    return false;
-                }
-
-                GlobalClient.DownloadFile(DonwloadURL, DestinationDirectoryPath + ".zip");
-                // Blocks calling thread until the download is completed
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log("DownloadZipArchive():\n" + ex.ToString());
-                BaseForm.Invoke(new Action(() => MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)));
-                return false;
-            }
-
-            Logger.Instance.Log("DownloadZipFileCompleted(): Download completed successfully.");
-            return true;
-        }
-
-        public void CheckForUpdates(bool OnStartup = true)
-        {
-            Logger.Instance.Log("WebHandler(): CheckForUpdates() called.");
-            Startup = OnStartup;
-
-            if (!EventHandlerRegistered)
-            {
-                GlobalClient.DownloadStringCompleted += Client_DownloadStringCompleted;
-                EventHandlerRegistered = true;
-            }
-
-            try
-            {
-                GlobalClient.DownloadStringAsync(new Uri(Resources.VersionFileLink));
+                var Response = await GlobalClient.GetAsync(GlobalMod, HttpCompletionOption.ResponseHeadersRead);
+                Response.EnsureSuccessStatusCode();
+                long Size = Response.Content.Headers.ContentLength ?? 0;
+                DownloadSize = (Size / (float)1024).ToString("0.00");
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                if (!Startup)
-                {
-                    MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                return string.Empty;
             }
+
+            Logger.Instance.Log("DownloadZipArchiveAsync(): Download size: " + DownloadSize);
+            return DownloadSize;
         }
 
-        private void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        public async Task<List<MemoryStream>> DownloadScriptFilesAsync(Uri[] Paths)
         {
-            if (e.Cancelled == false && e.Error == null)
+            List<MemoryStream> Elements = [];
+            foreach (var Element in Paths)
             {
-                if (string.Compare(Application.ProductVersion, e.Result, true) != 0)
+                try
                 {
-                    string Message = "A newer version of the S6Patcher is available on GitHub!\n\nCurrent Version: " + 
-                        Application.ProductVersion + "\nNew Version: " + e.Result;
-                    Logger.Instance.Log(Message);
-                    MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    var Response = await GlobalClient.GetAsync(Element, HttpCompletionOption.ResponseHeadersRead);
+                    Response.EnsureSuccessStatusCode();
+                    using Stream Stream = await Response.Content.ReadAsStreamAsync();
+                    MemoryStream MemStream = new();
+                    await Stream.CopyToAsync(MemStream);
+                    MemStream.Position = 0;
+                    Elements.Add(MemStream);
                 }
-                else
+                catch (Exception ex)
                 {
-                    string Message = "You are using the latest version of the S6Patcher!";
-                    Logger.Instance.Log(Message);
-                    if (!Startup)
-                    {
-                        MessageBox.Show(Message, "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    Logger.Instance.Log(ex.ToString());
+                    return null;
                 }
+            }
+
+            Logger.Instance.Log("DownloadScriptFilesAsync(): Downloaded ScriptFiles successfully.");
+            return Elements;
+        }
+
+        public async Task<bool> DownloadZipArchiveAsync(string DestinationDirectoryPath)
+        {
+            try
+            {
+                var Response = await GlobalClient.GetAsync(GlobalMod, HttpCompletionOption.ResponseHeadersRead);
+                Response.EnsureSuccessStatusCode();
+                using Stream Stream = await Response.Content.ReadAsStreamAsync();
+                using FileStream FileStream = File.Create(DestinationDirectoryPath + ".zip");
+                await Stream.CopyToAsync(FileStream);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                return false;
+            }
+
+            Logger.Instance.Log("DownloadZipArchiveAsync(): Download completed successfully.");
+            return true;
+        }
+
+        public async Task<string> CheckForUpdatesAsync(bool OnStartup = true)
+        {
+            Logger.Instance.Log("CheckForUpdatesAsync() with " + OnStartup.ToString() + " called.");
+
+            string WebVersion;
+            try
+            {
+                WebVersion = await GlobalClient.GetStringAsync(GlobalVersion);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                return !OnStartup ? ex.Message : string.Empty;
+            }
+
+            string LocalVersion = Utility.GetApplicationVersion();
+            if (string.Compare(LocalVersion, WebVersion, true) != 0)
+            {
+                return "A newer version of the S6Patcher is available on GitHub!\n" +
+                    "\nCurrent Version: " + LocalVersion + "\nNew Version: " + WebVersion +
+                    "\n\n" + Resources.VersionFileLink[..Resources.VersionFileLink.IndexOf("/raw")];
             }
             else
             {
-                string Message = "Could not retrieve update information!";
-                Logger.Instance.Log(Message);
-                if (!Startup)
-                {
-                    MessageBox.Show(Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                };
+                return !OnStartup ? "You are using the latest version of the S6Patcher!" : string.Empty;
             }
-        }
-    }
-
-    public class WebClientWithTimeout(int Time = 30000) : WebClient
-    {
-        protected override WebRequest GetWebRequest(Uri URL)
-        {
-            WebRequest Request = base.GetWebRequest(URL);
-            Request.Timeout = Time;
-            return Request;
         }
     }
 }

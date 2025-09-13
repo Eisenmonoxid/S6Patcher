@@ -1,21 +1,19 @@
-﻿using S6Patcher.Source.Patcher;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace S6Patcher.Source.Helpers
 {
-    public static class Backup
+    internal static class Backup
     {
-        public static bool CreateBackup(string Filepath)
+        public static event Action<string> ShowMessage;
+        public static bool Create(string Path)
         {
-            string BackupPath = GetBackupPath(Filepath);
-            if (File.Exists(BackupPath) == false)
+            string Backup = GetBackupPath(Path, false);
+            if (File.Exists(Backup) == false)
             {
                 try
                 {
-                    File.Copy(Filepath, BackupPath, false);
+                    File.Copy(Path, Backup, false);
                 }
                 catch (Exception ex)
                 {
@@ -24,114 +22,43 @@ namespace S6Patcher.Source.Helpers
                 }
             }
 
-            Logger.Instance.Log("CreateBackup(): Backup creation successful! Path: " + BackupPath);
+            Logger.Instance.Log("Backup creation successful! Path: " + Backup);
             return true;
         }
 
-        private static void DeleteUserConfiguration(string[] Options)
+        public static void Restore(string Path)
         {
-            UserScriptHandler.GetUserScriptDirectories().ForEach(Element =>
+            string Backup = GetBackupPath(Path, true);
+            if (File.Exists(Backup) == false)
             {
-                DeleteSectionFromOptions(Path.Combine(Element, "Config"), Options);
-                string ScriptPath = Path.Combine(Element, "Script");
-                if (Directory.Exists(ScriptPath) == true)
+                Logger.Instance.Log("OLD File " + Backup + " NOT found! Retry ...");
+
+                Backup = GetBackupPath(Path, false);
+                if (File.Exists(Backup) == false)
                 {
-                    foreach (string Entry in UserScriptHandler.ScriptFiles)
-                    {
-                        try
-                        {
-                            string CurrentFile = Path.Combine(ScriptPath, Entry);
-                            File.Delete(CurrentFile);
-                            Logger.Instance.Log("DeleteUserConfiguration(): File sucessfully deleted: " + CurrentFile);
-                        }
-                        catch (Exception ex) // Errors here do not matter
-                        {
-                            Logger.Instance.Log("DeleteUserConfiguration(): " + ex.Message);
-                            continue;
-                        }
-                    }
-                }
-            });
-        }
-
-        private static void DeleteSectionFromOptions(string CurrentPath, string[] Options)
-        {
-            CurrentPath = Path.Combine(CurrentPath, "Options.ini");
-            if (File.Exists(CurrentPath) == false)
-            {
-                Logger.Instance.Log("DeleteSectionFromOptions(): File " + CurrentPath + " NOT found! Aborting ...");
-                return;
-            }
-
-            List<string> Lines;
-            try
-            {
-                Lines = [.. File.ReadAllLines(CurrentPath)];
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                return;
-            }
-
-            foreach (string Element in Options)
-            {
-                Lines.RemoveAll(Line => Line.Contains(Element));
-            }
-
-            try
-            {
-                File.WriteAllLines(CurrentPath, Lines);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-                return;
-            }
-
-            Logger.Instance.Log("DeleteSectionFromOptions(): File " + CurrentPath + " sucessfully updated!");
-        }
-
-        public static bool RestoreBackup(FileStream Stream, string[] Options)
-        {
-            DeleteUserConfiguration(Options); // Delete Userscript & Config Section from Documents folder
-
-            string FilePath = Stream.Name;
-            string FinalPath = GetOldBackupPath(FilePath);
-
-            if (File.Exists(FinalPath) == false)
-            {
-                Logger.Instance.Log("RestoreBackup(): OLD File " + FinalPath + " NOT found! Retry ...");
-
-                FinalPath = GetBackupPath(FilePath);
-                if (File.Exists(FinalPath) == false)
-                {
-                    Logger.Instance.Log("RestoreBackup(): NEW File " + FinalPath + " NOT found! Aborting ...");
-                    return false;
+                    Logger.Instance.Log("NEW File " + Backup + " NOT found! Aborting ...");
+                    ShowMessage.Invoke("Could not restore Backup. No file found!");
+                    return;
                 }
             }
 
-            IOFileHandler.Instance.CloseStream(Stream);
-
             try
             {
-                File.Replace(FinalPath, FilePath, null);
+                File.Replace(Backup, Path, null);
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
+                ShowMessage.Invoke(ex.Message);
+                return;
             }
 
-            Logger.Instance.Log("RestoreBackup(): File " + FinalPath + " successfully restored!");
-            return true;
+            Logger.Instance.Log("File " + Path + " successfully restored!");
+            ShowMessage.Invoke("Backup successfully restored!");
         }
 
-        private static string GetBackupPath(string Filepath) => 
-            Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + ".backup");
-
-        private static string GetOldBackupPath(string Filepath) =>
-            Path.Combine(Path.GetDirectoryName(Filepath), Path.GetFileNameWithoutExtension(Filepath) + "_BACKUP.exe");
+        private static string GetBackupPath(string Filepath, bool Old) =>
+            Path.Combine(Path.GetDirectoryName(Filepath), 
+                Path.GetFileNameWithoutExtension(Filepath) + ((Old == true) ? "_BACKUP.exe" : ".backup"));
     }
 }

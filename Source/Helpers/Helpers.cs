@@ -1,12 +1,18 @@
-﻿namespace S6Patcher.Source.Helpers
+﻿using System.Reflection;
+
+namespace S6Patcher.Source.Helpers
 {
     public enum execID
     {
         NONE = 0,
         OV = 1,
-        OV_OFFSET = 2,
-        HE_UBISOFT = 3,
-        HE_STEAM = 4,
-        ED = 5
+        HE_UBISOFT = 2,
+        HE_STEAM = 3,
+        ED = 4
     };
+
+    public static class Utility
+    {
+        public static string GetApplicationVersion() => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+    }
 }

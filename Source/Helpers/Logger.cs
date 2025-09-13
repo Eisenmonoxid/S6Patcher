@@ -1,58 +1,49 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
+using System.Threading;
 
 namespace S6Patcher.Source.Helpers
 {
     public sealed class Logger
     {
-        private static readonly string GlobalFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), 
-            "S6Patcher.log");
-
+        private static readonly string GlobalFile = Path.Combine(AppContext.BaseDirectory, "S6Patcher.log");
         private static StreamWriter Writer = null;
-        private static readonly object Lock = new();
-
-        private Logger() {}
+        private static readonly Lock Lock = new();
         public static Logger Instance {get;} = new();
 
-        ~Logger()
+        private Logger() 
         {
-            IOFileHandler.Instance.CloseStream(Writer.BaseStream);
-            Writer = null;
+            try
+            {
+                Writer = File.CreateText(GlobalFile);
+            }
+            catch
+            {
+                Writer = null;
+            }
         }
 
-        private void EnsureLogWriter()
+        public void Dispose()
+        {
+            Log("Logger: Shutting down.");
+            Writer?.Flush();
+            Writer?.Dispose();
+        }
+
+        public void Log(string Message)
         {
             lock (Lock)
             {
                 try
                 {
-                    Writer = File.CreateText(GlobalFile);
+                    Writer?.WriteLine(DateTime.Now.ToString() + ": " + Message);
+                    Writer?.Flush();
                 }
                 catch
                 {
-                    Writer = null;
+                    return;
                 }
             }
-        }
-
-        public void Log(string Message)
-        {
-            if (Writer == null)
-            {
-                EnsureLogWriter();
-                if (Writer == null) {return;};
-            }
-
-            try
-            {
-                lock (Lock)
-                {
-                    Writer.WriteLine(DateTime.Now.ToString() + ": " + Message);
-                    Writer.Flush();
-                }
-            }
-            catch {};
         }
     }
 }

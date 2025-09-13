@@ -22,7 +22,7 @@ namespace S6Patcher.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace S6Patcher.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("S6Patcher.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace S6Patcher.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,18 +61,9 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://discord.com/invite/7SGkQtAAET.
-        /// </summary>
-        internal static string DiscordMainLink {
-            get {
-                return ResourceManager.GetString("DiscordMainLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] EMXBinData {
+        public static byte[] EMXBinData {
             get {
                 object obj = ResourceManager.GetObject("EMXBinData", resourceCulture);
                 return ((byte[])(obj));
@@ -80,118 +71,9 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not create backup file! Aborting ....
-        /// </summary>
-        internal static string ErrorBackup {
-            get {
-                return ResourceManager.GetString("ErrorBackup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not restore backup! Aborting ....
-        /// </summary>
-        internal static string ErrorBackupFail {
-            get {
-                return ResourceManager.GetString("ErrorBackupFail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Patching is currently in progress.
-        ///Do you want to exit?.
-        /// </summary>
-        internal static string ErrorClosingWhenPatching {
-            get {
-                return ResourceManager.GetString("ErrorClosingWhenPatching", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not open File! Aborting ....
-        /// </summary>
-        internal static string ErrorCouldNotOpenStream {
-            get {
-                return ResourceManager.GetString("ErrorCouldNotOpenStream", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid executable has been chosen! Aborting ....
-        /// </summary>
-        internal static string ErrorInvalidExecutable {
-            get {
-                return ResourceManager.GetString("ErrorInvalidExecutable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Steam executable invalid, has to be unpacked with the tool &quot;Steamless&quot; before using the S6Patcher!.
-        /// </summary>
-        internal static string ErrorInvalidExecutableSteam {
-            get {
-                return ResourceManager.GetString("ErrorInvalidExecutableSteam", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Lua-Fixes: File could not be written!.
-        /// </summary>
-        internal static string ErrorLuaScriptFixes {
-            get {
-                return ResourceManager.GetString("ErrorLuaScriptFixes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No file chosen or file does not exist!.
-        /// </summary>
-        internal static string ErrorNoFile {
-            get {
-                return ResourceManager.GetString("ErrorNoFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md.
-        /// </summary>
-        internal static string FeaturesLink {
-            get {
-                return ResourceManager.GetString("FeaturesLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Backup has been successfully restored!.
-        /// </summary>
-        internal static string FinishedBackup {
-            get {
-                return ResourceManager.GetString("FinishedBackup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Patching process finished successfully!.
-        /// </summary>
-        internal static string FinishedSuccess {
-            get {
-                return ResourceManager.GetString("FinishedSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher.
-        /// </summary>
-        internal static string GithubMainLink {
-            get {
-                return ResourceManager.GetString("GithubMainLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] MainMenuUserScript {
+        public static byte[] MainMenuUserScript {
             get {
                 object obj = ResourceManager.GetObject("MainMenuUserScript", resourceCulture);
                 return ((byte[])(obj));
@@ -201,7 +83,7 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] mod {
+        public static byte[] mod {
             get {
                 object obj = ResourceManager.GetObject("mod", resourceCulture);
                 return ((byte[])(obj));
@@ -209,37 +91,28 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to %x KB will be downloaded from the GitHub repository.
-        ///Continue?.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static string ModDownloadMessage {
+        public static byte[] Modfiles {
             get {
-                return ResourceManager.GetString("ModDownloadMessage", resourceCulture);
+                object obj = ResourceManager.GetObject("Modfiles", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/Gamefiles/Modfiles.zip.
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/.
         /// </summary>
-        internal static string ModLink {
+        public static string RepoBasePath {
             get {
-                return ResourceManager.GetString("ModLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please provide the path to the &quot;Options.ini&quot; configuration file that the game has created!.
-        /// </summary>
-        internal static string MonoOptionsFile {
-            get {
-                return ResourceManager.GetString("MonoOptionsFile", resourceCulture);
+                return ResourceManager.GetString("RepoBasePath", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] UserScriptGlobal {
+        public static byte[] UserScriptGlobal {
             get {
                 object obj = ResourceManager.GetObject("UserScriptGlobal", resourceCulture);
                 return ((byte[])(obj));
@@ -249,7 +122,7 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] UserScriptLocal {
+        public static byte[] UserScriptLocal {
             get {
                 object obj = ResourceManager.GetObject("UserScriptLocal", resourceCulture);
                 return ((byte[])(obj));
@@ -259,18 +132,9 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Version.txt.
         /// </summary>
-        internal static string VersionFileLink {
+        public static string VersionFileLink {
             get {
                 return ResourceManager.GetString("VersionFileLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select recommended settings or customize manually?.
-        /// </summary>
-        internal static string WelcomeMessage {
-            get {
-                return ResourceManager.GetString("WelcomeMessage", resourceCulture);
             }
         }
     }

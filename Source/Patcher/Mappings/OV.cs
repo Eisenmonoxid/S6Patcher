@@ -33,10 +33,7 @@ namespace S6Patcher.Source.Patcher.Mappings
                 Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x1B5E36, [0x08]}, // Crash fix when dismissing entertainer, push EntityID on stack
-                    {0x4FD5A9, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
-                    {0x4FD5BD, [0x00, 0x00, 0x00]}, // Make game load .s6patcher binary file in MAINMENU lua state
                     {0x00BA9F, [0xEB, 0x27]}, // Disable parental control check, start multiple instances at the same time and enable remote session game start
-                    {0x01A9E5, [0x90, 0x90]}, // Always load userscript, even when not in dev mode
                     {0x09BCE1, [0x90, 0x90]}, // Enable GUI.SendScriptCommand in Multiplayer
                     {0x09BCF3, [0x90, 0x90]}, // Theoretically, you could also use Logic.AllowSendScript(true) ;)
                 }
@@ -51,6 +48,13 @@ namespace S6Patcher.Source.Patcher.Mappings
                 }
             },
         ];
+
+        public override Dictionary<long, byte[]> GetScriptFileMapping() => new()
+        {
+            {0x4FD5A9, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
+            {0x4FD5BD, [0x00, 0x00, 0x00]}, // Make game load .s6patcher binary file in MAINMENU lua state
+            {0x01A9E5, [0x90, 0x90]}, // Always load userscript, even when not in dev mode
+        };
 
         public override Dictionary<long, byte[]> GetEasyDebugMapping() => new()
         {

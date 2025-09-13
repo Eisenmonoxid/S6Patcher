@@ -24,9 +24,6 @@ namespace S6Patcher.Source.Patcher.Mappings
                 Mapping = new Dictionary<long, byte[]>()
                 {
                     {0x33C533, [0x08]}, // Crash fix when dismissing entertainer, push EntityID on stack
-                    {0xC3E661, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
-                    {0xC3E675, [0x00, 0x00, 0x00]}, // Make game load .s6patcher binary file in MAINMENU lua state
-                    {0x1C577C, [0x90, 0x90]}, // Always load userscript, even when not in dev mode
                     {0x36B743, [0x90, 0x90]}, // Enable GUI.SendScriptCommand in Multiplayer
                     {0x36B74D, [0x90, 0x90]}, // Theoretically, you could also use Logic.AllowSendScript(true) ;)
                 }
@@ -41,6 +38,13 @@ namespace S6Patcher.Source.Patcher.Mappings
                 }
             },
         ];
+
+        public override Dictionary<long, byte[]> GetScriptFileMapping() => new()
+        {
+            {0xC3E661, Encoding.ASCII.GetBytes("EMXBinData.s6patcher")}, // Make game load .s6patcher binary file in MAINMENU lua state
+            {0xC3E675, [0x00, 0x00, 0x00]}, // Make game load .s6patcher binary file in MAINMENU lua state
+            {0x1C577C, [0x90, 0x90]}, // Always load userscript, even when not in dev mode
+        };
 
         public override Dictionary<long, byte[]> GetEasyDebugMapping() => new()
         {
@@ -99,7 +103,7 @@ namespace S6Patcher.Source.Patcher.Mappings
 
         public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time) => new()
         {
-            {0x1C5F2A, (Time == 0.0) ? [0xEB] : [0x76]}, // Switch autosave on or off
+            {0x1C5F2A, Time == 0.0 ? [0xEB] : [0x76]}, // Switch autosave on or off
             {0xEB83C0, BitConverter.GetBytes(Time * 60000)},
         };
     }

@@ -1,13 +1,17 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {
-	UseSingleStop = false,
-	UseDowngrade = false,
-	UseMilitaryRelease = false,
-	UseDayNightCycle = false,
 	DayNightCycleEnvironmentSet = nil,
 };
-S6Patcher.DisableFeatures = ((function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName()));
+
+S6Patcher.UseExtendedKnightSelection = Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0;
+S6Patcher.UseSpecialKnights = Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0;
+S6Patcher.UseSingleStop = Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0;
+S6Patcher.UseDowngrade = Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0;
+S6Patcher.UseMilitaryRelease = Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0;
+S6Patcher.UseDayNightCycle = Options.GetIntValue("S6Patcher", "DayNightCycle", 0) ~= 0;
+S6Patcher.IsUsermap = ((function(_param) return (type(_param) == "table" and _param[1] == 3) or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName()));
+S6Patcher.DisableFeatures = S6Patcher.IsUsermap and ((Options.GetIntValue("S6Patcher", "FeaturesInUsermaps", 0) ~= 0) == false);
 -- ************************************************************************************************************************************************************* --
 -- Fix the "Meldungsstau" Bug in the game																					 									 --
 -- ************************************************************************************************************************************************************* --
@@ -65,9 +69,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Enable a Day/Night Cycle																					 									 	 			 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "DayNightCycle", 0) ~= 0 and (not S6Patcher.DisableFeatures) then
-	S6Patcher.UseDayNightCycle = true;
-
+if S6Patcher.UseDayNightCycle and not S6Patcher.DisableFeatures then
 	if S6Patcher.GameCallback_Feedback_EndOfMonth == nil then
 		S6Patcher.GameCallback_Feedback_EndOfMonth = GameCallback_Feedback_EndOfMonth;
 	end
@@ -150,7 +152,7 @@ S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	local Name = Framework.GetCurrentMapName();
 	local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
 
-	if Type == 0 or Type == 3 then -- Singleplayer and Usermap
+	if Type == 0 or (Type == 3 and not S6Patcher.DisableFeatures) then
 		local Names = {Framework.GetValidKnightNames(Name, Type)};
 		if (#Names == 0) or (Base and #Names == 6) then -- No custom ValidKnightNames in info.xml
 			return true;
@@ -161,10 +163,7 @@ S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 end
 
 S6Patcher.ShownFirstAbilityMessage = false;
-S6Patcher.UseSpecialKnights = false;
 S6Patcher.EnableSpecialKnights = function()
-	S6Patcher.UseSpecialKnights = true;
-
 	g_MilitaryFeedback.Knights[Entities.U_KnightSabatta] = "H_Knight_Sabatt";
 	g_HeroAbilityFeedback.Knights[Entities.U_KnightSabatta] = "Sabatta";
 
@@ -239,7 +238,7 @@ S6Patcher.EnableSpecialKnights = function()
 end
 
 if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
-	and Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0
+	and S6Patcher.UseExtendedKnightSelection
 	and (not Framework.IsNetworkGame())
 	and (not S6Patcher.GlobalScriptOverridden)
 	and (S6Patcher.SelectedKnight ~= nil) then
@@ -248,7 +247,7 @@ if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
 		table.remove(S6Patcher.DefaultKnightNames, 1);
 	end
 	
-	if Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0 then
+	if S6Patcher.UseSpecialKnights then
 		S6Patcher.EnableSpecialKnights();
 	end
 	S6Patcher.OverrideGlobalScript();
@@ -273,9 +272,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- SingleStopButtons on Buildings																														 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0 and not S6Patcher.DisableFeatures then
-	S6Patcher.UseSingleStop = true;
-	
+if S6Patcher.UseSingleStop and not S6Patcher.DisableFeatures then
 	GUI_BuildingButtons.GateAutoToggleClicked = function()
 		Sound.FXPlay2DSound("ui\\menu_click");
 		local EntityID = GUI.GetSelectedEntity();
@@ -309,9 +306,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- DowngradeButton on Buildings																															 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0 and not S6Patcher.DisableFeatures then
-	S6Patcher.UseDowngrade = true;
-	
+if S6Patcher.UseDowngrade and not S6Patcher.DisableFeatures then
 	GUI_BuildingButtons.GateOpenCloseClicked = function()
 		local PlayerID = GUI.GetPlayerID();
 		local EntityID = GUI.GetSelectedEntity();
@@ -354,9 +349,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Release soldiers																																		 		 --
 -- ************************************************************************************************************************************************************* --
-if Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0 and not S6Patcher.DisableFeatures then
-	S6Patcher.UseMilitaryRelease = true;
-
+if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 	if S6Patcher.DismountClicked == nil then
 		S6Patcher.DismountClicked = GUI_Military.DismountClicked;
 	end
@@ -421,7 +414,7 @@ end
 GameCallback_GUI_SelectionChanged = function(_Source)
 	S6Patcher.GameCallback_GUI_SelectionChanged(_Source);
 	
-	if S6Patcher.UseSingleStop or S6Patcher.UseDowngrade then -- Don't show in usermaps to not break compatibility	
+	if S6Patcher.UseSingleStop or S6Patcher.UseDowngrade then
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
 	end
@@ -470,13 +463,13 @@ if S6Patcher.SetNameAndDescription == nil then
 	S6Patcher.SetNameAndDescription = GUI_Tooltip.SetNameAndDescription;
 end
 GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
-	if not S6Patcher.DisableFeatures then -- compatibility with usermaps
-		if _OptionalTextKeyName == "DowngradeButton" then
+	if not S6Patcher.DisableFeatures then
+		if S6Patcher.UseDowngrade and _OptionalTextKeyName == "DowngradeButton" then
 			local Title = {de = "Rückbau", en = "Downgrade"};
 			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
 			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText(Title), S6Patcher.GetLocalizedText(Text));
 			return;
-		elseif XGUIEng.GetCurrentWidgetID() == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
+		elseif S6Patcher.UseMilitaryRelease and XGUIEng.GetCurrentWidgetID() == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
 			if S6Patcher.CanDisplayDismissButton() then
 				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center"); -- "Mitglied entlassen"
 				local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
@@ -529,5 +522,5 @@ S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _
 
 	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height)
 end
-S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and  _text.de) or _text.en; end;
+S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and _text.de) or _text.en; end;
 -- #EOF

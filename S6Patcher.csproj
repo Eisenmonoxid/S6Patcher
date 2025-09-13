@@ -1,0 +1,104 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <PublishTrimmed>True</PublishTrimmed>
+	<IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
+    <PackageIcon>favicon.ico</PackageIcon>
+    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyVersion>6.0.0.0</AssemblyVersion>
+    <FileVersion>6.0.0.0</FileVersion>
+    <Company>Eisenmonoxid</Company>
+    <Copyright>Eisenmonoxid</Copyright>
+    <Title>S6Patcher</Title>
+    <Version>6.0.0.0</Version>
+    <Authors>Eisenmonoxid</Authors>
+    <Product>github.com/Eisenmonoxid/S6Patcher</Product>
+    <Description>A simple application that fixes some bugs and adds new features in the various editions of "The Settlers 6 - Rise of an Empire".</Description>
+    <PackageProjectUrl>github.com/Eisenmonoxid/S6Patcher</PackageProjectUrl>
+    <RepositoryUrl>github.com/Eisenmonoxid/S6Patcher</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	<CleanBeforeBuild>True</CleanBeforeBuild>
+	<BuiltInComInteropSupport>False</BuiltInComInteropSupport>
+	<IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
+    <PublishTrimmed>True</PublishTrimmed>
+	<PublishAot>False</PublishAot>
+    <PublishSingleFile>True</PublishSingleFile>
+    <SelfContained>True</SelfContained>
+    <DebugType>none</DebugType>
+	<InvariantGlobalization>true</InvariantGlobalization>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <AvaloniaXaml Remove="LEGACY\**" />
+    <Compile Remove="LEGACY\**" />
+    <EmbeddedResource Remove="LEGACY\**" />
+    <None Remove="LEGACY\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\favicon.ico" />
+    <None Remove="Resources\Gamefiles\Modfiles.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Gamefiles\Modfiles.zip" />
+    <EmbeddedResource Include="Resources\Scripts\EMXBinData.s6patcher" />
+    <EmbeddedResource Include="Resources\Scripts\MainMenuUserScript.lua" />
+    <EmbeddedResource Include="Resources\Mod\mod.bba" />
+    <EmbeddedResource Include="Resources\Scripts\UserScriptGlobal.lua" />
+    <EmbeddedResource Include="Resources\Scripts\UserScriptLocal.lua" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.6" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.6" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.6" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.6" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.6">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Licenses\" />
+    <Folder Include="Source\Helpers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Resources\favicon.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

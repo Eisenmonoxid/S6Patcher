@@ -4,58 +4,86 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher
 {
-    public static class UserScriptHandler
+    public sealed class UserScriptHandler
     {
-        private static readonly Dictionary<string, byte[]> Scripts = new()
+        // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua are ...
+        // ... always loaded by the game when a map is started!
+        // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
+
+        private UserScriptHandler() {}
+        public static UserScriptHandler Instance {get;} = new();
+
+        private readonly Dictionary<string, byte[]> Scripts = new()
         {
             {"UserScriptLocal.lua", Resources.UserScriptLocal},
             {"EMXBinData.s6patcher", Resources.EMXBinData},
             {"UserScriptGlobal.lua", Resources.UserScriptGlobal}
         };
-        public static string[] ScriptFiles => [.. Scripts.Keys];
-        public static byte[][] ScriptResources => [.. Scripts.Values];
-        private static string MonoGlobalDocumentsPath = String.Empty;
+        private string[] ScriptFiles => [.. Scripts.Keys];
+        private byte[][] ScriptResources => [.. Scripts.Values];
+        public string GlobalDocuments {get; set;} = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        public static List<string> GetUserScriptDirectories()
-        {
-            // <Documents>/THE SETTLERS - Rise of an Empire/Script/UserScriptGlobal.lua && UserScriptLocal.lua are always loaded by the game when a map is started!
-            // EMXBinData.s6patcher is the minified and precompiled MainMenuUserScript.lua
-            string DocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            if (Program.IsMono)
-            {
-                if (MonoGlobalDocumentsPath == String.Empty)
-                {
-                    MessageBox.Show(Resources.MonoOptionsFile, "Select Options.ini file ...", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    OpenFileDialog ofd = IOFileHandler.Instance.CreateOFDialog("Configuration file|*.ini", 
-                        Environment.SpecialFolder.MyDocuments);
+        public bool DoesUserScriptDirectoryExist() => GetUserScriptDirectories().Count != 0;
 
-                    if (ofd.ShowDialog() == DialogResult.OK)
-                    {
-                        DirectoryInfo Info = new(ofd.FileName);
-                        MonoGlobalDocumentsPath = Info.Parent.Parent.Parent.FullName;
-                    }
-                    else
-                    {
-                        Logger.Instance.Log("GetUserScriptDirectories(): User did not select a file! Aborting ...");
-                        ofd.Dispose();
-                        return [];
-                    }
-                    ofd.Dispose();
-                }
+        public List<string> GetUserScriptDirectories() => !string.IsNullOrEmpty(GlobalDocuments) ? SelectUserScriptDirectories(GlobalDocuments) : [];
 
-                DocumentsPath = MonoGlobalDocumentsPath;
-            }
-
-            return SelectUserScriptDirectories(DocumentsPath);
-        }
-
-        private static List<string> SelectUserScriptDirectories(string Documents) => [.. Directory.GetDirectories(Documents)
+        private List<string> SelectUserScriptDirectories(string Documents) => [.. Directory.GetDirectories(Documents)
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})];
+
+        private async Task<List<MemoryStream>> DownloadSciptFiles()
+        {
+            int Length = ScriptFiles.Length;
+            Uri[] Scripts = new Uri[Length];
+            for (uint i = 0; i < Length; i++)
+            {
+                Scripts[i] = new Uri(Resources.RepoBasePath + "Scripts/" + ScriptFiles[i]);
+            }
+
+            return await WebHandler.Instance.DownloadScriptFilesAsync(Scripts);
+        }
+
+        public async void CreateUserScriptFiles()
+        {
+            // Try download, otherwise write local files from embedded resources as fallback
+            var Files = await DownloadSciptFiles();
+            foreach (string Element in GetUserScriptDirectories())
+            {
+                string CurrentPath = Path.Combine(Element, "Script");
+                try
+                {
+                    Directory.CreateDirectory(CurrentPath);
+                    for (int i = 0; i < ScriptFiles.Length; i++)
+                    {
+                        string FilePath = Path.Combine(CurrentPath, ScriptFiles[i]);
+                        if (Files != null)
+                        {
+                            using FileStream Stream = IOFileHandler.Instance.OpenFileStream(FilePath);
+                            await Files[i].CopyToAsync(Stream);
+                            IOFileHandler.Instance.CloseStream(Stream);
+                            Files[i].Position = 0;
+                        }
+                        else
+                        {
+                            File.WriteAllBytes(FilePath, ScriptResources[i]);
+                        }
+
+                        Logger.Instance.Log("CreateUserScriptFiles(): Finished writing ScriptFile named " +
+                            ScriptFiles[i] + " to " + CurrentPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Log(ex.ToString());
+                    continue;
+                }
+            }
+
+            Files?.ForEach(Element => Element?.Dispose());
+        }
     }
 }

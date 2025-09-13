@@ -1,7 +1,6 @@
 -- UserScriptGlobal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.DisableFeatures = (function(_param) return type(_param) == "table" and _param[1] == 3 or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName());
 -- ************************************************************************************************************************************************************* --
 -- "B_NPC_Barracks_ME" will now correctly respawn soldiers																					 					 --
 -- ************************************************************************************************************************************************************* --
@@ -61,7 +60,11 @@ end
 	local Campaign = Framework.GetCampaignName();
 	local Map = Framework.GetCampaignMap();
 	
-	if Campaign == "c00" and Map == "c00_m16_Rossotorres" then
+	if Campaign ~= "c00" then
+		return;
+	end
+	
+	if Map == "c00_m16_Rossotorres" then
 		-- Interrupt Quests running
 		local Found = FindQuestsByName("HiddenQuest_NPCMarcusMustSurvive", false);
 		if #Found > 0 then
@@ -83,11 +86,11 @@ end
 				CreateQuestToProtectKnight(Knights[i].pID);
 			end
 		end
-	elseif Campaign == "c00" and Map == "c00_m03_Gallos" then
+	elseif Map == "c00_m03_Gallos" then
 		Logic.ExecuteInLuaLocalState([[
 			GUI.SetPlayerName(8, XGUIEng.GetStringTableText("UI_ObjectNames/B_NPC_ShipsStorehouse"));
 		]]);
-	elseif Campaign == "c00" and Map == "c00_m11_Tios" then
+	elseif Map == "c00_m11_Tios" then
 		StartFlexibalPlayerVoiceAfterOneSecond = function()
 			if Logic.GetTime() >= FlexibalPlayerVoiceStart + 1 then
 				SendVoiceMessage(FlexibleSpeakerPlayerID, FlexibalPlayerVoiceText);
@@ -95,10 +98,12 @@ end
 				return true;
 			end
 		end
-	elseif Campaign == "c00" and Map == "c00_m15_Vestholm" then
+	elseif Map == "c00_m15_Vestholm" then
 		local Entity = Logic.GetEntityIDByName("ReinforcementSpawn");
 		local posX, posY = Logic.GetEntityPosition(Entity);
 		Logic.DEBUG_SetSettlerPosition(Entity, posX + 250, posY);
+	elseif Map == "c00_m13_Montecito" then
+		SetDiplomacyState(RedPrincePlayerID, HarborBayPlayerID, DiplomacyStates.Enemy);
 	end
 end)();
 -- ************************************************************************************************************************************************************* --

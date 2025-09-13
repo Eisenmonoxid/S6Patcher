@@ -87,7 +87,9 @@ namespace S6Patcher.Source.Patcher.Mappings
         public override Dictionary<long, byte[]> GetEasyDebugMapping() => throw new NotImplementedException();
         public override Dictionary<long, byte[]> GetModloaderMapping() => throw new NotImplementedException();
         public override Dictionary<long, byte[]> GetTextureResolutionMapping(uint Resolution) => throw new NotImplementedException();
-        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance) => throw new NotImplementedException();
+        public override Dictionary<long, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance) => 
+            throw new NotImplementedException();
         public override Dictionary<long, byte[]> GetAutoSaveMapping(double Time) => throw new NotImplementedException();
+        public override Dictionary<long, byte[]> GetScriptFileMapping() => throw new NotImplementedException();
     }
 }

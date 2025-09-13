@@ -117,76 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DiscordMainLink" xml:space="preserve">
-    <value>https://discord.com/invite/7SGkQtAAET</value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="EMXBinData" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Source\Resources\Scripts\EMXBinData.s6patcher;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ErrorBackup" xml:space="preserve">
-    <value>Could not create backup file! Aborting ...</value>
-  </data>
-  <data name="ErrorBackupFail" xml:space="preserve">
-    <value>Could not restore backup! Aborting ...</value>
-  </data>
-  <data name="ErrorClosingWhenPatching" xml:space="preserve">
-    <value>Patching is currently in progress.
-Do you want to exit?</value>
-  </data>
-  <data name="ErrorCouldNotOpenStream" xml:space="preserve">
-    <value>Could not open File! Aborting ...</value>
-  </data>
-  <data name="ErrorInvalidExecutable" xml:space="preserve">
-    <value>Invalid executable has been chosen! Aborting ...</value>
-  </data>
-  <data name="ErrorInvalidExecutableSteam" xml:space="preserve">
-    <value>Steam executable invalid, has to be unpacked with the tool "Steamless" before using the S6Patcher!</value>
-  </data>
-  <data name="ErrorLuaScriptFixes" xml:space="preserve">
-    <value>Lua-Fixes: File could not be written!</value>
-  </data>
-  <data name="ErrorNoFile" xml:space="preserve">
-    <value>No file chosen or file does not exist!</value>
-  </data>
-  <data name="FeaturesLink" xml:space="preserve">
-    <value>https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md</value>
-  </data>
-  <data name="FinishedBackup" xml:space="preserve">
-    <value>Backup has been successfully restored!</value>
-  </data>
-  <data name="FinishedSuccess" xml:space="preserve">
-    <value>Patching process finished successfully!</value>
-  </data>
-  <data name="GithubMainLink" xml:space="preserve">
-    <value>https://github.com/Eisenmonoxid/S6Patcher</value>
+    <value>..\Resources\Scripts\EMXBinData.s6patcher;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="MainMenuUserScript" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Source\Resources\Scripts\MainMenuUserScript.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Resources\Scripts\MainMenuUserScript.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="mod" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Source\Resources\Mod\mod.bba;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Resources\Mod\mod.bba;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="ModDownloadMessage" xml:space="preserve">
-    <value>%x KB will be downloaded from the GitHub repository.
-Continue?</value>
+  <data name="RepoBasePath" xml:space="preserve">
+    <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/</value>
   </data>
-  <data name="ModLink" xml:space="preserve">
-    <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/Gamefiles/Modfiles.zip</value>
-  </data>
-  <data name="MonoOptionsFile" xml:space="preserve">
-    <value>Please provide the path to the "Options.ini" configuration file that the game has created!</value>
+  <data name="Modfiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Gamefiles\Modfiles.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="UserScriptGlobal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Source\Resources\Scripts\UserScriptGlobal.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Resources\Scripts\UserScriptGlobal.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="UserScriptLocal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Source\Resources\Scripts\UserScriptLocal.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Resources\Scripts\UserScriptLocal.lua;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="VersionFileLink" xml:space="preserve">
     <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Version.txt</value>
-  </data>
-  <data name="WelcomeMessage" xml:space="preserve">
-    <value>Select recommended settings or customize manually?</value>
   </data>
 </root>
