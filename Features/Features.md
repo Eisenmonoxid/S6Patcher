@@ -4,51 +4,61 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 ---
 ## All Versions: Higher Zoom Level
 - The default zoom limit value of the game is `7200`. When patching, the angle of the RTS camera is maintained and other camera behaviours (Cutscene, ThroneRoom, FreeView) are not impacted. The pictures below show a comparison of default `7200` and `14000` zoom levels. It is recommended to not go higher than `20000`.
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Zoom_High_Final.jpg?raw=true" width="40%" height="40%" alt="Zoom_High"/>
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Zoom_Normal_Final.jpg?raw=true" width="40%" height="40%" alt="Zoom_Normal"/>
 
 ## All Versions: Ingame Options Menu
 - A new menu in the options menu allows to toggle some of the features of the S6Patcher ingame.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Ingame_Menu_Final.jpg?raw=true" width="35%" height="35%" alt="Windowed"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Ingame_Menu_Final.jpg?raw=true" width="60%" height="60%" alt="Windowed"/>
 
 ## All Versions: Base Game Knights in the Expansion Pack
 - All seven knights can be selected in the "Eastern Realm" expansion pack. 
 **Caution:** Some audio feedback lines regarding the "Eastern Realm" features (Tradepost, Well, Geologist) are missing and the stories of some maps might not really make sense (e.g. "Kestrals Wedding" when playing as Kestral).
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Knights_Final.jpg?raw=true" width="35%" height="35%" alt="Knights"/>
 
 ## All Versions: Special Knights (Crimson Sabatt & Red Prince)
 - The antagonistic knights "Crimson Sabatt" and the "Red Prince" can be selected in singleplayer maps in the base game and additionally in the "Eastern Realm" expansion pack.
 **Caution:** The stories of some maps might not really make sense when playing as these knights.
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/SpecialKnights_Final.jpg?raw=true" width="45%" height="45%" alt="SpecialKnights"/>
 
 ## All Versions: Single Stop, Downgrade & Military Release
 - These new buttons (originally introduced in the NEP by Netsurfer in 2009) were rewritten and are now available in campaign and singleplayer. 
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Downgrade_Final.jpg?raw=true" width="40%" height="40%" alt="Downgrade"/>
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Military_Release_Final.jpg?raw=true" width="40%" height="40%" alt="Military_Release"/>
 
 ## All Versions: Day/Night Cycle
 - A day/night cycle similar to the one in Settlers 7. This is entirely cosmetic and has no impact on the gameplay. 
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Night_Cycle_Final.jpg?raw=true" width="60%" height="60%" alt="Night"/>
 
 ## Original Release: Texture Resolution
 - The S6Patcher can restore the texture slider for entities and set a custom texture resolution for ground textures. The pictures show a comparison between unpatched and highest texture resolution. It is recommended to stay in the interval of 128 - 4096 for ground texture resolution.
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Textures_Low_Final.jpg?raw=true" width="35%" height="35%" alt="Textures_Low"/>
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Textures_High_Final.jpg?raw=true" width="35%" height="35%" alt="Textures_High"/>
 
 ## Original Release: Higher Resolutions
 - Two new resolutions are added in the ingame video options menu: 2K (2560x1440) and 4K (3840x2160).
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Resolution_Final.jpg?raw=true" width="40%" height="40%" alt="Resolution"/>
 
 ## Mapeditor: Unlimited Scaling
 - Entities in the Mapeditor can now be freely scaled in their size.
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Scaling_Final.jpg?raw=true" width="40%" height="40%" alt="Scaling"/>
 
 ## Mapeditor: All Entities & Textures available and freely placeable
 - In the "Place Entities" dialog within the map editor, all possible entities are available. They can be freely placed and selected. **Caution:** Some entities may cause a crash, so it's recommended to save the map before placing an unknown entity. Same goes for ground textures.
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Menu_Final.jpg?raw=true" width="20%" height="20%" alt="Menu"/>
 
 ## Mapeditor: Usable black border area
 - The black border area of the map can now be utilized and will no longer be deleted when saving the map. If the map area needs to be restricted, the "Map Boundary" menu option can still be used manually.
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Black_Border_Final.jpg?raw=true" width="40%" height="40%" alt="Black_Border"/>
 
 ---
@@ -100,6 +110,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
   - `D_X_VikingBoat`   
 
 - This will also fix the problem with `D_X_VikingBoat` not being rendered correctly in the game.   
+
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Reflection_Final.jpg?raw=true" width="40%" height="40%" alt="Reflection"/>
 
 - An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
