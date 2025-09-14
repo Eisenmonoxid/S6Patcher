@@ -64,6 +64,7 @@ namespace S6Patcher.Source.Patcher
                         {
                             using FileStream Stream = IOFileHandler.Instance.OpenFileStream(FilePath);
                             await Files[i].CopyToAsync(Stream);
+                            Stream.SetLength(Stream.Position);
                             IOFileHandler.Instance.CloseStream(Stream);
                             Files[i].Position = 0;
                         }
