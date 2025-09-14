@@ -101,7 +101,7 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/.
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Resources/.
         /// </summary>
         public static string RepoBasePath {
             get {

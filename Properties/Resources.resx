@@ -128,7 +128,7 @@
     <value>..\Resources\Mod\mod.bba;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="RepoBasePath" xml:space="preserve">
-    <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Source/Resources/</value>
+    <value>https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Resources/</value>
   </data>
   <data name="Modfiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Gamefiles\Modfiles.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

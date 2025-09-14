@@ -44,12 +44,6 @@
     <StripSymbols>true</StripSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <AvaloniaXaml Remove="LEGACY\**" />
-    <Compile Remove="LEGACY\**" />
-    <EmbeddedResource Remove="LEGACY\**" />
-    <None Remove="LEGACY\**" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="Resources\favicon.ico" />
     <None Remove="Resources\Gamefiles\Modfiles.zip" />
   </ItemGroup>
