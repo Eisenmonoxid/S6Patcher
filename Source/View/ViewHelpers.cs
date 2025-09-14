@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace S6Patcher.Source.View
             return Found;
         }
 
-        public IEnumerable<T> GetControlsByType<T>() where T : Control => Window.GetVisualDescendants().OfType<T>();
+        public IEnumerable<T> GetControlsByType<T>() where T : Control => Window.GetLogicalDescendants().OfType<T>();
 
         public async Task<string> GetFileFromFilePicker(string Title, string Name, FilePickerFileType Type)
         {
