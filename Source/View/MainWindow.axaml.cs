@@ -45,6 +45,9 @@ namespace S6Patcher.Source.View
                 var Panel = this.FindControl<HeaderedContentControl>("hccMain");
                 Panel.IsEnabled = true;
 
+                ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Result => Result.IsEnabled = true);
+                ViewHelpers.GetControlsByType<TextBox>().ToList().ForEach(Result => Result.IsEnabled = true);
+
                 if (Mapping.TryGetValue(ID, out string[] Value))
                 {
                     var Controls = ViewHelpers.GetControlsByType<TabItem>();
