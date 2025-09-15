@@ -210,7 +210,7 @@ namespace S6Patcher.Source.View
             if (cbUpdater.IsChecked == true && Patcher.GlobalID != execID.ED)
             {
                 Patcher.WriteScriptFilesToFolder();
-                Patcher.SetModLoader(cbModDownload.IsChecked == true);
+                Patcher.SetModLoader(true);
                 return;
             }
 
