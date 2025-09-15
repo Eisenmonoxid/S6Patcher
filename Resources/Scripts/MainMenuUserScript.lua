@@ -250,6 +250,17 @@ S6Patcher.ExtendedGameOptions.Features = {
 	{{de = "Features in Usermaps", en = "Features in Usermaps"}, false, "FeaturesInUsermaps"}, 
 };
 
+S6Patcher.ExtendedGameOptions.CanAddSpecialKnights = function()
+	local Available = Options.GetIntValue("S6Patcher", "IsModAvailable", 0) ~= 0;
+	if not Available then
+		local Text = {de = "Fehlende Spieldateien!{cr}Dieses Feature benötigt den {@color:255,0,255}installierten Bugfixmod{@color:none}.", 
+					  en = "Missing Gamefiles!{cr}This Feature requires the {@color:255,0,255}Bugfix Mod{@color:none} to be installed."};
+		OpenDialog(S6Patcher.GetLocalizedText(Text), "{center}Error");
+	end
+	
+	return Available;
+end
+
 S6Patcher.ExtendedGameOptions.InitTempStuff = function()
 	GUI_BuildingInfo = GUI_BuildingInfo or {};
 	GUI_BuildingInfo.BuildingNameUpdate = function() -- Update function
@@ -344,8 +355,14 @@ end
 S6Patcher.ExtendedGameOptions.ToggleFeature = function()
 	local WidgetID = XGUIEng.GetWidgetID(S6Patcher.ExtendedGameOptions.Root .. "/SliderWidget");
 	local Value = XGUIEng.SliderGetValueAbs(WidgetID);
-
 	local Index = XGUIEng.ListBoxGetSelectedIndex(S6Patcher.ExtendedGameOptions.Root .. "/Games") + 1; -- zero based
+	
+	if S6Patcher.ExtendedGameOptions.Features[Index][3] == "SpecialKnightsAvailable" then
+		if not S6Patcher.ExtendedGameOptions.CanAddSpecialKnights() then
+			return;
+		end
+	end
+
 	S6Patcher.ExtendedGameOptions.Features[Index][2] = not S6Patcher.ExtendedGameOptions.Features[Index][2];
 	S6Patcher.ExtendedGameOptions.UpdateFeatures(Index - 1);
 	

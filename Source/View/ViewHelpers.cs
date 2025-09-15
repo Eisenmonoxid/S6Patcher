@@ -16,7 +16,7 @@ namespace S6Patcher.Source.View
         public FilePickerFileType Configuration {get;} = new("Configuration file | *.ini") {Patterns = ["*.ini"]};
 
         public List<string> GetSelectedFeatures() => [.. GetControlsByType<CheckBox>()
-            .Where(Box => Box.IsChecked == true)
+            .Where(Box => (Box.IsChecked == true && Box.IsEnabled == true))
             .Select(Box => Box.Name).Distinct()];
 
         public async void ShowMessageBox(string Title, string Message)

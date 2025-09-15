@@ -30,7 +30,7 @@ namespace S6Patcher.Source.View
         {
             InitializeComponent();
             ViewHelpers = new ViewHelpers(this);
-            Backup.ShowMessage += Message => {ShowMessageBox("Backup", Message);};
+            Backup.ShowMessage += Message => { ShowMessageBox("Backup", Message); };
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
 
             DisableUI();
@@ -77,7 +77,7 @@ namespace S6Patcher.Source.View
                 btnBackup.IsEnabled = true;
             });
         }
-        
+
         private void DisableUI()
         {
             ViewHelpers.ViewAccessorWrapper(() =>
@@ -97,7 +97,6 @@ namespace S6Patcher.Source.View
                 btnBackup.IsEnabled = false;
                 btnChoose.IsEnabled = true;
                 txtPath.Text = "...";
-                // pbWorking.IsIndeterminate = false;
 
                 var Panel = this.FindControl<HeaderedContentControl>("hccMain");
                 Panel.IsEnabled = false;
@@ -154,10 +153,9 @@ namespace S6Patcher.Source.View
                 btnChoose.IsEnabled = Enable;
                 btnPatch.IsEnabled = Enable;
                 btnBackup.IsEnabled = Enable;
-                // pbWorking.IsIndeterminate = !Enable;
             });
         }
-        
+
         private void InitializePatcher(string Filepath)
         {
             try
@@ -268,7 +266,7 @@ namespace S6Patcher.Source.View
 
         private async void GetModfileInformation()
         {
-            string Size = await WebHandler.Instance.GetModfileDownloadSize(); 
+            string Size = await WebHandler.Instance.GetModfileDownloadSize();
             if (string.IsNullOrEmpty(Size))
             {
                 Size = "Could not retrieve Data!";
@@ -308,5 +306,13 @@ namespace S6Patcher.Source.View
         private void btnUpdate_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => CheckForUpdates(false);
         private void btnExit_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
         private void cbUpdater_Checked(object sender, Avalonia.Interactivity.RoutedEventArgs e) => tcMain.IsEnabled = cbUpdater.IsChecked == false;
+        private void cbModLoader_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            cbModDownload.IsEnabled = cbModLoader.IsChecked == true;
+            if (cbModLoader.IsChecked == false)
+            {
+                cbModDownload.IsChecked = false;
+            }
+        }
     }
 }

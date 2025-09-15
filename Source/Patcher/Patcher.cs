@@ -61,7 +61,7 @@ namespace S6Patcher.Source.Patcher
         public void PatchByControlFeatures(List<string> Features)
         {
             List<Dictionary<long, byte[]>> Results = 
-                [.. from Entry in GlobalMappings?.GetMapping()
+                [.. from Entry in GlobalMappings.GetMapping()
                     from Name in Features
                     where Name == Entry.Name
                     select Entry.Mapping];
@@ -118,6 +118,10 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("SetModLoader(): Called with " + UseBugFixMod.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             GlobalMod.CreateModLoader(UseBugFixMod);
+
+            // Assume writing Bugfix mod succeeded
+            SetEntryInOptionsFile("IsModAvailable", UseBugFixMod);
+            SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugFixMod);
         }
 
         public void SetLargeAddressAwareFlag()
@@ -160,7 +164,7 @@ namespace S6Patcher.Source.Patcher
 
             foreach (var Element in ScriptFeatures.Features)
             {
-                SetEntryInOptionsFile(Element, true);
+                SetEntryInOptionsFile(Element.Key, Element.Value);
             }
         }
 
