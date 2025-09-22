@@ -30,7 +30,7 @@ namespace S6Patcher.Source.View
         {
             InitializeComponent();
             ViewHelpers = new ViewHelpers(this);
-            Backup.ShowMessage += Message => { ShowMessageBox("Backup", Message); };
+            Backup.ShowMessage += Message => ShowMessageBox("Backup", Message);
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
 
             DisableUI();
@@ -106,13 +106,11 @@ namespace S6Patcher.Source.View
         private async void OpenFilePicker()
         {
             DisableUI();
-            Patcher?.Dispose();
-            Patcher = null;
+            ResetPatcher();
 
             string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);
             if (string.IsNullOrEmpty(Path))
             {
-                DisableUI();
                 txtPath.Text = "...";
                 return;
             }
@@ -173,9 +171,7 @@ namespace S6Patcher.Source.View
             {
                 if (Success)
                 {
-                    Patcher.Dispose(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
-                    Patcher = null;
-
+                    ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
                     DisableUI();
                     ShowMessageBox("Success", "Patching finished successfully!");
                 }
@@ -281,9 +277,7 @@ namespace S6Patcher.Source.View
 
         protected override void OnClosing(WindowClosingEventArgs e)
         {
-            Patcher?.Dispose();
-            Patcher = null;
-
+            ResetPatcher();
             Logger.Instance.Dispose();
             WebHandler.Instance.Dispose();
             base.OnClosing(e);
@@ -291,14 +285,17 @@ namespace S6Patcher.Source.View
 
         private void RestoreBackup()
         {
-            Patcher?.Dispose();
-            Patcher = null;
-
+            ResetPatcher();
             Backup.Restore(txtPath.Text);
             DisableUI();
         }
 
         private void ShowMessageBox(string Title, string Message) => ViewHelpers.ShowMessageBox(Title, Message);
+        private void ResetPatcher(bool FinishWithPEHeader = false)
+        {
+            Patcher?.Dispose(FinishWithPEHeader);
+            Patcher = null;
+        }
 
         private void btnPatch_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => MainPatchingTask();
         private void btnBackup_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => RestoreBackup();

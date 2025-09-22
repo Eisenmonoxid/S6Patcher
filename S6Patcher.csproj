@@ -6,8 +6,6 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <PublishTrimmed>True</PublishTrimmed>
-	<IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
     <PackageIcon>favicon.ico</PackageIcon>
     <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -39,9 +37,15 @@
     <PublishSingleFile>True</PublishSingleFile>
     <SelfContained>True</SelfContained>
     <DebugType>none</DebugType>
-	<InvariantGlobalization>true</InvariantGlobalization>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    <StripSymbols>true</StripSymbols>
+	<InvariantGlobalization>True</InvariantGlobalization>
+	<EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
+	<StripSymbols>True</StripSymbols>
+	<DebuggerSupport>False</DebuggerSupport>
+	<EnableUnsafeBinaryFormatterSerialization>False</EnableUnsafeBinaryFormatterSerialization>
+	<EnableUnsafeUTF7Encoding>False</EnableUnsafeUTF7Encoding>
+	<MetadataUpdaterSupport>False</MetadataUpdaterSupport>
+	<MetricsSupport>False</MetricsSupport>
+	<XmlResolverIsNetworkingEnabledByDefault>False</XmlResolverIsNetworkingEnabledByDefault>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\favicon.ico" />

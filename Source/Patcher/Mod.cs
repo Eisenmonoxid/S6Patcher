@@ -49,7 +49,7 @@ namespace S6Patcher.Source.Patcher
                 }
                 else
                 {
-                    ZipArchiveEntry Entry = Archive.GetEntry("mod.bba");
+                    ZipArchiveEntry Entry = Archive.GetEntry(ArchiveFileName);
                     Entry.ExtractToFile(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
                 }
             }
