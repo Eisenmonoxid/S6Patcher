@@ -52,6 +52,7 @@ S6Patcher.ReplaceGlobalKnight = function(_knightID, _newType)
 	Logic.SetPrimaryKnightID(PlayerID, ID);
 	Logic.DestroyEntity(_knightID);
 end
+
 (function()
 	if g_GlobalThroneRoom ~= nil then
 		return;
@@ -132,6 +133,7 @@ ActivateFireplaceforBanditPack = function(_CampID)
 
 	return false;
 end
+
 DisableFireplaceforBanditPack = function(_CampID)
 	local BanditsPlayerID = Logic.EntityGetPlayer(_CampID);
 
@@ -153,59 +155,95 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Special Knight Abilities																										 								 --
 -- ************************************************************************************************************************************************************* --
-S6Patcher.AbilityEffectsOnMap = {};
-S6Patcher.EffectCleanupJob = nil;
-S6Patcher.KnightRedPrinceAbility = function(_playerID)
+S6Patcher.SpecialKnights = S6Patcher.SpecialKnights or {}
+S6Patcher.SpecialKnights.AbilityEffectsOnMap = {};
+S6Patcher.SpecialKnights.EffectCleanupJob = nil;
+
+S6Patcher.SpecialKnights.KnightRedPrinceAbility = function(_playerID)
 	local EffectTime = 12;
 	local Area = 4500;
-	local KnightID = Logic.GetKnightID(_playerID);
-	local posX, posY, posZ = Logic.EntityGetPos(KnightID);
-	local Entries = {Logic.GetEntitiesInArea(0, posX, posY, Area, 16)};
-	
-	if Entries[1] <= 0 or Logic.GetEntityType(KnightID) ~= Entities.U_KnightRedPrince then
+	local MaxSettlers = 32;
+
+	local KnightID = Logic.GetKnightID(_playerID); --S6Patcher.SpecialKnights.GetSpecialKnightID(_playerID, Entities.U_KnightRedPrince);
+	if KnightID == 0 then
 		return;
 	end
-	
+
 	local Position = {Logic.EntityGetPos(KnightID)};
+	local Entries = S6Patcher.SpecialKnights.GetEntityTypesInArea(KnightID, EntityCategories.Worker, Area);
 	local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_HealingFX, Position[1], Position[2], 0, 1);
-	table.insert(S6Patcher.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + 5});
-	
+	table.insert(S6Patcher.SpecialKnights.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + 5});
+
 	local Counter = 0;
-	for i = 2, Entries[1] do
-		if Logic.IsEntityTypeInCategory(Logic.GetEntityType(Entries[i]), EntityCategories.Worker) == 1 and not Logic.IsIll(Entries[i]) then
+	for i = 1, #Entries do
+		if not Logic.IsIll(Entries[i]) then
 			Logic.MakeSettlerIll(Entries[i], true);
-			local Position = {Logic.EntityGetPos(Entries[i])};
-			local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_SickBuilding, Position[1], Position[2], 0, 1);
-			table.insert(S6Patcher.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + EffectTime});
+			Position = {Logic.EntityGetPos(Entries[i])};
+			
+			if i % 2 == 0 then
+				local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_SickBuilding, Position[1], Position[2], 0, 1);
+				table.insert(S6Patcher.SpecialKnights.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + EffectTime});
+			end
 			
 			Counter = Counter + 1;
-			if Counter >= 16 then
+			if Counter >= MaxSettlers then
 				break;
 			end
 		end
 	end
 	
-	if S6Patcher.EffectCleanupJob == nil then
-		S6Patcher.EffectCleanupJob = StartSimpleJobEx(S6Patcher.CleanupKnightEffects);
+	if S6Patcher.SpecialKnights.EffectCleanupJob == nil then
+		S6Patcher.SpecialKnights.EffectCleanupJob = StartSimpleJobEx(S6Patcher.SpecialKnights.CleanupKnightEffects);
 	end
 end
-S6Patcher.CleanupKnightEffects = function()
+
+S6Patcher.SpecialKnights.GetEntityTypesInArea = function(_entityID, _category, _area)
+	local TypesInCategory = {Logic.GetEntityTypesInCategory(_category)};
+	local Position = {Logic.EntityGetPos(_entityID)};
+	local Entries = {};
+	
+	for i = 1, #TypesInCategory do
+		local Type = TypesInCategory[i];
+		if Type ~= nil and Type ~= 0 then 
+			local CurrentSettlers = {Logic.GetEntitiesInArea(TypesInCategory[i], Position[1], Position[2], _area)}; -- Max 16
+			for j = 2, #CurrentSettlers do
+				table.insert(Entries, CurrentSettlers[j]);
+			end
+		end
+	end
+	
+	return Entries;
+end
+
+S6Patcher.SpecialKnights.GetSpecialKnightID = function(_playerID, _type)
+	local Knights = {Logic.GetKnights(_playerID)}; -- Crashes ...
+	for i = 1, #Knights do
+		if Logic.GetEntityType(Knights[i]) == _type then
+			return Knights[i];
+		end
+	end
+	
+	return 0;
+end
+
+S6Patcher.SpecialKnights.CleanupKnightEffects = function()
 	local CurrentTime = Logic.GetTime();
-	for Key, Value in pairs(S6Patcher.AbilityEffectsOnMap) do
+	for Key, Value in pairs(S6Patcher.SpecialKnights.AbilityEffectsOnMap) do
 		if Value[2] <= CurrentTime then
 			Logic.DestroyEffect(Value[1]);
-			S6Patcher.AbilityEffectsOnMap[Key] = nil;
+			S6Patcher.SpecialKnights.AbilityEffectsOnMap[Key] = nil;
 		end
 	end
 end
-if S6Patcher.GameCallback_KnightAbilityUsed == nil then
-	S6Patcher.GameCallback_KnightAbilityUsed = GameCallback_KnightAbilityUsed;
+
+if S6Patcher.SpecialKnights.GameCallback_KnightAbilityUsed == nil then
+	S6Patcher.SpecialKnights.GameCallback_KnightAbilityUsed = GameCallback_KnightAbilityUsed;
 end
 GameCallback_KnightAbilityUsed = function(_PlayerID, _KnightType)
 	if _KnightType == Entities.U_KnightRedPrince then
-		S6Patcher.KnightRedPrinceAbility(_PlayerID);
+		S6Patcher.SpecialKnights.KnightRedPrinceAbility(_PlayerID);
 	end
 
-	S6Patcher.GameCallback_KnightAbilityUsed(_PlayerID, _KnightType);
+	S6Patcher.SpecialKnights.GameCallback_KnightAbilityUsed(_PlayerID, _KnightType);
 end
 -- #EOF

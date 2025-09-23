@@ -1,37 +1,23 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
-S6Patcher = S6Patcher or {
-	DayNightCycleEnvironmentSet = nil,
-};
-
-S6Patcher.UseExtendedKnightSelection = Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0;
-S6Patcher.UseSpecialKnights = Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0;
-S6Patcher.UseSingleStop = Options.GetIntValue("S6Patcher", "UseSingleStop", 0) ~= 0;
-S6Patcher.UseDowngrade = Options.GetIntValue("S6Patcher", "UseDowngrade", 0) ~= 0;
-S6Patcher.UseMilitaryRelease = Options.GetIntValue("S6Patcher", "UseMilitaryRelease", 0) ~= 0;
-S6Patcher.UseDayNightCycle = Options.GetIntValue("S6Patcher", "DayNightCycle", 0) ~= 0;
+S6Patcher = S6Patcher or {};
+S6Patcher.Options = {"ExtendedKnightSelection", "SpecialKnightsAvailable", "UseSingleStop", "UseDowngrade", 
+	"UseMilitaryRelease", "DayNightCycle", "FeaturesInUsermaps"};
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+for i = 1, #S6Patcher.Options do S6Patcher[S6Patcher.Options[i]] = Options.GetIntValue("S6Patcher", S6Patcher.Options[i], 0) ~= 0; end
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
 S6Patcher.IsUsermap = ((function(_param) return (type(_param) == "table" and _param[1] == 3) or _param == 3 end)(Framework.GetCurrentMapTypeAndCampaignName()));
-S6Patcher.DisableFeatures = S6Patcher.IsUsermap and ((Options.GetIntValue("S6Patcher", "FeaturesInUsermaps", 0) ~= 0) == false);
--- ************************************************************************************************************************************************************* --
--- Fix the "Meldungsstau" Bug in the game																					 									 --
--- ************************************************************************************************************************************************************* --
-if (S6Patcher.g_FeedbackSpeechFix == nil) or (not Trigger.IsTriggerEnabled(S6Patcher.g_FeedbackSpeechFix)) then
-	S6Patcher.g_FeedbackSpeechFix = Trigger.RequestTrigger(Events.LOGIC_EVENT_EVERY_SECOND, "", "FeedbackSpeechEndTimeFixCustom", 1);
-	if Framework.WriteToLog ~= nil then
-		Framework.WriteToLog("S6Patcher: Meldungsstaufix is enabled!");
-	end
-end
-FeedbackSpeechEndTimeFixCustom = function()
+S6Patcher.DisableFeatures = S6Patcher.IsUsermap and not S6Patcher.FeaturesInUsermaps;
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+StartSimpleJobEx(function()
 	local Time = Framework.GetTimeMs();	
 	if (g_FeedbackSpeech ~= nil) and (g_FeedbackSpeech.LastSpeechEndTime ~= nil) and ((Time + 6000) < g_FeedbackSpeech.LastSpeechEndTime) then
 		g_FeedbackSpeech.LastSpeechEndTime = nil;
 		XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomRight/MapFrame/FeedbackSpeechText", 0);
-	
-		if Framework.WriteToLog ~= nil then
-			Framework.WriteToLog("S6Patcher: Caught Meldungsstau at " .. tostring(Time));
-		end
+		Framework.WriteToLog("S6Patcher: Caught Meldungsstau at " .. tostring(Time));
 	end
-end
+end);
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- ************************************************************************************************************************************************************* --
 -- Fix "Build Walls from Fence Button"																					 									 	 --
 -- ************************************************************************************************************************************************************* --
@@ -69,7 +55,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Enable a Day/Night Cycle																					 									 	 			 --
 -- ************************************************************************************************************************************************************* --
-if S6Patcher.UseDayNightCycle and not S6Patcher.DisableFeatures then
+if S6Patcher.DayNightCycle and not S6Patcher.DisableFeatures then
 	if S6Patcher.GameCallback_Feedback_EndOfMonth == nil then
 		S6Patcher.GameCallback_Feedback_EndOfMonth = GameCallback_Feedback_EndOfMonth;
 	end
@@ -79,7 +65,7 @@ if S6Patcher.UseDayNightCycle and not S6Patcher.DisableFeatures then
 		local Month = 3; -- May
 		local Duration = 160; -- 2:40 minutes (ingame time, not real time)
 		
-		if (_NewMonth == Month) and (S6Patcher.UseDayNightCycle) and (not Logic.IsWeatherEventActive()) then
+		if (_NewMonth == Month) and (not Logic.IsWeatherEventActive()) then
 			if S6Patcher.DayNightCycleEnvironmentSet == nil then
 				S6Patcher.DayNightCycleEnvironmentSet = Display.AddEnvironmentSettingsSequence("ME_Special_Sundawn.xml");
 			end
@@ -120,6 +106,18 @@ S6Patcher.OverrideGlobalScript = function()
 			
 			return ID;
 		end
+		
+		S6Patcher.UpdateQuestData = function(_data, _savedKnightID, _result)
+			if type(_data) == "table" then
+				for Key, Value in ipairs(_data) do
+					_data[Key] = S6Patcher.UpdateQuestData(Value, _savedKnightID, _result);
+				end
+			elseif _data == _savedKnightID then
+				return _result;
+			end
+			
+			return _data;
+		end
 
 		local Result = S6Patcher.ReplaceKnight(S6Patcher.SavedKnightID, ]] .. tostring(Knight) .. [[);
 		if Result == nil or Result == S6Patcher.SavedKnightID then
@@ -130,17 +128,22 @@ S6Patcher.OverrideGlobalScript = function()
 		for _, Quest in ipairs(Quests) do
 			if Quest.Objectives then
 				for i = 1, Quest.Objectives[0] do
-					if type(Quest.Objectives[i].Data) == "table" then
-						for j = 1, #Quest.Objectives[i].Data do
-							if Quest.Objectives[i].Data[j] == S6Patcher.SavedKnightID then
-								Quest.Objectives[i].Data[j] = Result;
-							end
-						end
-					elseif type(Quest.Objectives[i].Data) == "number" then
-						if Quest.Objectives[i].Data == S6Patcher.SavedKnightID then
-							Quest.Objectives[i].Data = Result;
-						end
-					end
+					Quest.Objectives[i].Data = S6Patcher.UpdateQuestData(Quest.Objectives[i].Data, S6Patcher.SavedKnightID, Result);
+				end
+			end
+			if Quest.Triggers then
+				for i = 1, Quest.Triggers[0] do
+					Quest.Triggers[i].Data = S6Patcher.UpdateQuestData(Quest.Triggers[i].Data, S6Patcher.SavedKnightID, Result);
+				end
+			end
+			if Quest.Rewards then
+				for i = 1, Quest.Rewards[0] do
+					Quest.Rewards[i].Data = S6Patcher.UpdateQuestData(Quest.Rewards[i].Data, S6Patcher.SavedKnightID, Result);
+				end
+			end
+			if Quest.Reprisals then
+				for i = 1, Quest.Reprisals[0] do
+					Quest.Reprisals[i].Data = S6Patcher.UpdateQuestData(Quest.Reprisals[i].Data, S6Patcher.SavedKnightID, Result);
 				end
 			end
 		end
@@ -237,17 +240,18 @@ S6Patcher.EnableSpecialKnights = function()
 	end
 end
 
-if S6Patcher.IsCurrentMapEligibleForKnightReplacement() == true
-	and S6Patcher.UseExtendedKnightSelection
-	and (not Framework.IsNetworkGame())
+if S6Patcher.ExtendedKnightSelection
+	and S6Patcher.SelectedKnight ~= nil
+	and S6Patcher.IsCurrentMapEligibleForKnightReplacement()
 	and (not S6Patcher.GlobalScriptOverridden)
-	and (S6Patcher.SelectedKnight ~= nil) then
+	and (not Framework.IsNetworkGame())
+	then
 	
 	if Framework.GetGameExtraNo() < 1 then
 		table.remove(S6Patcher.DefaultKnightNames, 1);
 	end
 	
-	if S6Patcher.UseSpecialKnights then
+	if S6Patcher.SpecialKnightsAvailable then
 		S6Patcher.EnableSpecialKnights();
 	end
 	S6Patcher.OverrideGlobalScript();
@@ -479,7 +483,7 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 		end
 	end
 	
-	if S6Patcher.UseSpecialKnights then
+	if S6Patcher.SpecialKnightsAvailable then
 		if _OptionalTextKeyName == "AbilityConvert" then
 			local EntityID = GUI.GetSelectedEntity();
 			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightSabatta) then

@@ -14,7 +14,6 @@ namespace S6Patcher.Source.Patcher
             {"ExtendedKnightSelection", true},
             {"SpecialKnightsAvailable", false},
             {"FeaturesInUsermaps", false},
-            {"IsModAvailable", false},
         };
     }
 }

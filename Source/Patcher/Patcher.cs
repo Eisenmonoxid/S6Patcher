@@ -118,9 +118,6 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("SetModLoader(): Called with " + UseBugFixMod.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             GlobalMod.CreateModLoader(UseBugFixMod);
-
-            // Assume writing Bugfix mod succeeded
-            SetEntryInOptionsFile("IsModAvailable", UseBugFixMod);
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugFixMod);
         }
 

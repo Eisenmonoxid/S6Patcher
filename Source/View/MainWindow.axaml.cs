@@ -167,7 +167,13 @@ namespace S6Patcher.Source.View
             }
 
             Patcher.ShowMessage += Message => ShowMessageBox("Error", Message);
-            Patcher.PatchingFinished += Success =>
+            Patcher.PatchingFinished += Success => FinishPatching(Success);
+            EnableUIElements(Patcher.GlobalID);
+        }
+
+        private void FinishPatching(bool Success)
+        {
+            ViewHelpers.ViewAccessorWrapper(() =>
             {
                 if (Success)
                 {
@@ -177,12 +183,10 @@ namespace S6Patcher.Source.View
                 }
                 else
                 {
-                    Dispatcher.UIThread.Post(() => ToggleUIAvailability(true));
+                    ToggleUIAvailability(true);
                     ShowMessageBox("Error", "Patching failed! Check log file for details.");
                 }
-            };
-
-            EnableUIElements(Patcher.GlobalID);
+            });
         }
 
         private async void MainPatchingTask()
