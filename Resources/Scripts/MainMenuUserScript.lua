@@ -1,8 +1,8 @@
 -- MainMenuUserScript by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
-S6Patcher = {};
+S6Patcher = S6Patcher or {};
 S6Patcher.KnightSelection = {};
-S6Patcher.IsInBETA = false;
+S6Patcher.IsInBETA = true;
 g_DisplayScriptErrors = S6Patcher.IsInBETA == true;
 -- ************************************************************************************************************************************************************* --
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
@@ -239,7 +239,7 @@ S6Patcher.ExtendedGameOptions.Root = "/InGame/Multiplayer/SelectGame/Container/L
 S6Patcher.ExtendedGameOptions.OriginalRootPosition = {0, 0};
 S6Patcher.ExtendedGameOptions.Features = {
 	{{de = "Fenstermodus", en = "Window Mode"}, false, "Windowed"}, 
-	{{de = "Menühintergrund", en = "Main Menu Background"}, false, "UseAlternateBackground"}, 
+	{{de = "Hauptmenühintergrund", en = "Main Menu Background"}, false, "UseAlternateBackground"}, 
 	{{de = "Einzelstoppbutton", en = "Single Stop Button"}, false, "UseSingleStop"}, 
 	{{de = "Rückbaubutton", en = "Downgrade Button"}, false, "UseDowngrade"}, 
 	{{de = "Soldaten Entlassen Button", en = "Military Release Button"}, false, "UseMilitaryRelease"},
@@ -250,15 +250,20 @@ S6Patcher.ExtendedGameOptions.Features = {
 	{{de = "Features in Usermaps", en = "Features in Usermaps"}, false, "FeaturesInUsermaps"}, 
 };
 
+S6Patcher.ExtendedGameOptions.ShowUsermapWarning = function()
+	local Text = {de = "Das Aktivieren dieses Features kann dafür sorgen, dass eine kleine Menge an Usermaps nicht mehr korrekt funktionieren wird.", 
+				  en = "Activating this Feature can lead to a small number of usermaps not working correctly anymore."};
+	OpenDialog(S6Patcher.GetLocalizedText(Text), S6Patcher.GetLocalizedText({de = "{center}Hinweis", en = "{center}Hint"}));
+end
+
 S6Patcher.ExtendedGameOptions.CanAddSpecialKnights = function()
-	local Available = Options.GetIntValue("S6Patcher", "IsModAvailable", 0) ~= 0;
-	if not Available then
+	if S6Patcher.IsModInstalled ~= true then
 		local Text = {de = "Fehlende Spieldateien!{cr}Dieses Feature benötigt den {@color:255,0,255}installierten Bugfixmod{@color:none}.", 
 					  en = "Missing Gamefiles!{cr}This Feature requires the {@color:255,0,255}Bugfix Mod{@color:none} to be installed."};
-		OpenDialog(S6Patcher.GetLocalizedText(Text), "{center}Error");
+		OpenDialog(S6Patcher.GetLocalizedText(Text), S6Patcher.GetLocalizedText({de = "{center}Fehler", en = "{center}Error"}));
 	end
 	
-	return Available;
+	return S6Patcher.IsModInstalled;
 end
 
 S6Patcher.ExtendedGameOptions.InitTempStuff = function()
@@ -356,10 +361,22 @@ S6Patcher.ExtendedGameOptions.ToggleFeature = function()
 	local WidgetID = XGUIEng.GetWidgetID(S6Patcher.ExtendedGameOptions.Root .. "/SliderWidget");
 	local Value = XGUIEng.SliderGetValueAbs(WidgetID);
 	local Index = XGUIEng.ListBoxGetSelectedIndex(S6Patcher.ExtendedGameOptions.Root .. "/Games") + 1; -- zero based
-	
-	if S6Patcher.ExtendedGameOptions.Features[Index][3] == "SpecialKnightsAvailable" then
-		if not S6Patcher.ExtendedGameOptions.CanAddSpecialKnights() then
-			return;
+	local Active = S6Patcher.ExtendedGameOptions.Features[Index][2];
+	local Name = S6Patcher.ExtendedGameOptions.Features[Index][3];
+
+	if not Active then
+		if Name == "SpecialKnightsAvailable" then
+			if not S6Patcher.ExtendedGameOptions.CanAddSpecialKnights() then
+				return;
+			else
+				S6Patcher.ExtendedGameOptions.Features[Index - 1][2] = true;
+			end
+		elseif Name == "FeaturesInUsermaps" then
+			S6Patcher.ExtendedGameOptions.ShowUsermapWarning();
+		end
+	else
+		if Name == "ExtendedKnightSelection" then
+			S6Patcher.ExtendedGameOptions.Features[Index + 1][2] = false;
 		end
 	end
 
