@@ -6,6 +6,7 @@ namespace S6Patcher.Source.Helpers
     internal static class Backup
     {
         public static event Action<string> ShowMessage;
+
         public static bool Create(string Path)
         {
             string Backup = GetBackupPath(Path, false);

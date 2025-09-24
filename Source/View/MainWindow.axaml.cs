@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Threading;
 using S6Patcher.Source.Helpers;
 using S6Patcher.Source.Patcher;
 using System;
@@ -15,7 +14,6 @@ namespace S6Patcher.Source.View
     public partial class MainWindow : Window
     {
         private readonly ViewHelpers ViewHelpers;
-
         private Patcher.Patcher Patcher = null;
         private readonly Dictionary<execID, string[]> Mapping = new()
         {
@@ -46,7 +44,7 @@ namespace S6Patcher.Source.View
                 Panel.IsEnabled = true;
 
                 ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Result => Result.IsEnabled = true);
-                ViewHelpers.GetControlsByType<TextBox>().ToList().ForEach(Result => Result.IsEnabled = true);
+                cbModDownload.IsEnabled = false;
 
                 if (Mapping.TryGetValue(ID, out string[] Value))
                 {
@@ -315,5 +313,12 @@ namespace S6Patcher.Source.View
                 cbModDownload.IsChecked = false;
             }
         }
+
+        private void cbAutosave_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) => 
+            txtAutosave.IsEnabled = cbAutosave.IsChecked == true;
+        private void cbZoom_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+            txtZoom.IsEnabled = cbZoom.IsChecked == true;
+        private void cbHighTextures_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+            txtResolution.IsEnabled = cbHighTextures.IsChecked == true && Patcher.GlobalID != execID.ED;
     }
 }

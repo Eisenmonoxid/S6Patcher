@@ -33,16 +33,13 @@ namespace S6Patcher.Source.Helpers
 
         public void CloseStream(Stream Stream)
         {
-            if (Stream != null)
-            {
-                Stream.Close();
-                Stream.Dispose();
+            Stream?.Close();
+            Stream?.Dispose();
 
-                if (Streams.TryGetValue(Stream, out uint Key))
-                {
-                    Streams.Remove(Stream);
-                    Logger.Instance.Log("CloseStream(): Stream with ID " + Key.ToString() + " has been closed.");
-                }
+            if (Streams.TryGetValue(Stream, out uint Key))
+            {
+                Streams.Remove(Stream);
+                Logger.Instance.Log("CloseStream(): Stream with ID " + Key.ToString() + " has been closed.");
             }
         }
 
