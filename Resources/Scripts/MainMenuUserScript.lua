@@ -1,12 +1,12 @@
 -- MainMenuUserScript by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.KnightSelection = {};
-S6Patcher.IsInBETA = true;
+S6Patcher.IsInBETA = false;
 g_DisplayScriptErrors = S6Patcher.IsInBETA == true;
 -- ************************************************************************************************************************************************************* --
--- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
+-- Extended Knight Selection and Special Knights 																												 --
 -- ************************************************************************************************************************************************************* --
+S6Patcher.KnightSelection = {};
 S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 	if S6Patcher.KnightSelection.StartMapCallback2 == nil then
 		S6Patcher.KnightSelection.StartMapCallback2 = CustomGame_StartMapCallback2;
@@ -25,6 +25,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 
 		S6Patcher.KnightSelection.StartMapCallback2();
 	end
+	
 	if S6Patcher.KnightSelection.CustomGame_StartOnLeftClick == nil then
 		S6Patcher.KnightSelection.CustomGame_StartOnLeftClick = CustomGame_StartOnLeftClick;
 	end
@@ -37,9 +38,11 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		
 		S6Patcher.KnightSelection.CustomGame_StartOnLeftClick();
 	end
+	
 	if S6Patcher.KnightSelection.RemapKnightID == nil then
 		S6Patcher.KnightSelection.RemapKnightID = RemapKnightID;
 	end
+	
 	if S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick == nil then
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick = CustomGameDialog_CloseOnLeftClick;
 	end
@@ -47,6 +50,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.SetKnightSelection(false);
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick();
 	end
+	
 	if S6Patcher.KnightSelection.OpenCustomGameDialog == nil then
 		S6Patcher.KnightSelection.OpenCustomGameDialog = OpenCustomGameDialog;
 	end
@@ -54,6 +58,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.SetKnightSelection(true);
 		S6Patcher.KnightSelection.OpenCustomGameDialog();
 	end
+	
 	if S6Patcher.CustomGame_FillHeroComboBox == nil then
 		S6Patcher.CustomGame_FillHeroComboBox = CustomGame_FillHeroComboBox;
 	end
@@ -67,26 +72,29 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 				
 				for i = 1, #CustomGame.KnightTypes do
 					XGUIEng.ListBoxPushItem(HeroComboBoxID, XGUIEng.GetStringTableText("Names/" .. CustomGame.KnightTypes[i]));
-				end
-				
+				end			
 				-- No _TryToKeepSelectedKnight ... meh, whatever
 			end
 		end
 	end
+	
 end
+
 S6Patcher.KnightSelection.SetKnightSelection = function(_showKnights)
 	local Context = S6Patcher.KnightSelection;
-	CustomGame.KnightTypes = (_showKnights) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
-	CustomGame.CurrentKnightList = (_showKnights) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
-	g_MapAndHeroPreview.KnightTypes = (_showKnights) and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
-	RemapKnightID = (_showKnights) and Context.OverrideRemapKnightID or Context.RemapKnightID;
+	CustomGame.KnightTypes = _showKnights and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	CustomGame.CurrentKnightList = _showKnights and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	g_MapAndHeroPreview.KnightTypes = _showKnights and Context.NewKnightTypes or Context.SavedOriginalKnightTypes;
+	RemapKnightID = _showKnights and Context.OverrideRemapKnightID or Context.RemapKnightID;
 end
+
 S6Patcher.KnightSelection.OverrideRemapKnightID = function(_ID)
 	local Base = (Framework.GetGameExtraNo() < 1) == true;
 	local Nr = Base and 6 or 7;
 	if _ID > Nr then return "" end;
 	return (Base and _ID) or (((_ID == 1) and 7) or (_ID - 1));
 end
+
 S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _selectedMapType)
 	if _selectedMapType == 0 or (_selectedMapType == 3 and S6Patcher.KnightSelection.EnableInUsermaps) then
 		local Base = (Framework.GetGameExtraNo() < 1) == true;
@@ -99,11 +107,12 @@ S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _se
 	
 	return false;
 end
+
 if Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedKnightID = -1;
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
 	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
-	S6Patcher.KnightSelection.EnableInUsermaps = (Options.GetIntValue("S6Patcher", "FeaturesInUsermaps", 0) ~= 0) == true;
+	S6Patcher.KnightSelection.EnableInUsermaps = Options.GetIntValue("S6Patcher", "FeaturesInUsermaps", 0) ~= 0;
 	
 	if Framework.GetGameExtraNo() < 1 then
 		table.remove(S6Patcher.KnightSelection.NewKnightTypes, 1);
@@ -136,7 +145,7 @@ if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
 Framework.GetProgramVersion = function() 
-	local Text = " - S6Patcher v6" .. ((S6Patcher.IsInBETA == true) and " - BETA" or "");
+	local Text = " - S6Patcher v6" .. (S6Patcher.IsInBETA and " - BETA" or "");
 	return S6Patcher.GetProgramVersion() .. Text;
 end
 -- ************************************************************************************************************************************************************* --
@@ -298,7 +307,8 @@ S6Patcher.ExtendedGameOptions.InitTempStuff = function()
 	XGUIEng.ShowWidget(BasePath .. "/Buttons/TestDisabled", 0);	
 	
 	local Action = "Sound.FXPlay2DSound('ui\\menu_click');S6Patcher.ExtendedGameOptions.ToggleFeature();";
-	XGUIEng.SetText(BasePath .. "/Buttons/TestLongText", "{center}Toggle Feature");
+	local Text = S6Patcher.GetLocalizedText({de = "{center}Feature Umschalten", en = "{center}Toggle Feature"});
+	XGUIEng.SetText(BasePath .. "/Buttons/TestLongText", Text);
 	XGUIEng.SetActionFunction(BasePath .. "/Buttons/TestLongText", Action);
 
 	return S6Patcher.ExtendedGameOptions.PlaceUIElementsOnDialog(BasePath);
@@ -410,8 +420,9 @@ S6Patcher.ExtendedGameOptions.AddFeature = function(_name, _checked)
 	local u1 = (posX + 1) * 44 + 8;
 	local v1 = (posY + 1) * 44 - 1;
 
-	XGUIEng.ListBoxPushItemEx(S6Patcher.ExtendedGameOptions.Root .. "/Icons", "", "Icons.png", nil, u0, v0, u1, v1)
-	XGUIEng.ListBoxPushItem(S6Patcher.ExtendedGameOptions.Root .. "/Games", _name)
+	XGUIEng.ListBoxPushItemEx(S6Patcher.ExtendedGameOptions.Root .. "/Icons", "", "Icons.png", nil, u0, v0, u1, v1);
+	XGUIEng.ListBoxPushItem(S6Patcher.ExtendedGameOptions.Root .. "/Games", _name);
 end
+
 S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and _text.de) or _text.en; end
 -- #EOF

@@ -4,6 +4,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,22 +20,19 @@ namespace S6Patcher.Source.View
             .Where(Box => (Box.IsChecked == true && Box.IsEnabled == true))
             .Select(Box => Box.Name).Distinct()];
 
-        public async void ShowMessageBox(string Title, string Message)
+        public void ShowMessageBox(string Title, string Message)
         {
             if (Design.IsDesignMode)
             {
                 return;
             }
 
-            if (Dispatcher.UIThread.CheckAccess() == false)
+            ViewAccessorWrapper(async () =>
             {
-                Dispatcher.UIThread.Post(() => ShowMessageBox(Title, Message));
-                return;
-            }
-
-            var Box = MessageBoxManager.GetMessageBoxStandard(Title, Message, ButtonEnum.Ok,
-                Icon.Warning, WindowStartupLocation.CenterOwner);
-            await Box.ShowWindowDialogAsync(Window);
+                var Box = MessageBoxManager.GetMessageBoxStandard(Title, Message, ButtonEnum.Ok,
+                    Icon.Warning, WindowStartupLocation.CenterOwner);
+                await Box.ShowWindowDialogAsync(Window);
+            });
         }
 
         public List<Control> GetControlsByNames(string[] Names)
@@ -67,7 +65,7 @@ namespace S6Patcher.Source.View
             return File.Count > 0 ? File[0].Path.LocalPath : string.Empty;
         }
 
-        public void ViewAccessorWrapper(System.Action Action)
+        public void ViewAccessorWrapper(Action Action)
         {
             if (Dispatcher.UIThread.CheckAccess() == false)
             {

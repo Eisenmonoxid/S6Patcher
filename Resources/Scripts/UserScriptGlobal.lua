@@ -155,7 +155,7 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Special Knight Abilities																										 								 --
 -- ************************************************************************************************************************************************************* --
-S6Patcher.SpecialKnights = S6Patcher.SpecialKnights or {}
+S6Patcher.SpecialKnights = {}
 S6Patcher.SpecialKnights.AbilityEffectsOnMap = {};
 S6Patcher.SpecialKnights.EffectCleanupJob = nil;
 
@@ -164,7 +164,10 @@ S6Patcher.SpecialKnights.KnightRedPrinceAbility = function(_playerID)
 	local Area = 4500;
 	local MaxSettlers = 32;
 
-	local KnightID = Logic.GetKnightID(_playerID); --S6Patcher.SpecialKnights.GetSpecialKnightID(_playerID, Entities.U_KnightRedPrince);
+	local KnightID = Logic.GetKnightID(_playerID);
+	if Logic.GetEntityType(KnightID) ~= Entities.U_KnightRedPrince then
+		KnightID = S6Patcher.SpecialKnights.GetSpecialKnightID(_playerID, Entities.U_KnightRedPrince);
+	end
 	if KnightID == 0 then
 		return;
 	end
@@ -216,10 +219,10 @@ S6Patcher.SpecialKnights.GetEntityTypesInArea = function(_entityID, _category, _
 end
 
 S6Patcher.SpecialKnights.GetSpecialKnightID = function(_playerID, _type)
-	local Knights = {Logic.GetKnights(_playerID)}; -- Crashes ...
-	for i = 1, #Knights do
-		if Logic.GetEntityType(Knights[i]) == _type then
-			return Knights[i];
+	local Knights = {Logic.GetEntitiesOfType(_type)};
+	for Key, Value in pairs(Knights) do
+		if Logic.EntityGetPlayer(Value) == _playerID then
+			return Value;
 		end
 	end
 	
