@@ -4,8 +4,11 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using S6Patcher.Source.Helpers;
+using S6Patcher.Source.Patcher;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -63,6 +66,41 @@ namespace S6Patcher.Source.View
             });
 
             return File.Count > 0 ? File[0].Path.LocalPath : string.Empty;
+        }
+
+        public async Task GetPathToOptionsFile()
+        {
+            if (UserScriptHandler.Instance.DoesUserScriptDirectoryExist())
+            {
+                return;
+            }
+
+            string Path = await GetFileFromFilePicker("Choose Options.ini file", "Options", Configuration);
+            if (!string.IsNullOrEmpty(Path))
+            {
+                try
+                {
+                    Path = new DirectoryInfo(System.IO.Path.GetDirectoryName(Path)).Parent.Parent.FullName;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Log(ex.ToString());
+                }
+
+                UserScriptHandler.Instance.GlobalDocuments = Path;
+            }
+        }
+
+        public void CheckForUpdates(bool Startup)
+        {
+            WebHandler.Instance.CheckForUpdatesAsync(Startup).ContinueWith((Task) =>
+            {
+                if (Task.Result != string.Empty)
+                {
+                    Logger.Instance.Log(Task.Result);
+                    ShowMessageBox("Updater", Task.Result);
+                }
+            });
         }
 
         public void ViewAccessorWrapper(Action Action)

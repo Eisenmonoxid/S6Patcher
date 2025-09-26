@@ -1,10 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using S6Patcher.Source.Helpers;
-using S6Patcher.Source.Patcher;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -28,13 +26,14 @@ namespace S6Patcher.Source.View
         public MainWindow()
         {
             InitializeComponent();
+
             ViewHelpers = new ViewHelpers(this);
-            Backup.ShowMessage += Message => ShowMessageBox("Backup", Message);
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
+            Backup.ShowMessage += Message => ShowMessageBox("Backup", Message);
 
             DisableUI();
             GetModfileInformation();
-            CheckForUpdates(true);
+            ViewHelpers.CheckForUpdates(true);
         }
 
         private void EnableUIElements(execID ID)
@@ -119,30 +118,6 @@ namespace S6Patcher.Source.View
             InitializePatcher(Path);
         }
 
-        private async Task GetPathToOptionsFile()
-        {
-            if (UserScriptHandler.Instance.DoesUserScriptDirectoryExist())
-            {
-                return;
-            }
-
-            string Path = await ViewHelpers.GetFileFromFilePicker("Choose .ini file", "Options", ViewHelpers.Configuration);
-            if (!string.IsNullOrEmpty(Path))
-            {
-                try
-                {
-                    Path = new DirectoryInfo(System.IO.Path.GetDirectoryName(Path)).Parent.Parent.FullName;
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    Path = string.Empty;
-                }
-            }
-
-            UserScriptHandler.Instance.GlobalDocuments = Path;
-        }
-
         private void ToggleUIAvailability(bool Enable)
         {
             ViewHelpers.ViewAccessorWrapper(() =>
@@ -151,8 +126,6 @@ namespace S6Patcher.Source.View
                 btnPatch.IsEnabled = Enable;
                 btnBackup.IsEnabled = Enable;
             });
-
-            PatchingInProgress = !Enable;
         }
 
         private void InitializePatcher(string Filepath)
@@ -176,29 +149,29 @@ namespace S6Patcher.Source.View
             ViewHelpers.ViewAccessorWrapper(() =>
             {
                 ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
-                ShowMessageBox("Finished", "Patching finished!");
                 DisableUI();
+                ShowMessageBox("Finished", "Patching finished!");
             });
         }
 
         private async void MainPatchingTask()
         {
+            PatchingInProgress = true;
+
             ToggleUIAvailability(false);
-            await GetPathToOptionsFile();
+            await ViewHelpers.GetPathToOptionsFile();
             await PatchByFeatures();
             FinishPatching();
+
+            PatchingInProgress = false;
         }
 
         private async Task PatchByFeatures()
         {
-            Task Scripts = null, Mod = null;
-
+            Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(), PatcherModLoaderWrapper(cbModDownload.IsChecked == true || cbUpdater.IsChecked == true));
             if (cbUpdater.IsChecked == true && Patcher.GlobalID != execID.ED)
             {
-                Scripts = Patcher.WriteScriptFilesToFolder();
-                Mod = Patcher.SetModLoader(true);
-
-                await Task.WhenAll(Scripts, Mod);
+                await Completed;
                 return;
             }
 
@@ -206,10 +179,6 @@ namespace S6Patcher.Source.View
             Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
             Patcher.PatchByControlFeatures(Features);
 
-            if (Patcher.GlobalID != execID.ED)
-            {
-                Scripts = Patcher.WriteScriptFilesToFolder();
-            }
             if (cbHighTextures.IsChecked == true && Patcher.GlobalID != execID.ED)
             {
                 Patcher.SetTextureResolution(txtResolution.Text);
@@ -230,31 +199,24 @@ namespace S6Patcher.Source.View
             {
                 Patcher.SetEasyDebug();
             }
-            if (cbModLoader.IsChecked == true)
-            {
-                Mod = Patcher.SetModLoader(cbModDownload.IsChecked == true);
-            }
 
-            if (Scripts != null)
+            await Completed;
+        }
+
+        private async Task PatcherModLoaderWrapper(bool Download)
+        {
+            if (cbModLoader.IsChecked == true || cbUpdater.IsChecked == true)
             {
-                await Scripts;
-            }
-            if (Mod != null)
-            {
-                await Mod;
+                await Patcher.SetModLoader(Download);
             }
         }
 
-        private void CheckForUpdates(bool Startup)
+        private async Task PatcherScriptFilesWrapper()
         {
-            WebHandler.Instance.CheckForUpdatesAsync(Startup).ContinueWith((Task) =>
+            if (Patcher.GlobalID != execID.ED)
             {
-                if (Task.Result != string.Empty)
-                {
-                    Logger.Instance.Log(Task.Result);
-                    ShowMessageBox("Updater", Task.Result);
-                }
-            });
+                await Patcher.WriteScriptFilesToFolder();
+            }
         }
 
         private async void GetModfileInformation()
@@ -282,8 +244,8 @@ namespace S6Patcher.Source.View
             }
 
             ResetPatcher();
-            Logger.Instance.Dispose();
             WebHandler.Instance.Dispose();
+            Logger.Instance.Dispose();
             base.OnClosing(e);
         }
 
@@ -304,7 +266,7 @@ namespace S6Patcher.Source.View
         private void btnPatch_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => MainPatchingTask();
         private void btnBackup_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => RestoreBackup();
         private void btnChoose_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => OpenFilePicker();
-        private void btnUpdate_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => CheckForUpdates(false);
+        private void btnUpdate_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => ViewHelpers.CheckForUpdates(false);
         private void btnExit_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
         private void cbUpdater_Checked(object sender, Avalonia.Interactivity.RoutedEventArgs e) => tcMain.IsEnabled = cbUpdater.IsChecked == false;
         private void cbModLoader_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
