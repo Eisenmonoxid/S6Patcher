@@ -27,7 +27,7 @@ namespace S6Patcher.Source.Helpers
         public void Dispose()
         {
             Log("Logger: Shutting down.");
-            Writer?.Flush();
+            Writer?.Close();
             Writer?.Dispose();
         }
 
@@ -37,7 +37,7 @@ namespace S6Patcher.Source.Helpers
             {
                 try
                 {
-                    Writer?.WriteLine(DateTime.Now.ToString() + " - " + Caller + ": " + Message);
+                    Writer?.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " - " + Caller + "(): " + Message);
                     Writer?.Flush();
                 }
                 catch

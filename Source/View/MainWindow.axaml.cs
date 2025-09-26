@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace S6Patcher.Source.View
 {
@@ -157,12 +158,14 @@ namespace S6Patcher.Source.View
         private async void MainPatchingTask()
         {
             PatchingInProgress = true;
+            Logger.Instance.Log("Patching Process Started!");
 
             ToggleUIAvailability(false);
             await ViewHelpers.GetPathToOptionsFile();
             await PatchByFeatures();
             FinishPatching();
 
+            Logger.Instance.Log("Patching Process Finished!");
             PatchingInProgress = false;
         }
 

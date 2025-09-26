@@ -99,7 +99,7 @@ namespace S6Patcher.Source.Helpers
                     continue;
                 }
 
-                Logger.Instance.Log("Updated file with Section " + Section + " and Key " + Key);
+                Logger.Instance.Log("Updated Section " + Section + " - Key " + Key);
             }
         }
 
