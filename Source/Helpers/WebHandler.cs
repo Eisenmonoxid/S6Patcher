@@ -38,7 +38,7 @@ namespace S6Patcher.Source.Helpers
                 return string.Empty;
             }
 
-            Logger.Instance.Log("DownloadZipArchiveAsync(): Download size: " + DownloadSize);
+            Logger.Instance.Log("Download size: " + DownloadSize);
             return DownloadSize;
         }
 
@@ -64,7 +64,7 @@ namespace S6Patcher.Source.Helpers
                 }
             }
 
-            Logger.Instance.Log("DownloadScriptFilesAsync(): Downloaded ScriptFiles successfully.");
+            Logger.Instance.Log("Downloaded ScriptFiles successfully.");
             return Elements;
         }
 
@@ -84,13 +84,13 @@ namespace S6Patcher.Source.Helpers
                 return false;
             }
 
-            Logger.Instance.Log("DownloadZipArchiveAsync(): Download completed successfully.");
+            Logger.Instance.Log("Downloaded ModFiles successfully.");
             return true;
         }
 
         public async Task<string> CheckForUpdatesAsync(bool OnStartup = true)
         {
-            Logger.Instance.Log("CheckForUpdatesAsync() with " + OnStartup.ToString() + " called.");
+            Logger.Instance.Log("With " + OnStartup.ToString() + " called.");
 
             string WebVersion;
             try

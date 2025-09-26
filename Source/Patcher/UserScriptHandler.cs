@@ -35,7 +35,7 @@ namespace S6Patcher.Source.Patcher
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})];
 
-        private async Task<List<MemoryStream>> DownloadSciptFiles()
+        private async Task<List<MemoryStream>> DownloadScriptFiles()
         {
             int Length = ScriptFiles.Length;
             Uri[] Scripts = new Uri[Length];
@@ -47,10 +47,10 @@ namespace S6Patcher.Source.Patcher
             return await WebHandler.Instance.DownloadScriptFilesAsync(Scripts);
         }
 
-        public async void CreateUserScriptFiles()
+        public async Task CreateUserScriptFiles()
         {
             // Try download, otherwise write local files from embedded resources as fallback
-            var Files = await DownloadSciptFiles();
+            var Files = await DownloadScriptFiles();
             foreach (string Element in GetUserScriptDirectories())
             {
                 string CurrentPath = Path.Combine(Element, "Script");
@@ -73,8 +73,7 @@ namespace S6Patcher.Source.Patcher
                             File.WriteAllBytes(FilePath, ScriptResources[i]);
                         }
 
-                        Logger.Instance.Log("CreateUserScriptFiles(): Finished writing ScriptFile named " +
-                            ScriptFiles[i] + " to " + CurrentPath);
+                        Logger.Instance.Log("Finished writing ScriptFile named " + ScriptFiles[i] + " to " + CurrentPath);
                     }
                 }
                 catch (Exception ex)

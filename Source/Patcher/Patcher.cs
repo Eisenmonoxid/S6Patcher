@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -13,9 +15,8 @@ namespace S6Patcher.Source.Patcher
         private readonly MappingBase GlobalMappings;
         private readonly Mod GlobalMod;
         public readonly execID GlobalID;
-
+        private readonly Lock WriteLock = new();
         public event Action<string> ShowMessage;
-        public event Action<bool> PatchingFinished;
 
         public Patcher(string FilePath)
         {
@@ -52,10 +53,9 @@ namespace S6Patcher.Source.Patcher
             }
 
             GlobalMod = new Mod(GlobalID, IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStream.Name));
-            GlobalMod.Finished += Success => PatchingFinished?.Invoke(Success);
-            GlobalMod.ShowErrorMessage += Message => ShowMessage?.Invoke(Message);
+            GlobalMod.ShowMessage += Message => ShowMessage.Invoke(Message);
 
-            Logger.Instance.Log("Patcher ctor(): ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
+            Logger.Instance.Log("ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
 
         public void PatchByControlFeatures(List<string> Features)
@@ -74,11 +74,13 @@ namespace S6Patcher.Source.Patcher
 
         public void SetTextureResolution(string ResolutionText)
         {
-            Logger.Instance.Log("SetTextureResolution(): Called with " + ResolutionText);
+            Logger.Instance.Log("Called with " + ResolutionText);
 
             if (uint.TryParse(ResolutionText, out uint Resolution) == false)
             {
-                ShowMessage?.Invoke("Invalid texture resolution value: " + ResolutionText);
+                string Text = "Invalid texture resolution value: " + ResolutionText;
+                ShowMessage.Invoke(Text);
+                Logger.Instance.Log(Text);
                 return;
             }
 
@@ -89,11 +91,13 @@ namespace S6Patcher.Source.Patcher
 
         public void SetAutosaveTimer(string AutosaveText)
         {
-            Logger.Instance.Log("SetAutosaveTimer(): Called with " + AutosaveText);
+            Logger.Instance.Log("Called with " + AutosaveText);
 
             if (double.TryParse(AutosaveText, out double Timer) == false)
             {
-                ShowMessage?.Invoke("Invalid autosave timer value: " + AutosaveText);
+                string Text = "Invalid autosave timer value: " + AutosaveText;
+                ShowMessage.Invoke(Text);
+                Logger.Instance.Log(Text);
                 return;
             }
 
@@ -102,28 +106,30 @@ namespace S6Patcher.Source.Patcher
 
         public void SetZoomLevel(string ZoomText)
         {
-            Logger.Instance.Log("SetZoomLevel(): Called with " + ZoomText);
+            Logger.Instance.Log("Called with " + ZoomText);
 
             if (double.TryParse(ZoomText, out double Level) == false || float.TryParse(ZoomText, out float Distance) == false)
             {
-                ShowMessage?.Invoke("Invalid zoom level value: " + ZoomText);
+                string Text = "Invalid zoom level value: " + ZoomText;
+                ShowMessage.Invoke(Text);
+                Logger.Instance.Log(Text);
                 return;
             }
 
             WriteMappingToFile(GlobalMappings.GetZoomLevelMapping(Level, Distance));
         }
 
-        public void SetModLoader(bool UseBugFixMod)
+        public async Task SetModLoader(bool UseBugFixMod)
         {
-            Logger.Instance.Log("SetModLoader(): Called with " + UseBugFixMod.ToString());
+            Logger.Instance.Log("Called with " + UseBugFixMod.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
-            GlobalMod.CreateModLoader(UseBugFixMod);
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugFixMod);
+            await GlobalMod.CreateModLoader(UseBugFixMod);
         }
 
         public void SetLargeAddressAwareFlag()
         {
-            Logger.Instance.Log("SetLargeAddressAwareFlag(): Called.");
+            Logger.Instance.Log("Called.");
 
             // Partially adapted from: https://stackoverflow.com/questions/9054469
             const int IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
@@ -134,7 +140,7 @@ namespace S6Patcher.Source.Patcher
 
             if (Reader.ReadInt32() != 0x4550)
             {
-                Logger.Instance.Log("SetLargeAddressAwareFlag(): Error - Not at expected offset!");
+                Logger.Instance.Log("Error - Not at expected offset!");
                 return;
             }
 
@@ -147,22 +153,22 @@ namespace S6Patcher.Source.Patcher
                 WriteBytes(CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
             }
 
-            Logger.Instance.Log("SetLargeAddressAwareFlag(): Finished successfully.");
+            Logger.Instance.Log("Finished successfully.");
         }
 
         public void SetEntryInOptionsFile(string Entry, bool Checked) => 
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
         public void SetEasyDebug() => WriteMappingToFile(GlobalMappings.GetEasyDebugMapping());
 
-        public void WriteScriptFilesToFolder()
+        public async Task WriteScriptFilesToFolder()
         {
             WriteMappingToFile(GlobalMappings.GetScriptFileMapping());
-            UserScriptHandler.Instance.CreateUserScriptFiles();
-
             foreach (var Element in ScriptFeatures.Features)
             {
                 SetEntryInOptionsFile(Element.Key, Element.Value);
             }
+
+            await UserScriptHandler.Instance.CreateUserScriptFiles();
         }
 
         private void WriteMappingToFile(Dictionary<long, byte[]> Mapping)
@@ -170,31 +176,36 @@ namespace S6Patcher.Source.Patcher
             foreach (var Entry in Mapping)
             {
                 WriteBytes(Entry.Key, Entry.Value);
-                Logger.Instance.Log("WriteMappingToFile(): Patching Element: 0x" + $"{Entry.Key:X}");
+                Logger.Instance.Log("Patching Element: 0x" + $"{Entry.Key:X}");
             }
         }
 
         private void WriteBytes(long Position, byte[] Bytes)
         {
-            GlobalStream.Position = Position;
-            try
+            lock (WriteLock)
             {
-                GlobalStream.Write(Bytes, 0, Bytes.Length);
-            }
-            catch (Exception ex)
-            {
-                ShowMessage?.Invoke(ex.ToString());
-                Logger.Instance.Log(ex.ToString());
+                GlobalStream.Position = Position;
+                try
+                {
+                    GlobalStream.Write(Bytes, 0, Bytes.Length);
+                }
+                catch (Exception ex)
+                {
+                    ShowMessage.Invoke(ex.ToString());
+                    Logger.Instance.Log(ex.ToString());
+                }
             }
         }
-
-        public void RaiseFinishedEvent(bool Success) => PatchingFinished.Invoke(Success);
 
         public void Dispose(bool FinishWithPEHeader = false)
         {
             string Name = GlobalStream.Name;
             long Size = GlobalStream.Length;
-            IOFileHandler.Instance.CloseStream(GlobalStream);
+
+            lock (WriteLock)
+            {
+                IOFileHandler.Instance.CloseStream(GlobalStream);
+            }
 
             if (FinishWithPEHeader)
             {

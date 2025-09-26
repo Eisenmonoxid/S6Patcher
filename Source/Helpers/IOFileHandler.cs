@@ -9,6 +9,7 @@ namespace S6Patcher.Source.Helpers
     {
         private IOFileHandler() {}
         public static IOFileHandler Instance {get;} = new();
+
         private readonly Dictionary<Stream, uint> Streams = [];
         private uint StreamID = 0;
 
@@ -27,7 +28,7 @@ namespace S6Patcher.Source.Helpers
             }
 
             Streams.Add(Stream, StreamID);
-            Logger.Instance.Log("OpenFileStream(): Returning Stream with ID " + StreamID++.ToString() + " and Path " + Stream.Name);
+            Logger.Instance.Log("Returning Stream with ID " + StreamID++.ToString() + " and Path " + Stream.Name);
             return Stream;
         }
 
@@ -39,7 +40,7 @@ namespace S6Patcher.Source.Helpers
             if (Streams.TryGetValue(Stream, out uint Key))
             {
                 Streams.Remove(Stream);
-                Logger.Instance.Log("CloseStream(): Stream with ID " + Key.ToString() + " has been closed.");
+                Logger.Instance.Log("Stream with ID " + Key.ToString() + " has been closed.");
             }
         }
 
@@ -48,12 +49,12 @@ namespace S6Patcher.Source.Helpers
             string CurrentPath = Path.GetFileNameWithoutExtension(Filepath);
             if (!CurrentPath.StartsWith("Play")) {return Filepath;};
 
-            Logger.Instance.Log("IsPlayLauncherExecutable(): Found Launcher!");
+            Logger.Instance.Log("Found Launcher!");
 
             string Version = CurrentPath.Contains("Eastern") ? "extra1" : "base";
             string NewPath = Path.Combine(Path.GetDirectoryName(Filepath), Version, "bin", "Settlers6.exe");
 
-            Logger.Instance.Log("IsPlayLauncherExecutable(): Trying to redirect Filepath to " + NewPath);
+            Logger.Instance.Log("Trying to redirect Filepath to " + NewPath);
             return File.Exists(NewPath) ? NewPath : Filepath;
         }
 
@@ -65,7 +66,7 @@ namespace S6Patcher.Source.Helpers
                 string CurrentPath = Path.Combine(Element, "Config", Name);
                 if (File.Exists(CurrentPath) == false)
                 {
-                    Logger.Instance.Log("UpdateEntryInOptionsFile(): Skipping! Did not find Options file " + CurrentPath);
+                    Logger.Instance.Log("Skipping! Did not find Options file " + CurrentPath);
                     continue;
                 }
 
@@ -98,7 +99,7 @@ namespace S6Patcher.Source.Helpers
                     continue;
                 }
 
-                Logger.Instance.Log("UpdateEntryInOptionsFile(): Updated file with Section " + Section + " and Key " + Key);
+                Logger.Instance.Log("Updated file with Section " + Section + " and Key " + Key);
             }
         }
 
@@ -110,7 +111,7 @@ namespace S6Patcher.Source.Helpers
 
         private string GetRootDirectory(string Filepath, uint Depth)
         {
-            Logger.Instance.Log("GetRootDirectory(): Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
+            Logger.Instance.Log("Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
 
             DirectoryInfo Info = new(Path.GetDirectoryName(Filepath));
             for (; Depth > 0; Depth--)
@@ -118,7 +119,7 @@ namespace S6Patcher.Source.Helpers
                 Info = Info.Parent;
             }
 
-            Logger.Instance.Log("GetRootDirectory(): Returning Path: " + Info.FullName);
+            Logger.Instance.Log("Returning Path: " + Info.FullName);
             return Info.FullName;
         }
     }

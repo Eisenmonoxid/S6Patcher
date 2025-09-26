@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace S6Patcher.Source.Helpers
@@ -30,13 +31,13 @@ namespace S6Patcher.Source.Helpers
             Writer?.Dispose();
         }
 
-        public void Log(string Message)
+        public void Log(string Message, [CallerMemberName] string Caller = "")
         {
             lock (Lock)
             {
                 try
                 {
-                    Writer?.WriteLine(DateTime.Now.ToString() + ": " + Message);
+                    Writer?.WriteLine(DateTime.Now.ToString() + " - " + Caller + ": " + Message);
                     Writer?.Flush();
                 }
                 catch

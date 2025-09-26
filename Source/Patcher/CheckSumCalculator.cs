@@ -15,7 +15,7 @@ namespace S6Patcher.Source.Patcher
 
         private uint UpdatePEHeaderFileCheckSum(string Path, long Size)
         {
-            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): Called.");
+            Logger.Instance.Log("Called.");
 
             // This will only work on Windows
             uint CheckSum = 0x0;
@@ -25,7 +25,7 @@ namespace S6Patcher.Source.Patcher
 
             CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
 
-            Logger.Instance.Log("UpdatePEHeaderFileCheckSum(): New CheckSum: 0x" + $"{CheckSum.ToString():X}");
+            Logger.Instance.Log("New CheckSum: 0x" + $"{CheckSum.ToString():X}");
             return CheckSum;
         }
 

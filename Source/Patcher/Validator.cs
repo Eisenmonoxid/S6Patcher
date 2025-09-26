@@ -36,7 +36,7 @@ namespace S6Patcher.Source.Patcher
 
         private execID ValidateExecutableID()
         {
-            Logger.Instance.Log("ValidateExecutableID(): Called with Stream: " + Stream.Name);
+            Logger.Instance.Log("Called with Stream: " + Stream.Name);
 
             int Size = Encoding.Unicode.GetByteCount(ExpectedVersion) + 1;
             byte[] Result = new byte[Size];
@@ -45,8 +45,7 @@ namespace S6Patcher.Source.Patcher
             {
                 if (Stream.Length < Element.Key)
                 {
-                    Logger.Instance.Log("ValidateExecutableID(): " + Element.Value.ToString() + 
-                        " Stream Length smaller than Mapping Index: " + Stream.Length.ToString());
+                    Logger.Instance.Log(Element.Value.ToString() + " Stream Length smaller than Mapping Index: " + Stream.Length.ToString());
                     continue;
                 }
 
@@ -54,16 +53,16 @@ namespace S6Patcher.Source.Patcher
                 Stream.ReadExactly(Result);
 
                 string Version = Encoding.Unicode.GetString(Result)[..ExpectedVersion.Length];
-                Logger.Instance.Log("ValidateExecutableID(): " + Element.Value.ToString() + " Read from File: " + Version);
+                Logger.Instance.Log(Element.Value.ToString() + " Read from File: " + Version);
 
                 if (Version == ExpectedVersion)
                 {
-                    Logger.Instance.Log("ValidateExecutableID(): Valid executable! execID: " + Element.Value.ToString());
+                    Logger.Instance.Log("Valid executable! execID: " + Element.Value.ToString());
                     return Element.Value;
                 };
             }
 
-            Logger.Instance.Log("ValidateExecutableID(): No valid executable was found!");
+            Logger.Instance.Log("No valid executable was found!");
             return execID.NONE;
         }
 

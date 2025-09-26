@@ -13,6 +13,7 @@ namespace S6Patcher.Source.View
 {
     public partial class MainWindow : Window
     {
+        private bool PatchingInProgress = false;
         private readonly ViewHelpers ViewHelpers;
         private Patcher.Patcher Patcher = null;
         private readonly Dictionary<execID, string[]> Mapping = new()
@@ -150,6 +151,8 @@ namespace S6Patcher.Source.View
                 btnPatch.IsEnabled = Enable;
                 btnBackup.IsEnabled = Enable;
             });
+
+            PatchingInProgress = !Enable;
         }
 
         private void InitializePatcher(string Filepath)
@@ -165,25 +168,16 @@ namespace S6Patcher.Source.View
             }
 
             Patcher.ShowMessage += Message => ShowMessageBox("Error", Message);
-            Patcher.PatchingFinished += Success => FinishPatching(Success);
             EnableUIElements(Patcher.GlobalID);
         }
 
-        private void FinishPatching(bool Success)
+        private void FinishPatching()
         {
             ViewHelpers.ViewAccessorWrapper(() =>
             {
-                if (Success)
-                {
-                    ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
-                    DisableUI();
-                    ShowMessageBox("Success", "Patching finished successfully!");
-                }
-                else
-                {
-                    ToggleUIAvailability(true);
-                    ShowMessageBox("Error", "Patching failed! Check log file for details.");
-                }
+                ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+                ShowMessageBox("Finished", "Patching finished!");
+                DisableUI();
             });
         }
 
@@ -191,24 +185,20 @@ namespace S6Patcher.Source.View
         {
             ToggleUIAvailability(false);
             await GetPathToOptionsFile();
-
-            try
-            {
-                PatchByFeatures();
-            }
-            catch (Exception ex)
-            {
-                ShowMessageBox("Error", ex.Message);
-                Patcher.RaiseFinishedEvent(false);
-            }
+            await PatchByFeatures();
+            FinishPatching();
         }
 
-        private void PatchByFeatures()
+        private async Task PatchByFeatures()
         {
+            Task Scripts = null, Mod = null;
+
             if (cbUpdater.IsChecked == true && Patcher.GlobalID != execID.ED)
             {
-                Patcher.WriteScriptFilesToFolder();
-                Patcher.SetModLoader(true);
+                Scripts = Patcher.WriteScriptFilesToFolder();
+                Mod = Patcher.SetModLoader(true);
+
+                await Task.WhenAll(Scripts, Mod);
                 return;
             }
 
@@ -218,7 +208,7 @@ namespace S6Patcher.Source.View
 
             if (Patcher.GlobalID != execID.ED)
             {
-                Patcher.WriteScriptFilesToFolder();
+                Scripts = Patcher.WriteScriptFilesToFolder();
             }
             if (cbHighTextures.IsChecked == true && Patcher.GlobalID != execID.ED)
             {
@@ -242,11 +232,16 @@ namespace S6Patcher.Source.View
             }
             if (cbModLoader.IsChecked == true)
             {
-                Patcher.SetModLoader(cbModDownload.IsChecked == true);
+                Mod = Patcher.SetModLoader(cbModDownload.IsChecked == true);
             }
-            else
+
+            if (Scripts != null)
             {
-                Patcher.RaiseFinishedEvent(true);
+                await Scripts;
+            }
+            if (Mod != null)
+            {
+                await Mod;
             }
         }
 
@@ -279,6 +274,13 @@ namespace S6Patcher.Source.View
 
         protected override void OnClosing(WindowClosingEventArgs e)
         {
+            if (PatchingInProgress)
+            {
+                ShowMessageBox("Patching in Progress ...", "Patching is currently in progress!");
+                e.Cancel = true;
+                return;
+            }
+
             ResetPatcher();
             Logger.Instance.Dispose();
             WebHandler.Instance.Dispose();

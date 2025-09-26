@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -14,9 +14,7 @@ namespace S6Patcher.Source.Patcher
         private readonly string ArchiveFilePathExtra1 = Path.Combine(GlobalDestinationDirectoryPath, "extra1");
         private readonly string BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         private const string ArchiveFileName = "mod.bba";
-
-        public event Action<bool> Finished;
-        public event Action<string> ShowErrorMessage;
+        public event Action<string> ShowMessage;
 
         private void ExtractHistoryEditionArchiveFiles(ZipArchive Archive)
         {
@@ -34,7 +32,7 @@ namespace S6Patcher.Source.Patcher
                 }
 
                 Entry.ExtractToFile(Path.Combine(BaseDirectoryPath, Entry.FullName), true);
-                Logger.Instance.Log("ExtractHistoryEditionArchiveFiles(): Extracted " + Path.Combine(BaseDirectoryPath, Entry.FullName));
+                Logger.Instance.Log("Extracted " + Path.Combine(BaseDirectoryPath, Entry.FullName));
             }
         }
 
@@ -56,20 +54,20 @@ namespace S6Patcher.Source.Patcher
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                ShowErrorMessage?.Invoke(ex.ToString());
+                ShowMessage.Invoke(ex.ToString());
                 return false;
             }
 
-            Logger.Instance.Log("ExtractZipArchive(): Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);
+            Logger.Instance.Log("Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);
             return true;
         }
 
-        private async void DownloadZipArchive()
+        private async Task DownloadZipArchive()
         {
             bool Result = await WebHandler.Instance.DownloadZipArchiveAsync(GlobalDestinationDirectoryPath);
             if (Result)
             {
-                Result = ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
+                ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
             else
             {
@@ -77,21 +75,18 @@ namespace S6Patcher.Source.Patcher
                 try
                 {
                     File.WriteAllBytes(GlobalDestinationDirectoryPath + ".zip", Resources.Modfiles);
-                    Logger.Instance.Log("DownloadZipArchive(): Written fallback Modfiles.zip to " + GlobalDestinationDirectoryPath + ".zip");
-                    Result = ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
+                    Logger.Instance.Log("Written fallback ModFiles to " + GlobalDestinationDirectoryPath + ".zip");
+                    ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
                 }
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    ShowErrorMessage?.Invoke(ex.ToString());
-                    Result = false;
+                    ShowMessage.Invoke(ex.ToString());
                 }
             }
-
-            Finished.Invoke(Result);
         }
 
-        public void CreateModLoader(bool DownloadModfiles)
+        public async Task CreateModLoader(bool DownloadModfiles)
         {
             try
             {
@@ -100,22 +95,13 @@ namespace S6Patcher.Source.Patcher
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                ShowErrorMessage?.Invoke(ex.ToString());
-                Finished.Invoke(false);
+                ShowMessage.Invoke(ex.ToString());
                 return;
             }
 
             if (DownloadModfiles)
             {
-                Thread Context = new(DownloadZipArchive)
-                {
-                    IsBackground = true
-                };
-                Context.Start();
-            }
-            else
-            {
-                Finished.Invoke(true);
+                await DownloadZipArchive();
             }
         }
 
@@ -126,7 +112,7 @@ namespace S6Patcher.Source.Patcher
                 Directory.CreateDirectory(BaseDirectoryPath);
                 Directory.CreateDirectory(Path.Combine(GlobalDestinationDirectoryPath, "base", "shr"));
                 Directory.CreateDirectory(Path.Combine(GlobalDestinationDirectoryPath, "extra1", "shr"));
-                Logger.Instance.Log("WriteModLoaderFiles(): Directories created.");
+                Logger.Instance.Log("Directories created.");
             }
             else
             {
@@ -135,7 +121,7 @@ namespace S6Patcher.Source.Patcher
                 // Always do this in case the download fails or user cancels
                 File.WriteAllBytes(Path.Combine(ArchiveFilePathBase, ArchiveFileName), Resources.mod);
                 File.WriteAllBytes(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
-                Logger.Instance.Log("WriteModLoaderFiles(): Written " + ArchiveFileName + " to Paths "
+                Logger.Instance.Log("Written " + ArchiveFileName + " to Paths "
                     + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
 
                 string OldModLoaderPath = Path.Combine(GlobalDestinationDirectoryPath, "bba");
