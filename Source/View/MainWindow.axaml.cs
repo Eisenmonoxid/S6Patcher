@@ -208,7 +208,7 @@ namespace S6Patcher.Source.View
 
         private async Task PatcherModLoaderWrapper(bool Download)
         {
-            if (cbModLoader.IsChecked == true || cbUpdater.IsChecked == true)
+            if (Patcher.GlobalID != execID.ED && (cbModLoader.IsChecked == true || cbUpdater.IsChecked == true))
             {
                 await Patcher.SetModLoader(Download);
             }
