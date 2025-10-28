@@ -4,9 +4,9 @@ using S6Patcher.Source.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace S6Patcher.Source.View
 {
@@ -147,12 +147,9 @@ namespace S6Patcher.Source.View
 
         private void FinishPatching()
         {
-            ViewHelpers.ViewAccessorWrapper(() =>
-            {
-                ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
-                DisableUI();
-                ShowMessageBox("Finished", "Patching finished!");
-            });
+            ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+            DisableUI();
+            ShowMessageBox("Finished", "Patching finished!");
         }
 
         private async void MainPatchingTask()

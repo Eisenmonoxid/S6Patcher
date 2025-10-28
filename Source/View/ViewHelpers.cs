@@ -20,7 +20,7 @@ namespace S6Patcher.Source.View
         public FilePickerFileType Configuration {get;} = new("Configuration file | *.ini") {Patterns = ["*.ini"]};
 
         public List<string> GetSelectedFeatures() => [.. GetControlsByType<CheckBox>()
-            .Where(Box => (Box.IsChecked == true && Box.IsEnabled == true))
+            .Where(Box => Box.IsChecked == true && Box.IsEnabled == true)
             .Select(Box => Box.Name).Distinct()];
 
         public void ShowMessageBox(string Title, string Message)
@@ -105,9 +105,9 @@ namespace S6Patcher.Source.View
 
         public void ViewAccessorWrapper(Action Action)
         {
-            if (Dispatcher.UIThread.CheckAccess() == false)
+            if (!Dispatcher.UIThread.CheckAccess())
             {
-                Dispatcher.UIThread.Post(Action);
+                Dispatcher.UIThread.InvokeAsync(Action);
                 return;
             }
 

@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace S6Patcher
+namespace S6Patcher.Source
 {
     public partial class App : Application
     {
@@ -15,7 +15,7 @@ namespace S6Patcher
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new Source.View.MainWindow();
+                desktop.MainWindow = new View.MainWindow();
             }
 
             base.OnFrameworkInitializationCompleted();
