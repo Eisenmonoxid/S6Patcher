@@ -11,6 +11,7 @@ namespace S6Patcher.Source.Patcher
 {
     internal partial class Patcher
     {
+        private readonly BinaryParser GlobalParser;
         private readonly FileStream GlobalStream;
         private readonly MappingBase GlobalMappings;
         private readonly Mod GlobalMod;
@@ -18,7 +19,7 @@ namespace S6Patcher.Source.Patcher
         private readonly Lock WriteLock = new();
         public event Action<string> ShowMessage;
 
-        public Patcher(string FilePath)
+        public Patcher(string FilePath, Stream DefinitionStream)
         {
             if (FilePath == null)
             {
@@ -45,7 +46,17 @@ namespace S6Patcher.Source.Patcher
                 throw;
             }
 
-            GlobalMappings = MappingBase.GetMappingsByID(GlobalID);
+            try
+            {
+                GlobalParser = new BinaryParser(DefinitionStream);
+            }
+            catch (Exception)
+            {
+                IOFileHandler.Instance.CloseStream(GlobalStream);
+                throw;
+            }
+
+            GlobalMappings = MappingBase.GetMappingsByID(GlobalID, GlobalParser);
             if (GlobalMappings == null)
             {
                 IOFileHandler.Instance.CloseStream(GlobalStream);
@@ -58,19 +69,7 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
 
-        public void PatchByControlFeatures(List<string> Features)
-        {
-            List<Dictionary<long, byte[]>> Results = 
-                [.. from Entry in GlobalMappings.GetMapping()
-                    from Name in Features
-                    where Name == Entry.Name
-                    select Entry.Mapping];
-
-            foreach (var Element in Results)
-            {
-                WriteMappingToFile(Element);
-            }
-        }
+        public void PatchByControlFeatures(List<string> Features) => WriteMappingToFile(GlobalMappings.GetMapping(Features));
 
         public void SetTextureResolution(string ResolutionText)
         {
@@ -171,7 +170,7 @@ namespace S6Patcher.Source.Patcher
             await UserScriptHandler.Instance.CreateUserScriptFiles();
         }
 
-        private void WriteMappingToFile(Dictionary<long, byte[]> Mapping)
+        private void WriteMappingToFile(Dictionary<UInt32, byte[]> Mapping)
         {
             foreach (var Entry in Mapping)
             {

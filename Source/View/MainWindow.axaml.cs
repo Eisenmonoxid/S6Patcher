@@ -3,8 +3,9 @@ using Avalonia.Controls.Primitives;
 using S6Patcher.Source.Helpers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -121,19 +122,18 @@ namespace S6Patcher.Source.View
 
         private void ToggleUIAvailability(bool Enable)
         {
-            ViewHelpers.ViewAccessorWrapper(() =>
-            {
-                btnChoose.IsEnabled = Enable;
-                btnPatch.IsEnabled = Enable;
-                btnBackup.IsEnabled = Enable;
-            });
+            btnChoose.IsEnabled = Enable;
+            btnPatch.IsEnabled = Enable;
+            btnBackup.IsEnabled = Enable;
         }
+
+        private static Stream GetEmbeddedResourceDefinition() => Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Definitions.Definitions.bin");
 
         private void InitializePatcher(string Filepath)
         {
             try
             {
-                Patcher = new Patcher.Patcher(Filepath);
+                Patcher = new Patcher.Patcher(Filepath, GetEmbeddedResourceDefinition());
             }
             catch (Exception ex)
             {

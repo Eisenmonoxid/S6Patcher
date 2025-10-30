@@ -49,10 +49,12 @@
 	<XmlResolverIsNetworkingEnabledByDefault>False</XmlResolverIsNetworkingEnabledByDefault>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Definitions\Definitions.bin" />
     <None Remove="Resources\favicon.ico" />
     <None Remove="Resources\Gamefiles\Modfiles.zip" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Definitions\Definitions.bin" />
     <EmbeddedResource Include="Resources\Gamefiles\Modfiles.zip" />
     <EmbeddedResource Include="Resources\Scripts\EMXBinData.s6patcher" />
     <EmbeddedResource Include="Resources\Scripts\MainMenuUserScript.lua" />

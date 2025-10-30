@@ -4,11 +4,11 @@ namespace S6Patcher.Source.Helpers
 {
     public enum execID
     {
-        NONE = 0,
-        OV = 1,
+        NONE = -1,
+        OV = 0,
+        HE_STEAM = 1,
         HE_UBISOFT = 2,
-        HE_STEAM = 3,
-        ED = 4
+        ED = 3
     };
 
     public static class Utility
