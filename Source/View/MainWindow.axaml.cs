@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using S6Patcher.Source.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -183,7 +184,7 @@ namespace S6Patcher.Source.View
 
             var Features = ViewHelpers.GetSelectedFeatures();
             Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
-            Patcher.PatchByControlFeatures(Features);
+            Patcher.PatchByControlFeatures([.. Features.Select(Item => Utility.Features.TryGetValue(Item, out string Value) ? Value : Item)]);
 
             if (cbHighTextures.IsChecked == true && Patcher.GlobalID != execID.ED)
             {
