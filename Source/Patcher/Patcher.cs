@@ -1,20 +1,19 @@
 ﻿using S6Patcher.Source.Helpers;
-using S6Patcher.Source.Patcher.Mappings;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher
 {
-    internal partial class Patcher
+    internal class Patcher
     {
         private readonly BinaryParser GlobalParser;
         private readonly FileStream GlobalStream;
-        private readonly MappingBase GlobalMappings;
+        private readonly Mappings GlobalMappings;
         private readonly Mod GlobalMod;
+
         public readonly execID GlobalID;
         private readonly Lock WriteLock = new();
         public event Action<string> ShowMessage;
@@ -56,13 +55,7 @@ namespace S6Patcher.Source.Patcher
                 throw;
             }
 
-            GlobalMappings = MappingBase.GetMappingsByID(GlobalID, GlobalParser);
-            if (GlobalMappings == null)
-            {
-                IOFileHandler.Instance.CloseStream(GlobalStream);
-                throw new ArgumentException("Erroneous arguments to Patcher ctor.");
-            }
-
+            GlobalMappings = new Mappings(GlobalID, GlobalParser);
             GlobalMod = new Mod(GlobalID, IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStream.Name));
             GlobalMod.ShowMessage += Message => ShowMessage.Invoke(Message);
 
