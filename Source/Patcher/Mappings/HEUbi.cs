@@ -13,7 +13,7 @@ namespace S6Patcher.Source.Patcher.Mappings
 
         public override Dictionary<UInt32, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance)
         {
-            Dictionary<UInt32, byte[]> Mapping = Parser.ParseBinaryWrapper(ID, "ZLM");
+            Dictionary<UInt32, byte[]> Mapping = _Parser.ParseBinaryWrapper(_ID, "ZLM");
             Mapping[0xC4EC4C] = BitConverter.GetBytes(ClutterFarDistance);
             Mapping[0x270314] = BitConverter.GetBytes(ClutterFarDistance + 4800f);
 

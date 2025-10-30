@@ -7,12 +7,15 @@ namespace S6Patcher.Source.Patcher.Mappings
 {
     public abstract class MappingBase(execID ID, BinaryParser Parser)
     {
+        protected readonly execID _ID = ID;
+        protected readonly BinaryParser _Parser = Parser;
+
         public Dictionary<UInt32, byte[]> GetMapping(List<string> Features)
         {
             Dictionary<UInt32, byte[]> Mapping = [];
             foreach (string Feature in Features)
             {
-                Mapping = Mapping.Union(Parser.ParseBinaryWrapper(ID, Feature)).ToDictionary(K => K.Key, V => V.Value);
+                Mapping = Mapping.Union(_Parser.ParseBinaryWrapper(_ID, Feature)).ToDictionary(K => K.Key, V => V.Value);
             }
 
             return Mapping;
@@ -36,9 +39,9 @@ namespace S6Patcher.Source.Patcher.Mappings
             {Offsets[1], BitConverter.GetBytes(Time * 60000)},
         };
 
-        public Dictionary<UInt32, byte[]> GetScriptFileMapping() => Parser.ParseBinaryWrapper(ID, "SFM");
-        public Dictionary<UInt32, byte[]> GetEasyDebugMapping() => Parser.ParseBinaryWrapper(ID, "EDG");
-        public Dictionary<UInt32, byte[]> GetModloaderMapping() => Parser.ParseBinaryWrapper(ID, "MDL");
+        public Dictionary<UInt32, byte[]> GetScriptFileMapping() => _Parser.ParseBinaryWrapper(_ID, "SFM");
+        public Dictionary<UInt32, byte[]> GetEasyDebugMapping() => _Parser.ParseBinaryWrapper(_ID, "EDG");
+        public Dictionary<UInt32, byte[]> GetModloaderMapping() => _Parser.ParseBinaryWrapper(_ID, "MDL");
 
         public abstract Dictionary<UInt32, byte[]> GetZoomLevelMapping(double ZoomLevel, float ClutterFarDistance);
         public abstract Dictionary<UInt32, byte[]> GetTextureResolutionMapping(uint Resolution);
