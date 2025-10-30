@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -16,13 +15,14 @@ namespace S6Patcher.Source.View
         private bool PatchingInProgress = false;
         private readonly ViewHelpers ViewHelpers;
         private Patcher.Patcher Patcher = null;
+
         private readonly Dictionary<execID, string[]> Mapping = new()
         {
-            {execID.OV, ["tiGeneral", "tiMod", "tiDev"]},
-            {execID.HE_STEAM, ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
+            {execID.OV,         ["tiGeneral", "tiMod", "tiDev"]},
+            {execID.HE_STEAM,   ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
             {execID.HE_UBISOFT, ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
-            {execID.ED, ["tiGeneral", "tiEditor", "tiDev", "cbZoom", "cbLimitedEdition", "cbScriptBugFixes",
-                "cbEasyDebug", "txtResolution", "txtZoom"]}
+            {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "cbZoom", "cbLimitedEdition", "cbScriptBugFixes",
+                                 "cbEasyDebug", "txtResolution", "txtZoom"]}
         };
 
         public MainWindow()
@@ -47,6 +47,11 @@ namespace S6Patcher.Source.View
 
                 ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Result => Result.IsEnabled = true);
                 cbModDownload.IsEnabled = false;
+                
+                if (ID == execID.ED)
+                {
+                    cbUpdater.IsEnabled = false;
+                }
 
                 if (Mapping.TryGetValue(ID, out string[] Value))
                 {
@@ -127,13 +132,13 @@ namespace S6Patcher.Source.View
             btnBackup.IsEnabled = Enable;
         }
 
-        private static Stream GetEmbeddedResourceDefinition() => Assembly.GetExecutingAssembly().GetManifestResourceStream("S6Patcher.Definitions.Definitions.bin");
-
         private void InitializePatcher(string Filepath)
         {
             try
             {
-                Patcher = new Patcher.Patcher(Filepath, GetEmbeddedResourceDefinition());
+                Stream Definition = Utility.GetEmbeddedResourceDefinition("S6Patcher.Definitions.Definitions.bin") ?? 
+                    throw new Exception("Error: Could not load Definition file! Aborting ...");
+                Patcher = new Patcher.Patcher(Filepath, Definition);
             }
             catch (Exception ex)
             {
@@ -168,8 +173,9 @@ namespace S6Patcher.Source.View
 
         private async Task PatchByFeatures()
         {
-            Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(), PatcherModLoaderWrapper(cbModDownload.IsChecked == true || cbUpdater.IsChecked == true));
-            if (cbUpdater.IsChecked == true && Patcher.GlobalID != execID.ED)
+            bool Download = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
+            Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(), PatcherModLoaderWrapper(Download));
+            if (cbUpdater.IsChecked == true)
             {
                 await Completed;
                 return;

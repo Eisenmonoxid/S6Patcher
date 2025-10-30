@@ -78,7 +78,6 @@
 
   <ItemGroup>
     <Folder Include="Licenses\" />
-    <Folder Include="Source\Helpers\" />
   </ItemGroup>
 
   <ItemGroup>

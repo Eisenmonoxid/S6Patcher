@@ -36,7 +36,7 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        private bool ExtractZipArchive(string ZipPath)
+        private void ExtractZipArchive(string ZipPath)
         {
             try
             {
@@ -55,11 +55,10 @@ namespace S6Patcher.Source.Patcher
             {
                 Logger.Instance.Log(ex.ToString());
                 ShowMessage.Invoke(ex.ToString());
-                return false;
+                return;
             }
 
             Logger.Instance.Log("Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);
-            return true;
         }
 
         private async Task DownloadZipArchive()

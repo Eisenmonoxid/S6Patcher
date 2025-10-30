@@ -99,7 +99,7 @@
 			</Grid>
 			<Grid Grid.Row="2" Margin="10" Name="grdBoxes" VerticalAlignment="Top" HorizontalAlignment="Right">
 				<CheckBox IsCheckedChanged="cbUpdater_Checked" VerticalAlignment="Top" Margin="20 5" HorizontalAlignment="Left" 
-						  Name="cbUpdater">Only Update Scriptfiles and Modfiles</CheckBox>
+						  Name="cbUpdater" IsEnabled="False">Only Update Scriptfiles and Modfiles</CheckBox>
 			</Grid>
 		</Grid>		
 	</Grid>
