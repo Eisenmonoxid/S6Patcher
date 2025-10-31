@@ -7,9 +7,9 @@ namespace S6Patcher.Source.Helpers
 {
     public sealed class Logger
     {
-        private static readonly string GlobalFile = Path.Combine(AppContext.BaseDirectory, "S6Patcher.log");
-        private static StreamWriter Writer = null;
-        private static readonly Lock Lock = new();
+        private readonly string GlobalFile = Path.Combine(AppContext.BaseDirectory, "S6Patcher.log");
+        private readonly StreamWriter Writer = null;
+        private readonly Lock Lock = new();
         public static Logger Instance {get;} = new();
 
         private Logger() 

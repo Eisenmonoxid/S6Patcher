@@ -1,12 +1,11 @@
-﻿using S6Patcher.Source.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
-namespace S6Patcher.Source.Patcher
+namespace S6Patcher.Source.Helpers
 {
     public class BinaryParser
     {
@@ -67,9 +66,9 @@ namespace S6Patcher.Source.Patcher
             return GlobalReader.ReadByte();
         }
 
-        public Dictionary<UInt32, byte[]> ParseBinaryWrapper(execID ID, string Identifier)
+        public Dictionary<uint, byte[]> ParseBinaryWrapper(execID ID, string Identifier)
         {
-            if (!ParseBinaryFileContent((byte)ID, out Dictionary<UInt32, byte[]> Mapping, Identifier))
+            if (!ParseBinaryFileContent((byte)ID, out Dictionary<uint, byte[]> Mapping, Identifier))
             {
                 throw new Exception("[ERROR] Could not parse binary file content.");
             }

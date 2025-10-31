@@ -13,14 +13,14 @@ namespace S6Patcher.Source.Helpers
         public void Dispose() {GlobalClient.Dispose();}
         public static WebHandler Instance {get;} = new();
 
-        private static readonly HttpClient GlobalClient = new()
+        private readonly HttpClient GlobalClient = new()
         {
             Timeout = TimeSpan.FromMilliseconds(8000),
             DefaultRequestHeaders = {{"User-Agent", "Other"}},
         };
 
-        private static readonly Uri GlobalMod = new(Resources.RepoBasePath + "Gamefiles/Modfiles.zip");
-        private static readonly Uri GlobalVersion = new(Resources.VersionFileLink);
+        private readonly Uri GlobalMod = new(Resources.RepoBasePath + "Gamefiles/Modfiles.zip");
+        private readonly Uri GlobalVersion = new(Resources.VersionFileLink);
 
         public async Task<string> GetModfileDownloadSize()
         {

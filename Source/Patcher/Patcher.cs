@@ -191,6 +191,8 @@ namespace S6Patcher.Source.Patcher
 
         public void Dispose(bool FinishWithPEHeader = false)
         {
+            IOFileHandler.Instance.WriteBackToOptionsFiles();
+
             string Name = GlobalStream.Name;
             long Size = GlobalStream.Length;
 

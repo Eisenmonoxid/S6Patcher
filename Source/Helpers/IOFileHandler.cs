@@ -11,6 +11,7 @@ namespace S6Patcher.Source.Helpers
         public static IOFileHandler Instance {get;} = new();
 
         private readonly Dictionary<Stream, uint> Streams = [];
+        private readonly Dictionary<string, List<string>> OpenOptionFiles = [];
         private uint StreamID = 0;
 
         public FileStream OpenFileStream(string Path, bool WithException = false)
@@ -70,28 +71,44 @@ namespace S6Patcher.Source.Helpers
                     continue;
                 }
 
-                // Open configuration file, update Section, Key and Value
-                List<string> Lines;
-                try
+                List<string> Lines = OpenOptionFiles.GetValueOrDefault(CurrentPath);
+                // Do not open file everytime, readonce, modify lines, write once
+                if (Lines == default)
                 {
-                    Lines = [.. File.ReadAllLines(CurrentPath)];
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    continue;
+                    // Open configuration file, update Section, Key and Value
+                    Logger.Instance.Log("No entry found for Options.ini file " + CurrentPath + "! Trying to open ...");
+                    try
+                    {
+                        Lines = [.. File.ReadAllLines(CurrentPath)];
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Log(ex.ToString());
+                        continue;
+                    }
+
+                    OpenOptionFiles.Add(CurrentPath, Lines);
                 }
 
                 Lines.RemoveAll(Line => Line.Contains(Key));
-                if (Lines.Contains(Section) == false)
+                if (!Lines.Contains(Section))
                 {
                     Lines.Add(Section);
                 }
                 Lines.Insert(Lines.IndexOf(Section) + 1, Key + "=" + Entry.ToString());
 
+                Logger.Instance.Log("Updated Section " + Section + " - Key " + Key);
+            }
+        }
+
+        public void WriteBackToOptionsFiles()
+        {
+            foreach (var Element in OpenOptionFiles)
+            {
                 try
                 {
-                    File.WriteAllLines(CurrentPath, Lines);
+                    File.WriteAllLines(Element.Key, Element.Value);
+                    OpenOptionFiles.Remove(Element.Key);
                 }
                 catch (Exception ex)
                 {
@@ -99,7 +116,7 @@ namespace S6Patcher.Source.Helpers
                     continue;
                 }
 
-                Logger.Instance.Log("Updated Section " + Section + " - Key " + Key);
+                Logger.Instance.Log("Updated Options.ini file " + Element.Key);
             }
         }
 

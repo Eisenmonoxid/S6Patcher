@@ -6,14 +6,14 @@ namespace S6Patcher.Source.Patcher
     {
         public static readonly Dictionary<string, bool> Features = new()
         {
-            {"UseAlternateBackground", true},
-            {"UseSingleStop", true},
-            {"UseDowngrade", true},
-            {"UseMilitaryRelease", true},
-            {"DayNightCycle", true},
-            {"ExtendedKnightSelection", true},
-            {"SpecialKnightsAvailable", false},
-            {"FeaturesInUsermaps", false},
+            {"UseAlternateBackground",      true},
+            {"UseSingleStop",               true},
+            {"UseDowngrade",                true},
+            {"UseMilitaryRelease",          true},
+            {"DayNightCycle",               true},
+            {"ExtendedKnightSelection",     true},
+            {"SpecialKnightsAvailable",     false},
+            {"FeaturesInUsermaps",          false},
         };
     }
 }
