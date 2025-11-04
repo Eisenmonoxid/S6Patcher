@@ -29,5 +29,22 @@ namespace S6Patcher.Source.Helpers
             {"cbScriptBugFixes",    "SBF"},
             {"cbLimitedEdition",    "LME"},
         };
+        
+        public static void WritePEHeaderPosition(FileStream Stream, long Offset, byte[] Bytes)
+        {
+            BinaryReader Reader = new(Stream);
+
+            Reader.BaseStream.Position = 0x3C;
+            Reader.BaseStream.Position = Reader.ReadInt32();
+
+            if (Reader.ReadInt32() != 0x4550)
+            {
+                Logger.Instance.Log("PE Header offset not found! Skipping ...");
+                return;
+            }
+
+            Reader.BaseStream.Position += Offset;
+            Reader.BaseStream.Write(Bytes, 0, Bytes.Length);
+        }
     }
 }

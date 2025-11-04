@@ -123,29 +123,9 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("Called.");
 
-            // Partially adapted from: https://stackoverflow.com/questions/9054469
-            const int IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
-            BinaryReader Reader = new(GlobalStream);
-
-            Reader.BaseStream.Position = 0x3C;
-            Reader.BaseStream.Position = Reader.ReadInt32();
-
-            if (Reader.ReadInt32() != 0x4550)
-            {
-                Logger.Instance.Log("Error - Not at expected offset!");
-                return;
-            }
-
-            Reader.BaseStream.Position += 0x12;
-            long CurrentPosition = Reader.BaseStream.Position;
-
-            short Flag = Reader.ReadInt16();
-            if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
-            {
-                WriteBytes(CurrentPosition, BitConverter.GetBytes(Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE));
-            }
-
-            Logger.Instance.Log("Finished successfully.");
+            const short Flag = 0x20;
+            Utility.WritePEHeaderPosition(GlobalStream, 0x12, BitConverter.GetBytes(Flag));
+            Logger.Instance.Log("Finished.");
         }
 
         public void SetEntryInOptionsFile(string Entry, bool Checked) => 

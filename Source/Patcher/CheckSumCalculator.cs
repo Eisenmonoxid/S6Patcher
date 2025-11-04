@@ -44,25 +44,8 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            WritePEHeaderFileCheckSum(Stream, BitConverter.GetBytes(CheckSum));
+            Utility.WritePEHeaderPosition(Stream, 0x54, BitConverter.GetBytes(CheckSum));
             IOFileHandler.Instance.CloseStream(Stream);
-        }
-
-        private void WritePEHeaderFileCheckSum(FileStream Stream, byte[] CheckSum)
-        {
-            BinaryReader Reader = new(Stream);
-
-            Reader.BaseStream.Position = 0x3C;
-            Reader.BaseStream.Position = Reader.ReadInt32();
-
-            if (Reader.ReadInt32() != 0x4550)
-            {
-                Logger.Instance.Log("CheckSum offset not found! Skipping ...");
-                return;
-            }
-
-            Reader.BaseStream.Position += 0x54;
-            Reader.BaseStream.Write(CheckSum, 0, CheckSum.Length);
         }
     }
 }
