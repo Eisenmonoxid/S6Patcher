@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using S6Patcher.Source.Helpers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
