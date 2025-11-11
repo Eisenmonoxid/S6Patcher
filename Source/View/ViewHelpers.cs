@@ -38,15 +38,10 @@ namespace S6Patcher.Source.View
             });
         }
 
-        public List<Control> GetControlsByNames(string[] Names)
-        {
-            List<Control> Found = [.. Names
-                .Select(Element => Window.FindControl<Control>(Element))
+        public List<Control> GetControlsByNames(string[] Names) => [.. Names
+                .Select(Window.FindControl<Control>)
                 .Where(Control => Control != null)];
-
-            return Found;
-        }
-
+                
         public IEnumerable<T> GetControlsByType<T>() where T : Control => Window.GetLogicalDescendants().OfType<T>();
 
         public async Task<string> GetFileFromFilePicker(string Title, string Name, FilePickerFileType Type)
@@ -80,7 +75,16 @@ namespace S6Patcher.Source.View
             {
                 try
                 {
-                    Path = new DirectoryInfo(System.IO.Path.GetDirectoryName(Path)).Parent.Parent.FullName;
+                    var dirInfo = new DirectoryInfo(System.IO.Path.GetDirectoryName(Path));
+                    if (dirInfo?.Parent?.Parent != null)
+                    {
+                        Path = dirInfo.Parent.Parent.FullName;
+                    }
+                    else
+                    {
+                        Logger.Instance.Log("Directory structure not as expected!");
+                        Path = string.Empty;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -91,16 +95,14 @@ namespace S6Patcher.Source.View
             }
         }
 
-        public void CheckForUpdates(bool Startup)
+        public async void CheckForUpdates(bool Startup)
         {
-            WebHandler.Instance.CheckForUpdatesAsync(Startup).ContinueWith((Task) =>
+            string result = await WebHandler.Instance.CheckForUpdatesAsync(Startup);
+            if (!string.IsNullOrEmpty(result))
             {
-                if (Task.Result != string.Empty)
-                {
-                    Logger.Instance.Log(Task.Result);
-                    ShowMessageBox("Updater", Task.Result);
-                }
-            });
+                Logger.Instance.Log(result);
+                ShowMessageBox("Updater", result);
+            }
         }
 
         public void ViewAccessorWrapper(Action Action)

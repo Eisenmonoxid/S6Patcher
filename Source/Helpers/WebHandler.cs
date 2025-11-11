@@ -1,4 +1,5 @@
-﻿using S6Patcher.Properties;
+﻿using Avalonia.Controls.Documents;
+using S6Patcher.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,68 +23,71 @@ namespace S6Patcher.Source.Helpers
         private readonly Uri GlobalMod = new(Resources.RepoBasePath + "Gamefiles/Modfiles.zip");
         private readonly Uri GlobalVersion = new(Resources.VersionFileLink);
 
-        public async Task<string> GetModfileDownloadSize()
+        private async Task<HttpResponseMessage> GetHttpResponse(Uri Path)
         {
-            string DownloadSize;
             try
             {
-                var Response = await GlobalClient.GetAsync(GlobalMod, HttpCompletionOption.ResponseHeadersRead);
+                var Response = await GlobalClient.GetAsync(Path, HttpCompletionOption.ResponseHeadersRead);
                 Response.EnsureSuccessStatusCode();
-                long Size = Response.Content.Headers.ContentLength ?? 0;
-                DownloadSize = (Size / (float)1024).ToString("0.00");
+                return Response;
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
+                return null;
+            }
+        }
+
+        public async Task<string> GetModfileDownloadSize()
+        {
+            HttpResponseMessage Response = await GetHttpResponse(GlobalMod);
+            if (Response == null)
+            {
                 return string.Empty;
             }
+
+            long Size = Response.Content.Headers.ContentLength ?? 0;
+            string DownloadSize = (Size / (float)1024).ToString("0.00");
 
             Logger.Instance.Log("Download size: " + DownloadSize);
             return DownloadSize;
         }
 
-        public async Task<List<MemoryStream>> DownloadScriptFilesAsync(Uri[] Paths)
+        public List<MemoryStream> DownloadScriptFiles(Uri[] Paths)
         {
             List<MemoryStream> Elements = [];
-            foreach (var Element in Paths)
+            Parallel.ForEach(Paths, async CurrentPath =>
             {
-                try
+                Logger.Instance.Log("Downloading ScriptFile: " + CurrentPath.ToString());
+                HttpResponseMessage Response = await GetHttpResponse(CurrentPath);
+                if (Response == null)
                 {
-                    var Response = await GlobalClient.GetAsync(Element, HttpCompletionOption.ResponseHeadersRead);
-                    Response.EnsureSuccessStatusCode();
-                    using Stream Stream = await Response.Content.ReadAsStreamAsync();
-                    MemoryStream MemStream = new();
-                    await Stream.CopyToAsync(MemStream);
-                    MemStream.Position = 0;
-                    Elements.Add(MemStream);
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    return null;
-                }
-            }
 
-            Logger.Instance.Log("Downloaded ScriptFiles successfully.");
+                using Stream Stream = Response.Content.ReadAsStream();
+                MemoryStream MemStream = new();
+                Stream.CopyTo(MemStream);
+                MemStream.Seek(0, SeekOrigin.Begin);
+                Elements.Add(MemStream);
+            });
+
+            Logger.Instance.Log("Downloaded ScriptFiles successfully. Size: " + Elements.Count);
             return Elements;
         }
 
         public async Task<bool> DownloadZipArchiveAsync(string DestinationDirectoryPath)
         {
-            try
+            HttpResponseMessage Response = await GetHttpResponse(GlobalMod);
+            if (Response == null)
             {
-                var Response = await GlobalClient.GetAsync(GlobalMod, HttpCompletionOption.ResponseHeadersRead);
-                Response.EnsureSuccessStatusCode();
-                using Stream Stream = await Response.Content.ReadAsStreamAsync();
-                using FileStream FileStream = File.Create(DestinationDirectoryPath + ".zip");
-                await Stream.CopyToAsync(FileStream);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
                 return false;
             }
 
+            using Stream Stream = await Response.Content.ReadAsStreamAsync();
+            using FileStream FileStream = File.Create(DestinationDirectoryPath + ".zip");
+            await Stream.CopyToAsync(FileStream);
+            
             Logger.Instance.Log("Downloaded ModFiles successfully.");
             return true;
         }

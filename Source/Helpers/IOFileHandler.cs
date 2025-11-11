@@ -118,6 +118,11 @@ namespace S6Patcher.Source.Helpers
 
                 Logger.Instance.Log("Updated Options.ini file " + Element.Key);
             }
+
+            if (OpenOptionFiles.Count != 0)
+            {
+                Logger.Instance.Log("Could not write back to all Options.ini files!");
+            }
         }
 
         public string GetModLoaderDirectory(execID ID, string Filepath)

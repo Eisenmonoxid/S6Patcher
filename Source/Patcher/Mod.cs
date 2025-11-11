@@ -23,17 +23,23 @@ namespace S6Patcher.Source.Patcher
                           where !string.IsNullOrEmpty(Entry.Name)
                           select Entry;
 
-            foreach (ZipArchiveEntry Entry in Entries)
+            Parallel.ForEach(Entries, Entry =>
             {
                 string FullPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName));
-                if (Directory.Exists(FullPath) == false)
+                if (!Directory.Exists(FullPath))
                 {
-                    Directory.CreateDirectory(FullPath);
+                    lock (FullPath)
+                    {
+                        if (!Directory.Exists(FullPath))
+                        {
+                            Directory.CreateDirectory(FullPath);
+                        }
+                    }
                 }
 
                 Entry.ExtractToFile(Path.Combine(BaseDirectoryPath, Entry.FullName), true);
                 Logger.Instance.Log("Extracted " + Path.Combine(BaseDirectoryPath, Entry.FullName));
-            }
+            });
         }
 
         private void ExtractZipArchive(string ZipPath)

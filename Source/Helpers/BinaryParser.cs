@@ -46,11 +46,7 @@ namespace S6Patcher.Source.Helpers
             return DecompressedStream;
         }
 
-        public void Dispose()
-        {
-            GlobalReader?.Close();
-            GlobalReader?.Dispose();
-        }
+        public void Dispose() => GlobalReader?.Dispose();
 
         private bool IsValidBinaryFile()
         {

@@ -29,7 +29,7 @@ namespace S6Patcher.Source.Helpers
             {"cbScriptBugFixes",    "SBF"},
             {"cbLimitedEdition",    "LME"},
         };
-        
+
         public static void WritePEHeaderPosition(FileStream Stream, long Offset, byte[] Bytes)
         {
             BinaryReader Reader = new(Stream);
