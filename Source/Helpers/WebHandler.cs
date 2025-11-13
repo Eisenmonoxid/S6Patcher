@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls.Documents;
-using S6Patcher.Properties;
+﻿using S6Patcher.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -85,9 +84,17 @@ namespace S6Patcher.Source.Helpers
             }
 
             using Stream Stream = await Response.Content.ReadAsStreamAsync();
-            using FileStream FileStream = File.Create(DestinationDirectoryPath + ".zip");
-            await Stream.CopyToAsync(FileStream);
-            
+            try
+            {
+                using FileStream FileStream = File.Create(DestinationDirectoryPath + ".zip");
+                await Stream.CopyToAsync(FileStream);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                return false;
+            }
+
             Logger.Instance.Log("Downloaded ModFiles successfully.");
             return true;
         }

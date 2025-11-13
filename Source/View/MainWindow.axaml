@@ -25,8 +25,9 @@
 			</Style>
 		</Grid.Styles>
 		
-		<Grid RowDefinitions="Auto Auto Auto Auto Auto Auto Auto" ColumnDefinitions="Auto Auto Auto" Name="grdForm" 
-			  Background="{DynamicResource SystemControlBackgroundAltHighBrush}">		
+		<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+			ColumnDefinitions="Auto, Auto, Auto" Name="grdForm"
+			Background="{DynamicResource SystemControlBackgroundAltHighBrush}">	
 			
 			<HeaderedContentControl Grid.Row="0" Name="hccSelect" Header="Select Game/Editor Executable">
 				<Grid RowDefinitions="* *">
@@ -45,7 +46,8 @@
 							<Label Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Standard: 512</Label>
 							<CheckBox Grid.Row="1" Name="cbLAAFlag">Activate Large Address Aware Flag</CheckBox>
 							<CheckBox Grid.Row="2" Name="cbZoom" IsCheckedChanged="cbZoom_IsCheckedChanged">Max. Zoom Level:</CheckBox>
-							<TextBox Grid.Row="2" Margin="10 0" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Name="txtZoom" HorizontalAlignment="Center" MaxLength="5">12000</TextBox>
+							<TextBox Grid.Row="2" Margin="10 0" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Name="txtZoom" 
+								HorizontalAlignment="Center" MaxLength="5">12000</TextBox>
 							<Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Standard: 7200</Label>
 							<CheckBox Grid.Row="3" Name="cbLimitedEdition">Activate Limited/Special Edition</CheckBox>
 							<CheckBox Grid.Row="4" Name="cbScriptBugFixes">Activate Script and Code Bugfixes</CheckBox>

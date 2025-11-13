@@ -22,8 +22,6 @@ namespace S6Patcher.Source.Helpers
 
             BlockOffset = (uint)(Magic.Length + sizeof(byte));
             GlobalReader = new BinaryReader(GetDecompressedStream(BinaryStream));
-
-            BinaryStream.Close();
             BinaryStream.Dispose();
 
             if (!IsValidBinaryFile())

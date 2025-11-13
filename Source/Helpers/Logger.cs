@@ -7,27 +7,30 @@ namespace S6Patcher.Source.Helpers
 {
     public sealed class Logger
     {
-        private readonly string GlobalFile = Path.Combine(AppContext.BaseDirectory, "S6Patcher.log");
+        private Logger()
+        {
+            FileStream Stream;
+            string LogFilePath = Path.Combine(AppContext.BaseDirectory, "S6Patcher.log");
+
+            try
+            {
+                Stream = new FileStream(LogFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch
+            {
+                return;
+            }
+
+            Writer = new StreamWriter(Stream);
+        }
+
         private readonly StreamWriter Writer = null;
         private readonly Lock Lock = new();
         public static Logger Instance {get;} = new();
 
-        private Logger() 
-        {
-            try
-            {
-                Writer = File.CreateText(GlobalFile);
-            }
-            catch
-            {
-                Writer = null;
-            }
-        }
-
         public void Dispose()
         {
             Log("Logger: Shutting down.");
-            Writer?.Close();
             Writer?.Dispose();
         }
 
@@ -35,15 +38,8 @@ namespace S6Patcher.Source.Helpers
         {
             lock (Lock)
             {
-                try
-                {
-                    Writer?.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " - " + Caller + "(): " + Message);
-                    Writer?.Flush();
-                }
-                catch
-                {
-                    return;
-                }
+                Writer?.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " - " + Caller + "(): " + Message);
+                Writer?.Flush();
             }
         }
     }

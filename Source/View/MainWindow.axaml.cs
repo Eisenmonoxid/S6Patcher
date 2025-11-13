@@ -14,7 +14,7 @@ namespace S6Patcher.Source.View
     {
         private bool PatchingInProgress = false;
         private readonly ViewHelpers ViewHelpers;
-        private Patcher.Patcher Patcher = null;
+        private Patcher.Patcher MainPatcher = null;
 
         private readonly Dictionary<execID, string[]> Mapping = new()
         {
@@ -138,7 +138,7 @@ namespace S6Patcher.Source.View
             {
                 Stream Definition = Utility.GetEmbeddedResourceDefinition("S6Patcher.Definitions.Definitions.bin") ?? 
                     throw new Exception("Error: Could not load Definition file! Aborting ...");
-                Patcher = new Patcher.Patcher(Filepath, Definition);
+                MainPatcher = new Patcher.Patcher(Filepath, Definition);
             }
             catch (Exception ex)
             {
@@ -146,8 +146,10 @@ namespace S6Patcher.Source.View
                 return;
             }
 
-            Patcher.ShowMessage += Message => ShowMessageBox("Error", Message);
-            EnableUIElements(Patcher.GlobalID);
+            MainPatcher.ShowMessage += Message => ShowMessageBox("Error", Message);
+            MainPatcher.GlobalMod.ShowMessage += Message => ShowMessageBox("ModLoader", Message);
+            
+            EnableUIElements(MainPatcher.GlobalID);
         }
 
         private void FinishPatching()
@@ -183,27 +185,27 @@ namespace S6Patcher.Source.View
 
             var Features = ViewHelpers.GetSelectedFeatures();
             Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
-            Patcher.PatchByControlFeatures([.. Features.Select(Item => Utility.Features.TryGetValue(Item, out string Value) ? Value : Item)]);
+            MainPatcher.PatchByControlFeatures([.. Features.Select(Item => Utility.Features.TryGetValue(Item, out string Value) ? Value : Item)]);
 
-            if (cbHighTextures.IsChecked == true && Patcher.GlobalID != execID.ED)
+            if (cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED)
             {
-                Patcher.SetTextureResolution(txtResolution.Text);
+                MainPatcher.SetTextureResolution(txtResolution.Text);
             }
             if (cbZoom.IsChecked == true)
             {
-                Patcher.SetZoomLevel(txtZoom.Text);
+                MainPatcher.SetZoomLevel(txtZoom.Text);
             }
             if (cbAutosave.IsChecked == true)
             {
-                Patcher.SetAutosaveTimer(txtAutosave.Text);
+                MainPatcher.SetAutosaveTimer(txtAutosave.Text);
             }
             if (cbLAAFlag.IsChecked == true)
             {
-                Patcher.SetLargeAddressAwareFlag();
+                MainPatcher.SetLargeAddressAwareFlag();
             }
             if (cbEasyDebug.IsChecked == true)
             {
-                Patcher.SetEasyDebug();
+                MainPatcher.SetEasyDebug();
             }
 
             await Completed;
@@ -211,17 +213,17 @@ namespace S6Patcher.Source.View
 
         private async Task PatcherModLoaderWrapper(bool Download)
         {
-            if (Patcher.GlobalID != execID.ED && (cbModLoader.IsChecked == true || cbUpdater.IsChecked == true))
+            if (MainPatcher.GlobalID != execID.ED && (cbModLoader.IsChecked == true || cbUpdater.IsChecked == true))
             {
-                await Patcher.SetModLoader(Download);
+                await MainPatcher.SetModLoader(Download);
             }
         }
 
         private async Task PatcherScriptFilesWrapper()
         {
-            if (Patcher.GlobalID != execID.ED)
+            if (MainPatcher.GlobalID != execID.ED)
             {
-                await Patcher.WriteScriptFilesToFolder();
+                await MainPatcher.WriteScriptFilesToFolder();
             }
         }
 
@@ -265,8 +267,8 @@ namespace S6Patcher.Source.View
         private void ShowMessageBox(string Title, string Message) => ViewHelpers.ShowMessageBox(Title, Message);
         private void ResetPatcher(bool FinishWithPEHeader = false)
         {
-            Patcher?.Dispose(FinishWithPEHeader);
-            Patcher = null;
+            MainPatcher?.Dispose(FinishWithPEHeader);
+            MainPatcher = null;
         }
 
         private void btnPatch_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => MainPatchingTask();
@@ -289,6 +291,6 @@ namespace S6Patcher.Source.View
         private void cbZoom_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
             txtZoom.IsEnabled = cbZoom.IsChecked == true;
         private void cbHighTextures_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
-            txtResolution.IsEnabled = cbHighTextures.IsChecked == true && Patcher.GlobalID != execID.ED;
+            txtResolution.IsEnabled = cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED;
     }
 }

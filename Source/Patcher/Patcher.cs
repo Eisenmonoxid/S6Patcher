@@ -12,7 +12,7 @@ namespace S6Patcher.Source.Patcher
         private readonly BinaryParser GlobalParser;
         private readonly FileStream GlobalStream;
         private readonly Mappings GlobalMappings;
-        private readonly Mod GlobalMod;
+        public readonly Mod GlobalMod;
 
         public readonly execID GlobalID;
         private readonly Lock WriteLock = new();
@@ -57,7 +57,6 @@ namespace S6Patcher.Source.Patcher
 
             GlobalMappings = new Mappings(GlobalID, GlobalParser);
             GlobalMod = new Mod(GlobalID, IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStream.Name));
-            GlobalMod.ShowMessage += Message => ShowMessage.Invoke(Message);
 
             Logger.Instance.Log("ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }

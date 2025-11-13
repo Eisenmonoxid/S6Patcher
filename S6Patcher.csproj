@@ -22,12 +22,11 @@
     <PackageProjectUrl>github.com/Eisenmonoxid/S6Patcher</PackageProjectUrl>
     <RepositoryUrl>github.com/Eisenmonoxid/S6Patcher</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PublishTrimmed>True</PublishTrimmed>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

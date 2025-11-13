@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Helpers
 {
@@ -14,12 +15,12 @@ namespace S6Patcher.Source.Helpers
         private readonly Dictionary<string, List<string>> OpenOptionFiles = [];
         private uint StreamID = 0;
 
-        public FileStream OpenFileStream(string Path, bool WithException = false)
+        public FileStream OpenFileStream(string FilePath, bool WithException = false)
         {
             FileStream Stream;
             try
             {
-                Stream = new FileStream(Path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                Stream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             }
             catch (Exception ex)
             {
@@ -29,15 +30,13 @@ namespace S6Patcher.Source.Helpers
             }
 
             Streams.Add(Stream, StreamID);
-            Logger.Instance.Log("Returning Stream with ID " + StreamID++.ToString() + " and Path " + Stream.Name);
+            Logger.Instance.Log("Returning Stream with ID " + StreamID++.ToString() + " and Name " + Path.GetFileName(Stream.Name));
             return Stream;
         }
 
         public void CloseStream(Stream Stream)
         {
-            Stream?.Close();
             Stream?.Dispose();
-
             if (Streams.TryGetValue(Stream, out uint Key))
             {
                 Streams.Remove(Stream);
@@ -72,7 +71,7 @@ namespace S6Patcher.Source.Helpers
                 }
 
                 List<string> Lines = OpenOptionFiles.GetValueOrDefault(CurrentPath);
-                // Do not open file everytime, readonce, modify lines, write once
+                // Do not open file everytime, read once, modify lines, write once
                 if (Lines == default)
                 {
                     // Open configuration file, update Section, Key and Value
@@ -103,21 +102,19 @@ namespace S6Patcher.Source.Helpers
 
         public void WriteBackToOptionsFiles()
         {
-            foreach (var Element in OpenOptionFiles)
+            Parallel.ForEach(OpenOptionFiles, Element =>
             {
                 try
                 {
                     File.WriteAllLines(Element.Key, Element.Value);
                     OpenOptionFiles.Remove(Element.Key);
+                    Logger.Instance.Log("Updated Options.ini file " + Element.Key);
                 }
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    continue;
                 }
-
-                Logger.Instance.Log("Updated Options.ini file " + Element.Key);
-            }
+            });
 
             if (OpenOptionFiles.Count != 0)
             {
