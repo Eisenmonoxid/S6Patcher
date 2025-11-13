@@ -13,6 +13,7 @@ namespace S6Patcher.Source.View
     public partial class MainWindow : Window
     {
         private bool PatchingInProgress = false;
+        private bool IsFilePickerActive = false;
         private readonly ViewHelpers ViewHelpers;
         private Patcher.Patcher MainPatcher = null;
 
@@ -110,10 +111,21 @@ namespace S6Patcher.Source.View
 
         private async void OpenFilePicker()
         {
+            if (IsFilePickerActive)
+            {
+                return;
+            }
+            else
+            {
+                IsFilePickerActive = true;
+            }
+
             DisableUI();
             ResetPatcher();
 
             string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);
+            IsFilePickerActive = false;
+            
             if (string.IsNullOrEmpty(Path))
             {
                 txtPath.Text = "...";
