@@ -41,3 +41,8 @@ The S6Patcher features a simple [Modloader](https://github.com/Eisenmonoxid/S6Pa
 - When the option "Activate Modloader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
 - The option "Download and Install Bugfix Mod" will download the zip compressed folder `Modfiles.zip` from the repository directory `/Source/Resources/Gamefiles` and extract
 it into the `modloader` folder. 
+
+---
+## Contribution
+In case you want to contribute your own features and/or fixes to the project, feel free to fork the repository and create a pull request.   
+**Important:** Everything contributed to the project must either be created by yourself or approved by the original author.

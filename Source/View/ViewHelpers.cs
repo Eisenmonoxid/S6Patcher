@@ -75,10 +75,10 @@ namespace S6Patcher.Source.View
             {
                 try
                 {
-                    var dirInfo = new DirectoryInfo(System.IO.Path.GetDirectoryName(Path));
-                    if (dirInfo?.Parent?.Parent != null)
+                    var Info = new DirectoryInfo(System.IO.Path.GetDirectoryName(Path));
+                    if (Info?.Parent?.Parent != null)
                     {
-                        Path = dirInfo.Parent.Parent.FullName;
+                        Path = Info.Parent.Parent.FullName;
                     }
                     else
                     {
