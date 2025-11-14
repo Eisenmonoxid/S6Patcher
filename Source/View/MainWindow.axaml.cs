@@ -176,16 +176,25 @@ namespace S6Patcher.Source.View
             PatchingInProgress = true;
             Logger.Instance.Log("Patching Process Started!");
 
+            List<string> Features = GetFeatures();
             ToggleUIAvailability(false);
             await ViewHelpers.GetPathToOptionsFile();
-            await PatchByFeatures();
+            await PatchByFeatures(Features);
             FinishPatching();
 
             Logger.Instance.Log("Patching Process Finished!");
             PatchingInProgress = false;
         }
 
-        private async Task PatchByFeatures()
+        private List<string> GetFeatures()
+        {
+            List<string> Features = ViewHelpers.GetSelectedFeatures();
+            Features = [.. Features.Select(Item => Utility.Features.TryGetValue(Item, out string Value) ? Value : Item)];
+            Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
+            return Features;
+        }
+
+        private async Task PatchByFeatures(List<string> Features)
         {
             bool Download = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
             Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(), PatcherModLoaderWrapper(Download));
@@ -195,10 +204,7 @@ namespace S6Patcher.Source.View
                 return;
             }
 
-            var Features = ViewHelpers.GetSelectedFeatures();
-            Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
-            MainPatcher.PatchByControlFeatures([.. Features.Select(Item => Utility.Features.TryGetValue(Item, out string Value) ? Value : Item)]);
-
+            MainPatcher.PatchByControlFeatures(Features);
             if (cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED)
             {
                 MainPatcher.SetTextureResolution(txtResolution.Text);

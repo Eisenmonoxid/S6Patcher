@@ -115,6 +115,8 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 
 - An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
 - Middle Europe NPC barracks will now correctly spawn soldiers as intended (This is now also directly fixed in the configuration file).
+- Polar bears are now using the correct "DIE" animation instead of "WALK" when killed.
+
 ---
 # Recommendation: DXVK
 Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) repository and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 
@@ -123,4 +125,4 @@ This wrapper will translate the Direct3D 9.0c commands to Vulkan, which is a muc
 d3d9.presentInterval = 1
 d3d9.samplerAnisotropy = 16
 ```
-The first option enables vertical synchronisation (without it, the game runs at an unlimited framerate), the second one sets the anisotropic filtering level.
+The first option enables vertical synchronisation (without it, the game runs at an unlimited framerate), the second one sets the anisotropic filtering level. It will also provide a higher framerate in CPU - bound situations.
