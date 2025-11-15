@@ -1,8 +1,8 @@
 -- MainMenuUserScript by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.IsInBETA = false;
-g_DisplayScriptErrors = S6Patcher.IsInBETA == true;
+S6Patcher.BETA = true;
+g_DisplayScriptErrors = S6Patcher.BETA == true;
 -- ************************************************************************************************************************************************************* --
 -- Extended Knight Selection and Special Knights 																												 --
 -- ************************************************************************************************************************************************************* --
@@ -12,12 +12,12 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.StartMapCallback2 = CustomGame_StartMapCallback2;
 	end
 	CustomGame_StartMapCallback2 = function()
-		local CurrentKnight = DisplayOptions.SkirmishGetKnight(1);
+		local Knight = DisplayOptions.SkirmishGetKnight(1);
 		if S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.StartMap, CustomGame.StartMapType) then
-			Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(CurrentKnight + 1) .. ";");
+			Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(Knight + 1) .. ";");
 		else
 			if S6Patcher.KnightSelection.SavedKnightID ~= -1 then
-				DisplayOptions.SkirmishSetKnight(1, S6Patcher.KnightSelection.SavedKnightID);
+				DisplayOptions.SkirmishSetKnight(1, S6Patcher.KnightSelection.MapKnightTypesToOriginalTable(Knight + 1));
 				S6Patcher.KnightSelection.SavedKnightID = -1;
 			end
 			Framework.SetOnGameStartLuaCommand("return;");
@@ -77,7 +77,18 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 			end
 		end
 	end
+end
+
+S6Patcher.KnightSelection.MapKnightTypesToOriginalTable = function(_newIndex)
+	local Name = S6Patcher.KnightSelection.NewKnightTypes[_newIndex];
 	
+	for Key, Value in pairs(S6Patcher.KnightSelection.SavedOriginalKnightTypes) do
+		if Value == Name then
+			return Key - 1;
+		end
+	end
+
+	return S6Patcher.KnightSelection.SavedKnightID;
 end
 
 S6Patcher.KnightSelection.SetKnightSelection = function(_showKnights)
@@ -145,7 +156,7 @@ if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
 Framework.GetProgramVersion = function() 
-	local Text = " - S6Patcher v6" .. (S6Patcher.IsInBETA and " - BETA" or "");
+	local Text = " - S6Patcher v6" .. (S6Patcher.BETA and " - BETA" or "");
 	return S6Patcher.GetProgramVersion() .. Text;
 end
 -- ************************************************************************************************************************************************************* --
