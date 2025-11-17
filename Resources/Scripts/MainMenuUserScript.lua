@@ -2,7 +2,7 @@
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
 S6Patcher.BETA = true;
-g_DisplayScriptErrors = S6Patcher.BETA == true;
+g_DisplayScriptErrors = S6Patcher.BETA;
 -- ************************************************************************************************************************************************************* --
 -- Extended Knight Selection and Special Knights 																												 --
 -- ************************************************************************************************************************************************************* --
@@ -25,7 +25,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 
 		S6Patcher.KnightSelection.StartMapCallback2();
 	end
-	
+
 	if S6Patcher.KnightSelection.CustomGame_StartOnLeftClick == nil then
 		S6Patcher.KnightSelection.CustomGame_StartOnLeftClick = CustomGame_StartOnLeftClick;
 	end
@@ -35,14 +35,14 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		if not S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.SelectedMap, CustomGame.SelectedMapType) then
 			S6Patcher.KnightSelection.SavedKnightID = Index;
 		end
-		
+
 		S6Patcher.KnightSelection.CustomGame_StartOnLeftClick();
 	end
-	
+
 	if S6Patcher.KnightSelection.RemapKnightID == nil then
 		S6Patcher.KnightSelection.RemapKnightID = RemapKnightID;
 	end
-	
+
 	if S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick == nil then
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick = CustomGameDialog_CloseOnLeftClick;
 	end
@@ -50,7 +50,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.SetKnightSelection(false);
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick();
 	end
-	
+
 	if S6Patcher.KnightSelection.OpenCustomGameDialog == nil then
 		S6Patcher.KnightSelection.OpenCustomGameDialog = OpenCustomGameDialog;
 	end
@@ -58,21 +58,21 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.SetKnightSelection(true);
 		S6Patcher.KnightSelection.OpenCustomGameDialog();
 	end
-	
+
 	if S6Patcher.CustomGame_FillHeroComboBox == nil then
 		S6Patcher.CustomGame_FillHeroComboBox = CustomGame_FillHeroComboBox;
 	end
 	CustomGame_FillHeroComboBox = function(_TryToKeepSelectedKnight)
 		S6Patcher.CustomGame_FillHeroComboBox(_TryToKeepSelectedKnight);
-		
+
 		if Framework.GetGameExtraNo() < 1 then
 			if S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.SelectedMap, CustomGame.SelectedMapType) then
 				local HeroComboBoxID = XGUIEng.GetWidgetID(CustomGame.Widget.KnightsList);
 				XGUIEng.ListBoxPopAll(HeroComboBoxID);
-				
+
 				for i = 1, #CustomGame.KnightTypes do
 					XGUIEng.ListBoxPushItem(HeroComboBoxID, XGUIEng.GetStringTableText("Names/" .. CustomGame.KnightTypes[i]));
-				end			
+				end
 				-- No _TryToKeepSelectedKnight ... meh, whatever
 			end
 		end
@@ -81,7 +81,7 @@ end
 
 S6Patcher.KnightSelection.MapKnightTypesToOriginalTable = function(_newIndex)
 	local Name = S6Patcher.KnightSelection.NewKnightTypes[_newIndex];
-	
+
 	for Key, Value in pairs(S6Patcher.KnightSelection.SavedOriginalKnightTypes) do
 		if Value == Name then
 			return Key - 1;
@@ -110,12 +110,12 @@ S6Patcher.KnightSelection.IsMapValidForKnightChoice = function(_selectedMap, _se
 	if _selectedMapType == 0 or (_selectedMapType == 3 and S6Patcher.KnightSelection.EnableInUsermaps) then
 		local Base = (Framework.GetGameExtraNo() < 1) == true;
 		local Names = {Framework.GetValidKnightNames(_selectedMap, _selectedMapType)};
-		
+
 		if (#Names == 0) or (Base and #Names == 6) then -- No custom ValidKnightNames in info.xml
 			return true;
 		end
-	end	
-	
+	end
+
 	return false;
 end
 
@@ -124,16 +124,16 @@ if Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.SavedOriginalKnightTypes = CustomGame.KnightTypes;
 	S6Patcher.KnightSelection.NewKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", "U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
 	S6Patcher.KnightSelection.EnableInUsermaps = Options.GetIntValue("S6Patcher", "FeaturesInUsermaps", 0) ~= 0;
-	
+
 	if Framework.GetGameExtraNo() < 1 then
 		table.remove(S6Patcher.KnightSelection.NewKnightTypes, 1);
 	end
-	
+
 	if Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0 then
 		S6Patcher.KnightSelection.NewKnightTypes[#S6Patcher.KnightSelection.NewKnightTypes + 1] = "U_KnightSabatta";
 		S6Patcher.KnightSelection.NewKnightTypes[#S6Patcher.KnightSelection.NewKnightTypes + 1] = "U_KnightRedPrince";
 	end
-	
+
 	S6Patcher.KnightSelection.OverrideGlobalKnightSelection();
 end
 -- ************************************************************************************************************************************************************* --
@@ -155,7 +155,7 @@ end
 if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
-Framework.GetProgramVersion = function() 
+Framework.GetProgramVersion = function()
 	local Text = " - S6Patcher v6" .. (S6Patcher.BETA and " - BETA" or "");
 	return S6Patcher.GetProgramVersion() .. Text;
 end
@@ -175,10 +175,10 @@ DisplayOptions.GetResolutionNames = function(_index)
 	if Network.IsNATReady ~= nil then -- Not necessary in History Edition
 		return ReturnState, Name;
 	end
-	
+
 	if ReturnState ~= 1 then
 		if _index <= (S6Patcher.Resolution.LastResolutionIndex + 2) then
-			return 1, ((S6Patcher.Resolution.LastResolutionIndex + 1 == _index) and S6Patcher.Resolution.WQHD or S6Patcher.Resolution.UHD); 
+			return 1, ((S6Patcher.Resolution.LastResolutionIndex + 1 == _index) and S6Patcher.Resolution.WQHD or S6Patcher.Resolution.UHD);
 		else
 			return ReturnState, Name;
 		end
@@ -195,7 +195,7 @@ g_GameOptions.OnShow = function()
 	g_MainMenuOptions:ShowHelper();
 
 	do
-		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox");   
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox");
 		XGUIEng.CheckBoxSetIsChecked(WidgetID, (Camera.RTS_GetBorderScrollSize() > 0) and true or false)
 	end
 	do
@@ -204,7 +204,7 @@ g_GameOptions.OnShow = function()
 		XGUIEng.SliderSetValueMin(WidgetID, 2)
 		XGUIEng.SliderSetValueMax(WidgetID, 8)
 		XGUIEng.SliderSetValueAbs(WidgetID, Value)
-	end    
+	end
 	do
 		local Value = Options.GetFloatValue("Game", "ScrollSpeed", Camera.RTS_GetScrollSpeed());
 		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/MouseScrollSlider");
@@ -231,7 +231,7 @@ g_GameOptions.OnOK = function()
 		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/BorderScroll/CheckBox");
 		if (XGUIEng.CheckBoxIsChecked(WidgetID) == true) then
 			Camera.RTS_SetBorderScrollSize(g_DefaultBorderScrollSize);
-		else        
+		else
 			Camera.RTS_SetBorderScrollSize(0);
 		end
 		Options.SetFloatValue("Game", "BorderScrolling", Camera.RTS_GetBorderScrollSize());
@@ -239,10 +239,10 @@ g_GameOptions.OnOK = function()
 	do
 		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/KeyboardScrollSlider");
 		Camera.RTS_SetZoomWheelSpeed(XGUIEng.SliderGetValueAbs(WidgetID));
-		Options.SetFloatValue("Game", "ZoomSpeed", Camera.RTS_GetZoomWheelSpeed());  
-	end        
+		Options.SetFloatValue("Game", "ZoomSpeed", Camera.RTS_GetZoomWheelSpeed());
+	end
 	do
-		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/MouseScrollSlider");    
+		local WidgetID = XGUIEng.GetWidgetID("/InGame/GameOptionsMain/RightContainer/MouseScrollSlider");
 		Camera.RTS_SetScrollSpeed(XGUIEng.SliderGetValueAbs(WidgetID) * 100);
 		Options.SetFloatValue("Game", "ScrollSpeed", Camera.RTS_GetScrollSpeed());
 	end
@@ -258,31 +258,31 @@ S6Patcher.ExtendedGameOptions.PageCount = 0;
 S6Patcher.ExtendedGameOptions.Root = "/InGame/Multiplayer/SelectGame/Container/ListGames";
 S6Patcher.ExtendedGameOptions.OriginalRootPosition = {0, 0};
 S6Patcher.ExtendedGameOptions.Features = {
-	{{de = "Fenstermodus", en = "Window Mode"}, false, "Windowed"}, 
-	{{de = "Hauptmenühintergrund", en = "Main Menu Background"}, false, "UseAlternateBackground"}, 
-	{{de = "Einzelstoppbutton", en = "Single Stop Button"}, false, "UseSingleStop"}, 
-	{{de = "Rückbaubutton", en = "Downgrade Button"}, false, "UseDowngrade"}, 
+	{{de = "Fenstermodus", en = "Window Mode"}, false, "Windowed"},
+	{{de = "Hauptmenühintergrund", en = "Main Menu Background"}, false, "UseAlternateBackground"},
+	{{de = "Einzelstoppbutton", en = "Single Stop Button"}, false, "UseSingleStop"},
+	{{de = "Rückbaubutton", en = "Downgrade Button"}, false, "UseDowngrade"},
 	{{de = "Soldaten Entlassen Button", en = "Military Release Button"}, false, "UseMilitaryRelease"},
-	{{de = "Tag/Nacht Zyklus", en = "Day/Night Cycle"}, false, "DayNightCycle"}, 
-	{{de = "Alle Ritter Selektierbar", en = "All Knights in Selection"}, false, "ExtendedKnightSelection"}, 
-	{{de = "Spezialritter (Crimson Sabatt & Roter Prinz)", en = "Special Knights (Crimson Sabatt & Red Prince)"}, 
+	{{de = "Tag/Nacht Zyklus", en = "Day/Night Cycle"}, false, "DayNightCycle"},
+	{{de = "Alle Ritter Selektierbar", en = "All Knights in Selection"}, false, "ExtendedKnightSelection"},
+	{{de = "Spezialritter (Crimson Sabatt & Roter Prinz)", en = "Special Knights (Crimson Sabatt & Red Prince)"},
 		false, "SpecialKnightsAvailable"},
-	{{de = "Features in Usermaps", en = "Features in Usermaps"}, false, "FeaturesInUsermaps"}, 
+	{{de = "Features in Usermaps", en = "Features in Usermaps"}, false, "FeaturesInUsermaps"},
 };
 
 S6Patcher.ExtendedGameOptions.ShowUsermapWarning = function()
-	local Text = {de = "Das Aktivieren dieses Features kann dafür sorgen, dass eine kleine Menge an Usermaps nicht mehr korrekt funktionieren wird.", 
+	local Text = {de = "Das Aktivieren dieses Features kann dafür sorgen, dass eine kleine Menge an Usermaps nicht mehr korrekt funktionieren wird.",
 				  en = "Activating this Feature can lead to a small number of usermaps not working correctly anymore."};
 	OpenDialog(S6Patcher.GetLocalizedText(Text), S6Patcher.GetLocalizedText({de = "{center}Hinweis", en = "{center}Hint"}));
 end
 
 S6Patcher.ExtendedGameOptions.CanAddSpecialKnights = function()
 	if S6Patcher.IsModInstalled ~= true then
-		local Text = {de = "Fehlende Spieldateien!{cr}Dieses Feature benötigt den {@color:255,0,255}installierten Bugfixmod{@color:none}.", 
+		local Text = {de = "Fehlende Spieldateien!{cr}Dieses Feature benötigt den {@color:255,0,255}installierten Bugfixmod{@color:none}.",
 					  en = "Missing Gamefiles!{cr}This Feature requires the {@color:255,0,255}Bugfix Mod{@color:none} to be installed."};
 		OpenDialog(S6Patcher.GetLocalizedText(Text), S6Patcher.GetLocalizedText({de = "{center}Fehler", en = "{center}Error"}));
 	end
-	
+
 	return S6Patcher.IsModInstalled;
 end
 
@@ -291,7 +291,7 @@ S6Patcher.ExtendedGameOptions.InitTempStuff = function()
 	GUI_BuildingInfo.BuildingNameUpdate = function() -- Update function
 		return true;
 	end
-	
+
 	local BasePath = "/InGame/TempStuff/StandardDialog";
 	local Width, Height = XGUIEng.GetWidgetScreenSize("/InGame/Background/WholeScreen");
 	local _, posY = XGUIEng.GetWidgetScreenPosition("/InGame/Map/ContainerMap/MapPreview");
@@ -306,17 +306,17 @@ S6Patcher.ExtendedGameOptions.InitTempStuff = function()
 	XGUIEng.ShowWidget(BasePath .. "/Buttons", 1);
 	XGUIEng.PushPage(BasePath .. "/Buttons", false);
 	S6Patcher.ExtendedGameOptions.PageCount = S6Patcher.ExtendedGameOptions.PageCount + 1;
-	
+
 	local CurrentPath = BasePath .. "/Background/TitleBig/Info/";
 	local Title = "{center}S6Patcher - Options";
-	
+
 	XGUIEng.SetText(CurrentPath .. "NameBlack", Title);
 	XGUIEng.ShowWidget(CurrentPath .. "Name", 0);
 	XGUIEng.ShowWidget(CurrentPath .. "NameWhite", 0);
 
 	XGUIEng.ShowWidget(BasePath .. "/Buttons/BG", 0);
-	XGUIEng.ShowWidget(BasePath .. "/Buttons/TestDisabled", 0);	
-	
+	XGUIEng.ShowWidget(BasePath .. "/Buttons/TestDisabled", 0);
+
 	local Action = "Sound.FXPlay2DSound('ui\\menu_click');S6Patcher.ExtendedGameOptions.ToggleFeature();";
 	local Text = S6Patcher.GetLocalizedText({de = "{center}Feature Umschalten", en = "{center}Toggle Feature"});
 	XGUIEng.SetText(BasePath .. "/Buttons/TestLongText", Text);
@@ -329,23 +329,23 @@ S6Patcher.ExtendedGameOptions.PlaceUIElementsOnDialog = function(_basePath)
 	local posX, posY = XGUIEng.GetWidgetScreenPosition(_basePath);
 	local Width, Height = XGUIEng.GetWidgetScreenSize(_basePath .. "/Background");
 	local ButtonWidth, _ = XGUIEng.GetWidgetScreenSize(_basePath .. "/Buttons/TestLongText");
-	
+
 	posX = (posX + (Width * 0.5)) - (ButtonWidth * 0.5);
 	posY = (posY + (Height * 0.8));
-	
+
 	XGUIEng.SetWidgetScreenPosition(_basePath .. "/Buttons/TestLongText", posX, posY);
 	return posX, posY;
 end
 
-S6Patcher.ExtendedGameOptions.Init = function()		
+S6Patcher.ExtendedGameOptions.Init = function()
 	local posX, posY = S6Patcher.ExtendedGameOptions.InitTempStuff(); -- Button Position
-	
+
 	S6Patcher.ExtendedGameOptions.OriginalRootPosition = {XGUIEng.GetWidgetScreenPosition(S6Patcher.ExtendedGameOptions.Root)};
-	XGUIEng.SetWidgetScreenPosition(S6Patcher.ExtendedGameOptions.Root, posX * 0.75, posY * 0.5);	
+	XGUIEng.SetWidgetScreenPosition(S6Patcher.ExtendedGameOptions.Root, posX * 0.75, posY * 0.5);
 	XGUIEng.ShowWidget(S6Patcher.ExtendedGameOptions.Root, 1);
 	XGUIEng.PushPage(S6Patcher.ExtendedGameOptions.Root, false);
 	S6Patcher.ExtendedGameOptions.PageCount = S6Patcher.ExtendedGameOptions.PageCount + 1;
-	
+
 	S6Patcher.ExtendedGameOptions.LoadFeaturesFromFile();
 	S6Patcher.ExtendedGameOptions.UpdateFeatures();
 end
@@ -358,7 +358,7 @@ S6Patcher.ExtendedGameOptions.LoadFeaturesFromFile = function()
 end
 
 S6Patcher.ExtendedGameOptions.WriteFeaturesToFile = function()
-	for Key, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do	
+	for Key, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
 		Options.SetIntValue(Value[3] == "Windowed" and "Display" or "S6Patcher", Value[3], Value[2] and 1 or 0);
 	end
 end
@@ -366,15 +366,15 @@ end
 S6Patcher.ExtendedGameOptions.OnClose = function()
 	XGUIEng.ListBoxPopAll(S6Patcher.ExtendedGameOptions.Root .. "/Icons");
 	XGUIEng.ListBoxPopAll(S6Patcher.ExtendedGameOptions.Root .. "/Games");
-	
+
 	for i = 1, S6Patcher.ExtendedGameOptions.PageCount do
 		XGUIEng.PopPage();
 	end
 	S6Patcher.ExtendedGameOptions.PageCount = 0;
-	
-	XGUIEng.SetWidgetScreenPosition(S6Patcher.ExtendedGameOptions.Root, S6Patcher.ExtendedGameOptions.OriginalRootPosition[1], 
-		S6Patcher.ExtendedGameOptions.OriginalRootPosition[2]);	
-	
+
+	XGUIEng.SetWidgetScreenPosition(S6Patcher.ExtendedGameOptions.Root, S6Patcher.ExtendedGameOptions.OriginalRootPosition[1],
+		S6Patcher.ExtendedGameOptions.OriginalRootPosition[2]);
+
 	S6Patcher.ExtendedGameOptions.WriteFeaturesToFile();
 end
 
@@ -403,18 +403,18 @@ S6Patcher.ExtendedGameOptions.ToggleFeature = function()
 
 	S6Patcher.ExtendedGameOptions.Features[Index][2] = not S6Patcher.ExtendedGameOptions.Features[Index][2];
 	S6Patcher.ExtendedGameOptions.UpdateFeatures(Index - 1);
-	
+
 	XGUIEng.SliderSetValueAbs(WidgetID, Value);
 end
 
 S6Patcher.ExtendedGameOptions.UpdateFeatures = function(_selectedIndex)
 	XGUIEng.ListBoxPopAll(S6Patcher.ExtendedGameOptions.Root .. "/Icons");
 	XGUIEng.ListBoxPopAll(S6Patcher.ExtendedGameOptions.Root .. "/Games");
-	
+
 	for Key, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
 		S6Patcher.ExtendedGameOptions.AddFeature(S6Patcher.GetLocalizedText(Value[1]), Value[2]);
 	end
-	
+
 	XGUIEng.ListBoxSetSelectedIndex(S6Patcher.ExtendedGameOptions.Root .. "/Icons", _selectedIndex);
 	XGUIEng.ListBoxSetSelectedIndex(S6Patcher.ExtendedGameOptions.Root .. "/Games", _selectedIndex);
 end
@@ -422,7 +422,7 @@ end
 S6Patcher.ExtendedGameOptions.AddFeature = function(_name, _checked)
 	local posX = _checked and 10 or 11;
 	local posY = _checked and 11 or 12;
-	
+
 	local UVOffsetX = _checked and 3 or 9;
 	local UVOffsetY = _checked and 8 or 0;
 

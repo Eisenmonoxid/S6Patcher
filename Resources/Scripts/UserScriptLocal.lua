@@ -1,7 +1,7 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.Options = {"ExtendedKnightSelection", "SpecialKnightsAvailable", "UseSingleStop", "UseDowngrade", 
+S6Patcher.Options = {"ExtendedKnightSelection", "SpecialKnightsAvailable", "UseSingleStop", "UseDowngrade",
 	"UseMilitaryRelease", "DayNightCycle", "FeaturesInUsermaps"};
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 for i = 1, #S6Patcher.Options do S6Patcher[S6Patcher.Options[i]] = Options.GetIntValue("S6Patcher", S6Patcher.Options[i], 0) ~= 0; end
@@ -10,7 +10,7 @@ S6Patcher.IsUsermap = ((function(_param) return (type(_param) == "table" and _pa
 S6Patcher.DisableFeatures = S6Patcher.IsUsermap and not S6Patcher.FeaturesInUsermaps;
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 StartSimpleJobEx(function()
-	local Time = Framework.GetTimeMs();	
+	local Time = Framework.GetTimeMs();
 	if (g_FeedbackSpeech ~= nil) and (g_FeedbackSpeech.LastSpeechEndTime ~= nil) and ((Time + 6000) < g_FeedbackSpeech.LastSpeechEndTime) then
 		g_FeedbackSpeech.LastSpeechEndTime = nil;
 		XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomRight/MapFrame/FeedbackSpeechText", 0);
@@ -44,7 +44,7 @@ GUI_BuildingInfo.BuildingNameUpdate = function()
 	if EntityID == 0 or EntityID == nil then
 		return;
 	end
-	
+
 	local Type = Logic.GetEntityType(EntityID);
 	if Type == Entities.B_Cathedral_Big then
 		XGUIEng.SetText(XGUIEng.GetCurrentWidgetID(), "{center}" .. XGUIEng.GetStringTableText("Names/" .. Logic.GetEntityTypeName(Type)));
@@ -61,15 +61,15 @@ if S6Patcher.DayNightCycle and not S6Patcher.DisableFeatures then
 	end
 	GameCallback_Feedback_EndOfMonth = function(_LastMonth, _NewMonth)
 		S6Patcher.GameCallback_Feedback_EndOfMonth(_LastMonth, _NewMonth);
-		
+
 		local Month = 3; -- May
 		local Duration = 160; -- 2:40 minutes (ingame time, not real time)
-		
+
 		if (_NewMonth == Month) and (not Logic.IsWeatherEventActive()) then
 			if S6Patcher.DayNightCycleEnvironmentSet == nil then
 				S6Patcher.DayNightCycleEnvironmentSet = Display.AddEnvironmentSettingsSequence("ME_Special_Sundawn.xml");
 			end
-			
+
 			Display.PlayEnvironmentSettingsSequence(S6Patcher.DayNightCycleEnvironmentSet, Duration);
 		end
 	end
@@ -78,7 +78,7 @@ end
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.GlobalScriptOverridden = false;
-S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry", 
+S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry",
 	"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong", "U_KnightSabatta", "U_KnightRedPrince"};
 S6Patcher.OverrideGlobalScript = function()
 	Framework.SetOnGameStartLuaCommand("return;"); -- free memory
@@ -161,7 +161,7 @@ S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 			return true;
 		end
 	end
-	
+
 	return false;
 end
 
@@ -172,7 +172,7 @@ S6Patcher.EnableSpecialKnights = function()
 
 	g_MilitaryFeedback.Knights[Entities.U_KnightRedPrince] = "H_Knight_RedPrince";
 	g_HeroAbilityFeedback.Knights[Entities.U_KnightRedPrince] = "RedPrince";
-	
+
 	if S6Patcher.GetKnightAbilityAndIcons == nil then
 		S6Patcher.GetKnightAbilityAndIcons = GUI_Knight.GetKnightAbilityAndIcons;
 	end
@@ -186,7 +186,7 @@ S6Patcher.EnableSpecialKnights = function()
 			return S6Patcher.GetKnightAbilityAndIcons(_KnightID);
 		end
 	end
-	
+
 	if S6Patcher.StartAbilityClicked == nil then
 		S6Patcher.StartAbilityClicked = GUI_Knight.StartAbilityClicked;
 	end
@@ -195,21 +195,21 @@ S6Patcher.EnableSpecialKnights = function()
 		if KnightID == nil or Logic.IsKnight(KnightID) == false then
 			return;
 		end
-		
+
 		if Logic.GetEntityType(KnightID) == Entities.U_KnightRedPrince then
 			if not S6Patcher.ShownFirstAbilityMessage then
 				StartKnightVoiceForActionSpecialAbility(Entities.U_KnightRedPrince);
 			else
 				HeroAbilityFeedback(KnightID);
 			end
-			
+
 			Sound.FXPlay2DSound("ui\\menu_click");
 			GUI.StartKnightAbility(KnightID, Abilities.AbilityFood);
 		else
 			return S6Patcher.StartAbilityClicked(_Ability);
 		end
 	end
-	
+
 	if S6Patcher.GameCallback_Feedback_EntityHurt == nil then
 		S6Patcher.GameCallback_Feedback_EntityHurt = GameCallback_Feedback_EntityHurt;
 	end
@@ -220,22 +220,22 @@ S6Patcher.EnableSpecialKnights = function()
 				StartKnightVoiceForActionSpecialAbility(Type);
 			end
 		end
-		
+
 		return S6Patcher.GameCallback_Feedback_EntityHurt(_HurtPlayerID, _HurtEntityID, _HurtingPlayerID, _HurtingEntityID, _DamageReceived, _DamageDealt);
 	end
-	
+
 	if S6Patcher.StartKnightVoiceForPermanentSpecialAbility == nil then
 		S6Patcher.StartKnightVoiceForPermanentSpecialAbility = StartKnightVoiceForPermanentSpecialAbility;
 	end
-	StartKnightVoiceForPermanentSpecialAbility = function(_KnightType)	
+	StartKnightVoiceForPermanentSpecialAbility = function(_KnightType)
 		local Type = Logic.GetEntityType(Logic.GetKnightID(GUI.GetPlayerID()));
-		
+
 		if _KnightType == Entities.U_KnightPlunder and Type == Entities.U_KnightRedPrince then
 			_KnightType = Entities.U_KnightRedPrince;
 		elseif _KnightType == Entities.U_KnightTrading and Type == Entities.U_KnightSabatta then
 			_KnightType = Entities.U_KnightSabatta;
 		end
-		
+
 		return S6Patcher.StartKnightVoiceForPermanentSpecialAbility(_KnightType);
 	end
 end
@@ -246,16 +246,16 @@ if S6Patcher.ExtendedKnightSelection
 	and (not S6Patcher.GlobalScriptOverridden)
 	and (not Framework.IsNetworkGame())
 	then
-	
+
 	if Framework.GetGameExtraNo() < 1 then
 		table.remove(S6Patcher.DefaultKnightNames, 1);
 	end
-	
+
 	if S6Patcher.SpecialKnightsAvailable then
 		S6Patcher.EnableSpecialKnights();
 	end
 	S6Patcher.OverrideGlobalScript();
-	
+
 	if S6Patcher.RestartMap == nil then
 		S6Patcher.RestartMap = Framework.RestartMap;
 	end
@@ -267,10 +267,10 @@ if S6Patcher.ExtendedKnightSelection
 				break;
 			end
 		end
-	
+
 		S6Patcher.RestartMap(_knightType);
 	end
-	
+
 	S6Patcher.GlobalScriptOverridden = true;
 end
 -- ************************************************************************************************************************************************************* --
@@ -291,9 +291,9 @@ if S6Patcher.UseSingleStop and not S6Patcher.DisableFeatures then
 		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
 		local EntityID = GUI.GetSelectedEntity();
 
-		if EntityID == nil 
-			or Logic.IsBuilding(EntityID) == 0 
-			or Logic.IsConstructionComplete(EntityID) == 0 
+		if EntityID == nil
+			or Logic.IsBuilding(EntityID) == 0
+			or Logic.IsConstructionComplete(EntityID) == 0
 			or Logic.IsBuildingStoppable(EntityID, true) == false
 			or Logic.IsEntityInCategory(EntityID, EntityCategories.Cathedrals) == 1
 			or Logic.IsBurning(EntityID) == true
@@ -302,7 +302,7 @@ if S6Patcher.UseSingleStop and not S6Patcher.DisableFeatures then
 			XGUIEng.ShowWidget(CurrentWidgetID, 0);
 			return;
 		end
-		
+
 		SetIcon(CurrentWidgetID, (Logic.IsBuildingStopped(EntityID) and {4, 12}) or {4, 13});
 		XGUIEng.ShowWidget(CurrentWidgetID, 1);
 	end
@@ -315,7 +315,7 @@ if S6Patcher.UseDowngrade and not S6Patcher.DisableFeatures then
 		local PlayerID = GUI.GetPlayerID();
 		local EntityID = GUI.GetSelectedEntity();
 		local Value = Logic.GetEntityHealth(EntityID) - (Logic.GetEntityMaxHealth(EntityID) * 0.5);
-		
+
 		Sound.FXPlay2DSound("ui\\menu_click");
 		GUI.DeselectEntity(EntityID);
 		GUI.SendScriptCommand([[
@@ -329,10 +329,10 @@ if S6Patcher.UseDowngrade and not S6Patcher.DisableFeatures then
 	GUI_BuildingButtons.GateOpenCloseUpdate = function()
 		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
 		local EntityID = GUI.GetSelectedEntity();
-		
-		if EntityID == nil 
+
+		if EntityID == nil
 			or (Logic.IsEntityInCategory(EntityID, EntityCategories.CityBuilding) == 0 and Logic.IsEntityInCategory(EntityID, EntityCategories.OuterRimBuilding) == 0)
-			or Logic.IsConstructionComplete(EntityID) == 0 
+			or Logic.IsConstructionComplete(EntityID) == 0
 			or Logic.IsBurning(EntityID) == true
 			or Logic.CanCancelKnockDownBuilding(EntityID) == true
 			or Logic.GetEntityHealth(EntityID) < Logic.GetEntityMaxHealth(EntityID)
@@ -346,7 +346,7 @@ if S6Patcher.UseDowngrade and not S6Patcher.DisableFeatures then
 		XGUIEng.ShowWidget(CurrentWidgetID, 1);
 	end
 
-	GUI_BuildingButtons.GateOpenCloseMouseOver = function()	
+	GUI_BuildingButtons.GateOpenCloseMouseOver = function()
 		GUI_Tooltip.TooltipNormal("DowngradeButton");
 	end
 end
@@ -361,7 +361,7 @@ if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 		local PlayerID = GUI.GetPlayerID();
 		local EntityID = GUI.GetSelectedEntity();
 		local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
-		
+
 		if EntityID ~= 0 and GuardedEntityID == 0 and Logic.IsLeader(EntityID) == 1 then
 			Sound.FXPlay2DSound("ui\\menu_click");
 
@@ -375,12 +375,12 @@ if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 				]]);
 			else
 				GUI.ClearSelection();
-				local posX, posY = Logic.GetEntityPosition(EntityID);		
+				local posX, posY = Logic.GetEntityPosition(EntityID);
 				GUI.SendScriptCommand([[
 					Logic.CreateEffect(EGL_Effects.FXDie, ]] .. tostring(posX) .. [[, ]] .. tostring(posY) .. [[, ]] .. tostring(PlayerID) .. [[);
 					Logic.DestroyGroupByLeader(]] .. tostring(EntityID) .. [[);
 				]]);
-				
+
 				Soldiers = nil;
 			end
 		else
@@ -401,7 +401,7 @@ if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 			XGUIEng.DisableButton(CurrentWidgetID, 0);
 			return;
 		end
-		
+
 		SetIcon(CurrentWidgetID, {12, 1});
 		S6Patcher.DismountUpdate();
 	end
@@ -417,7 +417,7 @@ if S6Patcher.GameCallback_GUI_SelectionChanged == nil then
 end
 GameCallback_GUI_SelectionChanged = function(_Source)
 	S6Patcher.GameCallback_GUI_SelectionChanged(_Source);
-	
+
 	if S6Patcher.UseSingleStop or S6Patcher.UseDowngrade then
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateAutoToggle", 1); -- Unused in the game
 		XGUIEng.ShowWidget("/InGame/Root/Normal/BuildingButtons/GateOpenClose", 1); -- Unused in the game
@@ -431,7 +431,7 @@ if not S6Patcher.DisableFeatures then
 	S6Patcher.LeaderSortOrderAmmunition = {unpack(LeaderSortOrder)};
 	S6Patcher.LeaderSortOrderThiefAmmunition = {unpack(LeaderSortOrder)};
 	S6Patcher.LeaderSortOrderNoThief = {unpack(LeaderSortOrder)};
-	
+
 	S6Patcher.LeaderSortOrderThiefAmmunition[#S6Patcher.LeaderSortOrderThiefAmmunition + 1] = Entities.U_AmmunitionCart;
 	for Key, Value in pairs(S6Patcher.LeaderSortOrderNoThief) do
 		if Value == Entities.U_Thief then
@@ -446,7 +446,7 @@ if not S6Patcher.DisableFeatures then
 	GUI_MultiSelection.SelectAllPlayerUnitsClicked = function()
 		local Shift = XGUIEng.IsModifierPressed(Keys.ModifierShift) == true;
 		local Control = XGUIEng.IsModifierPressed(Keys.ModifierControl) == true;
-		
+
 		if Shift and Control then
 			LeaderSortOrder = S6Patcher.LeaderSortOrderAmmunition;
 		elseif Shift and not Control then
@@ -482,19 +482,19 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			end
 		end
 	end
-	
+
 	if S6Patcher.SpecialKnightsAvailable then
 		if _OptionalTextKeyName == "AbilityConvert" then
 			local EntityID = GUI.GetSelectedEntity();
 			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightSabatta) then
 				local Title = string.gsub(XGUIEng.GetStringTableText("UI_ObjectNames/" .. _OptionalTextKeyName), "Hakim", "Sabatt");
 				local Text = XGUIEng.GetStringTableText("UI_ObjectDescription/".. _OptionalTextKeyName);
-				
+
 				local Disabled = "";
 				if _OptionalDisabledTextKeyName ~= nil then
 					Disabled = "{cr}" .. XGUIEng.GetStringTableText("UI_ButtonDisabled/" .. _OptionalDisabledTextKeyName);
 				end
-				
+
 				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text .. "{cr}{@color:220, 0, 0}" .. Disabled .. "{@color:none}");
 				return;
 			end
@@ -503,19 +503,19 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			if (EntityID ~= 0) and (Logic.GetEntityType(EntityID) == Entities.U_KnightRedPrince) then
 				local Title = XGUIEng.GetStringTableText("UI_ObjectNames/AbilityPlagueRedPrince");
 				local Text = XGUIEng.GetStringTableText("UI_ObjectDescription/AbilityPlagueRedPrince");
-				
+
 				local Disabled = "";
 				if _OptionalDisabledTextKeyName ~= nil then
 					Disabled = "{cr}" .. XGUIEng.GetStringTableText("UI_ButtonDisabled/" .. _OptionalDisabledTextKeyName);
 				end
-				
+
 				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text .. "{@color:220, 0, 0}" .. Disabled .. "{@color:none}");
 				return;
 			end
-		end	
+		end
 	end
-	
-	return S6Patcher.SetNameAndDescription(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean);	
+
+	return S6Patcher.SetNameAndDescription(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean);
 end
 S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _Title, _Text)
 	XGUIEng.SetText(_TooltipNameWidget, "{center}" .. _Title);

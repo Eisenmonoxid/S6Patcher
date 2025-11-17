@@ -64,6 +64,16 @@ end
 	if Campaign ~= "c00" then
 		return;
 	end
+
+	-- Fix incorrect enemy knight type
+	if RedPrincePlayerID ~= nil then
+		local KnightID = Logic.GetKnightID(RedPrincePlayerID);
+		local Type = Logic.GetEntityType(KnightID);
+
+		if (KnightID ~= 0) and (Type ~= Entities.U_KnightRedPrince) and (Type ~= Entities.U_KnightSabatta) then
+			S6Patcher.ReplaceGlobalKnight(KnightID, Entities.U_KnightSabatta);
+		end
+	end
 	
 	if Map == "c00_m16_Rossotorres" then
 		-- Interrupt Quests running
