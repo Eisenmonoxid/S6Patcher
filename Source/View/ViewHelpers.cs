@@ -23,18 +23,23 @@ namespace S6Patcher.Source.View
             .Where(Box => Box.IsChecked == true && Box.IsEnabled == true)
             .Select(Box => Box.Name).Distinct()];
 
-        public void ShowMessageBox(string Title, string Message)
+        public async Task<ButtonResult> ShowMessageBox(string Title, string Message)
         {
-            if (Design.IsDesignMode)
-            {
-                return;
-            }
-
-            ViewAccessorWrapper(async () =>
+            return await ViewAccessorWrapper(async () =>
             {
                 var Box = MessageBoxManager.GetMessageBoxStandard(Title, Message, ButtonEnum.Ok,
-                    Icon.Warning, WindowStartupLocation.CenterOwner);
-                await Box.ShowWindowDialogAsync(Window);
+                    Icon.Warning, null, WindowStartupLocation.CenterOwner);
+                return await Box.ShowWindowDialogAsync(Window);
+            });
+        }
+
+        public async Task<ButtonResult> ShowPromptMessageBox(string Title, string Message)
+        {
+            return await ViewAccessorWrapper(async () =>
+            {
+                var Box = MessageBoxManager.GetMessageBoxStandard(Title, Message, ButtonEnum.YesNo, 
+                    Icon.Question, null, WindowStartupLocation.CenterOwner);
+                return await Box.ShowWindowDialogAsync(Window);
             });
         }
 
@@ -101,15 +106,25 @@ namespace S6Patcher.Source.View
             if (!string.IsNullOrEmpty(result))
             {
                 Logger.Instance.Log(result);
-                ShowMessageBox("Updater", result);
+                await ShowMessageBox("Updater", result);
             }
+        }
+
+        public Task<T> ViewAccessorWrapper<T>(Func<Task<T>> Action)
+        {
+            if (!Dispatcher.UIThread.CheckAccess())
+            {
+                return Dispatcher.UIThread.InvokeAsync(Action);
+            }
+
+            return Action();
         }
 
         public void ViewAccessorWrapper(Action Action)
         {
             if (!Dispatcher.UIThread.CheckAccess())
             {
-                Dispatcher.UIThread.InvokeAsync(Action);
+                Dispatcher.UIThread.Post(Action);
                 return;
             }
 

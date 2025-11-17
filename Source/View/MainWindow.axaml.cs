@@ -32,7 +32,7 @@ namespace S6Patcher.Source.View
 
             ViewHelpers = new ViewHelpers(this);
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
-            Backup.ShowMessage += Message => ShowMessageBox("Backup", Message);
+            Backup.ShowMessage += async Message => await ShowMessageBox("Backup", Message);
 
             DisableUI();
             GetModfileInformation();
@@ -56,19 +56,11 @@ namespace S6Patcher.Source.View
 
                 if (Mapping.TryGetValue(ID, out string[] Value))
                 {
-                    var Controls = ViewHelpers.GetControlsByType<TabItem>();
-                    foreach (var Control in Controls.ToArray())
+                    var Names = new HashSet<string>(Value);
+                    foreach (var Element in ViewHelpers.GetControlsByType<TabItem>())
                     {
-                        Control.IsEnabled = false;
+                        Element.IsEnabled = Names.Contains(Element.Name);
                     }
-
-                    List<TabItem> TabResults =
-                    [.. from Entry in Value
-                        from Control in Controls
-                        where Control.Name == Entry
-                        select Control];
-
-                    TabResults.ForEach(Result => Result.IsEnabled = true);
 
                     List<Control> ControlResults =
                         [.. from Entry in Value
@@ -134,7 +126,7 @@ namespace S6Patcher.Source.View
 
             Path = IOFileHandler.Instance.IsPlayLauncherExecutable(Path);
             txtPath.Text = Path;
-            InitializePatcher(Path);
+            await InitializePatcher(Path);
         }
 
         private void ToggleUIAvailability(bool Enable)
@@ -144,7 +136,7 @@ namespace S6Patcher.Source.View
             btnBackup.IsEnabled = Enable;
         }
 
-        private void InitializePatcher(string Filepath)
+        private async Task InitializePatcher(string Filepath)
         {
             try
             {
@@ -154,21 +146,21 @@ namespace S6Patcher.Source.View
             }
             catch (Exception ex)
             {
-                ShowMessageBox("Error", ex.Message);
+                await ShowMessageBox("Error", ex.Message);
                 return;
             }
 
-            MainPatcher.ShowMessage += Message => ShowMessageBox("Error", Message);
-            MainPatcher.GlobalMod.ShowMessage += Message => ShowMessageBox("ModLoader", Message);
+            MainPatcher.ShowMessage += async Message => await ShowMessageBox("Error", Message);
+            MainPatcher.GlobalMod.ShowMessage += async Message => await ShowMessageBox("ModLoader", Message);
             
             EnableUIElements(MainPatcher.GlobalID);
         }
 
-        private void FinishPatching()
+        private async Task FinishPatching()
         {
             ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
             DisableUI();
-            ShowMessageBox("Finished", "Patching finished!");
+            await ShowMessageBox("Finished", "Patching finished!");
         }
 
         private async void MainPatchingTask()
@@ -178,9 +170,10 @@ namespace S6Patcher.Source.View
 
             List<string> Features = GetFeatures();
             ToggleUIAvailability(false);
+            
             await ViewHelpers.GetPathToOptionsFile();
             await PatchByFeatures(Features);
-            FinishPatching();
+            await FinishPatching();
 
             Logger.Instance.Log("Patching Process Finished!");
             PatchingInProgress = false;
@@ -264,7 +257,7 @@ namespace S6Patcher.Source.View
         {
             if (PatchingInProgress)
             {
-                ShowMessageBox("Patching in Progress ...", "Patching is currently in progress!");
+                _ = ShowMessageBox("Patching in Progress ...", "Patching is currently in progress!");
                 e.Cancel = true;
                 return;
             }
@@ -282,7 +275,7 @@ namespace S6Patcher.Source.View
             DisableUI();
         }
 
-        private void ShowMessageBox(string Title, string Message) => ViewHelpers.ShowMessageBox(Title, Message);
+        private async Task ShowMessageBox(string Title, string Message) => await ViewHelpers.ShowMessageBox(Title, Message);
         private void ResetPatcher(bool FinishWithPEHeader = false)
         {
             MainPatcher?.Dispose(FinishWithPEHeader);
@@ -297,7 +290,7 @@ namespace S6Patcher.Source.View
         private void cbUpdater_Checked(object sender, Avalonia.Interactivity.RoutedEventArgs e) => tcMain.IsEnabled = cbUpdater.IsChecked == false;
         private void cbModLoader_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            cbModDownload.IsEnabled = cbModLoader.IsChecked == true;
+            cbModDownload.IsEnabled = (bool)cbModLoader.IsChecked;
             if (cbModLoader.IsChecked == false)
             {
                 cbModDownload.IsChecked = false;

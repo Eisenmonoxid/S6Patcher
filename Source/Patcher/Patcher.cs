@@ -67,7 +67,7 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("Called with " + ResolutionText);
 
-            if (uint.TryParse(ResolutionText, out uint Resolution) == false)
+            if (!uint.TryParse(ResolutionText, out uint Resolution))
             {
                 string Text = "Invalid texture resolution value: " + ResolutionText;
                 ShowMessage.Invoke(Text);
@@ -84,7 +84,7 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("Called with " + AutosaveText);
 
-            if (double.TryParse(AutosaveText, out double Timer) == false)
+            if (!double.TryParse(AutosaveText, out double Timer))
             {
                 string Text = "Invalid autosave timer value: " + AutosaveText;
                 ShowMessage.Invoke(Text);
@@ -99,7 +99,7 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("Called with " + ZoomText);
 
-            if (double.TryParse(ZoomText, out double Level) == false || float.TryParse(ZoomText, out float Distance) == false)
+            if (!double.TryParse(ZoomText, out double Level) || !float.TryParse(ZoomText, out float Distance))
             {
                 string Text = "Invalid zoom level value: " + ZoomText;
                 ShowMessage.Invoke(Text);
