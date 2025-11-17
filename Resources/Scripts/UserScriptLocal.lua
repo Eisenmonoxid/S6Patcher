@@ -78,11 +78,12 @@ end
 -- Make all Knights available in the expansion pack ("Eastern Realm")																					 		 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.GlobalScriptOverridden = false;
-S6Patcher.DefaultKnightNames = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry",
-	"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong", "U_KnightSabatta", "U_KnightRedPrince"};
 S6Patcher.OverrideGlobalScript = function()
 	Framework.SetOnGameStartLuaCommand("return;"); -- free memory
-	local Knight = Entities[S6Patcher.DefaultKnightNames[S6Patcher.SelectedKnight]];
+	local Knight = Entities[S6Patcher.SelectedKnight];
+	if Knight == nil then
+		return;
+	end
 
 	GUI.SendScriptCommand([[
 		S6Patcher = S6Patcher or {};
@@ -247,10 +248,6 @@ if S6Patcher.ExtendedKnightSelection
 	and (not Framework.IsNetworkGame())
 	then
 
-	if Framework.GetGameExtraNo() < 1 then
-		table.remove(S6Patcher.DefaultKnightNames, 1);
-	end
-
 	if S6Patcher.SpecialKnightsAvailable then
 		S6Patcher.EnableSpecialKnights();
 	end
@@ -260,14 +257,8 @@ if S6Patcher.ExtendedKnightSelection
 		S6Patcher.RestartMap = Framework.RestartMap;
 	end
 	Framework.RestartMap = function(_knightType)
-		local TypeName = Logic.GetEntityTypeName(_knightType);
-		for i = 1, #S6Patcher.DefaultKnightNames do
-			if S6Patcher.DefaultKnightNames[i] == TypeName then
-				Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(i) .. ";");
-				break;
-			end
-		end
-
+		local Type = Logic.GetEntityTypeName(_knightType);
+		Framework.SetOnGameStartLuaCommand("S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring(Type) .. ";");
 		S6Patcher.RestartMap(_knightType);
 	end
 
