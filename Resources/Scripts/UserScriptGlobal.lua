@@ -166,6 +166,7 @@ end
 -- Special Knight Abilities																										 								 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.SpecialKnights = {}
+S6Patcher.SpecialKnights.AbilityEffect = nil;
 S6Patcher.SpecialKnights.AbilityEffectsOnMap = {};
 S6Patcher.SpecialKnights.EffectCleanupJob = nil;
 
@@ -185,7 +186,8 @@ S6Patcher.SpecialKnights.KnightRedPrinceAbility = function(_playerID)
 	local Position = {Logic.EntityGetPos(KnightID)};
 	local Entries = S6Patcher.SpecialKnights.GetEntityTypesInArea(KnightID, EntityCategories.Worker, Area);
 	local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_HealingFX, Position[1], Position[2], 0, 1);
-	table.insert(S6Patcher.SpecialKnights.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + 5});
+	--table.insert(S6Patcher.SpecialKnights.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + 5});
+	S6Patcher.SpecialKnights.AbilityEffect = {EffectID, KnightID, Logic.GetTime() + 5, Logic.GetEntityPosition(KnightID)};
 
 	local Counter = 0;
 	for i = 1, #Entries do
@@ -245,6 +247,14 @@ S6Patcher.SpecialKnights.CleanupKnightEffects = function()
 		if Value[2] <= CurrentTime then
 			Logic.DestroyEffect(Value[1]);
 			S6Patcher.SpecialKnights.AbilityEffectsOnMap[Key] = nil;
+		end
+	end
+
+	if S6Patcher.SpecialKnights.AbilityEffect ~= nil then
+		if (S6Patcher.SpecialKnights.AbilityEffect[3] <= CurrentTime) or
+				(Logic.GetEntityPosition(S6Patcher.SpecialKnights.AbilityEffect[2]) ~= S6Patcher.SpecialKnights.AbilityEffect[4]) then
+			Logic.DestroyEffect(S6Patcher.SpecialKnights.AbilityEffect[1]);
+			S6Patcher.SpecialKnights.AbilityEffect = nil;
 		end
 	end
 end
