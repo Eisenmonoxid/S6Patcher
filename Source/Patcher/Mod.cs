@@ -22,14 +22,25 @@ namespace S6Patcher.Source.Patcher
             var Entries = Archive.Entries
                 .Where(Element => !Element.FullName.Contains(ArchiveFileName))
                 .Where(Element => !string.IsNullOrEmpty(Element.Name));
-                
+
             foreach (var Entry in Entries)
             {
                 string DirectoryPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName) ?? string.Empty);
-                Directory.CreateDirectory(DirectoryPath);
                 string Destination = Path.Combine(BaseDirectoryPath, Entry.FullName);
-                Entry.ExtractToFile(Destination, true);
-                Logger.Instance.Log("Extracted " + Destination);
+
+                try
+                {
+                    Directory.CreateDirectory(DirectoryPath);
+                    Entry.ExtractToFile(Destination, true);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Log(ex.ToString());
+                    ShowMessage.Invoke(ex.Message);
+                    continue;
+                }
+
+                Logger.Instance.Log("Successfully extracted " + Destination);
             };
         }
 
