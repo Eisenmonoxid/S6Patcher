@@ -30,9 +30,9 @@
 			Background="{DynamicResource SystemControlBackgroundAltHighBrush}">	
 			
 			<HeaderedContentControl Grid.Row="0" Name="hccSelect" Header="Select Game/Editor Executable">
-				<Grid RowDefinitions="* *">
-					<Button Margin="0 5" Grid.Row="1" Name="btnChoose" Click="btnChoose_Click" HorizontalAlignment="Right">Choose File</Button>
-					<TextBox Grid.Row="0" TextWrapping="NoWrap" Name="txtPath" IsReadOnly="True" HorizontalAlignment="Stretch">...</TextBox>
+    			<Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+        			<TextBox Grid.Row="0" Grid.Column="0" TextWrapping="NoWrap" Name="txtPath" IsReadOnly="True"/>
+					<Button Grid.Row="1" Margin="0 5" Name="btnChoose" Click="btnChoose_Click" HorizontalAlignment="Right">Choose File</Button>
 				</Grid>
 			</HeaderedContentControl>
 
@@ -64,8 +64,9 @@
 						<Grid Margin="15"  RowDefinitions="Auto Auto" ColumnDefinitions="Auto Auto">
 							<CheckBox IsCheckedChanged="cbModLoader_IsCheckedChanged" Grid.Row="0" Name="cbModLoader">Activate ModLoader</CheckBox>
 							<CheckBox IsEnabled="False" Grid.Row="1" Name="cbModDownload">Install Bugfix Mod</CheckBox>
-							<Label Foreground="Blue" HorizontalContentAlignment="Right" Name="lblDownloadSize" HorizontalAlignment="Right" VerticalAlignment="Center" 
-								   Margin="10 0" Content="Download Size: Fetching ..." Grid.Row="1" Grid.Column="1"></Label>
+							<Label Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" HorizontalContentAlignment="Right" 
+								Name="lblDownloadSize" HorizontalAlignment="Right" VerticalAlignment="Center" 
+								Margin="10 0" Content="Download Size: Fetching ..." Grid.Row="1" Grid.Column="1"></Label>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiDev" Header="Development">
