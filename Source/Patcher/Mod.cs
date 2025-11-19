@@ -22,21 +22,15 @@ namespace S6Patcher.Source.Patcher
             var Entries = Archive.Entries
                 .Where(Element => !Element.FullName.Contains(ArchiveFileName))
                 .Where(Element => !string.IsNullOrEmpty(Element.Name));
-
-            ConcurrentDictionary<string, byte> Created = new();
-            Parallel.ForEach(Entries, Entry =>
+                
+            foreach (var Entry in Entries)
             {
                 string DirectoryPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName) ?? string.Empty);
-                Created.GetOrAdd(DirectoryPath, _ =>
-                {
-                    Directory.CreateDirectory(DirectoryPath);
-                    return 0;
-                });
-
+                Directory.CreateDirectory(DirectoryPath);
                 string Destination = Path.Combine(BaseDirectoryPath, Entry.FullName);
                 Entry.ExtractToFile(Destination, true);
                 Logger.Instance.Log("Extracted " + Destination);
-            });
+            };
         }
 
         private void ExtractZipArchive(string ZipPath)
