@@ -86,6 +86,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
   - Mission 11: The victory message by the Red Prince now has the correct portrait and voice message.
   - Mission 15: The reinforcements are now correctly spawned.
   - Mission 13: The Red Prince and the Harbor are now actually enemies and attacks are therefore possible.
+  - All Missions where the enemy had the wrong knight type (Marcus instead of Sabatta/Red Prince) have been fixed.
 
 ### Original Release
 - The parental control check is disabled. This caused the game to fail to launch when a certain Win32 DLL file was missing on the system.

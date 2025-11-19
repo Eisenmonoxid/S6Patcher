@@ -45,4 +45,4 @@ it into the `modloader` folder.
 ---
 ## Contribution
 In case you want to contribute your own features and/or fixes to the project, feel free to fork the repository and create a pull request.   
-**Important:** Everything contributed to the project must either be created by yourself or approved by the original author.
+**Important:** Everything contributed to the project must either be created by yourself or approved by the original author(s).
