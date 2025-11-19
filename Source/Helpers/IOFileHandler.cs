@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Helpers
@@ -106,7 +107,7 @@ namespace S6Patcher.Source.Helpers
             {
                 try
                 {
-                    File.WriteAllLines(Element.Key, Element.Value);
+                    File.WriteAllText(Element.Key, string.Join("\r\n", Element.Value));
                     OpenOptionFiles.Remove(Element.Key);
                     Logger.Instance.Log("Updated Options.ini file " + Element.Key);
                 }
