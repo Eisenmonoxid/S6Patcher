@@ -44,7 +44,10 @@ namespace S6Patcher.Source.View
             ViewHelpers.ViewAccessorWrapper(() =>
             {
                 var Panel = this.FindControl<HeaderedContentControl>("hccMain");
-                Panel.IsEnabled = true;
+                Panel?.IsEnabled = true;
+
+                Panel = this.FindControl<HeaderedContentControl>("hccUpdater");
+                Panel?.IsEnabled = true;
 
                 ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Result => Result.IsEnabled = true);
                 cbModDownload.IsEnabled = false;
@@ -91,7 +94,10 @@ namespace S6Patcher.Source.View
                 txtPath.Text = "...";
 
                 var Panel = this.FindControl<HeaderedContentControl>("hccMain");
-                Panel.IsEnabled = false;
+                Panel?.IsEnabled = false;
+
+                Panel = this.FindControl<HeaderedContentControl>("hccUpdater");
+                Panel?.IsEnabled = false;
             });
         }
 
@@ -167,10 +173,13 @@ namespace S6Patcher.Source.View
             Logger.Instance.Log("Patching Process Started!");
 
             List<string> Features = GetFeatures();
+            bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
+            bool UseModLoader = cbModLoader.IsChecked == true || UseBugfixMod;
+            bool DoNotUseEmbedded = rbDownload.IsChecked == true;
+
             ToggleUIAvailability(false);
-            
             await ViewHelpers.GetPathToOptionsFile();
-            await PatchByFeatures(Features);
+            await PatchByFeatures(Features, UseBugfixMod, UseModLoader, DoNotUseEmbedded);
             await FinishPatching();
 
             Logger.Instance.Log("Patching Process Finished!");
@@ -185,10 +194,11 @@ namespace S6Patcher.Source.View
             return Features;
         }
 
-        private async Task PatchByFeatures(List<string> Features)
+        private async Task PatchByFeatures(List<string> Features, bool UseBugfixMod, bool UseModLoader, bool DoNotUseEmbedded)
         {
-            bool Download = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
-            Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(), PatcherModLoaderWrapper(Download));
+            Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
+                PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded));
+
             if (cbUpdater.IsChecked == true)
             {
                 await Completed;
@@ -220,19 +230,19 @@ namespace S6Patcher.Source.View
             await Completed;
         }
 
-        private async Task PatcherModLoaderWrapper(bool ModInstallation)
+        private async Task PatcherModLoaderWrapper(bool ModInstallation, bool UseModLoader, bool DoNotUseEmbedded)
         {
-            if (MainPatcher.GlobalID != execID.ED && (cbModLoader.IsChecked == true || cbUpdater.IsChecked == true))
+            if (MainPatcher.GlobalID != execID.ED && (UseModLoader || ModInstallation))
             {
-                await MainPatcher.SetModLoader(ModInstallation, rbDownload.IsChecked == true);
+                await MainPatcher.SetModLoader(ModInstallation, DoNotUseEmbedded);
             }
         }
 
-        private async Task PatcherScriptFilesWrapper()
+        private async Task PatcherScriptFilesWrapper(bool DoNotUseEmbedded)
         {
             if (MainPatcher.GlobalID != execID.ED)
             {
-                await MainPatcher.WriteScriptFilesToFolder(rbDownload.IsChecked == true);
+                await MainPatcher.WriteScriptFilesToFolder(DoNotUseEmbedded);
             }
         }
 

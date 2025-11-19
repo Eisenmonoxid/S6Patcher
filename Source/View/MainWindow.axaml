@@ -110,7 +110,7 @@
 					<RadioButton Grid.Row="3" Name="rbEmbedded" GroupName="Installation Options" 
 						Content="Use local Embedded Resources"/>
 					<CheckBox Grid.Row="5" IsCheckedChanged="cbUpdater_Checked" Margin="20 5"
-							Name="cbUpdater" IsEnabled="False">Only update Script and Mod files</CheckBox>
+							Name="cbUpdater" IsEnabled="False">Only Update Script and Mod Files</CheckBox>
 				</Grid>
 
 			</HeaderedContentControl>
