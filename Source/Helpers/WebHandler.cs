@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -52,27 +53,31 @@ namespace S6Patcher.Source.Helpers
             return DownloadSize;
         }
 
-        public List<MemoryStream> DownloadScriptFiles(Uri[] Paths)
+        public async Task<List<MemoryStream>> DownloadScriptFilesAsync(Uri[] Paths)
         {
-            List<MemoryStream> Elements = [];
-            Parallel.ForEach(Paths, async CurrentPath =>
+            var Tasks = Paths.Select(async Path =>
             {
-                Logger.Instance.Log("Downloading ScriptFile: " + CurrentPath.ToString());
-                HttpResponseMessage Response = await GetHttpResponse(CurrentPath);
+                Logger.Instance.Log("Downloading ScriptFile: " + Path.ToString());
+
+                HttpResponseMessage Response = await GetHttpResponse(Path);
                 if (Response == null)
                 {
-                    return;
+                    Logger.Instance.Log("Failed to download ScriptFile: " + Path.ToString());
+                    return null;
                 }
 
-                using Stream Stream = Response.Content.ReadAsStream();
-                MemoryStream MemStream = new();
-                Stream.CopyTo(MemStream);
-                MemStream.Seek(0, SeekOrigin.Begin);
-                Elements.Add(MemStream);
+                await using var Stream = await Response.Content.ReadAsStreamAsync();
+                var Memory = new MemoryStream();
+                await Stream.CopyToAsync(Memory);
+                Memory.Seek(0, SeekOrigin.Begin);
+                return Memory;
             });
 
-            Logger.Instance.Log("Downloaded ScriptFiles successfully. Size: " + Elements.Count);
-            return Elements;
+            var Finished = await Task.WhenAll(Tasks);
+            var FinalList = Finished.Where(Element => Element != null).ToList();
+            Logger.Instance.Log("Downloaded ScriptFiles successfully. Size: " + FinalList.Count);
+
+            return FinalList;
         }
 
         public async Task<bool> DownloadZipArchiveAsync(string DestinationDirectoryPath)

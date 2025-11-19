@@ -1,6 +1,7 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Helpers;
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -18,27 +19,23 @@ namespace S6Patcher.Source.Patcher
 
         private void ExtractHistoryEditionArchiveFiles(ZipArchive Archive)
         {
-            var Entries = from Entry in Archive.Entries
-                          where !Entry.FullName.Contains(ArchiveFileName)
-                          where !string.IsNullOrEmpty(Entry.Name)
-                          select Entry;
+            var Entries = Archive.Entries
+                .Where(Element => !Element.FullName.Contains(ArchiveFileName))
+                .Where(Element => !string.IsNullOrEmpty(Element.Name));
 
+            ConcurrentDictionary<string, byte> Created = new();
             Parallel.ForEach(Entries, Entry =>
             {
-                string FullPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName));
-                if (!Directory.Exists(FullPath))
+                string DirectoryPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName) ?? string.Empty);
+                Created.GetOrAdd(DirectoryPath, _ =>
                 {
-                    lock (FullPath)
-                    {
-                        if (!Directory.Exists(FullPath))
-                        {
-                            Directory.CreateDirectory(FullPath);
-                        }
-                    }
-                }
+                    Directory.CreateDirectory(DirectoryPath);
+                    return 0;
+                });
 
-                Entry.ExtractToFile(Path.Combine(BaseDirectoryPath, Entry.FullName), true);
-                Logger.Instance.Log("Extracted " + Path.Combine(BaseDirectoryPath, Entry.FullName));
+                string Destination = Path.Combine(BaseDirectoryPath, Entry.FullName);
+                Entry.ExtractToFile(Destination, true);
+                Logger.Instance.Log("Extracted " + Destination);
             });
         }
 

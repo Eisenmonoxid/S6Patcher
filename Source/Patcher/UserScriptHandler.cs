@@ -35,7 +35,7 @@ namespace S6Patcher.Source.Patcher
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})];
 
-        private List<MemoryStream> DownloadScriptFiles()
+        private async Task<List<MemoryStream>> DownloadScriptFiles()
         {
             int Length = ScriptFiles.Length;
             Uri[] Scripts = new Uri[Length];
@@ -44,13 +44,13 @@ namespace S6Patcher.Source.Patcher
                 Scripts[i] = new Uri(Resources.RepoBasePath + "Scripts/" + ScriptFiles[i]);
             }
 
-            return WebHandler.Instance.DownloadScriptFiles(Scripts);
+            return await WebHandler.Instance.DownloadScriptFilesAsync(Scripts);
         }
 
         public async Task CreateUserScriptFiles(bool UseDownload)
         {
-            // Try download, otherwise write local files from embedded resources as fallback
-            var Files = UseDownload ? DownloadScriptFiles() : null;
+            // If download fails, write local files from embedded resources as fallback
+            var Files = UseDownload ? await DownloadScriptFiles() : null;
             foreach (string Element in GetUserScriptDirectories())
             {
                 string CurrentPath = Path.Combine(Element, "Script");
