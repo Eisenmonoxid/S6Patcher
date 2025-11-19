@@ -102,11 +102,11 @@ namespace S6Patcher.Source.View
 
         public async void CheckForUpdates(bool Startup)
         {
-            string result = await WebHandler.Instance.CheckForUpdatesAsync(Startup);
-            if (!string.IsNullOrEmpty(result))
+            string Result = await WebHandler.Instance.CheckForUpdatesAsync(Startup);
+            if (!string.IsNullOrEmpty(Result))
             {
-                Logger.Instance.Log(result);
-                await ShowMessageBox("Updater", result);
+                Logger.Instance.Log(Result);
+                await ShowMessageBox("Updater", Result);
             }
         }
 

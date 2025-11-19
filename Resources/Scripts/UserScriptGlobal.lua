@@ -1,6 +1,7 @@
 -- UserScriptGlobal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
+S6Patcher.BETA = false;
 -- ************************************************************************************************************************************************************* --
 -- "B_NPC_Barracks_ME" will now correctly respawn soldiers																					 					 --
 -- ************************************************************************************************************************************************************* --
@@ -9,7 +10,7 @@ if S6Patcher.GameCallback_OnBuildingConstructionComplete == nil then
 end
 GameCallback_OnBuildingConstructionComplete = function(_PlayerID, _EntityID)
 	S6Patcher.GameCallback_OnBuildingConstructionComplete(_PlayerID, _EntityID);
-	
+
 	local EntityType = Logic.GetEntityType(_EntityID);
 	if EntityType == Entities.B_NPC_Barracks_ME then
 		Logic.RespawnResourceSetMaxSpawn(_EntityID, 0.01);
@@ -60,21 +61,26 @@ end
 
 	local Campaign = Framework.GetCampaignName();
 	local Map = Framework.GetCampaignMap();
-	
+
 	if Campaign ~= "c00" then
 		return;
 	end
 
 	-- Fix incorrect enemy knight type
-	if RedPrincePlayerID ~= nil then
-		local KnightID = Logic.GetKnightID(RedPrincePlayerID);
-		local Type = Logic.GetEntityType(KnightID);
+	local PossibleIDs = {RedPrincePlayerID, SabattaPlayerID, HusranPlayerID, 
+		CrimsonCitadelPlayerID, SidiKhemisRuinsPlayerID, KyrkasundPlayerID};
+	for _, Value in pairs(PossibleIDs) do
+		if Value ~= nil then
+			local KnightID = Logic.GetKnightID(Value);
+			local Type = Logic.GetEntityType(KnightID);
 
-		if (KnightID ~= 0) and (Type ~= Entities.U_KnightRedPrince) and (Type ~= Entities.U_KnightSabatta) then
-			S6Patcher.ReplaceGlobalKnight(KnightID, Entities.U_KnightSabatta);
+			if (KnightID ~= 0) and (Type ~= Entities.U_KnightRedPrince) and (Type ~= Entities.U_KnightSabatta) then
+				local Replacement = string.find(Map, "m13") and Entities.U_KnightRedPrince or Entities.U_KnightSabatta;
+				S6Patcher.ReplaceGlobalKnight(KnightID, Replacement);
+			end
 		end
 	end
-	
+
 	if Map == "c00_m16_Rossotorres" then
 		-- Interrupt Quests running
 		local Found = FindQuestsByName("HiddenQuest_NPCMarcusMustSurvive", false);
@@ -83,14 +89,14 @@ end
 				Quest:Interrupt();
 			end
 		end
-	
+
 		-- Update Knight Entities and Heads
 		local Knights = {
-			{Index = HarbourPlayerKnight, 		pID = HarborPlayerID}, 
-			{Index = GranCastillaPlayerKnight, 	pID = GranCastillaPlayerID}, 
+			{Index = HarbourPlayerKnight, 		pID = HarborPlayerID},
+			{Index = GranCastillaPlayerKnight, 	pID = GranCastillaPlayerID},
 			{Index = MonasterioPlayerKnight, 	pID = MonasterioPlayerID}
 		};
-			
+
 		for i = 1, #Knights do
 			if Knights[i].Index ~= nil and Knights[i].pID ~= nil then
 				S6Patcher.ReplaceGlobalKnight(Logic.GetKnightID(Knights[i].pID), Knights[i].Index.Type);
@@ -113,6 +119,8 @@ end
 		local Entity = Logic.GetEntityIDByName("ReinforcementSpawn");
 		local posX, posY = Logic.GetEntityPosition(Entity);
 		Logic.DEBUG_SetSettlerPosition(Entity, posX + 250, posY);
+		
+		SetupPlayer(5, TraitorKnight.Face, "Village of Eastholm", "VillageColor2");
 	elseif Map == "c00_m13_Montecito" then
 		SetDiplomacyState(RedPrincePlayerID, HarborBayPlayerID, DiplomacyStates.Enemy);
 	end
@@ -147,8 +155,8 @@ end
 DisableFireplaceforBanditPack = function(_CampID)
 	local BanditsPlayerID = Logic.EntityGetPlayer(_CampID);
 
-	if g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire ~= nil then      
-		local x, y = Logic.GetEntityPosition(g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire);      
+	if g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire ~= nil then
+		local x, y = Logic.GetEntityPosition(g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire);
 		Logic.DestroyEntity(g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire);
 
 		if g_Outlaws.ReplaceCampType == nil then
@@ -156,7 +164,7 @@ DisableFireplaceforBanditPack = function(_CampID)
 			g_Outlaws.ReplaceCampType[Entities.D_X_Fireplace01] = Entities.D_X_Fireplace01_Expired;
 			g_Outlaws.ReplaceCampType[Entities.D_X_Fireplace02] = Entities.D_X_Fireplace02_Expired;
 		end
-		
+
 		local FireplaceType = g_Outlaws.ReplaceCampType[g_Outlaws.Players[BanditsPlayerID][_CampID].CampFireType];
 		g_Outlaws.Players[BanditsPlayerID][_CampID].ExtinguishedFire = Logic.CreateEntityOnUnblockedLand(FireplaceType, x, y, 0, 0);
 		g_Outlaws.Players[BanditsPlayerID][_CampID].CampFire = nil;
@@ -183,30 +191,29 @@ S6Patcher.SpecialKnights.KnightRedPrinceAbility = function(_playerID)
 		return;
 	end
 
-	local Position = {Logic.EntityGetPos(KnightID)};
+	local Position = {Logic.GetEntityPosition(KnightID)};
 	local Entries = S6Patcher.SpecialKnights.GetEntityTypesInArea(KnightID, EntityCategories.Worker, Area);
 	local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_HealingFX, Position[1], Position[2], 0, 1);
-	--table.insert(S6Patcher.SpecialKnights.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + 5});
-	S6Patcher.SpecialKnights.AbilityEffect = {EffectID, KnightID, Logic.GetTime() + 5, Logic.GetEntityPosition(KnightID)};
+	S6Patcher.SpecialKnights.AbilityEffect = {EffectID, KnightID, Logic.GetTime() + 5, Position};
 
 	local Counter = 0;
 	for i = 1, #Entries do
 		if not Logic.IsIll(Entries[i]) then
 			Logic.MakeSettlerIll(Entries[i], true);
 			Position = {Logic.EntityGetPos(Entries[i])};
-			
+
 			if i % 2 == 0 then
-				local EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_SickBuilding, Position[1], Position[2], 0, 1);
+				EffectID = Logic.CreateEffectWithOrientation(EGL_Effects.E_SickBuilding, Position[1], Position[2], 0, 1);
 				table.insert(S6Patcher.SpecialKnights.AbilityEffectsOnMap, {EffectID, Logic.GetTime() + EffectTime});
 			end
-			
+
 			Counter = Counter + 1;
 			if Counter >= MaxSettlers then
 				break;
 			end
 		end
 	end
-	
+
 	if S6Patcher.SpecialKnights.EffectCleanupJob == nil then
 		S6Patcher.SpecialKnights.EffectCleanupJob = StartSimpleJobEx(S6Patcher.SpecialKnights.CleanupKnightEffects);
 	end
@@ -216,17 +223,17 @@ S6Patcher.SpecialKnights.GetEntityTypesInArea = function(_entityID, _category, _
 	local TypesInCategory = {Logic.GetEntityTypesInCategory(_category)};
 	local Position = {Logic.EntityGetPos(_entityID)};
 	local Entries = {};
-	
+
 	for i = 1, #TypesInCategory do
 		local Type = TypesInCategory[i];
-		if Type ~= nil and Type ~= 0 then 
+		if Type ~= nil and Type ~= 0 then
 			local CurrentSettlers = {Logic.GetEntitiesInArea(TypesInCategory[i], Position[1], Position[2], _area)}; -- Max 16
 			for j = 2, #CurrentSettlers do
 				table.insert(Entries, CurrentSettlers[j]);
 			end
 		end
 	end
-	
+
 	return Entries;
 end
 
@@ -237,7 +244,7 @@ S6Patcher.SpecialKnights.GetSpecialKnightID = function(_playerID, _type)
 			return Value;
 		end
 	end
-	
+
 	return 0;
 end
 
@@ -251,12 +258,20 @@ S6Patcher.SpecialKnights.CleanupKnightEffects = function()
 	end
 
 	if S6Patcher.SpecialKnights.AbilityEffect ~= nil then
-		if (S6Patcher.SpecialKnights.AbilityEffect[3] <= CurrentTime) or
-				(Logic.GetEntityPosition(S6Patcher.SpecialKnights.AbilityEffect[2]) ~= S6Patcher.SpecialKnights.AbilityEffect[4]) then
+		local IsSamePosition = S6Patcher.SpecialKnights.CompareAbsolutePosition(
+			{Logic.GetEntityPosition(S6Patcher.SpecialKnights.AbilityEffect[2])},
+			S6Patcher.SpecialKnights.AbilityEffect[4]
+		);
+
+		if (S6Patcher.SpecialKnights.AbilityEffect[3] <= CurrentTime) or not IsSamePosition then
 			Logic.DestroyEffect(S6Patcher.SpecialKnights.AbilityEffect[1]);
 			S6Patcher.SpecialKnights.AbilityEffect = nil;
 		end
 	end
+end
+
+S6Patcher.SpecialKnights.CompareAbsolutePosition = function(_pos01, _pos02)
+	return (_pos01[1] == _pos02[1]) and (_pos01[2] == _pos02[2]);
 end
 
 if S6Patcher.SpecialKnights.GameCallback_KnightAbilityUsed == nil then

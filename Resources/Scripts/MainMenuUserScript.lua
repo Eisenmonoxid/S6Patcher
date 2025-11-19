@@ -1,12 +1,13 @@
 -- MainMenuUserScript by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.BETA = true;
+S6Patcher.BETA = false;
 g_DisplayScriptErrors = S6Patcher.BETA;
 -- ************************************************************************************************************************************************************* --
 -- Extended Knight Selection and Special Knights 																												 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.KnightSelection = {};
+S6Patcher.KnightSelection.OriginalKnightTypes = {unpack(CustomGame.KnightTypes)};
 S6Patcher.KnightSelection.UpdatedKnightTypes = {"U_KnightSaraya", "U_KnightTrading", "U_KnightHealing", "U_KnightChivalry",
 	"U_KnightWisdom", "U_KnightPlunder", "U_KnightSong"};
 
@@ -35,7 +36,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		local HeroComboBoxID = XGUIEng.GetWidgetID(CustomGame.Widget.KnightsList);
 		XGUIEng.ListBoxPopAll(HeroComboBoxID);
 
-		local KnightSelection = CustomGame.KnightTypes; -- Original 
+		local KnightSelection = S6Patcher.KnightSelection.OriginalKnightTypes; -- Original 
 		if CustomGame.SelectedMap and CustomGame.SelectedMapType then
 			local KnightNames = {Framework.GetValidKnightNames(CustomGame.SelectedMap, CustomGame.SelectedMapType)};
 			if #KnightNames > 0 then
@@ -47,6 +48,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 			KnightSelection = S6Patcher.KnightSelection.UpdatedKnightTypes;
 		end
 
+		CustomGame.KnightTypes = KnightSelection;
 		CustomGame.CurrentKnightList = KnightSelection;
 		g_MapAndHeroPreview.KnightTypes = KnightSelection;
 
@@ -63,11 +65,12 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 	end
 	CustomGame_StartMapCallback2 = function()
 		local Knight = DisplayOptions.SkirmishGetKnight(1);
-		if S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.StartMap, CustomGame.StartMapType) then
+		local Validity = S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.StartMap, CustomGame.StartMapType);
+
+		if Validity then
 			local Name = S6Patcher.KnightSelection.UpdatedKnightTypes[Knight + 1];
 			local Command = "S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring("Entities." .. Name) .. ";";
 			Framework.SetOnGameStartLuaCommand(Command);
-			Framework.WriteToLog("COMMAND: " .. Command);
 		else
 			Framework.SetOnGameStartLuaCommand("return;");
 		end
@@ -75,14 +78,27 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.StartMapCallback2();
 	end
 
+	if S6Patcher.KnightSelection.CloseCustomGameDialog == nil then
+		S6Patcher.KnightSelection.CloseCustomGameDialog = CloseCustomGameDialog;
+	end
+	CloseCustomGameDialog = function()
+		S6Patcher.KnightSelection.CloseCustomGameDialog();
+
+		CustomGame.KnightTypes = S6Patcher.KnightSelection.OriginalKnightTypes;
+		CustomGame.CurrentKnightList = S6Patcher.KnightSelection.OriginalKnightTypes;
+		g_MapAndHeroPreview.KnightTypes = S6Patcher.KnightSelection.OriginalKnightTypes;
+	end
+
 	RemapKnightID = S6Patcher.KnightSelection.OverrideRemapKnightID;
 end
 
 if Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
 	S6Patcher.KnightSelection.EnableInUsermaps = Options.GetIntValue("S6Patcher", "FeaturesInUsermaps", 0) ~= 0;
+
 	if Framework.GetGameExtraNo() < 1 then
 		table.remove(S6Patcher.KnightSelection.UpdatedKnightTypes, 1);
 	end
+	
 	if Options.GetIntValue("S6Patcher", "SpecialKnightsAvailable", 0) ~= 0 then
 		S6Patcher.KnightSelection.UpdatedKnightTypes[#S6Patcher.KnightSelection.UpdatedKnightTypes + 1] = "U_KnightSabatta";
 		S6Patcher.KnightSelection.UpdatedKnightTypes[#S6Patcher.KnightSelection.UpdatedKnightTypes + 1] = "U_KnightRedPrince";
@@ -110,7 +126,7 @@ if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
 Framework.GetProgramVersion = function()
-	local Text = " - S6Patcher v6" .. (S6Patcher.BETA and " - BETA" or "");
+	local Text = " - S6Patcher v7" .. (S6Patcher.BETA and " - BETA" or "");
 	return S6Patcher.GetProgramVersion() .. Text;
 end
 -- ************************************************************************************************************************************************************* --

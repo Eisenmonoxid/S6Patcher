@@ -81,16 +81,10 @@ namespace S6Patcher.Source.View
             ViewHelpers.ViewAccessorWrapper(() =>
             {
                 tcMain.SelectedIndex = 0;
-                foreach (var Element in ViewHelpers.GetControlsByType<CheckBox>())
-                {
-                    Element.IsChecked = false;
-                }
 
-                foreach (var Element in ViewHelpers.GetControlsByType<TabItem>())
-                {
-                    Element.IsEnabled = false;
-                }
-
+                ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Element => Element.IsChecked = false);
+                ViewHelpers.GetControlsByType<TabItem>().ToList().ForEach(Element => Element.IsEnabled = false);
+                
                 btnPatch.IsEnabled = false;
                 btnBackup.IsEnabled = false;
                 btnChoose.IsEnabled = true;
@@ -138,14 +132,18 @@ namespace S6Patcher.Source.View
 
         private async Task InitializePatcher(string Filepath)
         {
+            Stream Definition = Utility.GetEmbeddedResourceDefinition("S6Patcher.Definitions.Definitions.bin");
             try
             {
-                Stream Definition = Utility.GetEmbeddedResourceDefinition("S6Patcher.Definitions.Definitions.bin") ?? 
-                    throw new Exception("Error: Could not load Definition file! Aborting ...");
                 MainPatcher = new Patcher.Patcher(Filepath, Definition);
             }
             catch (Exception ex)
             {
+                if (Definition.CanRead)
+                {
+                    Definition.Dispose();
+                }
+
                 await ShowMessageBox("Error", ex.Message);
                 return;
             }

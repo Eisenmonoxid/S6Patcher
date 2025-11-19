@@ -1,6 +1,8 @@
 -- UserScriptLocal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
+S6Patcher.BETA = false;
+
 S6Patcher.Options = {"ExtendedKnightSelection", "SpecialKnightsAvailable", "UseSingleStop", "UseDowngrade",
 	"UseMilitaryRelease", "DayNightCycle", "FeaturesInUsermaps"};
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -80,6 +82,7 @@ end
 S6Patcher.GlobalScriptOverridden = false;
 S6Patcher.OverrideGlobalScript = function(_selectedKnight)
 	Framework.SetOnGameStartLuaCommand("return;"); -- free memory
+	
 	GUI.SendScriptCommand([[
 		S6Patcher = S6Patcher or {};
 		S6Patcher.PlayerID = ]] .. tostring(GUI.GetPlayerID()) .. [[;
@@ -237,10 +240,10 @@ S6Patcher.EnableSpecialKnights = function()
 end
 
 if S6Patcher.ExtendedKnightSelection
-	and S6Patcher.SelectedKnight ~= nil
-	and S6Patcher.IsCurrentMapEligibleForKnightReplacement()
-	and (not S6Patcher.GlobalScriptOverridden)
-	and (not Framework.IsNetworkGame())
+		and S6Patcher.SelectedKnight ~= nil
+		and S6Patcher.IsCurrentMapEligibleForKnightReplacement()
+		and (not S6Patcher.GlobalScriptOverridden)
+		and (not Framework.IsNetworkGame())
 	then
 
 	if S6Patcher.SpecialKnightsAvailable then
@@ -477,7 +480,7 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 
 				local Disabled = "";
 				if _OptionalDisabledTextKeyName ~= nil then
-					Disabled = "{cr}" .. XGUIEng.GetStringTableText("UI_ButtonDisabled/" .. _OptionalDisabledTextKeyName);
+					Disabled = XGUIEng.GetStringTableText("UI_ButtonDisabled/" .. _OptionalDisabledTextKeyName);
 				end
 
 				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, Text .. "{cr}{@color:220, 0, 0}" .. Disabled .. "{@color:none}");
@@ -502,14 +505,15 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 
 	return S6Patcher.SetNameAndDescription(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean);
 end
+
 S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _Title, _Text)
 	XGUIEng.SetText(_TooltipNameWidget, "{center}" .. _Title);
 	XGUIEng.SetText(_TooltipDescriptionWidget, _Text);
 
-	local Height = XGUIEng.GetTextHeight(_TooltipDescriptionWidget, true)
-	local W, H = XGUIEng.GetWidgetSize(_TooltipDescriptionWidget)
+	local Height = XGUIEng.GetTextHeight(_TooltipDescriptionWidget, true);
+	local W, H = XGUIEng.GetWidgetSize(_TooltipDescriptionWidget);
 
-	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height)
+	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height);
 end
 S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and _text.de) or _text.en; end;
 -- #EOF
