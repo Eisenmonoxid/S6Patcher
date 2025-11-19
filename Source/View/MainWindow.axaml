@@ -63,14 +63,14 @@
 					<TabItem Name="tiMod" Header="ModLoader">
 						<Grid Margin="15"  RowDefinitions="Auto Auto" ColumnDefinitions="Auto Auto">
 							<CheckBox IsCheckedChanged="cbModLoader_IsCheckedChanged" Grid.Row="0" Name="cbModLoader">Activate ModLoader</CheckBox>
-							<CheckBox IsEnabled="False" Grid.Row="1" Name="cbModDownload">Download and Install Bugfix Mod</CheckBox>
+							<CheckBox IsEnabled="False" Grid.Row="1" Name="cbModDownload">Install Bugfix Mod</CheckBox>
 							<Label Foreground="Blue" HorizontalContentAlignment="Right" Name="lblDownloadSize" HorizontalAlignment="Right" VerticalAlignment="Center" 
 								   Margin="10 0" Content="Download Size: Fetching ..." Grid.Row="1" Grid.Column="1"></Label>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiDev" Header="Development">
 						<Grid Margin="15" RowDefinitions="* *">
-							<CheckBox Name="cbDevMode" Grid.Row="0">Activate Development Mode Permanently</CheckBox>
+							<CheckBox Name="cbDevMode" Grid.Row="0">Activate Development Mode</CheckBox>
 							<CheckBox Name="cbEasyDebug" Grid.Row="1">Enable Easy Debug</CheckBox>
 						</Grid>
 					</TabItem>
@@ -99,10 +99,20 @@
 				<Button Grid.Row="3" Name="btnUpdate" Click="btnUpdate_Click">Check for Updates</Button>
 				<Button Grid.Row="4" Name="btnExit" Click="btnExit_Click">Exit Application</Button>
 			</Grid>
-			<Grid Grid.Row="2" Margin="10" Name="grdBoxes" VerticalAlignment="Top" HorizontalAlignment="Right">
-				<CheckBox IsCheckedChanged="cbUpdater_Checked" VerticalAlignment="Top" Margin="20 5" HorizontalAlignment="Left" 
-						  Name="cbUpdater" IsEnabled="False">Only Update Scriptfiles and Modfiles</CheckBox>
-			</Grid>
+
+			<HeaderedContentControl Name="hccUpdater" Grid.Row="2" Margin="10" Padding="5" VerticalAlignment="Top" 
+				HorizontalAlignment="Right" Header="Installation Options">
+
+				<Grid Name="grdBoxes" RowDefinitions="Auto Auto Auto Auto *">
+					<RadioButton Grid.Row="2" Name="rbDownload" IsChecked="true" IsCheckedChanged="rbDownload_IsCheckedChanged"
+						 GroupName="Installation Options" Content="Download latest files from GitHub"/>
+					<RadioButton Grid.Row="3" Name="rbEmbedded" GroupName="Installation Options" 
+						Content="Use local Embedded Resources"/>
+					<CheckBox Grid.Row="5" IsCheckedChanged="cbUpdater_Checked" Margin="20 5"
+							Name="cbUpdater" IsEnabled="False">Only update Script and Mod files</CheckBox>
+				</Grid>
+
+			</HeaderedContentControl>
 		</Grid>		
 	</Grid>
 </Window>

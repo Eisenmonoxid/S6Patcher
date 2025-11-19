@@ -67,31 +67,35 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);
         }
 
-        private async Task DownloadZipArchive()
+        private void WriteEmbeddedFiles()
         {
-            bool Result = await WebHandler.Instance.DownloadZipArchiveAsync(GlobalDestinationDirectoryPath);
+            try
+            {
+                File.WriteAllBytes(GlobalDestinationDirectoryPath + ".zip", Resources.Modfiles);
+                Logger.Instance.Log("Written fallback ModFiles to " + GlobalDestinationDirectoryPath + ".zip");
+                ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                ShowMessage.Invoke(ex.Message);
+            }
+        }
+
+        private async Task DownloadZipArchive(bool UseDownload)
+        {
+            bool Result = UseDownload && await WebHandler.Instance.DownloadZipArchiveAsync(GlobalDestinationDirectoryPath);
             if (Result)
             {
                 ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
             else
             {
-                // Write File from Resources as fallback
-                try
-                {
-                    File.WriteAllBytes(GlobalDestinationDirectoryPath + ".zip", Resources.Modfiles);
-                    Logger.Instance.Log("Written fallback ModFiles to " + GlobalDestinationDirectoryPath + ".zip");
-                    ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(ex.ToString());
-                    ShowMessage.Invoke(ex.ToString());
-                }
+                WriteEmbeddedFiles();
             }
         }
 
-        public async Task CreateModLoader(bool DownloadModfiles)
+        public async Task CreateModLoader(bool InstallBugfixMod, bool UseDownload)
         {
             try
             {
@@ -104,9 +108,9 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            if (DownloadModfiles)
+            if (InstallBugfixMod)
             {
-                await DownloadZipArchive();
+                await DownloadZipArchive(UseDownload);
             }
         }
 

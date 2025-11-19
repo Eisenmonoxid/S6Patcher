@@ -110,12 +110,12 @@ namespace S6Patcher.Source.Patcher
             WriteMappingToFile(GlobalMappings.GetZoomLevelMapping(Level, Distance));
         }
 
-        public async Task SetModLoader(bool UseBugFixMod)
+        public async Task SetModLoader(bool UseBugfixMod, bool UseDownload)
         {
-            Logger.Instance.Log("Called with " + UseBugFixMod.ToString());
+            Logger.Instance.Log("Called with " + UseBugfixMod.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
-            SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugFixMod);
-            await GlobalMod.CreateModLoader(UseBugFixMod);
+            SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugfixMod);
+            await GlobalMod.CreateModLoader(UseBugfixMod, UseDownload);
         }
 
         public void SetLargeAddressAwareFlag()
@@ -131,7 +131,7 @@ namespace S6Patcher.Source.Patcher
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
         public void SetEasyDebug() => WriteMappingToFile(GlobalMappings.GetEasyDebugMapping());
 
-        public async Task WriteScriptFilesToFolder()
+        public async Task WriteScriptFilesToFolder(bool UseDownload)
         {
             WriteMappingToFile(GlobalMappings.GetScriptFileMapping());
             foreach (var Element in ScriptFeatures.Features)
@@ -139,7 +139,7 @@ namespace S6Patcher.Source.Patcher
                 SetEntryInOptionsFile(Element.Key, Element.Value);
             }
 
-            await UserScriptHandler.Instance.CreateUserScriptFiles();
+            await UserScriptHandler.Instance.CreateUserScriptFiles(UseDownload);
         }
 
         private void WriteMappingToFile(Dictionary<UInt32, byte[]> Mapping)

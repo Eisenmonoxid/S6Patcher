@@ -47,10 +47,10 @@ namespace S6Patcher.Source.Patcher
             return WebHandler.Instance.DownloadScriptFiles(Scripts);
         }
 
-        public async Task CreateUserScriptFiles()
+        public async Task CreateUserScriptFiles(bool UseDownload)
         {
             // Try download, otherwise write local files from embedded resources as fallback
-            var Files = DownloadScriptFiles();
+            var Files = UseDownload ? DownloadScriptFiles() : null;
             foreach (string Element in GetUserScriptDirectories())
             {
                 string CurrentPath = Path.Combine(Element, "Script");
@@ -60,7 +60,7 @@ namespace S6Patcher.Source.Patcher
                     for (int i = 0; i < ScriptFiles.Length; i++)
                     {
                         string FilePath = Path.Combine(CurrentPath, ScriptFiles[i]);
-                        if (Files != null)
+                        if (Files != null && Files.Count == ScriptFiles.Length)
                         {
                             using FileStream Stream = IOFileHandler.Instance.OpenFileStream(FilePath);
                             await Files[i].CopyToAsync(Stream);

@@ -220,11 +220,11 @@ namespace S6Patcher.Source.View
             await Completed;
         }
 
-        private async Task PatcherModLoaderWrapper(bool Download)
+        private async Task PatcherModLoaderWrapper(bool ModInstallation)
         {
             if (MainPatcher.GlobalID != execID.ED && (cbModLoader.IsChecked == true || cbUpdater.IsChecked == true))
             {
-                await MainPatcher.SetModLoader(Download);
+                await MainPatcher.SetModLoader(ModInstallation, rbDownload.IsChecked == true);
             }
         }
 
@@ -232,7 +232,7 @@ namespace S6Patcher.Source.View
         {
             if (MainPatcher.GlobalID != execID.ED)
             {
-                await MainPatcher.WriteScriptFilesToFolder();
+                await MainPatcher.WriteScriptFilesToFolder(rbDownload.IsChecked == true);
             }
         }
 
@@ -292,6 +292,14 @@ namespace S6Patcher.Source.View
             if (cbModLoader.IsChecked == false)
             {
                 cbModDownload.IsChecked = false;
+            }
+        }
+        private void rbDownload_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            cbUpdater.IsEnabled = rbDownload.IsChecked == true;
+            if (rbDownload.IsChecked == false)
+            {
+                cbUpdater.IsChecked = false;
             }
         }
 
