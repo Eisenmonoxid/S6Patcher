@@ -66,6 +66,7 @@ end
 		return;
 	end
 
+	Framework.WriteToLog("S6Patcher: Applying " .. Campaign .. " fixes.");
 	-- Fix incorrect enemy knight type
 	local PossibleIDs = {RedPrincePlayerID, SabattaPlayerID, HusranPlayerID, 
 		CrimsonCitadelPlayerID, SidiKhemisRuinsPlayerID, KyrkasundPlayerID};
@@ -81,7 +82,9 @@ end
 		end
 	end
 
-	if Map == "c00_m16_Rossotorres" then
+	if Map == "c00_m16_rossotorres" then
+		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
+
 		-- Interrupt Quests running
 		local Found = FindQuestsByName("HiddenQuest_NPCMarcusMustSurvive", false);
 		if #Found > 0 then
@@ -103,11 +106,13 @@ end
 				CreateQuestToProtectKnight(Knights[i].pID);
 			end
 		end
-	elseif Map == "c00_m03_Gallos" then
+	elseif Map == "c00_m03_gallos" then
+		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		Logic.ExecuteInLuaLocalState([[
 			GUI.SetPlayerName(8, XGUIEng.GetStringTableText("UI_ObjectNames/B_NPC_ShipsStorehouse"));
 		]]);
-	elseif Map == "c00_m11_Tios" then
+	elseif Map == "c00_m11_tios" then
+		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		StartFlexibalPlayerVoiceAfterOneSecond = function()
 			if Logic.GetTime() >= FlexibalPlayerVoiceStart + 1 then
 				SendVoiceMessage(FlexibleSpeakerPlayerID, FlexibalPlayerVoiceText);
@@ -115,13 +120,15 @@ end
 				return true;
 			end
 		end
-	elseif Map == "c00_m15_Vestholm" then
+	elseif Map == "c00_m15_vestholm" then
+		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		local Entity = Logic.GetEntityIDByName("ReinforcementSpawn");
 		local posX, posY = Logic.GetEntityPosition(Entity);
 		Logic.DEBUG_SetSettlerPosition(Entity, posX + 250, posY);
 		
 		SetupPlayer(5, TraitorKnight.Face, "Village of Eastholm", "VillageColor2");
-	elseif Map == "c00_m13_Montecito" then
+	elseif Map == "c00_m13_montecito" then
+		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		SetDiplomacyState(RedPrincePlayerID, HarborBayPlayerID, DiplomacyStates.Enemy);
 	end
 end)();
