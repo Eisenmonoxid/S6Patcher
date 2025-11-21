@@ -138,18 +138,12 @@ namespace S6Patcher.Source.View
 
         private async Task InitializePatcher(string Filepath)
         {
-            Stream Definition = Utility.GetEmbeddedResourceDefinition("S6Patcher.Definitions.Definitions.bin");
             try
             {
-                MainPatcher = new Patcher.Patcher(Filepath, Definition);
+                MainPatcher = new Patcher.Patcher(Filepath);
             }
             catch (Exception ex)
             {
-                if (Definition.CanRead)
-                {
-                    Definition.Dispose();
-                }
-
                 await ShowMessageBox("Error", ex.Message);
                 return;
             }

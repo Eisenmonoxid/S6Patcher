@@ -10,11 +10,12 @@ namespace S6Patcher.Source.Helpers
     public class BinaryParser
     {
         private readonly byte[] Magic = Encoding.UTF8.GetBytes("EMX");
-        private readonly BinaryReader GlobalReader;
+        private readonly BinaryReader GlobalReader = null;
         private readonly uint BlockOffset = 0x0;
 
-        public BinaryParser(Stream BinaryStream)
+        public BinaryParser(string Definition)
         {
+            Stream BinaryStream = Utility.GetEmbeddedResourceDefinition(Definition);
             if (BinaryStream == null || BinaryStream.CanRead == false)
             {
                 throw new Exception("[ERROR] Invalid binary stream.");

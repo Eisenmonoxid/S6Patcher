@@ -18,7 +18,7 @@ namespace S6Patcher.Source.Patcher
         private readonly Lock WriteLock = new();
         public event Action<string> ShowMessage;
 
-        public Patcher(string FilePath, Stream DefinitionStream)
+        public Patcher(string FilePath)
         {
             if (FilePath == null)
             {
@@ -47,7 +47,7 @@ namespace S6Patcher.Source.Patcher
 
             try
             {
-                GlobalParser = new BinaryParser(DefinitionStream);
+                GlobalParser = new BinaryParser("S6Patcher.Definitions.Definitions.bin");
             }
             catch (Exception)
             {
@@ -179,6 +179,8 @@ namespace S6Patcher.Source.Patcher
             {
                 IOFileHandler.Instance.CloseStream(GlobalStream);
             }
+
+            GlobalParser.Dispose();
 
             if (FinishWithPEHeader)
             {

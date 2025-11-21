@@ -2,7 +2,6 @@
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
 S6Patcher.BETA = false;
-
 S6Patcher.Options = {"ExtendedKnightSelection", "SpecialKnightsAvailable", "UseSingleStop", "UseDowngrade",
 	"UseMilitaryRelease", "DayNightCycle", "FeaturesInUsermaps"};
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -152,7 +151,7 @@ end
 S6Patcher.IsCurrentMapEligibleForKnightReplacement = function()
 	local Base = (Framework.GetGameExtraNo() < 1) == true;
 	local Name = Framework.GetCurrentMapName();
-	local Type, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
+	local Type, _ = Framework.GetCurrentMapTypeAndCampaignName();
 
 	if Type == 0 or (Type == 3 and not S6Patcher.DisableFeatures) then
 		local Names = {Framework.GetValidKnightNames(Name, Type)};
@@ -517,3 +516,4 @@ S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _
 end
 S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and _text.de) or _text.en; end;
 -- #EOF
+

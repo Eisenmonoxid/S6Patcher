@@ -59,8 +59,8 @@ end
 		return;
 	end
 
-	local Campaign = Framework.GetCampaignName();
-	local Map = Framework.GetCampaignMap();
+	local _, Campaign = Framework.GetCurrentMapTypeAndCampaignName();
+	local Map = Framework.GetCurrentMapName();
 
 	if Campaign ~= "c00" then
 		return;
@@ -239,7 +239,7 @@ end
 
 S6Patcher.SpecialKnights.GetSpecialKnightID = function(_playerID, _type)
 	local Knights = {Logic.GetEntitiesOfType(_type)};
-	for Key, Value in pairs(Knights) do
+	for _, Value in pairs(Knights) do
 		if Logic.EntityGetPlayer(Value) == _playerID then
 			return Value;
 		end
