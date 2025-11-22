@@ -32,17 +32,7 @@ namespace S6Patcher.Source.View
                 return await Box.ShowWindowDialogAsync(Window);
             });
         }
-
-        public async Task<ButtonResult> ShowPromptMessageBox(string Title, string Message)
-        {
-            return await ViewAccessorWrapper(async () =>
-            {
-                var Box = MessageBoxManager.GetMessageBoxStandard(Title, Message, ButtonEnum.YesNo, 
-                    Icon.Question, null, WindowStartupLocation.CenterOwner);
-                return await Box.ShowWindowDialogAsync(Window);
-            });
-        }
-
+        
         public List<Control> GetControlsByNames(string[] Names) => [.. Names
                 .Select(Window.FindControl<Control>)
                 .Where(Control => Control != null)];

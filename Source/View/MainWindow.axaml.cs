@@ -14,9 +14,10 @@ namespace S6Patcher.Source.View
     {
         private bool PatchingInProgress = false;
         private bool IsFilePickerActive = false;
-        private readonly ViewHelpers ViewHelpers;
         private Patcher.Patcher MainPatcher = null;
 
+        private readonly ViewHelpers ViewHelpers;
+        private readonly bool UseCheckSumCalculation = true;
         private readonly Dictionary<execID, string[]> Mapping = new()
         {
             {execID.OV,         ["tiGeneral", "tiMod", "tiDev"]},
@@ -37,6 +38,8 @@ namespace S6Patcher.Source.View
             DisableUI();
             GetModfileInformation();
             ViewHelpers.CheckForUpdates(true);
+
+            UseCheckSumCalculation &= !Program.CommandLineArguments.Any(arg => arg.Contains("-skipchecksum"));
         }
 
         private void EnableUIElements(execID ID)
@@ -156,7 +159,7 @@ namespace S6Patcher.Source.View
 
         private async Task FinishPatching()
         {
-            ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+            ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && UseCheckSumCalculation);
             DisableUI();
             await ShowMessageBox("Finished", "Patching finished!");
         }
