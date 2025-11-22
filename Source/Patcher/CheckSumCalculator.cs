@@ -44,7 +44,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Utility.WritePEHeaderPosition(Stream, 0x54, BitConverter.GetBytes(CheckSum));
+            Utility.WritePEHeaderPosition(Stream, 0x58, BitConverter.GetBytes(CheckSum));
             IOFileHandler.Instance.CloseStream(Stream);
         }
     }

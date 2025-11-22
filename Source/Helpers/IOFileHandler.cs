@@ -107,7 +107,8 @@ namespace S6Patcher.Source.Helpers
             {
                 try
                 {
-                    File.WriteAllText(Element.Key, string.Join("\r\n", Element.Value));
+                    string CRLF = "\r\n";
+                    File.WriteAllText(Element.Key, string.Join(CRLF, Element.Value) + CRLF);
                     OpenOptionFiles.Remove(Element.Key);
                     Logger.Instance.Log("Updated Options.ini file " + Element.Key);
                 }

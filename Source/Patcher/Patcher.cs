@@ -122,9 +122,30 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("Called.");
 
-            const short Flag = 0x20;
-            Utility.WritePEHeaderPosition(GlobalStream, 0x12, BitConverter.GetBytes(Flag));
-            Logger.Instance.Log("Finished.");
+            // Partially adapted from: https://stackoverflow.com/questions/9054469
+            const short IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
+            BinaryReader Reader = new(GlobalStream);
+
+            Reader.BaseStream.Position = 0x3C;
+            Reader.BaseStream.Position = Reader.ReadInt32();
+
+            if (Reader.ReadInt32() != 0x4550)
+            {
+                Logger.Instance.Log("PE Header offset not found! Skipping ...");
+                return;
+            }
+
+            Reader.BaseStream.Position += 0x12;
+            long Saved = Reader.BaseStream.Position;
+
+            short Flag = Reader.ReadInt16();
+            if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
+            {
+                Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE;
+                WriteBytes(Saved, BitConverter.GetBytes(Flag));
+            }
+
+            Logger.Instance.Log($"Finished! Characteristics = 0x{Flag:X4}");
         }
 
         public void SetEntryInOptionsFile(string Entry, bool Checked) => 
