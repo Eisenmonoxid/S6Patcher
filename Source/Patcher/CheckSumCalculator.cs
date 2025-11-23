@@ -38,13 +38,18 @@ namespace S6Patcher.Source.Patcher
         public void WritePEHeaderFileCheckSum(string Path, long Size)
         {
             uint CheckSum = UpdatePEHeaderFileCheckSum(Path, Size);
+            if (CheckSum == 0)
+            {
+                return;
+            }
+
             FileStream Stream = IOFileHandler.Instance.OpenFileStream(Path);
             if (Stream == null)
             {
                 return;
             }
 
-            Utility.WritePEHeaderPosition(Stream, 0x58, BitConverter.GetBytes(CheckSum));
+            Utility.WritePEHeaderPosition(Stream, 0x54, BitConverter.GetBytes(CheckSum));
             IOFileHandler.Instance.CloseStream(Stream);
         }
     }

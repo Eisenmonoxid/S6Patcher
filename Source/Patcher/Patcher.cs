@@ -189,7 +189,7 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        public void Dispose(bool FinishWithPEHeader = false)
+        public void Dispose(bool FinishWithPEHeader)
         {
             IOFileHandler.Instance.WriteBackToOptionsFiles();
 
