@@ -27,7 +27,7 @@ namespace S6Patcher.Source.Patcher
 
             try
             {
-                GlobalStream = new ExecutableHandler(FilePath).OpenExecutableFile();
+                GlobalStream = OpenExecutableFile(FilePath);
             }
             catch (Exception)
             {
@@ -59,6 +59,16 @@ namespace S6Patcher.Source.Patcher
             GlobalMod = new Mod(GlobalID, IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStream.Name));
 
             Logger.Instance.Log("ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
+        }
+
+        private FileStream OpenExecutableFile(string ExecutablePath)
+        {
+            if (!Backup.Create(ExecutablePath))
+            {
+                throw new Exception("Could not create backup file!\nAborting ...");
+            }
+
+            return IOFileHandler.Instance.OpenFileStream(ExecutablePath, true);
         }
 
         public void PatchByControlFeatures(List<string> Features) => WriteMappingToFile(GlobalMappings.GetMapping(Features));
