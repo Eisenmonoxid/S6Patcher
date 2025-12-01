@@ -80,16 +80,16 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.StartMapCallback();
 	end
 
-	if S6Patcher.KnightSelection.CloseCustomGameDialog == nil then
-		S6Patcher.KnightSelection.CloseCustomGameDialog = CloseCustomGameDialog;
+	if S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick == nil then
+		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick = CustomGameDialog_CloseOnLeftClick;
 	end
-	CloseCustomGameDialog = function()
-		S6Patcher.KnightSelection.CloseCustomGameDialog();
-
+	CustomGameDialog_CloseOnLeftClick = function()
 		CustomGame.KnightTypes = S6Patcher.KnightSelection.OriginalKnightTypes;
 		CustomGame.CurrentKnightList = S6Patcher.KnightSelection.OriginalKnightTypes;
 		g_MapAndHeroPreview.KnightTypes = S6Patcher.KnightSelection.OriginalKnightTypes;
 		RemapKnightID = S6Patcher.KnightSelection.OriginalRemapKnightID;
+
+		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick();
 	end
 
 	S6Patcher.KnightSelection.OriginalRemapKnightID = RemapKnightID;
