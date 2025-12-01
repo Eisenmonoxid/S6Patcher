@@ -1,4 +1,4 @@
-# Modloader
+# ModLoader
 The S6Patcher features a simple modloader, which makes it possible to load additional game files without having to overwrite/replace any existing files. 
 The files are, depending on the game version, placed in a special folder or packed into an archive file, which is then loaded by the game on startup.
 

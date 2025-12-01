@@ -60,10 +60,10 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		CustomGame_OnHeroListBoxSelectionChange();
 	end
 
-	if S6Patcher.KnightSelection.StartMapCallback2 == nil then
-		S6Patcher.KnightSelection.StartMapCallback2 = CustomGame_StartMapCallback2;
+	if S6Patcher.KnightSelection.StartMapCallback == nil then
+		S6Patcher.KnightSelection.StartMapCallback = CustomGame_StartMapCallback;
 	end
-	CustomGame_StartMapCallback2 = function()
+	CustomGame_StartMapCallback = function()
 		local Knight = DisplayOptions.SkirmishGetKnight(1);
 		local Validity = S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.StartMap, CustomGame.StartMapType);
 
@@ -71,11 +71,13 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 			local Name = S6Patcher.KnightSelection.UpdatedKnightTypes[Knight + 1];
 			local Command = "S6Patcher = S6Patcher or {};S6Patcher.SelectedKnight = " .. tostring("Entities." .. Name) .. ";";
 			Framework.SetOnGameStartLuaCommand(Command);
+			RemapKnightID = S6Patcher.KnightSelection.OverrideRemapKnightID;
 		else
 			Framework.SetOnGameStartLuaCommand("return;");
+			RemapKnightID = S6Patcher.KnightSelection.OriginalRemapKnightID;
 		end
 
-		S6Patcher.KnightSelection.StartMapCallback2();
+		S6Patcher.KnightSelection.StartMapCallback();
 	end
 
 	if S6Patcher.KnightSelection.CloseCustomGameDialog == nil then
@@ -87,9 +89,10 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		CustomGame.KnightTypes = S6Patcher.KnightSelection.OriginalKnightTypes;
 		CustomGame.CurrentKnightList = S6Patcher.KnightSelection.OriginalKnightTypes;
 		g_MapAndHeroPreview.KnightTypes = S6Patcher.KnightSelection.OriginalKnightTypes;
+		RemapKnightID = S6Patcher.KnightSelection.OriginalRemapKnightID;
 	end
 
-	RemapKnightID = S6Patcher.KnightSelection.OverrideRemapKnightID;
+	S6Patcher.KnightSelection.OriginalRemapKnightID = RemapKnightID;
 end
 
 if Options.GetIntValue("S6Patcher", "ExtendedKnightSelection", 0) ~= 0 then
