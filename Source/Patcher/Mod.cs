@@ -1,7 +1,6 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Helpers;
 using System;
-using System.Collections.Concurrent;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -36,7 +35,6 @@ namespace S6Patcher.Source.Patcher
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
-                    ShowMessage.Invoke(ex.Message);
                     continue;
                 }
 
@@ -62,7 +60,7 @@ namespace S6Patcher.Source.Patcher
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                ShowMessage.Invoke(ex.ToString());
+                ShowMessage.Invoke(ex.Message);
                 return;
             }
 
@@ -74,14 +72,16 @@ namespace S6Patcher.Source.Patcher
             try
             {
                 File.WriteAllBytes(GlobalDestinationDirectoryPath + ".zip", Resources.Modfiles);
-                Logger.Instance.Log("Written fallback ModFiles to " + GlobalDestinationDirectoryPath + ".zip");
-                ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
                 ShowMessage.Invoke(ex.Message);
+                return;
             }
+
+            Logger.Instance.Log("Written fallback ModFiles to " + GlobalDestinationDirectoryPath + ".zip");
+            ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
         }
 
         private async Task DownloadZipArchive(bool UseDownload)
@@ -106,7 +106,7 @@ namespace S6Patcher.Source.Patcher
             catch (Exception ex)
             {
                 Logger.Instance.Log(ex.ToString());
-                ShowMessage.Invoke(ex.ToString());
+                ShowMessage.Invoke(ex.Message);
                 return;
             }
 
@@ -121,8 +121,8 @@ namespace S6Patcher.Source.Patcher
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
             {
                 Directory.CreateDirectory(BaseDirectoryPath);
-                Directory.CreateDirectory(Path.Combine(GlobalDestinationDirectoryPath, "base", "shr"));
-                Directory.CreateDirectory(Path.Combine(GlobalDestinationDirectoryPath, "extra1", "shr"));
+                Directory.CreateDirectory(Path.Combine(ArchiveFilePathBase, "shr"));
+                Directory.CreateDirectory(Path.Combine(ArchiveFilePathExtra1, "shr"));
                 Logger.Instance.Log("Directories created.");
             }
             else

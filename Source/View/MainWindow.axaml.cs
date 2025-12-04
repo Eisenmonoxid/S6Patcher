@@ -3,7 +3,6 @@ using Avalonia.Controls.Primitives;
 using S6Patcher.Source.Helpers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
