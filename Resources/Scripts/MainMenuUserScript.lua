@@ -81,7 +81,7 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 				KnightSelection = KnightNames;
 			end
 		end
-		
+
 		local Validity = S6Patcher.KnightSelection.IsMapValidForKnightChoice(CustomGame.SelectedMap, CustomGame.SelectedMapType);
 		if Validity then
 			KnightSelection = S6Patcher.KnightSelection.UpdatedKnightTypes;
@@ -281,29 +281,24 @@ S6Patcher.ExtendedGameOptions.PageCount = 0;
 S6Patcher.ExtendedGameOptions.Root = "/InGame/Multiplayer/SelectGame/Container/ListGames";
 S6Patcher.ExtendedGameOptions.OriginalRootPosition = {0, 0};
 S6Patcher.ExtendedGameOptions.Features = {
-	{{de = "Fenstermodus", en = "Window Mode"}, false, "Windowed"},
-	{{de = "Hauptmenühintergrund", en = "Main Menu Background"}, false, "UseAlternateBackground"},
-	{{de = "Einzelstoppbutton", en = "Single Stop Button"}, false, "UseSingleStop"},
-	{{de = "Rückbaubutton", en = "Downgrade Button"}, false, "UseDowngrade"},
-	{{de = "Soldaten Entlassen Button", en = "Military Release Button"}, false, "UseMilitaryRelease"},
-	{{de = "Tag/Nacht Zyklus", en = "Day/Night Cycle"}, false, "DayNightCycle"},
-	{{de = "Alle Ritter Selektierbar", en = "All Knights in Selection"}, false, "ExtendedKnightSelection"},
-	{{de = "Spezialritter (Crimson Sabatt & Roter Prinz)", en = "Special Knights (Crimson Sabatt & Red Prince)"},
-		false, "SpecialKnightsAvailable"},
-	{{de = "Features in Usermaps", en = "Features in Usermaps"}, false, "FeaturesInUsermaps"},
+	{false, "Windowed"},
+	{false, "UseAlternateBackground"},
+	{false, "UseSingleStop"},
+	{false, "UseDowngrade"},
+	{false, "UseMilitaryRelease"},
+	{false, "DayNightCycle"},
+	{false, "ExtendedKnightSelection"},
+	{false, "SpecialKnightsAvailable"},
+	{false, "FeaturesInUsermaps"},
 };
 
 S6Patcher.ExtendedGameOptions.ShowUsermapWarning = function()
-	local Text = {de = "Das Aktivieren dieses Features kann dafür sorgen, dass eine kleine Menge an Usermaps nicht mehr korrekt funktionieren wird.",
-				  en = "Activating this Feature can lead to a small number of usermaps not working correctly anymore."};
-	OpenDialog(S6Patcher.GetLocalizedText(Text), S6Patcher.GetLocalizedText({de = "{center}Hinweis", en = "{center}Hint"}));
+	OpenDialog(S6Patcher.GetLocalizedText("Feature"), S6Patcher.GetLocalizedText("Hint"));
 end
 
 S6Patcher.ExtendedGameOptions.CanAddSpecialKnights = function()
 	if S6Patcher.IsModInstalled ~= true then
-		local Text = {de = "Fehlende Spieldateien!{cr}Dieses Feature benötigt den {@color:255,0,255}installierten Bugfixmod{@color:none}.",
-					  en = "Missing Gamefiles!{cr}This Feature requires the {@color:255,0,255}Bugfix Mod{@color:none} to be installed."};
-		OpenDialog(S6Patcher.GetLocalizedText(Text), S6Patcher.GetLocalizedText({de = "{center}Fehler", en = "{center}Error"}));
+		OpenDialog(S6Patcher.GetLocalizedText("Files"), S6Patcher.GetLocalizedText("Error"));
 	end
 
 	return S6Patcher.IsModInstalled;
@@ -331,9 +326,7 @@ S6Patcher.ExtendedGameOptions.InitTempStuff = function()
 	S6Patcher.ExtendedGameOptions.PageCount = S6Patcher.ExtendedGameOptions.PageCount + 1;
 
 	local CurrentPath = BasePath .. "/Background/TitleBig/Info/";
-	local Title = "{center}S6Patcher - Options";
-
-	XGUIEng.SetText(CurrentPath .. "NameBlack", Title);
+	XGUIEng.SetText(CurrentPath .. "NameBlack", S6Patcher.GetLocalizedText("Options"));
 	XGUIEng.ShowWidget(CurrentPath .. "Name", 0);
 	XGUIEng.ShowWidget(CurrentPath .. "NameWhite", 0);
 
@@ -341,7 +334,7 @@ S6Patcher.ExtendedGameOptions.InitTempStuff = function()
 	XGUIEng.ShowWidget(BasePath .. "/Buttons/TestDisabled", 0);
 
 	local Action = "Sound.FXPlay2DSound('ui\\menu_click');S6Patcher.ExtendedGameOptions.ToggleFeature();";
-	local Text = S6Patcher.GetLocalizedText({de = "{center}Feature Umschalten", en = "{center}Toggle Feature"});
+	local Text = S6Patcher.GetLocalizedText("Toggle");
 	XGUIEng.SetText(BasePath .. "/Buttons/TestLongText", Text);
 	XGUIEng.SetActionFunction(BasePath .. "/Buttons/TestLongText", Action);
 
@@ -374,15 +367,15 @@ S6Patcher.ExtendedGameOptions.Init = function()
 end
 
 S6Patcher.ExtendedGameOptions.LoadFeaturesFromFile = function()
-	for Key, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
-		local Entry = Options.GetIntValue(Value[3] == "Windowed" and "Display" or "S6Patcher", Value[3], 1);
-		Value[2] = Entry == 1;
+	for _, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
+		local Entry = Options.GetIntValue(Value[2] == "Windowed" and "Display" or "S6Patcher", Value[2], 1);
+		Value[1] = Entry == 1;
 	end
 end
 
 S6Patcher.ExtendedGameOptions.WriteFeaturesToFile = function()
-	for Key, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
-		Options.SetIntValue(Value[3] == "Windowed" and "Display" or "S6Patcher", Value[3], Value[2] and 1 or 0);
+	for _, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
+		Options.SetIntValue(Value[2] == "Windowed" and "Display" or "S6Patcher", Value[2], Value[1] and 1 or 0);
 	end
 end
 
@@ -405,26 +398,26 @@ S6Patcher.ExtendedGameOptions.ToggleFeature = function()
 	local WidgetID = XGUIEng.GetWidgetID(S6Patcher.ExtendedGameOptions.Root .. "/SliderWidget");
 	local Value = XGUIEng.SliderGetValueAbs(WidgetID);
 	local Index = XGUIEng.ListBoxGetSelectedIndex(S6Patcher.ExtendedGameOptions.Root .. "/Games") + 1; -- zero based
-	local Active = S6Patcher.ExtendedGameOptions.Features[Index][2];
-	local Name = S6Patcher.ExtendedGameOptions.Features[Index][3];
+	local Active = S6Patcher.ExtendedGameOptions.Features[Index][1];
+	local Name = S6Patcher.ExtendedGameOptions.Features[Index][2];
 
 	if not Active then
 		if Name == "SpecialKnightsAvailable" then
 			if not S6Patcher.ExtendedGameOptions.CanAddSpecialKnights() then
 				return;
 			else
-				S6Patcher.ExtendedGameOptions.Features[Index - 1][2] = true;
+				S6Patcher.ExtendedGameOptions.Features[Index - 1][1] = true;
 			end
 		elseif Name == "FeaturesInUsermaps" then
 			S6Patcher.ExtendedGameOptions.ShowUsermapWarning();
 		end
 	else
 		if Name == "ExtendedKnightSelection" then
-			S6Patcher.ExtendedGameOptions.Features[Index + 1][2] = false;
+			S6Patcher.ExtendedGameOptions.Features[Index + 1][1] = false;
 		end
 	end
 
-	S6Patcher.ExtendedGameOptions.Features[Index][2] = not S6Patcher.ExtendedGameOptions.Features[Index][2];
+	S6Patcher.ExtendedGameOptions.Features[Index][1] = not S6Patcher.ExtendedGameOptions.Features[Index][1];
 	S6Patcher.ExtendedGameOptions.UpdateFeatures(Index - 1);
 
 	XGUIEng.SliderSetValueAbs(WidgetID, Value);
@@ -435,7 +428,7 @@ S6Patcher.ExtendedGameOptions.UpdateFeatures = function(_selectedIndex)
 	XGUIEng.ListBoxPopAll(S6Patcher.ExtendedGameOptions.Root .. "/Games");
 
 	for Key, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
-		S6Patcher.ExtendedGameOptions.AddFeature(S6Patcher.GetLocalizedText(Value[1]), Value[2]);
+		S6Patcher.ExtendedGameOptions.AddFeature(S6Patcher.GetLocalizedText(Value[2]), Value[1]);
 	end
 
 	XGUIEng.ListBoxSetSelectedIndex(S6Patcher.ExtendedGameOptions.Root .. "/Icons", _selectedIndex);
@@ -458,5 +451,52 @@ S6Patcher.ExtendedGameOptions.AddFeature = function(_name, _checked)
 	XGUIEng.ListBoxPushItem(S6Patcher.ExtendedGameOptions.Root .. "/Games", _name);
 end
 
-S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and _text.de) or _text.en; end
+S6Patcher.GetLocalizedText = function(_text)
+	local Language = Network.GetDesiredLanguage();
+	if S6Patcher.TranslatedStrings[Language] ~= nil then
+		return S6Patcher.TranslatedStrings[Language][_text];
+	else
+		return S6Patcher.TranslatedStrings["en"][_text];
+	end
+end
+
+S6Patcher.TranslatedStrings = {};
+S6Patcher.TranslatedStrings["de"] =
+{
+	["Toggle"] 	= "{center}Feature Umschalten",
+	["Options"] = "{center}S6Patcher - Optionen",
+	["Files"]	= "Fehlende Spieldateien!{cr}Dieses Feature benötigt den {@color:255,0,255}installierten Bugfixmod{@color:none}.",
+	["Error"]	= "{center}Fehler",
+	["Hint"]	= "{center}Hinweis",
+	["Feature"] = "Das Aktivieren dieses Features kann dafür sorgen, dass eine kleine Menge an Usermaps nicht mehr korrekt funktionieren wird.",
+	-- Options Menu Texts
+	["FeaturesInUsermaps"]		= "Features in Spielerkarten",
+	["Windowed"] 				= "Fenstermodus",
+	["UseAlternateBackground"] 	= "Hauptmenühintergrund",
+	["UseSingleStop"] 			= "Einzelstoppbutton",
+	["UseDowngrade"] 			= "Rückbaubutton",
+	["UseMilitaryRelease"] 		= "Soldaten Entlassen Button",
+	["DayNightCycle"] 			= "Tag/Nacht - Zyklus",
+	["ExtendedKnightSelection"] = "Alle Ritter Selektierbar",
+	["SpecialKnightsAvailable"] = "Spezialritter (Crimson Sabatt & Roter Prinz)",
+};
+S6Patcher.TranslatedStrings["en"] =
+{
+	["Toggle"] 	= "{center}Toggle Feature",
+	["Options"] = "{center}S6Patcher - Options",
+	["Files"]	= "Missing Gamefiles!{cr}This Feature requires the {@color:255,0,255}Bugfix Mod{@color:none} to be installed.",
+	["Error"]	= "{center}Error",
+	["Hint"]	= "{center}Hint",
+	["Feature"] = "Activating this Feature can lead to a small number of usermaps not working correctly anymore.",
+	-- Options Menu Texts
+	["FeaturesInUsermaps"]		= "Features in Usermaps",
+	["Windowed"] 				= "Window Mode",
+	["UseAlternateBackground"] 	= "Main Menu Background",
+	["UseSingleStop"] 			= "Single Stop Button",
+	["UseDowngrade"] 			= "Downgrade Button",
+	["UseMilitaryRelease"] 		= "Military Release Button",
+	["DayNightCycle"] 			= "Day/Night - Cycle",
+	["ExtendedKnightSelection"] = "All Knights in Selection",
+	["SpecialKnightsAvailable"] = "Special Knights (Crimson Sabatt & Red Prince)",
+};
 -- #EOF
