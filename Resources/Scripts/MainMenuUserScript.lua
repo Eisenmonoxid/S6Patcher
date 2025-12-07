@@ -499,4 +499,80 @@ S6Patcher.TranslatedStrings["en"] =
 	["ExtendedKnightSelection"] = "All Knights in Selection",
 	["SpecialKnightsAvailable"] = "Special Knights (Crimson Sabatt & Red Prince)",
 };
+S6Patcher.TranslatedStrings["pl"] =
+{
+	["Toggle"] 	= "{center}Przełącz funkcję",
+	["Options"] = "{center}S6Patcher - Opcje",
+	["Files"]	= "Brak plików gry!{cr}Ta funkcja wymaga zainstalowania {@color:255,0,255}Bugfix Mod{@color:none}.",
+	["Error"]	= "{center}Błąd",
+	["Hint"]	= "{center}Wskazówka",
+	["Feature"] = "Aktywacja tej funkcji może spowodować, że niewielka liczba map użytkownika przestanie działać poprawnie.",
+	-- Options Menu Texts
+	["FeaturesInUsermaps"]		= "Funkcje w mapach użytkownika",
+	["Windowed"] 				= "Tryb okienkowy",
+	["UseAlternateBackground"] 	= "Tło menu głównego",
+	["UseSingleStop"] 			= "Przycisk pojedynczego zatrzymania",
+	["UseDowngrade"] 			= "Przycisk degradacji",
+	["UseMilitaryRelease"] 		= "Przycisk uwolnienia wojsk",
+	["DayNightCycle"] 			= "Cykl dnia i nocy",
+	["ExtendedKnightSelection"] = "Wszyscy rycerze w wyborze",
+	["SpecialKnightsAvailable"] = "Specjalni rycerze (Crimson Sabatt i Red Prince)",
+};
+S6Patcher.TranslatedStrings["fr"] =
+{
+	["Toggle"] 	= "{center}Activer/Désactiver la fonction",
+	["Options"] = "{center}S6Patcher - Options",
+	["Files"]	= "Fichiers du jeu manquants!{cr}Cette fonction nécessite l’installation du {@color:255,0,255}Bugfix Mod{@color:none}.",
+	["Error"]	= "{center}Erreur",
+	["Hint"]	= "{center}Astuce",
+	["Feature"] = "L’activation de cette fonction peut empêcher un petit nombre de cartes utilisateur de fonctionner correctement.",
+	-- Options Menu Texts
+	["FeaturesInUsermaps"]		= "Fonctions dans les cartes utilisateur",
+	["Windowed"] 				= "Mode fenêtré",
+	["UseAlternateBackground"] 	= "Fond du menu principal",
+	["UseSingleStop"] 			= "Bouton d’arrêt unique",
+	["UseDowngrade"] 			= "Bouton de rétrogradation",
+	["UseMilitaryRelease"] 		= "Bouton de libération militaire",
+	["DayNightCycle"] 			= "Cycle jour/nuit",
+	["ExtendedKnightSelection"] = "Tous les chevaliers dans la sélection",
+	["SpecialKnightsAvailable"] = "Chevaliers spéciaux (Crimson Sabatt & Red Prince)",
+};
+S6Patcher.TranslatedStrings["nl"] =
+{
+	["Toggle"] 	= "{center}Functie in-/uitschakelen",
+	["Options"] = "{center}S6Patcher - Opties",
+	["Files"]	= "Ontbrekende spelbestanden!{cr}Deze functie vereist dat de {@color:255,0,255}Bugfix Mod{@color:none} is geïnstalleerd.",
+	["Error"]	= "{center}Fout",
+	["Hint"]	= "{center}Hint",
+	["Feature"] = "Het activeren van deze functie kan ervoor zorgen dat een klein aantal gebruikerskaarten niet meer correct werkt.",
+	-- Options Menu Texts
+	["FeaturesInUsermaps"]		= "Functies in gebruikerskaarten",
+	["Windowed"] 				= "Venstermodus",
+	["UseAlternateBackground"] 	= "Achtergrond hoofdmenu",
+	["UseSingleStop"] 			= "Enkele stopknop",
+	["UseDowngrade"] 			= "Degradatieknop",
+	["UseMilitaryRelease"] 		= "Legervrijgaveknop",
+	["DayNightCycle"] 			= "Dag-/nachtcyclus",
+	["ExtendedKnightSelection"] = "Alle ridders in selectie",
+	["SpecialKnightsAvailable"] = "Speciale ridders (Crimson Sabatt & Red Prince)",
+};
+S6Patcher.TranslatedStrings["ru"] =
+{
+	["Toggle"] 	= "{center}Переключить функцию",
+	["Options"] = "{center}S6Patcher - Настройки",
+	["Files"]	= "Отсутствуют файлы игры!{cr}Эта функция требует установки {@color:255,0,255}Bugfix Mod{@color:none}.",
+	["Error"]	= "{center}Ошибка",
+	["Hint"]	= "{center}Подсказка",
+	["Feature"] = "Активация этой функции может привести к тому, что некоторые пользовательские карты перестанут правильно работать.",
+	-- Options Menu Texts
+	["FeaturesInUsermaps"]		= "Функции в пользовательских картах",
+	["Windowed"] 				= "Оконный режим",
+	["UseAlternateBackground"] 	= "Фон главного меню",
+	["UseSingleStop"] 			= "Кнопка одиночной остановки",
+	["UseDowngrade"] 			= "Кнопка понижения",
+	["UseMilitaryRelease"] 		= "Кнопка освобождения войск",
+	["DayNightCycle"] 			= "Цикл день/ночь",
+	["ExtendedKnightSelection"] = "Все рыцари в выборе",
+	["SpecialKnightsAvailable"] = "Особые рыцари (Crimson Sabatt и Red Prince)",
+};
 -- #EOF
