@@ -438,21 +438,22 @@ end
 -- ************************************************************************************************************************************************************* --
 -- Some Helpers																																 					 --
 -- ************************************************************************************************************************************************************* --
+S6Patcher.DismountID = nil;
 if S6Patcher.SetNameAndDescription == nil then
 	S6Patcher.SetNameAndDescription = GUI_Tooltip.SetNameAndDescription;
 end
 GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
 	if not S6Patcher.DisableFeatures then
+		if S6Patcher.DismountID == nil then
+			S6Patcher.DismountID = XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount");
+		end
 		if S6Patcher.UseDowngrade and _OptionalTextKeyName == "DowngradeButton" then
-			local Title = {de = "Rückbau", en = "Downgrade"};
-			local Text = {de = "- Baut das Gebäude um eine Stufe zurück", en = "- Downgrades the building by one level"};
-			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText(Title), S6Patcher.GetLocalizedText(Text));
+			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText("DowngradeTitle"), S6Patcher.GetLocalizedText("DowngradeText"));
 			return;
-		elseif S6Patcher.UseMilitaryRelease and XGUIEng.GetCurrentWidgetID() == XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount") then
+		elseif S6Patcher.UseMilitaryRelease and XGUIEng.GetCurrentWidgetID() == S6Patcher.DismountID then
 			if S6Patcher.CanDisplayDismissButton() then
-				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center"); -- "Mitglied entlassen"
-				local Text = {de = "- Entlässt Soldaten der Reihe nach", en = "- Dismisses soldiers one after another"};
-				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText(Text));
+				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center");
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText("ReleaseSoldiersText"));
 				return;
 			end
 		end
@@ -502,6 +503,51 @@ S6Patcher.SetTooltip = function(_TooltipNameWidget, _TooltipDescriptionWidget, _
 
 	XGUIEng.SetWidgetSize(_TooltipDescriptionWidget, W, Height);
 end
-S6Patcher.GetLocalizedText = function(_text) return (Network.GetDesiredLanguage() == "de" and _text.de) or _text.en; end;
--- #EOF
 
+S6Patcher.GetLocalizedText = function(_text)
+	local Language = Network.GetDesiredLanguage();
+	if S6Patcher.TranslatedStrings[Language] ~= nil then
+		return S6Patcher.TranslatedStrings[Language][_text];
+	else
+		return S6Patcher.TranslatedStrings["en"][_text];
+	end
+end
+
+S6Patcher.TranslatedStrings = {};
+S6Patcher.TranslatedStrings["de"] =
+{
+	["DowngradeTitle"] 		= "Rückbau",
+	["DowngradeText"] 		= "- Baut das Gebäude um eine Stufe zurück",
+	["ReleaseSoldiersText"] = "- Entlässt Soldaten der Reihe nach",
+};
+S6Patcher.TranslatedStrings["en"] =
+{
+	["DowngradeTitle"] 		= "Downgrade",
+	["DowngradeText"] 		= "- Downgrades the building by one level",
+	["ReleaseSoldiersText"] = "- Dismisses soldiers one after another",
+};
+S6Patcher.TranslatedStrings["pl"] =
+{
+	["DowngradeTitle"]      = "Obniż poziom",
+	["DowngradeText"]       = "- Obniża poziom budynku o jeden",
+	["ReleaseSoldiersText"] = "- Zwalnia żołnierzy jeden po drugim",
+};
+S6Patcher.TranslatedStrings["fr"] =
+{
+	["DowngradeTitle"]      = "Rétrograder",
+	["DowngradeText"]       = "- Rétrograde le bâtiment d’un niveau",
+	["ReleaseSoldiersText"] = "- Renvoye les soldats un par un",
+};
+S6Patcher.TranslatedStrings["nl"] =
+{
+	["DowngradeTitle"]      = "Degraderen",
+	["DowngradeText"]       = "- Degradeert het gebouw met één niveau",
+	["ReleaseSoldiersText"] = "- Ontslaat soldaten één voor één",
+};
+S6Patcher.TranslatedStrings["ru"] =
+{
+	["DowngradeTitle"]      = "Понизить уровень",
+	["DowngradeText"]       = "- Понижает уровень здания на один",
+	["ReleaseSoldiersText"] = "- Увольняет солдат одного за другим",
+};
+-- #EOF
