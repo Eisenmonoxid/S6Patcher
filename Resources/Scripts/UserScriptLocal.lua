@@ -124,24 +124,12 @@ S6Patcher.OverrideGlobalScript = function(_selectedKnight)
 		Logic.ExecuteInLuaLocalState('LocalSetKnightPicture();');
 
 		for _, Quest in ipairs(Quests) do
-			if Quest.Objectives then
-				for i = 1, Quest.Objectives[0] do
-					Quest.Objectives[i].Data = S6Patcher.UpdateQuestData(Quest.Objectives[i].Data, S6Patcher.SavedKnightID, Result);
-				end
-			end
-			if Quest.Triggers then
-				for i = 1, Quest.Triggers[0] do
-					Quest.Triggers[i].Data = S6Patcher.UpdateQuestData(Quest.Triggers[i].Data, S6Patcher.SavedKnightID, Result);
-				end
-			end
-			if Quest.Rewards then
-				for i = 1, Quest.Rewards[0] do
-					Quest.Rewards[i].Data = S6Patcher.UpdateQuestData(Quest.Rewards[i].Data, S6Patcher.SavedKnightID, Result);
-				end
-			end
-			if Quest.Reprisals then
-				for i = 1, Quest.Reprisals[0] do
-					Quest.Reprisals[i].Data = S6Patcher.UpdateQuestData(Quest.Reprisals[i].Data, S6Patcher.SavedKnightID, Result);
+			local Options = {Quest.Objectives, Quest.Triggers, Quest.Rewards, Quest.Reprisals};
+			for _, Option in ipairs(Options) do
+				if Option then
+					for i = 1, Option[0] do
+						Option[i].Data = S6Patcher.UpdateQuestData(Option[i].Data, S6Patcher.SavedKnightID, Result);
+					end
 				end
 			end
 		end
