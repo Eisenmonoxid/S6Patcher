@@ -58,8 +58,8 @@ S6Patcher.KnightSelection.OverrideGlobalKnightSelection = function()
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick = CustomGameDialog_CloseOnLeftClick;
 	end
 	CustomGameDialog_CloseOnLeftClick = function()
-		S6Patcher.KnightSelection.SetKnightSelection(false);
 		S6Patcher.KnightSelection.CustomGameDialog_CloseOnLeftClick();
+		S6Patcher.KnightSelection.SetKnightSelection(false);
 	end
 
 	if S6Patcher.KnightSelection.OpenCustomGameDialog == nil then
