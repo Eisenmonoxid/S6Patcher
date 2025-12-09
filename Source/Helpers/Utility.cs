@@ -15,6 +15,7 @@ namespace S6Patcher.Source.Helpers
 
     public static class Utility
     {
+        public static uint ErrorCount = 0;
         public static string GetApplicationVersion() => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
         public static Stream GetEmbeddedResourceDefinition(string Name) => Assembly.GetExecutingAssembly().GetManifestResourceStream(Name);
 

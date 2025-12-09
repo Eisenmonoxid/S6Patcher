@@ -39,7 +39,7 @@
 			<HeaderedContentControl Grid.Row="1" Name="hccMain" Header="Choose Features">
 				<TabControl Name="tcMain">
 					<TabItem Name="tiGeneral" Header="General">
-						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto" RowDefinitions="Auto Auto Auto Auto Auto Auto">
+						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto" RowDefinitions="Auto Auto Auto Auto Auto Auto Auto">
 							<CheckBox Grid.Row="0" Grid.Column="0" IsCheckedChanged="cbHighTextures_IsCheckedChanged" Name="cbHighTextures">High Resolution Textures:</CheckBox>
 							<TextBox Grid.Row="0" Margin="10 0" VerticalAlignment="Center" Grid.Column="1" Name="txtResolution" 
 									 HorizontalAlignment="Center" MaxLength="4" IsEnabled="False">4096</TextBox>
@@ -51,6 +51,7 @@
 							<Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Standard: 7200</Label>
 							<CheckBox Grid.Row="3" Name="cbLimitedEdition">Activate Limited/Special Edition</CheckBox>
 							<CheckBox Grid.Row="4" Name="cbScriptBugFixes">Activate Script and Code Bugfixes</CheckBox>
+							<CheckBox Grid.Row="5" Name="cbFolderPath">Update Documents Folder Path</CheckBox>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiHistory" Header="History Edition">

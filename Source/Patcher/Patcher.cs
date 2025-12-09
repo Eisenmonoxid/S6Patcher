@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -79,9 +80,7 @@ namespace S6Patcher.Source.Patcher
 
             if (!uint.TryParse(ResolutionText, out uint Resolution))
             {
-                string Text = "Invalid texture resolution value: " + ResolutionText;
-                ShowMessage.Invoke(Text);
-                Logger.Instance.Log(Text);
+                HandleError("Invalid texture resolution value: " + ResolutionText);
                 return;
             }
 
@@ -96,9 +95,7 @@ namespace S6Patcher.Source.Patcher
 
             if (!double.TryParse(AutosaveText, out double Timer))
             {
-                string Text = "Invalid autosave timer value: " + AutosaveText;
-                ShowMessage.Invoke(Text);
-                Logger.Instance.Log(Text);
+                HandleError("Invalid autosave timer value: " + AutosaveText);
                 return;
             }
 
@@ -111,13 +108,27 @@ namespace S6Patcher.Source.Patcher
 
             if (!double.TryParse(ZoomText, out double Level) || !float.TryParse(ZoomText, out float Distance))
             {
-                string Text = "Invalid zoom level value: " + ZoomText;
-                ShowMessage.Invoke(Text);
-                Logger.Instance.Log(Text);
+                HandleError("Invalid zoom level value: " + ZoomText);
                 return;
             }
 
             WriteMappingToFile(GlobalMappings.GetZoomLevelMapping(Level, Distance));
+        }
+
+        public void SetDocumentsFolderPath(string FolderPath)
+        {
+            Logger.Instance.Log("Called with " + FolderPath);
+
+            uint MaxSize = 0x95;
+            int Size = Encoding.Unicode.GetByteCount(FolderPath);
+
+            if (Size > MaxSize)
+            {
+                HandleError($"The documents folder path is too long! Maximum length is {MaxSize} characters.");
+                return;
+            }
+
+            WriteMappingToFile(GlobalMappings.GetDocumentsFolderMapping(FolderPath));
         }
 
         public async Task SetModLoader(bool UseBugfixMod, bool UseDownload)
@@ -193,10 +204,16 @@ namespace S6Patcher.Source.Patcher
                 }
                 catch (Exception ex)
                 {
-                    ShowMessage.Invoke(ex.ToString());
-                    Logger.Instance.Log(ex.ToString());
+                    HandleError("Error while writing to file: " + ex.Message);
                 }
             }
+        }
+
+        private void HandleError(string Message)
+        {
+            Utility.ErrorCount++;
+            ShowMessage.Invoke(Message);
+            Logger.Instance.Log(Message);
         }
 
         public void Dispose(bool FinishWithPEHeader)

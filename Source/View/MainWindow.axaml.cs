@@ -34,7 +34,7 @@ namespace S6Patcher.Source.View
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
             Backup.ShowMessage += async Message => await ShowMessageBox("Backup", Message);
 
-            DisableUI();
+            DisableUI(true);
             GetModfileInformation();
             ViewHelpers.CheckForUpdates(true);
 
@@ -81,13 +81,23 @@ namespace S6Patcher.Source.View
             });
         }
 
-        private void DisableUI()
+        private void UncheckFeatureBoxes()
+        {
+            ViewHelpers.ViewAccessorWrapper(() =>
+            {
+                ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Element => Element.IsChecked = false);
+            });
+        }
+
+        private void DisableUI(bool Uncheck)
         {
             ViewHelpers.ViewAccessorWrapper(() =>
             {
                 tcMain.SelectedIndex = 0;
-
-                ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Element => Element.IsChecked = false);
+                if (Uncheck)
+                {
+                    UncheckFeatureBoxes();
+                }
                 ViewHelpers.GetControlsByType<TabItem>().ToList().ForEach(Element => Element.IsEnabled = false);
                 
                 btnPatch.IsEnabled = false;
@@ -114,7 +124,7 @@ namespace S6Patcher.Source.View
                 IsFilePickerActive = true;
             }
 
-            DisableUI();
+            DisableUI(true);
             ResetPatcher();
 
             string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);
@@ -129,13 +139,6 @@ namespace S6Patcher.Source.View
             Path = IOFileHandler.Instance.IsPlayLauncherExecutable(Path);
             txtPath.Text = Path;
             await InitializePatcher(Path);
-        }
-
-        private void ToggleUIAvailability(bool Enable)
-        {
-            btnChoose.IsEnabled = Enable;
-            btnPatch.IsEnabled = Enable;
-            btnBackup.IsEnabled = Enable;
         }
 
         private async Task InitializePatcher(string Filepath)
@@ -159,26 +162,34 @@ namespace S6Patcher.Source.View
         private async Task FinishPatching()
         {
             ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && UseCheckSumCalculation);
-            DisableUI();
-            await ShowMessageBox("Finished", "Patching finished!");
+            UncheckFeatureBoxes();
+
+            string Message = "Patching finished!" + (Utility.ErrorCount > 0 ? 
+                $"\nThere were {Utility.ErrorCount} errors during the process. Please check the log file for more information." : 
+                "\nNo errors occurred during the process.");
+
+            await ShowMessageBox("Finished", Message);
         }
 
         private async void MainPatchingTask()
         {
             PatchingInProgress = true;
+            Utility.ErrorCount = 0;
             Logger.Instance.Log("Patching Process Started!");
 
             List<string> Features = GetFeatures();
-            bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
+            bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true; // Remove
             bool UseModLoader = cbModLoader.IsChecked == true || UseBugfixMod;
             bool DoNotUseEmbedded = rbDownload.IsChecked == true;
 
-            ToggleUIAvailability(false);
+            DisableUI(false);
+            btnChoose.IsEnabled = false;
+
             await ViewHelpers.GetPathToOptionsFile();
             await PatchByFeatures(Features, UseBugfixMod, UseModLoader, DoNotUseEmbedded);
             await FinishPatching();
 
-            Logger.Instance.Log("Patching Process Finished!");
+            Logger.Instance.Log($"Patching Process Finished! Amount of Errors: {Utility.ErrorCount}");
             PatchingInProgress = false;
         }
 
@@ -221,6 +232,11 @@ namespace S6Patcher.Source.View
             if (cbEasyDebug.IsChecked == true)
             {
                 MainPatcher.SetEasyDebug();
+            }
+            if (cbFolderPath.IsChecked == true)
+            {
+                string DEBUG = string.Empty; // TODO: Add textbox for input or file picker?
+                MainPatcher.SetDocumentsFolderPath(DEBUG);
             }
 
             await Completed;
@@ -276,7 +292,7 @@ namespace S6Patcher.Source.View
         {
             ResetPatcher();
             Backup.Restore(txtPath.Text);
-            DisableUI();
+            DisableUI(true);
         }
 
         private async Task ShowMessageBox(string Title, string Message) => await ViewHelpers.ShowMessageBox(Title, Message);

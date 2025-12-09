@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -55,6 +56,16 @@ namespace S6Patcher.Source.Patcher
 
             Key = Mapping.FirstOrDefault(Element => Element.Value[0] == 0x1).Key;
             Mapping[Key] = BitConverter.GetBytes(ClutterFarDistance + 4800f);
+
+            return Mapping;
+        }
+
+        public Dictionary<uint, byte[]> GetDocumentsFolderMapping(string FolderPath)
+        {
+            Dictionary<uint, byte[]> Mapping = _Parser.ParseBinaryWrapper(_ID, "DCP");
+
+            byte[] UTF8Path = Encoding.Unicode.GetBytes(FolderPath + "\0");
+            Mapping.Add(0x4FF938, UTF8Path); // TODO: Get value from binary file instead of hardcoding it here
 
             return Mapping;
         }
