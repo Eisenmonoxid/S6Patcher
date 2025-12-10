@@ -58,6 +58,23 @@ namespace S6Patcher.Source.View
             return File.Count > 0 ? File[0].Path.LocalPath : string.Empty;
         }
 
+        public async Task<string> GetFolderFromFolderPicker(string Title)
+        {
+            var Level = TopLevel.GetTopLevel(Window);
+            if (Level?.StorageProvider == null)
+            {
+                return string.Empty;
+            }
+
+            var Folder = await Level.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                Title = Title,
+                AllowMultiple = false,
+            });
+
+            return Folder.Count > 0 ? Folder[0].Path.LocalPath : string.Empty;
+        }
+
         public async Task GetPathToOptionsFile()
         {
             if (UserScriptHandler.Instance.DoesUserScriptDirectoryExist())
@@ -65,7 +82,10 @@ namespace S6Patcher.Source.View
                 return;
             }
 
+            Window.IsEnabled = false;
             string Path = await GetFileFromFilePicker("Choose Options.ini file", "Options", Configuration);
+            Window.IsEnabled = true;
+
             if (!string.IsNullOrEmpty(Path))
             {
                 try

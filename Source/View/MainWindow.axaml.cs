@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.View
@@ -12,7 +13,7 @@ namespace S6Patcher.Source.View
     public partial class MainWindow : Window
     {
         private bool PatchingInProgress = false;
-        private bool IsFilePickerActive = false;
+        private string SelectedDocumentsFolder = string.Empty;
         private Patcher.Patcher MainPatcher = null;
 
         private readonly ViewHelpers ViewHelpers;
@@ -103,6 +104,7 @@ namespace S6Patcher.Source.View
                 btnPatch.IsEnabled = false;
                 btnBackup.IsEnabled = false;
                 txtPath.Text = "...";
+                SelectedDocumentsFolder = string.Empty;
 
                 var Panel = this.FindControl<HeaderedContentControl>("hccMain");
                 Panel?.IsEnabled = false;
@@ -112,22 +114,33 @@ namespace S6Patcher.Source.View
             });
         }
 
-        private async void OpenFilePicker()
+        private async void ChooseDocumentsFolder()
         {
-            if (IsFilePickerActive)
+            IsEnabled = false;
+            string Path = await ViewHelpers.GetFolderFromFolderPicker("Choose destination folder");
+            IsEnabled = true;
+            
+            if (string.IsNullOrEmpty(Path))
             {
+                SelectedDocumentsFolder = string.Empty;
+                cbFolderPath.IsChecked = false;
+                ToolTip.SetTip(cbFolderPath, "Current Folder: Not selected.");
+                await ShowMessageBox("Error", "No or invalid folder selected!");
                 return;
             }
-            else
-            {
-                IsFilePickerActive = true;
-            }
 
+            SelectedDocumentsFolder = Path;
+            ToolTip.SetTip(cbFolderPath, "Current Folder: " + SelectedDocumentsFolder);
+        }
+
+        private async void OpenFilePicker()
+        {
             DisableUI(true);
             ResetPatcher();
 
+            IsEnabled = false;
             string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);
-            IsFilePickerActive = false;
+            IsEnabled = true;
             
             if (string.IsNullOrEmpty(Path))
             {
@@ -232,10 +245,9 @@ namespace S6Patcher.Source.View
             {
                 MainPatcher.SetEasyDebug();
             }
-            if (cbFolderPath.IsChecked == true)
+            if (cbFolderPath.IsChecked == true && !string.IsNullOrEmpty(SelectedDocumentsFolder))
             {
-                string DEBUG = string.Empty; // TODO: Add textbox for input or file picker?
-                MainPatcher.SetDocumentsFolderPath(DEBUG);
+                MainPatcher.SetDocumentsFolderPath(SelectedDocumentsFolder);
             }
 
             await Completed;
@@ -330,5 +342,12 @@ namespace S6Patcher.Source.View
             txtZoom.IsEnabled = cbZoom.IsChecked == true;
         private void cbHighTextures_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
             txtResolution.IsEnabled = cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED;
+        private void cbFolderPath_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (cbFolderPath.IsChecked == true)
+            {
+                ChooseDocumentsFolder();
+            }
+        }
     }
 }
