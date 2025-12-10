@@ -80,6 +80,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - When pressing `SHIFT` when selecting all units, ammunition carts will now also be selected.
 - When pressing `CTRL` when selecting all units, Thiefs will now no longer be selected.
 - Campfires from bandit camps can now no longer crash the game under certain circumstances.
+- The default documents folder path (where the game stores savegames, options, profiles, etc.) can be changed to another directory.
 - Base Game campaign fixes:
   - Mission 16: The allied knights now have their correct names and entity types instead of Marcus.
   - Mission 3: The harbour now has the correct name.

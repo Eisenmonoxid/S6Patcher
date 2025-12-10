@@ -102,7 +102,6 @@ namespace S6Patcher.Source.View
                 
                 btnPatch.IsEnabled = false;
                 btnBackup.IsEnabled = false;
-                btnChoose.IsEnabled = true;
                 txtPath.Text = "...";
 
                 var Panel = this.FindControl<HeaderedContentControl>("hccMain");
@@ -177,18 +176,14 @@ namespace S6Patcher.Source.View
             Utility.ErrorCount = 0;
             Logger.Instance.Log("Patching Process Started!");
 
-            List<string> Features = GetFeatures();
-            bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true; // Remove
-            bool UseModLoader = cbModLoader.IsChecked == true || UseBugfixMod;
-            bool DoNotUseEmbedded = rbDownload.IsChecked == true;
-
             DisableUI(false);
             btnChoose.IsEnabled = false;
 
             await ViewHelpers.GetPathToOptionsFile();
-            await PatchByFeatures(Features, UseBugfixMod, UseModLoader, DoNotUseEmbedded);
+            await PatchByFeatures();
             await FinishPatching();
 
+            btnChoose.IsEnabled = true;
             Logger.Instance.Log($"Patching Process Finished! Amount of Errors: {Utility.ErrorCount}");
             PatchingInProgress = false;
         }
@@ -201,8 +196,12 @@ namespace S6Patcher.Source.View
             return Features;
         }
 
-        private async Task PatchByFeatures(List<string> Features, bool UseBugfixMod, bool UseModLoader, bool DoNotUseEmbedded)
+        private async Task PatchByFeatures()
         {
+            bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
+            bool UseModLoader = cbModLoader.IsChecked == true || UseBugfixMod;
+            bool DoNotUseEmbedded = rbDownload.IsChecked == true;
+
             Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
                 PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded));
 
@@ -212,7 +211,7 @@ namespace S6Patcher.Source.View
                 return;
             }
 
-            MainPatcher.PatchByControlFeatures(Features);
+            MainPatcher.PatchByControlFeatures(GetFeatures());
             if (cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED)
             {
                 MainPatcher.SetTextureResolution(txtResolution.Text);

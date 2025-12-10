@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 
 namespace S6Patcher.Source.Helpers
 {
@@ -40,6 +41,7 @@ namespace S6Patcher.Source.Helpers
 
             if (Reader.ReadInt32() != 0x4550)
             {
+                Interlocked.Increment(ref ErrorCount);
                 Logger.Instance.Log("PE Header offset not found! Skipping ...");
                 return;
             }

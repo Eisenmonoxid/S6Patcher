@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Helpers
@@ -114,6 +115,7 @@ namespace S6Patcher.Source.Helpers
                 }
                 catch (Exception ex)
                 {
+                    Interlocked.Increment(ref Utility.ErrorCount);
                     Logger.Instance.Log(ex.ToString());
                 }
             });

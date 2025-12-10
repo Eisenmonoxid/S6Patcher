@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher
@@ -34,6 +35,7 @@ namespace S6Patcher.Source.Patcher
                 }
                 catch (Exception ex)
                 {
+                    Interlocked.Increment(ref Utility.ErrorCount);
                     Logger.Instance.Log(ex.ToString());
                     continue;
                 }
@@ -59,6 +61,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
+                Interlocked.Increment(ref Utility.ErrorCount);
                 Logger.Instance.Log(ex.ToString());
                 ShowMessage.Invoke(ex.Message);
                 return;
@@ -75,6 +78,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
+                Interlocked.Increment(ref Utility.ErrorCount);
                 Logger.Instance.Log(ex.ToString());
                 ShowMessage.Invoke(ex.Message);
                 return;
@@ -105,6 +109,7 @@ namespace S6Patcher.Source.Patcher
             }
             catch (Exception ex)
             {
+                Interlocked.Increment(ref Utility.ErrorCount);
                 Logger.Instance.Log(ex.ToString());
                 ShowMessage.Invoke(ex.Message);
                 return;

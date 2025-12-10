@@ -152,6 +152,7 @@ namespace S6Patcher.Source.Patcher
 
             if (Reader.ReadInt32() != 0x4550)
             {
+                Interlocked.Increment(ref Utility.ErrorCount);
                 Logger.Instance.Log("PE Header offset not found! Skipping ...");
                 return;
             }
@@ -211,7 +212,7 @@ namespace S6Patcher.Source.Patcher
 
         private void HandleError(string Message)
         {
-            Utility.ErrorCount++;
+            Interlocked.Increment(ref Utility.ErrorCount);
             ShowMessage.Invoke(Message);
             Logger.Instance.Log(Message);
         }
