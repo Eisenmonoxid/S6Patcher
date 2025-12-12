@@ -1,11 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using MsBox.Avalonia.Enums;
 using S6Patcher.Source.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.View
@@ -24,7 +24,7 @@ namespace S6Patcher.Source.View
             {execID.HE_STEAM,   ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
             {execID.HE_UBISOFT, ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
             {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "cbZoom", "cbLimitedEdition", "cbScriptBugFixes",
-                                 "cbEasyDebug", "txtResolution", "txtZoom"]}
+                "cbEasyDebug", "txtResolution", "txtZoom"]}
         };
 
         public MainWindow()
@@ -40,6 +40,7 @@ namespace S6Patcher.Source.View
             ViewHelpers.CheckForUpdates(true);
 
             UseCheckSumCalculation &= !Program.CommandLineArguments.Any(arg => arg.Contains("-skipchecksum"));
+            ToolTip.SetTip(cbFolderPath, "Current Folder: Not selected.");
         }
 
         private void EnableUIElements(execID ID)
@@ -116,10 +117,7 @@ namespace S6Patcher.Source.View
 
         private async void ChooseDocumentsFolder()
         {
-            IsEnabled = false;
             string Path = await ViewHelpers.GetFolderFromFolderPicker("Choose destination folder");
-            IsEnabled = true;
-            
             if (string.IsNullOrEmpty(Path))
             {
                 SelectedDocumentsFolder = string.Empty;
@@ -138,10 +136,7 @@ namespace S6Patcher.Source.View
             DisableUI(true);
             ResetPatcher();
 
-            IsEnabled = false;
-            string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);
-            IsEnabled = true;
-            
+            string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);      
             if (string.IsNullOrEmpty(Path))
             {
                 txtPath.Text = "...";
@@ -284,11 +279,23 @@ namespace S6Patcher.Source.View
             lblDownloadSize.Content = lblDownloadSize.Content.ToString().Replace("Fetching ...", Size);
         }
 
+        private async void GetUserExitOption()
+        {
+            ButtonResult Result = await ViewHelpers.ShowPromptMessageBox("Exit", 
+                "Patching is currently in progress! Are you sure you want to exit?");
+
+            if (Result == ButtonResult.Yes)
+            {
+                PatchingInProgress = false;
+                Close();
+            }
+        }
+
         protected override void OnClosing(WindowClosingEventArgs e)
         {
             if (PatchingInProgress)
             {
-                _ = ShowMessageBox("Patching in Progress ...", "Patching is currently in progress!");
+                GetUserExitOption();
                 e.Cancel = true;
                 return;
             }

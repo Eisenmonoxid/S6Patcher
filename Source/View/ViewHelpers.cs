@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace S6Patcher.Source.View
 {
-    public class ViewHelpers(Window Window)
+    public class ViewHelpers(Window Owner)
     {
         public FilePickerFileType Executable {get;} = new("Executable file | *.exe") {Patterns = ["*.exe"]};
         public FilePickerFileType Configuration {get;} = new("Configuration file | *.ini") {Patterns = ["*.ini"]};
@@ -29,24 +29,35 @@ namespace S6Patcher.Source.View
             {
                 var Box = MessageBoxManager.GetMessageBoxStandard(Title, Message, ButtonEnum.Ok,
                     Icon.Warning, null, WindowStartupLocation.CenterOwner);
-                return await Box.ShowWindowDialogAsync(Window);
+                return await Box.ShowWindowDialogAsync(Owner);
+            });
+        }
+
+        public async Task<ButtonResult> ShowPromptMessageBox(string Title, string Message)
+        {
+            return await ViewAccessorWrapper(async () =>
+            {
+                var Box = MessageBoxManager.GetMessageBoxStandard(Title, Message, ButtonEnum.YesNo, 
+                    Icon.Question, null, WindowStartupLocation.CenterOwner);
+                return await Box.ShowWindowDialogAsync(Owner);
             });
         }
         
         public List<Control> GetControlsByNames(string[] Names) => [.. Names
-                .Select(Window.FindControl<Control>)
+                .Select(Owner.FindControl<Control>)
                 .Where(Control => Control != null)];
                 
-        public IEnumerable<T> GetControlsByType<T>() where T : Control => Window.GetLogicalDescendants().OfType<T>();
+        public IEnumerable<T> GetControlsByType<T>() where T : Control => Owner.GetLogicalDescendants().OfType<T>();
 
         public async Task<string> GetFileFromFilePicker(string Title, string Name, FilePickerFileType Type)
         {
-            var Level = TopLevel.GetTopLevel(Window);
+            var Level = TopLevel.GetTopLevel(Owner);
             if (Level?.StorageProvider == null)
             {
                 return string.Empty;
             }
 
+            Owner.IsEnabled = false;
             var File = await Level.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 AllowMultiple = false,
@@ -54,23 +65,26 @@ namespace S6Patcher.Source.View
                 Title = Title,
                 FileTypeFilter = [Type]
             });
+            Owner.IsEnabled = true;
 
             return File.Count > 0 ? File[0].Path.LocalPath : string.Empty;
         }
 
         public async Task<string> GetFolderFromFolderPicker(string Title)
         {
-            var Level = TopLevel.GetTopLevel(Window);
+            var Level = TopLevel.GetTopLevel(Owner);
             if (Level?.StorageProvider == null)
             {
                 return string.Empty;
             }
 
+            Owner.IsEnabled = false;
             var Folder = await Level.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
                 Title = Title,
                 AllowMultiple = false,
             });
+            Owner.IsEnabled = true;
 
             return Folder.Count > 0 ? Folder[0].Path.LocalPath : string.Empty;
         }
@@ -82,9 +96,9 @@ namespace S6Patcher.Source.View
                 return;
             }
 
-            Window.IsEnabled = false;
+            Owner.IsEnabled = false;
             string Path = await GetFileFromFilePicker("Choose Options.ini file", "Options", Configuration);
-            Window.IsEnabled = true;
+            Owner.IsEnabled = true;
 
             if (!string.IsNullOrEmpty(Path))
             {

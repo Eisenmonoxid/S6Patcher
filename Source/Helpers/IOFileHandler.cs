@@ -66,7 +66,7 @@ namespace S6Patcher.Source.Helpers
             foreach (string Element in UserScriptHandler.Instance.GetUserScriptDirectories())
             {
                 string CurrentPath = Path.Combine(Element, "Config", Name);
-                if (File.Exists(CurrentPath) == false)
+                if (!File.Exists(CurrentPath))
                 {
                     Logger.Instance.Log("Skipping! Did not find Options file " + CurrentPath);
                     continue;

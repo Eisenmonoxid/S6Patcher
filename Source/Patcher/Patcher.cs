@@ -119,12 +119,12 @@ namespace S6Patcher.Source.Patcher
         {
             Logger.Instance.Log("Called with " + FolderPath);
 
-            uint MaxSize = 0x95;
+            uint MaxSize = 0xB4;
             int Size = Encoding.Unicode.GetByteCount(FolderPath);
 
             if (Size > MaxSize)
             {
-                HandleError($"The documents folder path is too long! Maximum length is {MaxSize} characters.");
+                HandleError($"The documents folder path is too long! Maximum length is {MaxSize} unicode characters.");
                 return;
             }
 

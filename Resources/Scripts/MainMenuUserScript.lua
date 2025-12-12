@@ -179,7 +179,7 @@ if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
 Framework.GetProgramVersion = function()
-	local Text = " - S6Patcher v7" .. (S6Patcher.BETA and " - BETA" or "");
+	local Text = " - S6Patcher v7.1" .. (S6Patcher.BETA and " - BETA" or "");
 	return S6Patcher.GetProgramVersion() .. Text;
 end
 -- ************************************************************************************************************************************************************* --
