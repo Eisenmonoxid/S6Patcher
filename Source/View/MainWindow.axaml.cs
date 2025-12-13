@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.View
@@ -114,7 +115,7 @@ namespace S6Patcher.Source.View
                 Panel?.IsEnabled = false;
             });
         }
-
+        
         private async void ChooseDocumentsFolder()
         {
             string Path = await ViewHelpers.GetFolderFromFolderPicker("Choose destination folder");
@@ -358,6 +359,11 @@ namespace S6Patcher.Source.View
             if (cbFolderPath.IsChecked == true)
             {
                 ChooseDocumentsFolder();
+            }
+            else
+            {
+                txtFolderPath.Text = "...";
+                txtFolderPath.IsEnabled = false;
             }
         }
     }
