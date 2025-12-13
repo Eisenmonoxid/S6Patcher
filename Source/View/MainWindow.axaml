@@ -25,8 +25,7 @@
 			</Style>
 		</Grid.Styles>
 		
-		<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
-			ColumnDefinitions="Auto, Auto, Auto" Name="grdForm"
+		<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto, Auto" Name="grdForm"
 			Background="{DynamicResource SystemControlBackgroundAltHighBrush}">	
 			
 			<HeaderedContentControl Grid.Row="0" Name="hccSelect" Header="Select Game/Editor Executable">
@@ -39,7 +38,7 @@
 			<HeaderedContentControl Grid.Row="1" Name="hccMain" Header="Choose Features">
 				<TabControl Name="tcMain">
 					<TabItem Name="tiGeneral" Header="General">
-						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto" RowDefinitions="Auto Auto Auto Auto Auto Auto Auto">
+						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto" RowDefinitions="Auto Auto Auto Auto Auto Auto">
 							<CheckBox Grid.Row="0" Grid.Column="0" IsCheckedChanged="cbHighTextures_IsCheckedChanged" Name="cbHighTextures">High Resolution Textures:</CheckBox>
 							<TextBox Grid.Row="0" Margin="10 0" VerticalAlignment="Center" Grid.Column="1" Name="txtResolution" 
 									 HorizontalAlignment="Center" MaxLength="4" IsEnabled="False">4096</TextBox>
@@ -52,6 +51,8 @@
 							<CheckBox Grid.Row="3" Name="cbLimitedEdition">Activate Limited/Special Edition</CheckBox>
 							<CheckBox Grid.Row="4" Name="cbScriptBugFixes">Activate Script and Code Bugfixes</CheckBox>
 							<CheckBox Grid.Row="5" Name="cbFolderPath" IsCheckedChanged="cbFolderPath_IsCheckedChanged">Update Documents Folder Path</CheckBox>
+							<TextBox  Grid.Row="5" Grid.Column="1" Margin="10 0" Name="txtFolderPath" IsEnabled="False" Grid.ColumnSpan="3"
+								Text="..."></TextBox>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiHistory" Header="History Edition">

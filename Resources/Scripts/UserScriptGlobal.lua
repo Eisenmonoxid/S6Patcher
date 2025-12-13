@@ -82,9 +82,19 @@ end
 		end
 	end
 
-	if Map == "c00_m16_rossotorres" then
-		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
+	-- Fix "Player x has no name" in various campaign maps
+	Logic.ExecuteInLuaLocalState([[
+		DisplayVoiceMessage_ORIG = GUI_Interaction.DisplayVoiceMessage;
+		GUI_Interaction.DisplayVoiceMessage = function(_QuestIndex, _PlayerID, _MessageKey, _Actor, _ActorMood, _OptionalPlayVoice, _HidePortrait, _PlayerName)
+			if string.find(_PlayerName, "has no name") then
+				_PlayerName = GetPlayerName(_PlayerID);
+			end	
 
+			return DisplayVoiceMessage_ORIG(_QuestIndex, _PlayerID, _MessageKey, _Actor, _ActorMood, _OptionalPlayVoice, _HidePortrait, _PlayerName);
+		end
+	]]);
+
+	if Map == "c00_m16_rossotorres" then
 		-- Interrupt Quests running
 		local Found = FindQuestsByName("HiddenQuest_NPCMarcusMustSurvive", false);
 		if #Found > 0 then
@@ -107,12 +117,10 @@ end
 			end
 		end
 	elseif Map == "c00_m03_gallos" then
-		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		Logic.ExecuteInLuaLocalState([[
 			GUI.SetPlayerName(8, XGUIEng.GetStringTableText("UI_ObjectNames/B_NPC_ShipsStorehouse"));
 		]]);
 	elseif Map == "c00_m11_tios" then
-		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		StartFlexibalPlayerVoiceAfterOneSecond = function()
 			if Logic.GetTime() >= FlexibalPlayerVoiceStart + 1 then
 				SendVoiceMessage(FlexibleSpeakerPlayerID, FlexibalPlayerVoiceText);
@@ -121,14 +129,12 @@ end
 			end
 		end
 	elseif Map == "c00_m15_vestholm" then
-		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		local Entity = Logic.GetEntityIDByName("ReinforcementSpawn");
 		local posX, posY = Logic.GetEntityPosition(Entity);
 		Logic.DEBUG_SetSettlerPosition(Entity, posX + 250, posY);
 		
 		SetupPlayer(5, TraitorKnight.Face, "Village of Eastholm", "VillageColor2");
 	elseif Map == "c00_m13_montecito" then
-		Framework.WriteToLog("S6Patcher: Applying " .. Map .. " fixes.");
 		SetDiplomacyState(RedPrincePlayerID, HarborBayPlayerID, DiplomacyStates.Enemy);
 	end
 end)();

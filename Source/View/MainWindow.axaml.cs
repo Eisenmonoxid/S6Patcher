@@ -122,12 +122,16 @@ namespace S6Patcher.Source.View
             {
                 SelectedDocumentsFolder = string.Empty;
                 cbFolderPath.IsChecked = false;
+                txtFolderPath.Text = "...";
+                txtFolderPath.IsEnabled = false;
                 ToolTip.SetTip(cbFolderPath, "Current Folder: Not selected.");
                 await ShowMessageBox("Error", "No or invalid folder selected!");
                 return;
             }
 
             SelectedDocumentsFolder = Path;
+            txtFolderPath.Text = SelectedDocumentsFolder;
+            txtFolderPath.IsEnabled = true;
             ToolTip.SetTip(cbFolderPath, "Current Folder: " + SelectedDocumentsFolder);
         }
 
