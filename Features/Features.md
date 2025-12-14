@@ -83,7 +83,9 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - The default documents folder path (where the game stores savegames, options, profiles, etc.) can be changed to another directory.
 - Base Game campaign fixes:
   - Mission 16: The allied knights now have their correct names and entity types instead of Marcus.
-  - Mission 3: The harbour now has the correct name.
+  - Mission 03: 
+    - The harbour now has the correct name.
+    - Quest messages concerning the two villages and the cloister have been fixed.
   - Mission 11: The victory message by the Red Prince now has the correct portrait and voice message.
   - Mission 15: The reinforcements are now correctly spawned.
   - Mission 13: The Red Prince and the Harbor are now actually enemies and attacks are therefore possible.
