@@ -368,7 +368,7 @@ end
 
 S6Patcher.ExtendedGameOptions.LoadFeaturesFromFile = function()
 	for _, Value in pairs(S6Patcher.ExtendedGameOptions.Features) do
-		local Entry = Options.GetIntValue(Value[2] == "Windowed" and "Display" or "S6Patcher", Value[2], 1);
+		local Entry = Options.GetIntValue(Value[2] == "Windowed" and "Display" or "S6Patcher", Value[2], 0);
 		Value[1] = Entry == 1;
 	end
 end

@@ -25,11 +25,11 @@
 			</Style>
 		</Grid.Styles>
 		
-		<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto, Auto" Name="grdForm"
+		<Grid RowDefinitions="Auto Auto Auto Auto Auto Auto Auto" ColumnDefinitions="Auto Auto Auto" Name="grdForm"
 			Background="{DynamicResource SystemControlBackgroundAltHighBrush}">	
 			
 			<HeaderedContentControl Grid.Row="0" Name="hccSelect" Header="Select Game/Editor Executable">
-    			<Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+    			<Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto Auto">
         			<TextBox Grid.Row="0" Grid.Column="0" TextWrapping="NoWrap" Name="txtPath" IsReadOnly="True"/>
 					<Button Grid.Row="1" Margin="0 5" Name="btnChoose" Click="btnChoose_Click" HorizontalAlignment="Right">Choose File</Button>
 				</Grid>
@@ -73,8 +73,7 @@
 							<CheckBox Name="cbDevMode" Grid.Row="0">Activate Development Mode</CheckBox>
 							<CheckBox Name="cbEasyDebug" Grid.Row="1">Enable Easy Debug</CheckBox>
 							<CheckBox Name="cbFolderPath" Grid.Row="2" IsCheckedChanged="cbFolderPath_IsCheckedChanged">Update Documents Folder Path</CheckBox>
-							<TextBox Name="txtFolderPath" Grid.Row="2" MaxLength="90" Grid.Column="1" Margin="10 0" 
-								IsEnabled="False" Grid.ColumnSpan="3" Text="..."></TextBox>
+							<TextBox Name="txtFolderPath" Grid.Row="2" MaxLength="90" Grid.Column="1" Margin="10 0" IsEnabled="False" Text="..."></TextBox>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiEditor" Header="Mapeditor">
