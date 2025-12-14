@@ -68,7 +68,7 @@ end
 
 	Framework.WriteToLog("S6Patcher: Applying " .. Campaign .. " fixes.");
 	-- Fix incorrect enemy knight type
-	local PossibleIDs = {RedPrincePlayerID, SabattaPlayerID, HusranPlayerID, 
+	local PossibleIDs = {RedPrincePlayerID, SabattaPlayerID, HusranPlayerID,
 		CrimsonCitadelPlayerID, SidiKhemisRuinsPlayerID, KyrkasundPlayerID};
 	for _, Value in pairs(PossibleIDs) do
 		if Value ~= nil then
@@ -116,10 +116,6 @@ end
 				CreateQuestToProtectKnight(Knights[i].pID);
 			end
 		end
-	elseif Map == "c00_m03_gallos" then
-		Logic.ExecuteInLuaLocalState([[
-			GUI.SetPlayerName(8, XGUIEng.GetStringTableText("UI_ObjectNames/B_NPC_ShipsStorehouse"));
-		]]);
 	elseif Map == "c00_m11_tios" then
 		StartFlexibalPlayerVoiceAfterOneSecond = function()
 			if Logic.GetTime() >= FlexibalPlayerVoiceStart + 1 then
@@ -132,10 +128,48 @@ end
 		local Entity = Logic.GetEntityIDByName("ReinforcementSpawn");
 		local posX, posY = Logic.GetEntityPosition(Entity);
 		Logic.DEBUG_SetSettlerPosition(Entity, posX + 250, posY);
-		
+
 		SetupPlayer(5, TraitorKnight.Face, "Village of Eastholm", "VillageColor2");
 	elseif Map == "c00_m13_montecito" then
 		SetDiplomacyState(RedPrincePlayerID, HarborBayPlayerID, DiplomacyStates.Enemy);
+	elseif Map == "c00_m03_gallos" then
+		Logic.ExecuteInLuaLocalState([[
+			GUI.SetPlayerName(8, XGUIEng.GetStringTableText("UI_ObjectNames/B_NPC_ShipsStorehouse"));
+
+			GenerateVoiceMessage_ORIG = GUI_Interaction.GenerateVoiceMessage;
+			GUI_Interaction.GenerateVoiceMessage = function(_QuestIndex, _PlayerID, _MessageKey, _PlayDirectly, _Random, 
+				_OptionalPlayVoice, _HidePortrait, _OnlyIfMapSpecificKeyExists)
+
+				local Keys = {"Quest_GoToMonsteinStorehouse", "Quest_GoToCloister", "Quest_GoToRiedfurtStorehouse"};
+				local UseMessagePatching = false;
+				for i = 1, #Keys do
+					if _MessageKey == Keys[i] then
+						UseMessagePatching = true;
+						break;
+					end
+				end
+
+				if UseMessagePatching then
+					local Quest = Quests[_QuestIndex];
+					local JanusbergPlayerID = ]] .. tostring(JanusbergPlayerID) .. [[;
+					local MonsteinPlayerID 	= ]] .. tostring(MonsteinPlayerID) .. [[;
+					local RiedfurtPlayerID 	= ]] .. tostring(RiedfurtPlayerID) .. [[;
+					local CloisterPlayerID 	= ]] .. tostring(CloisterPlayerID) .. [[;
+
+					if (Quest.SendingPlayer == JanusbergPlayerID and Quest.Result == QuestResult.Success)
+						or (Quest.State == QuestState.Active
+							and (Quest.SendingPlayer == MonsteinPlayerID 
+								or Quest.SendingPlayer == RiedfurtPlayerID 
+								or Quest.SendingPlayer == CloisterPlayerID))
+					then
+						return false;
+					end
+				end
+
+				return GenerateVoiceMessage_ORIG(_QuestIndex, _PlayerID, _MessageKey, _PlayDirectly, _Random, 
+					_OptionalPlayVoice, _HidePortrait, _OnlyIfMapSpecificKeyExists);
+			end
+		]]);
 	end
 end)();
 -- ************************************************************************************************************************************************************* --
