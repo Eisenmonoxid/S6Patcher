@@ -72,7 +72,7 @@
 						<Grid Margin="15" RowDefinitions="Auto Auto Auto" ColumnDefinitions="Auto Auto">
 							<CheckBox Name="cbDevMode" Grid.Row="0">Activate Development Mode</CheckBox>
 							<CheckBox Name="cbEasyDebug" Grid.Row="1">Enable Easy Debug</CheckBox>
-							<CheckBox Name="cbFolderPath" Grid.Row="2" IsCheckedChanged="cbFolderPath_IsCheckedChanged">Update Documents Folder Path</CheckBox>
+							<CheckBox Name="cbFolderPath" Grid.Row="2" IsCheckedChanged="cbFolderPath_IsCheckedChanged">Update Documents Folder Path:</CheckBox>
 							<TextBox Name="txtFolderPath" Grid.Row="2" MaxLength="90" Grid.Column="1" Margin="10 0" IsEnabled="False" Text="..."></TextBox>
 						</Grid>
 					</TabItem>
