@@ -25,7 +25,7 @@ namespace S6Patcher.Source.View
             {execID.HE_STEAM,   ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
             {execID.HE_UBISOFT, ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
             {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "cbZoom", "cbLimitedEdition", "cbScriptBugFixes",
-                "cbEasyDebug", "txtResolution", "txtZoom"]}
+                "cbEasyDebug", "cbFolderPath", "txtResolution", "txtZoom"]}
         };
 
         public MainWindow()
