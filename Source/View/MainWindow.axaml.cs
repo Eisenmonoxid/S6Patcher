@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.View
@@ -14,7 +13,6 @@ namespace S6Patcher.Source.View
     public partial class MainWindow : Window
     {
         private bool PatchingInProgress = false;
-        private string SelectedDocumentsFolder = string.Empty;
         private Patcher.Patcher MainPatcher = null;
 
         private readonly ViewHelpers ViewHelpers;
@@ -105,7 +103,6 @@ namespace S6Patcher.Source.View
                 btnPatch.IsEnabled = false;
                 btnBackup.IsEnabled = false;
                 txtPath.Text = "...";
-                SelectedDocumentsFolder = string.Empty;
 
                 var Panel = this.FindControl<HeaderedContentControl>("hccMain");
                 Panel?.IsEnabled = false;
@@ -120,15 +117,13 @@ namespace S6Patcher.Source.View
             string Path = await ViewHelpers.GetFolderFromFolderPicker("Choose destination folder");
             if (string.IsNullOrEmpty(Path))
             {
-                SelectedDocumentsFolder = string.Empty;
                 cbFolderPath.IsChecked = false;
                 txtFolderPath.Text = "...";
                 txtFolderPath.IsEnabled = false;
                 return;
             }
 
-            SelectedDocumentsFolder = Path;
-            txtFolderPath.Text = SelectedDocumentsFolder;
+            txtFolderPath.Text = Path;
             txtFolderPath.IsEnabled = true;
         }
 
@@ -241,9 +236,9 @@ namespace S6Patcher.Source.View
             {
                 MainPatcher.SetEasyDebug();
             }
-            if (cbFolderPath.IsChecked == true && !string.IsNullOrEmpty(SelectedDocumentsFolder))
+            if (cbFolderPath.IsChecked == true && !string.IsNullOrEmpty(txtFolderPath.Text))
             {
-                MainPatcher.SetDocumentsFolderPath(SelectedDocumentsFolder);
+                MainPatcher.SetDocumentsFolderPath(txtFolderPath.Text);
             }
 
             await Completed;
@@ -360,7 +355,6 @@ namespace S6Patcher.Source.View
             {
                 txtFolderPath.Text = "...";
                 txtFolderPath.IsEnabled = false;
-                SelectedDocumentsFolder = string.Empty;
             }
         }
     }
