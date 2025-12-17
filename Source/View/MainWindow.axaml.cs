@@ -124,7 +124,6 @@ namespace S6Patcher.Source.View
                 cbFolderPath.IsChecked = false;
                 txtFolderPath.Text = "...";
                 txtFolderPath.IsEnabled = false;
-                await ShowMessageBox("Error", "No or invalid folder selected!");
                 return;
             }
 

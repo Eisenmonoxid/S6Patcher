@@ -127,6 +127,11 @@ namespace S6Patcher.Source.Patcher
                 HandleError($"The documents folder path is too long! Maximum length is {MaxSize} unicode characters.");
                 return;
             }
+            else if (Size < 3)
+            {
+                HandleError("The documents folder path is too short!");
+                return;
+            }
 
             WriteMappingToFile(GlobalMappings.GetDocumentsFolderMapping(FolderPath));
         }
