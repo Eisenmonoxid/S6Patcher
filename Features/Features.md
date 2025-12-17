@@ -10,6 +10,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 
 ## All Versions: Ingame Options Menu
 - A new menu in the options menu allows to toggle some of the features of the S6Patcher ingame.
+**The game needs to be restarted after changing these options.**
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Ingame_Menu_Final.jpg?raw=true" width="60%" height="60%" alt="Windowed"/>
 
 ## All Versions: Base Game Knights in the Expansion Pack
