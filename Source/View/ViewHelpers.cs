@@ -96,10 +96,7 @@ namespace S6Patcher.Source.View
                 return;
             }
 
-            Owner.IsEnabled = false;
             string Path = await GetFileFromFilePicker("Choose Options.ini file", "Options", Configuration);
-            Owner.IsEnabled = true;
-
             if (!string.IsNullOrEmpty(Path))
             {
                 try

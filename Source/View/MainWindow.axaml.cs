@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.View
@@ -132,7 +133,7 @@ namespace S6Patcher.Source.View
             DisableUI(true);
             ResetPatcher();
 
-            string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);      
+            string Path = await ViewHelpers.GetFileFromFilePicker("Choose .exe file", "Settlers6", ViewHelpers.Executable);
             if (string.IsNullOrEmpty(Path))
             {
                 txtPath.Text = "...";
@@ -177,7 +178,7 @@ namespace S6Patcher.Source.View
         private async void MainPatchingTask()
         {
             PatchingInProgress = true;
-            Utility.ErrorCount = 0;
+            Interlocked.Exchange(ref Utility.ErrorCount, 0);
             Logger.Instance.Log("Patching Process Started!");
 
             DisableUI(false);
