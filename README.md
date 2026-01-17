@@ -39,8 +39,7 @@ The S6Patcher features a simple [Modloader](https://github.com/Eisenmonoxid/S6Pa
 - A new folder `Script` in `<Documents>\THE SETTLERS - Rise of an Empire\` and three lua script files `"UserScriptGlobal.lua"`, `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
 - The configuration file `<Documents>\THE SETTLERS - Rise of an Empire\Config\Options.ini` is extended with a new section `[S6Patcher]`, where some necessary configuration values are stored.
 - When the option "Activate Modloader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
-- The option "Download and Install Bugfix Mod" will download the zip compressed folder `Modfiles.zip` from the repository directory `/Source/Resources/Gamefiles` and extract
-it into the `modloader` folder. 
+- The option "Install Bugfix Mod" will extract the zip compressed folder `Modfiles.zip` from the repository directory `/Source/Resources/Gamefiles` into the `modloader` folder. 
 
 ---
 ## Contribution
