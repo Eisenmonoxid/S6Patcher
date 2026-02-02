@@ -2,6 +2,8 @@ name: Build & Release .NET 10
 
 on:
   push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -9,8 +11,8 @@ permissions:
 
 jobs:
   build:
-    name: Build for ${{ matrix.displayName }}
-    runs-on: ${{ matrix.os }}
+    name: Build for ${{matrix.displayName}}
+    runs-on: ${{matrix.os}}
 
     strategy:
       matrix:
@@ -29,7 +31,7 @@ jobs:
       - name: Setup .NET 10 SDK
         uses: actions/setup-dotnet@v5.1.0
         with:
-          dotnet-version: '10.0.102'
+          dotnet-version: '10.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
@@ -46,7 +48,7 @@ jobs:
             -p:SelfContained=true \
             -p:PublishSingleFile=true \
             -p:StripSymbols=true \
-            -o ./publish/${{ matrix.runtime }}
+            -o ./publish/${{matrix.runtime}}
 
       - name: Install latest UPX (Windows)
         if: startsWith(matrix.os, 'windows')
