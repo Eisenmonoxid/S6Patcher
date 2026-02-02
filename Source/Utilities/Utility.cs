@@ -31,6 +31,17 @@ namespace S6Patcher.Source.Helpers
             {"cbScriptBugFixes",    "SBF"},
             {"cbLimitedEdition",    "LME"},
         };
+        public static readonly Dictionary<string, bool> ScriptFeatures = new()
+        {
+            {"UseAlternateBackground",      true},
+            {"UseSingleStop",               true},
+            {"UseDowngrade",                true},
+            {"UseMilitaryRelease",          true},
+            {"DayNightCycle",               true},
+            {"ExtendedKnightSelection",     true},
+            {"SpecialKnightsAvailable",     false},
+            {"FeaturesInUsermaps",          false},
+        };
 
         public static void WritePEHeaderPosition(FileStream Stream, long Offset, byte[] Bytes)
         {

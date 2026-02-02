@@ -33,16 +33,17 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <CleanBeforeBuild>True</CleanBeforeBuild>
     <IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
+
     <PublishTrimmed>True</PublishTrimmed>
+    <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <PublishAot>True</PublishAot>
+
     <PublishSingleFile>True</PublishSingleFile>
     <SelfContained>True</SelfContained>
     <DebugType>none</DebugType>
     <InvariantGlobalization>True</InvariantGlobalization>
-    <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <StripSymbols>True</StripSymbols>
-
     <BuiltInComInteropSupport>False</BuiltInComInteropSupport>
     <DebuggerSupport>False</DebuggerSupport>
     <EnableUnsafeBinaryFormatterSerialization>False</EnableUnsafeBinaryFormatterSerialization>

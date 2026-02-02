@@ -182,7 +182,7 @@ namespace S6Patcher.Source.Patcher
         public async Task WriteScriptFilesToFolder(bool UseDownload)
         {
             WriteMappingToFile(GlobalMappings.GetScriptFileMapping());
-            foreach (var Element in ScriptFeatures.Features)
+            foreach (var Element in Utility.ScriptFeatures)
             {
                 SetEntryInOptionsFile(Element.Key, Element.Value);
             }
