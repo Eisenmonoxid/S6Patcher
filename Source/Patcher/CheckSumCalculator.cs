@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32.SafeHandles;
-using S6Patcher.Source.Helpers;
+using S6Patcher.Source.Utilities;
 using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;

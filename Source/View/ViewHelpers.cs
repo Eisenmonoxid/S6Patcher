@@ -4,7 +4,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using S6Patcher.Source.Helpers;
+using S6Patcher.Source.Utilities;
 using S6Patcher.Source.Patcher;
 using System;
 using System.Collections.Generic;

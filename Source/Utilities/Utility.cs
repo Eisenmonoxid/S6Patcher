@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 
-namespace S6Patcher.Source.Helpers
+namespace S6Patcher.Source.Utilities
 {
     public enum execID
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace S6Patcher.Source.Helpers
+namespace S6Patcher.Source.Utilities
 {
     public sealed class Logger
     {

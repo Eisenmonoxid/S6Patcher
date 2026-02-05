@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace S6Patcher.Source.Helpers
+namespace S6Patcher.Source.Utilities
 {
     public sealed class IOFileHandler
     {

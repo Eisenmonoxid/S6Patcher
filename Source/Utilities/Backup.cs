@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace S6Patcher.Source.Helpers
+namespace S6Patcher.Source.Utilities
 {
     internal static class Backup
     {

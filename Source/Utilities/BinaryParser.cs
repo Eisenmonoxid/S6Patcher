@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
-namespace S6Patcher.Source.Helpers
+namespace S6Patcher.Source.Utilities
 {
     public class BinaryParser
     {

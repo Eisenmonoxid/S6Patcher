@@ -1,4 +1,4 @@
-﻿using S6Patcher.Source.Helpers;
+﻿using S6Patcher.Source.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

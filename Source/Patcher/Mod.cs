@@ -1,5 +1,5 @@
 ﻿using S6Patcher.Properties;
-using S6Patcher.Source.Helpers;
+using S6Patcher.Source.Utilities;
 using System;
 using System.IO;
 using System.IO.Compression;

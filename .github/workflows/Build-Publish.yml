@@ -44,64 +44,32 @@ jobs:
         run: |
           dotnet publish S6Patcher.csproj \
             -c Release \
-            -r ${{ matrix.runtime }} \
+            -r ${{matrix.runtime}} \
             -p:SelfContained=true \
             -p:PublishSingleFile=true \
             -p:StripSymbols=true \
             -o ./publish/${{matrix.runtime}}
 
-      - name: Install latest UPX (Windows)
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          $release = Invoke-RestMethod https://api.github.com/repos/upx/upx/releases/latest
-          $asset = $release.assets | Where-Object { $_.name -match 'win64.zip' } | Select-Object -First 1
-          Invoke-WebRequest $asset.browser_download_url -OutFile upx.zip
-          Expand-Archive upx.zip upx
-          $upxPath = Get-ChildItem upx -Recurse -Directory | Where-Object { $_.Name -like 'upx-*win64*' } | Select-Object -First 1
-          echo $upxPath.FullName >> $env:GITHUB_PATH
-
-      - name: Install latest UPX (Linux)
-        if: startsWith(matrix.os, 'ubuntu')
-        shell: bash
-        run: |
-          UPX_URL=$(curl -s https://api.github.com/repos/upx/upx/releases/latest \
-            | grep browser_download_url \
-            | grep linux \
-            | grep amd64 \
-            | cut -d '"' -f 4)
-          curl -L "$UPX_URL" -o upx.tar.xz
-          tar -xf upx.tar.xz
-          UPX_DIR=$(find . -maxdepth 1 -type d -name "upx-*linux*" | head -n 1)
-          sudo install "$UPX_DIR/upx" /usr/local/bin/upx
-
-      - name: UPX compress published files
-        shell: bash
-        run: |
-          cd publish/${{ matrix.runtime }}
-          find . -maxdepth 1 -type f \
-            -exec upx --best --lzma {} \; || true
-
       - name: Compress publish output (Windows)
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          $src = "publish/${{ matrix.runtime }}"
-          $dst = "${{ matrix.displayName }}.zip"
+          $src = "publish/${{matrix.runtime}}"
+          $dst = "${{matrix.displayName}}.zip"
           Compress-Archive -Path "$src\*" -DestinationPath $dst -CompressionLevel Optimal
 
       - name: Compress publish output (Unix)
         if: startsWith(matrix.os, 'ubuntu')
         shell: bash
         run: |
-          cd publish/${{ matrix.runtime }}
-          zip -9 -r ../../${{ matrix.displayName }}.zip .
+          cd publish/${{matrix.runtime}}
+          zip -9 -r ../../${{matrix.displayName}}.zip .
 
       - name: Upload compressed artifact
         uses: actions/upload-artifact@v6
         with:
-          name: dotnet-${{ matrix.displayName }}
-          path: ${{ matrix.displayName }}.zip
+          name: dotnet-${{matrix.displayName}}
+          path: ${{matrix.displayName}}.zip
 
   release:
     name: Create GitHub Release
@@ -121,8 +89,8 @@ jobs:
       - name: Create GitHub Release (Draft)
         uses: softprops/action-gh-release@v2.5.0
         with:
-          name: ${{ steps.get_version.outputs.version_name }}
-          tag_name: ${{ github.ref_name }}
+          name: ${{steps.get_version.outputs.version_name}}
+          tag_name: ${{github.ref_name}}
           body: "Latest Release."
           draft: true
           prerelease: false
@@ -130,5 +98,4 @@ jobs:
             ./artifacts/dotnet-Windows-x64/Windows-x64.zip
             ./artifacts/dotnet-Linux-x64/Linux-x64.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
