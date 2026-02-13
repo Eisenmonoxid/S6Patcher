@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using MsBox.Avalonia.Enums;
@@ -31,15 +32,17 @@ namespace S6Patcher.Source.View
         {
             InitializeComponent();
 
-            ViewHelpers = new ViewHelpers(this);
+            UseCheckSumCalculation &= !Program.CommandLineArguments.Any(arg => arg.Contains("-skipchecksum"));
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
+
+            ViewHelpers = new ViewHelpers(this);
             Backup.ShowMessage += async Message => await ShowMessageBox("Backup", Message);
 
             DisableUI(true);
             GetModfileInformation();
             ViewHelpers.CheckForUpdates(true);
-
-            UseCheckSumCalculation &= !Program.CommandLineArguments.Any(arg => arg.Contains("-skipchecksum"));
+            
+            Logger.Instance.Log("Avalonia Version: " + typeof(AvaloniaObject).Assembly.GetName().Version.ToString(3));
         }
 
         private void EnableUIElements(execID ID)

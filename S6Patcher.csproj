@@ -36,8 +36,8 @@
 
     <PublishTrimmed>True</PublishTrimmed>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
-    <PublishReadyToRun>True</PublishReadyToRun>
-    <PublishAot>True</PublishAot>
+    <PublishReadyToRun>False</PublishReadyToRun>
+    <PublishAot>False</PublishAot>
 
     <PublishSingleFile>True</PublishSingleFile>
     <SelfContained>True</SelfContained>
