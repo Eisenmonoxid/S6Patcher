@@ -11,22 +11,24 @@ namespace S6Patcher.Source.Patcher
 {
     internal class Mod(execID GlobalID, string GlobalDestinationDirectoryPath)
     {
+        private readonly string ArchiveFilePath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         private readonly string ArchiveFilePathBase = Path.Combine(GlobalDestinationDirectoryPath, "base");
         private readonly string ArchiveFilePathExtra1 = Path.Combine(GlobalDestinationDirectoryPath, "extra1");
-        private readonly string BaseDirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         private const string ArchiveFileName = "mod.bba";
+        private const string ArchiveFileNameBase = "base.bba";
+        private const string ArchiveFileNameExtra1 = "extra1.bba";
         public event Action<string> ShowMessage;
 
         private void ExtractHistoryEditionArchiveFiles(ZipArchive Archive)
         {
             var Entries = Archive.Entries
-                .Where(Element => !Element.FullName.Contains(ArchiveFileName))
+                .Where(Element => !Element.FullName.Contains(ArchiveFileNameBase) && !Element.FullName.Contains(ArchiveFileNameExtra1))
                 .Where(Element => !string.IsNullOrEmpty(Element.Name));
 
             foreach (var Entry in Entries)
             {
-                string DirectoryPath = Path.Combine(BaseDirectoryPath, Path.GetDirectoryName(Entry.FullName) ?? string.Empty);
-                string Destination = Path.Combine(BaseDirectoryPath, Entry.FullName);
+                string DirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, Path.GetDirectoryName(Entry.FullName) ?? string.Empty);
+                string Destination = Path.Combine(GlobalDestinationDirectoryPath, Entry.FullName);
 
                 try
                 {
@@ -55,8 +57,10 @@ namespace S6Patcher.Source.Patcher
                 }
                 else
                 {
-                    ZipArchiveEntry Entry = Archive.GetEntry(ArchiveFileName);
+                    ZipArchiveEntry Entry = Archive.GetEntry(ArchiveFileNameBase);
                     Entry.ExtractToFile(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
+                    Entry = Archive.GetEntry(ArchiveFileNameExtra1);
+                    Entry.ExtractToFile(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
                 }
             }
             catch (Exception ex)
@@ -123,9 +127,16 @@ namespace S6Patcher.Source.Patcher
 
         private void WriteModLoaderFiles()
         {
+            if (Directory.Exists(GlobalDestinationDirectoryPath))
+            {
+                Directory.Delete(GlobalDestinationDirectoryPath, true);
+            }
+
+            Directory.CreateDirectory(GlobalDestinationDirectoryPath);
+
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
             {
-                Directory.CreateDirectory(BaseDirectoryPath);
+                Directory.CreateDirectory(ArchiveFilePath);
                 Directory.CreateDirectory(Path.Combine(ArchiveFilePathBase, "shr"));
                 Directory.CreateDirectory(Path.Combine(ArchiveFilePathExtra1, "shr"));
                 Logger.Instance.Log("Directories created.");
@@ -137,14 +148,7 @@ namespace S6Patcher.Source.Patcher
                 // Always do this in case the download fails or user cancels
                 File.WriteAllBytes(Path.Combine(ArchiveFilePathBase, ArchiveFileName), Resources.mod);
                 File.WriteAllBytes(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
-                Logger.Instance.Log("Written " + ArchiveFileName + " to Paths "
-                    + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
-
-                string OldModLoaderPath = Path.Combine(GlobalDestinationDirectoryPath, "bba");
-                if (Directory.Exists(OldModLoaderPath))
-                {
-                    Directory.Delete(OldModLoaderPath, true);
-                }
+                Logger.Instance.Log("Written " + ArchiveFileName + " to Paths " + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
             }
         }
     }

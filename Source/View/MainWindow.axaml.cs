@@ -99,6 +99,7 @@ namespace S6Patcher.Source.View
                 {
                     UncheckFeatureBoxes();
                 }
+                
                 ViewHelpers.GetControlsByType<TabItem>().ToList().ForEach(Element => Element.IsEnabled = false);
                 
                 btnPatch.IsEnabled = false;
@@ -311,6 +312,7 @@ namespace S6Patcher.Source.View
         }
 
         private async Task ShowMessageBox(string Title, string Message) => await ViewHelpers.ShowMessageBox(Title, Message);
+
         private void ResetPatcher(bool FinishWithPEHeader = false)
         {
             MainPatcher?.Dispose(FinishWithPEHeader);
