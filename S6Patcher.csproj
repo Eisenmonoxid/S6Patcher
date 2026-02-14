@@ -10,12 +10,12 @@
     <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
     <NoWin32Manifest>True</NoWin32Manifest>
     <ImplicitUsings>disable</ImplicitUsings>
-    <AssemblyVersion>7.1.1.0</AssemblyVersion>
-    <FileVersion>7.1.1.0</FileVersion>
+    <AssemblyVersion>7.2.0.0</AssemblyVersion>
+    <FileVersion>7.2.0.0</FileVersion>
     <Company>Eisenmonoxid</Company>
     <Copyright>Eisenmonoxid</Copyright>
     <Title>S6Patcher</Title>
-    <Version>7.1.1.0</Version>
+    <Version>7.2.0.0</Version>
     <Authors>Eisenmonoxid</Authors>
     <Product>github.com/Eisenmonoxid/S6Patcher</Product>
     <Description>A simple application that fixes some bugs and adds new features in the various editions of "The Settlers 6 - Rise of an Empire".</Description>

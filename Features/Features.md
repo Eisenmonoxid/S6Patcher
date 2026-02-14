@@ -122,6 +122,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
 - Middle Europe NPC barracks will now correctly spawn soldiers as intended (This is now also directly fixed in the configuration file).
 - Polar bears are now using the correct "DIE" animation instead of "WALK" when killed.
+- Enables some Lost Features (e.g. the Spicetrader) to be used as models in maps.
 
 ---
 # Recommendation: DXVK

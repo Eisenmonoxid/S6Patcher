@@ -6,7 +6,7 @@ A simple application that fixes some bugs and adds new features in the various e
 
 ---
 ## Features
-#### Find a comprehensive list of all features in the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
+Find a comprehensive list of all features in the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
 
 ---
 ## Download
@@ -30,8 +30,8 @@ previously patched .exe file and use the button `Restore Backup`.
 **Should there be any questions or errors: [Discord](https://discord.gg/7SGkQtAAET).**
 
 ---
-## Modloader
-The S6Patcher features a simple [Modloader](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md), which can be used to create mods without having to modify the existing game files.
+## ModLoader
+The S6Patcher features a simple [ModLoader](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md), which can be used to create mods without having to modify the existing game files.
 
 ---
 ## Tech

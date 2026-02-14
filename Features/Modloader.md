@@ -50,4 +50,4 @@ must be located in the following path: `<Settlers>\modloader\base\mod.bba`.
 ---
 
 ## Questions
-**In case there are any questions: [Discord](https://discord.gg/7SGkQtAAET).**
+In case there are any questions: [Discord](https://discord.gg/7SGkQtAAET).**
