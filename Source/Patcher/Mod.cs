@@ -46,11 +46,11 @@ namespace S6Patcher.Source.Patcher
             };
         }
 
-        private void ExtractZipArchive(string ZipPath)
+        private void ExtractZipArchive(MemoryStream ZipArchiveStream)
         {
             try
             {
-                using ZipArchive Archive = ZipFile.OpenRead(ZipPath);
+                using ZipArchive Archive = new(ZipArchiveStream, ZipArchiveMode.Read, true);
                 if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
                 {
                     ExtractHistoryEditionArchiveFiles(Archive);
@@ -71,38 +71,23 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Logger.Instance.Log("Successfully extracted " + ZipPath + " to " + GlobalDestinationDirectoryPath);
-        }
-
-        private void WriteEmbeddedFiles()
-        {
-            try
-            {
-                File.WriteAllBytes(GlobalDestinationDirectoryPath + ".zip", Resources.Modfiles);
-            }
-            catch (Exception ex)
-            {
-                Interlocked.Increment(ref Utility.ErrorCount);
-                Logger.Instance.Log(ex.ToString());
-                ShowMessage.Invoke(ex.Message);
-                return;
-            }
-
-            Logger.Instance.Log("Written fallback ModFiles to " + GlobalDestinationDirectoryPath + ".zip");
-            ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
+            Logger.Instance.Log("Successfully extracted " + ZipArchiveStream.Length + " bytes to " + GlobalDestinationDirectoryPath);
         }
 
         private async Task DownloadZipArchive(bool UseDownload)
         {
-            bool Result = UseDownload && await WebHandler.Instance.DownloadZipArchiveAsync(GlobalDestinationDirectoryPath);
-            if (Result)
+            MemoryStream Result;
+            if (UseDownload)
             {
-                ExtractZipArchive(GlobalDestinationDirectoryPath + ".zip");
+                Result = await WebHandler.Instance.DownloadZipArchiveAsync() ?? new(Resources.Modfiles);
             }
             else
             {
-                WriteEmbeddedFiles();
+                Result = new(Resources.Modfiles);
             }
+
+            ExtractZipArchive(Result);
+            Result.Dispose();
         }
 
         public async Task CreateModLoader(bool InstallBugfixMod, bool UseDownload)

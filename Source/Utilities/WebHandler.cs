@@ -82,29 +82,31 @@ namespace S6Patcher.Source.Utilities
             return FinalList;
         }
 
-        public async Task<bool> DownloadZipArchiveAsync(string DestinationDirectoryPath)
+        public async Task<MemoryStream> DownloadZipArchiveAsync()
         {
             HttpResponseMessage Response = await GetHttpResponse(GlobalMod);
             if (Response == null)
             {
-                return false;
+                return null;
             }
 
+            var Memory = new MemoryStream();
             using Stream Stream = await Response.Content.ReadAsStreamAsync();
             try
             {
-                using FileStream FileStream = File.Create(DestinationDirectoryPath + ".zip");
-                await Stream.CopyToAsync(FileStream);
+                await Stream.CopyToAsync(Memory);
+                Memory.Seek(0, SeekOrigin.Begin);
             }
             catch (Exception ex)
             {
+                Memory.Dispose();
                 Interlocked.Increment(ref Utility.ErrorCount);
                 Logger.Instance.Log(ex.ToString());
-                return false;
+                return null;
             }
 
             Logger.Instance.Log("Downloaded ModFiles successfully.");
-            return true;
+            return Memory;
         }
 
         public async Task<string> CheckForUpdatesAsync(bool OnStartup = true)
