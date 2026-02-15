@@ -9,8 +9,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Zoom_Normal_Final.jpg?raw=true" width="40%" height="40%" alt="Zoom_Normal"/>
 
 ## All Versions: Ingame Options Menu
-- A new menu in the options menu allows to toggle some of the features of the S6Patcher ingame.
-**The game needs to be restarted after changing these options.**
+- A new menu in the options menu allows to toggle some of the features of the S6Patcher ingame. **The game needs to be restarted for the changed options to take effect.**
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Ingame_Menu_Final.jpg?raw=true" width="60%" height="60%" alt="Windowed"/>
 
 ## All Versions: Base Game Knights in the Expansion Pack
@@ -124,6 +123,8 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - Polar bears are now using the correct "DIE" animation instead of "WALK" when killed.
 - Enables some Lost Features (e.g. the Spicetrader) to be used as models in maps.
 
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Spicetrader_Final.jpg?raw=true" width="90%" height="90%" alt="Spicetrader"/>
+
 ---
 # Recommendation: DXVK
 Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) repository and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 
@@ -132,4 +133,4 @@ This wrapper will translate the Direct3D 9.0c commands to Vulkan, which is a muc
 d3d9.presentInterval = 1
 d3d9.samplerAnisotropy = 16
 ```
-The first option enables vertical synchronisation (without it, the game runs at an unlimited framerate), the second one sets the anisotropic filtering level. It will also provide a higher framerate in CPU - bound situations.
+The first option enables vertical synchronization (without it, the game runs at an unlimited framerate), the second one sets the anisotropic filtering level. It will also provide a higher framerate in CPU - bound situations.
