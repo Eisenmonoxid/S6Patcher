@@ -123,7 +123,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - Polar bears are now using the correct "DIE" animation instead of "WALK" when killed.
 - Enables some Lost Features (e.g. the Spicetrader) to be used as models in maps.
 
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Spicetrader_Final.jpg?raw=true" width="90%" height="90%" alt="Spicetrader"/>
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Spicetrader_Final.jpg?raw=true" width="50%" height="50%" alt="Spicetrader"/>
 
 ---
 # Recommendation: DXVK
