@@ -14,7 +14,7 @@ namespace S6Patcher.Source.Utilities
 
             try
             {
-                Stream = new FileStream(LogFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                Stream = new FileStream(LogFilePath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
             }
             catch
             {
