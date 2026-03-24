@@ -10,7 +10,7 @@ namespace S6Patcher.Source.Utilities
         public static bool Create(string Path)
         {
             string Backup = GetBackupPath(Path, false);
-            if (File.Exists(Backup) == false)
+            if (!File.Exists(Backup))
             {
                 try
                 {
@@ -30,12 +30,12 @@ namespace S6Patcher.Source.Utilities
         public static void Restore(string Path)
         {
             string Backup = GetBackupPath(Path, true);
-            if (File.Exists(Backup) == false)
+            if (!File.Exists(Backup))
             {
                 Logger.Instance.Log("OLD File " + Backup + " NOT found! Retry ...");
 
                 Backup = GetBackupPath(Path, false);
-                if (File.Exists(Backup) == false)
+                if (!File.Exists(Backup))
                 {
                     Logger.Instance.Log("NEW File " + Backup + " NOT found! Aborting ...");
                     ShowMessage.Invoke("Could not restore Backup. No file found!");
@@ -60,6 +60,6 @@ namespace S6Patcher.Source.Utilities
 
         private static string GetBackupPath(string Filepath, bool Old) =>
             Path.Combine(Path.GetDirectoryName(Filepath), 
-                Path.GetFileNameWithoutExtension(Filepath) + ((Old == true) ? "_BACKUP.exe" : ".backup"));
+                Path.GetFileNameWithoutExtension(Filepath) + (Old ? "_BACKUP.exe" : ".backup"));
     }
 }
