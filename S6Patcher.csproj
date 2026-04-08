@@ -10,12 +10,12 @@
     <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
     <NoWin32Manifest>True</NoWin32Manifest>
     <ImplicitUsings>disable</ImplicitUsings>
-    <AssemblyVersion>7.2.0.0</AssemblyVersion>
-    <FileVersion>7.2.0.0</FileVersion>
+    <AssemblyVersion>7.3.0.0</AssemblyVersion>
+    <FileVersion>7.3.0.0</FileVersion>
     <Company>Eisenmonoxid</Company>
     <Copyright>Eisenmonoxid</Copyright>
     <Title>S6Patcher</Title>
-    <Version>7.2.0.0</Version>
+    <Version>7.3.0.0</Version>
     <Authors>Eisenmonoxid</Authors>
     <Product>github.com/Eisenmonoxid/S6Patcher</Product>
     <Description>A simple application that fixes some bugs and adds new features in the various editions of "The Settlers 6 - Rise of an Empire".</Description>
@@ -33,9 +33,9 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <CleanBeforeBuild>True</CleanBeforeBuild>
     <IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
-
     <PublishTrimmed>True</PublishTrimmed>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
+
     <PublishReadyToRun>False</PublishReadyToRun>
     <PublishAot>False</PublishAot>
 
@@ -51,6 +51,7 @@
     <MetadataUpdaterSupport>False</MetadataUpdaterSupport>
     <MetricsSupport>False</MetricsSupport>
     <XmlResolverIsNetworkingEnabledByDefault>False</XmlResolverIsNetworkingEnabledByDefault>
+    <OptimizationPreference>Size</OptimizationPreference>
   </PropertyGroup>
 
   <ItemGroup>
@@ -69,17 +70,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.12" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.12" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.12" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.12" />
-    
-    <!-- Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <!-- <PackageReference Include="Avalonia.Diagnostics" Version="11.3.12"> -->
-    <!--  <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets> -->
-    <!--  <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets> -->
-    <!-- </PackageReference> -->
-
+    <PackageReference Include="Avalonia" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.0" />
     <PackageReference Include="MessageBox.Avalonia" Version="3.3.1.1" />
   </ItemGroup>
 
