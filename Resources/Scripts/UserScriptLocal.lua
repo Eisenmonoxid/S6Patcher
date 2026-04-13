@@ -67,10 +67,7 @@ if S6Patcher.DayNightCycle and not S6Patcher.DisableFeatures then
 		local Duration = 160; -- 2:40 minutes (ingame time, not real time)
 
 		if (_NewMonth == Month) and (not Logic.IsWeatherEventActive()) then
-			if S6Patcher.DayNightCycleEnvironmentSet == nil then
-				S6Patcher.DayNightCycleEnvironmentSet = Display.AddEnvironmentSettingsSequence("ME_Special_Sundawn.xml");
-			end
-
+			S6Patcher.DayNightCycleEnvironmentSet = Display.AddEnvironmentSettingsSequence("ME_Special_Sundawn.xml");
 			Display.PlayEnvironmentSettingsSequence(S6Patcher.DayNightCycleEnvironmentSet, Duration);
 		end
 	end
