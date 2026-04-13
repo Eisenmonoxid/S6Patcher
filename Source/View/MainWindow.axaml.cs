@@ -42,7 +42,8 @@ namespace S6Patcher.Source.View
             GetModfileInformation();
             ViewHelpers.CheckForUpdates(true);
             
-            Logger.Instance.Log("Avalonia Version: " + typeof(AvaloniaObject).Assembly.GetName().Version.ToString(3));
+            string AvaloniaVersion = typeof(AvaloniaObject).Assembly.GetName().Version.ToString(3);
+            Logger.Instance.Log(Title + "\nAvalonia Version: " + AvaloniaVersion);
         }
 
         private void EnableUIElements(execID ID)

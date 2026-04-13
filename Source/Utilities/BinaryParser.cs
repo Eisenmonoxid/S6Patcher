@@ -13,6 +13,8 @@ namespace S6Patcher.Source.Utilities
         private readonly BinaryReader GlobalReader = null;
         private readonly uint BlockOffset = 0x0;
 
+        public void Dispose() => GlobalReader?.Dispose();
+
         public BinaryParser(string Definition)
         {
             Stream BinaryStream = Utility.GetEmbeddedResourceDefinition(Definition);
@@ -45,8 +47,6 @@ namespace S6Patcher.Source.Utilities
             return DecompressedStream;
         }
 
-        public void Dispose() => GlobalReader?.Dispose();
-
         private bool IsValidBinaryFile()
         {
             byte[] Result = new byte[Magic.Length];
@@ -71,17 +71,17 @@ namespace S6Patcher.Source.Utilities
             return Mapping;
         }
 
-        private bool ParseBinaryFileContent(byte Identifier, out Dictionary<uint, byte[]> Result, string ID = "")
+        public bool ParseBinaryFileContent(byte Identifier, out Dictionary<UInt32, byte[]> Result, string ID = "")
         {
             Result = [];
-            byte[] IDBytes = ID == "" ? [0x0, 0x0, 0x0] : Encoding.UTF8.GetBytes(ID);
+            byte[] IDBytes = (ID == "") ? [0x0, 0x0, 0x0] : Encoding.UTF8.GetBytes(ID);
 
             GlobalReader.BaseStream.Position = BlockOffset;
             byte BlockID = GlobalReader.ReadByte();
             while (BlockID != Identifier)
             {
-                uint Size = GlobalReader.ReadUInt32();
-                if (GlobalReader.BaseStream.Position + Size > GlobalReader.BaseStream.Length)
+                UInt32 Size = GlobalReader.ReadUInt32();
+                if ((GlobalReader.BaseStream.Position + Size) > GlobalReader.BaseStream.Length)
                 {
                     return false;
                 }
@@ -91,21 +91,26 @@ namespace S6Patcher.Source.Utilities
             }
 
             // Read blocks
-            uint BlockSize = GlobalReader.ReadUInt32();
+            UInt32 BlockSize = GlobalReader.ReadUInt32();
             long Position = GlobalReader.BaseStream.Position;
 
-            uint Address;
+            UInt32 Address;
             byte[] Data;
             byte[] EntryID;
-            while (Position + BlockSize > GlobalReader.BaseStream.Position)
+            while ((Position + BlockSize) > GlobalReader.BaseStream.Position)
             {
                 EntryID = GlobalReader.ReadBytes(IDBytes.Length);
-                Address = GlobalReader.ReadUInt32();
-                Data = GlobalReader.ReadBytes(GlobalReader.ReadUInt16());
-
                 if (EntryID.SequenceEqual(IDBytes))
                 {
+                    Address = GlobalReader.ReadUInt32();
+                    Data = GlobalReader.ReadBytes(GlobalReader.ReadUInt16());
                     Result.Add(Address, Data);
+                }
+                else
+                {
+                    GlobalReader.BaseStream.Position += sizeof(UInt32);
+                    UInt16 Length = GlobalReader.ReadUInt16();
+                    GlobalReader.BaseStream.Position += Length;
                 }
             }
 
