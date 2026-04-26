@@ -20,6 +20,24 @@ StartSimpleJobEx(function()
 end);
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- ************************************************************************************************************************************************************* --
+-- Fix Tutorial Marker being updated every frame																			 									 --
+-- ************************************************************************************************************************************************************* --
+S6Patcher.TutorialMarkerLastUpdateTime = 0;
+if S6Patcher.TutorialMarkerUpdate == nil then
+	S6Patcher.TutorialMarkerUpdate = TutorialMarkerUpdate;
+end
+TutorialMarkerUpdate = function()
+	local TimeDifference = 33.3; -- ms
+	local CurrentTime = Framework.GetTimeMs();
+
+	if S6Patcher.TutorialMarkerLastUpdateTime + TimeDifference > CurrentTime then
+		return;
+	end
+
+	S6Patcher.TutorialMarkerLastUpdateTime = CurrentTime;
+	S6Patcher.TutorialMarkerUpdate();
+end
+-- ************************************************************************************************************************************************************* --
 -- Fix "Build Walls from Fence Button"																					 									 	 --
 -- ************************************************************************************************************************************************************* --
 if S6Patcher.ContinueWallUpdate == nil then
