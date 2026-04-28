@@ -35,7 +35,9 @@
     <IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
     <PublishTrimmed>True</PublishTrimmed>
     <TrimMode>link</TrimMode>
+    <TrimmerRemoveSymbols>True</TrimmerRemoveSymbols>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
+    <CopyOutputSymbolsToPublishDirectory>False</CopyOutputSymbolsToPublishDirectory>
 
     <PublishReadyToRun>False</PublishReadyToRun>
     <PublishAot>False</PublishAot>
