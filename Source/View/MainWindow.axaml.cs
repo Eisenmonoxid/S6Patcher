@@ -158,6 +158,7 @@ namespace S6Patcher.Source.View
             }
             catch (Exception ex)
             {
+                Logger.Instance.Log(ex.ToString());
                 await ShowMessageBox("Error", ex.Message);
                 return;
             }
