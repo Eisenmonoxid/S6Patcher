@@ -45,7 +45,6 @@
     <PublishSingleFile>True</PublishSingleFile>
     <SelfContained>True</SelfContained>
     <DebugType>none</DebugType>
-    <DebugSymbols>False</DebugSymbols>
     <InvariantGlobalization>True</InvariantGlobalization>
     <StripSymbols>True</StripSymbols>
     <BuiltInComInteropSupport>False</BuiltInComInteropSupport>
