@@ -34,6 +34,7 @@
     <CleanBeforeBuild>True</CleanBeforeBuild>
     <IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
     <PublishTrimmed>True</PublishTrimmed>
+    <TrimMode>link</TrimMode>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
 
     <PublishReadyToRun>True</PublishReadyToRun>
@@ -42,6 +43,7 @@
     <PublishSingleFile>True</PublishSingleFile>
     <SelfContained>True</SelfContained>
     <DebugType>none</DebugType>
+    <DebugSymbols>False</DebugSymbols>
     <InvariantGlobalization>True</InvariantGlobalization>
     <StripSymbols>True</StripSymbols>
     <BuiltInComInteropSupport>False</BuiltInComInteropSupport>
@@ -70,10 +72,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.0.1" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.1" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.1" />
+    <PackageReference Include="Avalonia" Version="12.0.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.2" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.2" />
     <PackageReference Include="MessageBox.Avalonia" Version="12.0.0" />
   </ItemGroup>
 

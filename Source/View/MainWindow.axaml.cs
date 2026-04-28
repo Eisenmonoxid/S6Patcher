@@ -173,8 +173,8 @@ namespace S6Patcher.Source.View
             ResetPatcher(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && UseCheckSumCalculation);
             UncheckFeatureBoxes();
 
-            string Message = "Patching finished!" + (Utility.ErrorCount > 0 ? 
-                $"\nThere were {Utility.ErrorCount} errors during the process. Please check the log file for more information." : 
+            string Message = "Patching finished!" + (ErrorTracking.Count > 0 ? 
+                $"\nThere were {ErrorTracking.Count} errors during the process. Please check the log file for more information." : 
                 "\nNo errors occurred during the process.");
 
             await ShowMessageBox("Finished", Message);
@@ -183,7 +183,7 @@ namespace S6Patcher.Source.View
         private async void MainPatchingTask()
         {
             PatchingInProgress = true;
-            Interlocked.Exchange(ref Utility.ErrorCount, 0);
+            ErrorTracking.Reset();
             Logger.Instance.Log("Patching Process Started!");
 
             DisableUI(false);
@@ -194,7 +194,7 @@ namespace S6Patcher.Source.View
             await FinishPatching();
 
             btnChoose.IsEnabled = true;
-            Logger.Instance.Log($"Patching Process Finished! Amount of Errors: {Utility.ErrorCount}");
+            Logger.Instance.Log($"Patching Process Finished! Amount of Errors: {ErrorTracking.Count}");
             PatchingInProgress = false;
         }
 

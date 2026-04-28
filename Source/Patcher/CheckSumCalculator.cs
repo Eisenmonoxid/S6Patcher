@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -28,7 +27,7 @@ namespace S6Patcher.Source.Patcher
             int Result = CheckSumMappedFile(View.SafeMemoryMappedViewHandle, (uint)Size, ref HeaderSum, ref CheckSum);
             if (Result == 0x0)
             {
-                Interlocked.Increment(ref Utility.ErrorCount);
+                ErrorTracking.Increment();
                 Logger.Instance.Log("CheckSumMappedFile failed with code 0 and error: " + CheckSum.ToString());
                 return 0;
             }

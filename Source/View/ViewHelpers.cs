@@ -133,9 +133,9 @@ namespace S6Patcher.Source.View
 
         public Task<T> ViewAccessorWrapper<T>(Func<Task<T>> Action)
         {
-            if (!Dispatcher.UIThread.CheckAccess())
+            if (!Dispatcher.CurrentDispatcher.CheckAccess())
             {
-                return Dispatcher.UIThread.InvokeAsync(Action);
+                return Dispatcher.CurrentDispatcher.InvokeAsync(Action);
             }
 
             return Action();
@@ -143,9 +143,9 @@ namespace S6Patcher.Source.View
 
         public void ViewAccessorWrapper(Action Action)
         {
-            if (!Dispatcher.UIThread.CheckAccess())
+            if (!Dispatcher.CurrentDispatcher.CheckAccess())
             {
-                Dispatcher.UIThread.Post(Action);
+                Dispatcher.CurrentDispatcher.Post(Action);
                 return;
             }
 

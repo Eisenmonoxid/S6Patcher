@@ -14,9 +14,17 @@ namespace S6Patcher.Source.Utilities
         ED = 3
     };
 
+    public static class ErrorTracking
+    {
+        private static uint ErrorCount = 0;
+
+        public static void Increment() => Interlocked.Increment(ref ErrorCount);
+        public static void Reset() => Interlocked.Exchange(ref ErrorCount, 0);
+        public static uint Count => ErrorCount;
+    }
+
     public static class Utility
     {
-        public static uint ErrorCount = 0;
         public static string GetApplicationVersion() => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
         public static Stream GetEmbeddedResourceDefinition(string Name) => Assembly.GetExecutingAssembly().GetManifestResourceStream(Name);
 
@@ -52,7 +60,7 @@ namespace S6Patcher.Source.Utilities
 
             if (Reader.ReadInt32() != 0x4550)
             {
-                Interlocked.Increment(ref ErrorCount);
+                ErrorTracking.Increment();
                 Logger.Instance.Log("PE Header offset not found! Skipping ...");
                 return;
             }

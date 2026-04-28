@@ -20,22 +20,59 @@ StartSimpleJobEx(function()
 end);
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- ************************************************************************************************************************************************************* --
+-- Update moving RTS camera every frame																 															 --
+-- ************************************************************************************************************************************************************* --
+if not S6Patcher.DisableFeatures then
+	if S6Patcher.UpdateCamera == nil then
+		S6Patcher.UpdateCamera = CameraAnimation.UpdateCamera;
+	end
+	CameraAnimation.UpdateCamera = function()
+		if CameraAnimation.CameraMoveToX ~= nil and CameraAnimation.CameraMoveToY ~= nil then
+			local LookAtX, LookAtY = Camera.RTS_GetLookAtPosition();
+			local Distance = CameraAnimation.GetMoveToLength();
+
+			if CameraAnimation.CameraMoveToLastDistance >= Distance then
+				local DeltaTime = 0.01; -- Fixed
+				local Speed = CameraAnimation.CameraMoveToSpeed;
+
+				local NewX = LookAtX + CameraAnimation.DirectionX * DeltaTime * Speed;
+				local NewY = LookAtY + CameraAnimation.DirectionY * DeltaTime * Speed;
+
+				Camera.RTS_SetLookAtPosition(NewX, NewY)
+
+				CameraAnimation.CameraStartTime = Logic.GetTimeMs() / 1000;
+				CameraAnimation.CameraMoveToLastDistance = Distance;
+
+				if XGUIEng.IsWidgetShown("/InGame/Root/Normal/AnimatedCameraMovement") == 0 then
+					XGUIEng.ShowWidget("/InGame/Root/Normal/AnimatedCameraMovement", 1);
+				end
+
+				return;
+			end
+		end
+
+		S6Patcher.UpdateCamera();
+	end
+end
+-- ************************************************************************************************************************************************************* --
 -- Fix Tutorial Marker being updated every frame																			 									 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.TutorialMarkerLastUpdateTime = 0;
-if S6Patcher.TutorialMarkerUpdate == nil then
-	S6Patcher.TutorialMarkerUpdate = TutorialMarkerUpdate;
-end
-TutorialMarkerUpdate = function()
-	local TimeDifference = 33.3; -- ms
-	local CurrentTime = Framework.GetTimeMs();
-
-	if S6Patcher.TutorialMarkerLastUpdateTime + TimeDifference > CurrentTime then
-		return;
+if not S6Patcher.DisableFeatures then
+	if S6Patcher.TutorialMarkerUpdate == nil then
+		S6Patcher.TutorialMarkerUpdate = TutorialMarkerUpdate;
 	end
+	TutorialMarkerUpdate = function()
+		local TimeDifference = 33.3; -- ms
+		local CurrentTime = Framework.GetTimeMs();
 
-	S6Patcher.TutorialMarkerLastUpdateTime = CurrentTime;
-	S6Patcher.TutorialMarkerUpdate();
+		if S6Patcher.TutorialMarkerLastUpdateTime + TimeDifference > CurrentTime then
+			return;
+		end
+
+		S6Patcher.TutorialMarkerLastUpdateTime = CurrentTime;
+		S6Patcher.TutorialMarkerUpdate();
+	end
 end
 -- ************************************************************************************************************************************************************* --
 -- Fix "Build Walls from Fence Button"																					 									 	 --
