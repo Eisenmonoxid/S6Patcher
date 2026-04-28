@@ -25,50 +25,37 @@ jobs:
             os: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6
 
-      - name: Setup .NET 10 SDK
-        uses: actions/setup-dotnet@v5.2.0
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Clean
-        run: dotnet clean
-
       - name: Publish
+        run: >
+          dotnet publish S6Patcher.csproj
+          -c Release
+          -r ${{matrix.runtime}}
+          -o publish/${{matrix.runtime}}
+          -p:DebugType=None
+          -p:DebugSymbols=false
+          -p:StripSymbols=true
+
+      - name: Remove debug symbols
         shell: bash
         run: |
-          dotnet publish S6Patcher.csproj \
-            -c Release \
-            -r ${{matrix.runtime}} \
-            -p:SelfContained=true \
-            -p:PublishSingleFile=true \
-            -p:StripSymbols=true \
-            -o ./publish/${{matrix.runtime}}
+          find publish/${{matrix.runtime}} -name "*.pdb" -delete || true
 
-      - name: Compress publish output (Windows)
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          $src = "publish/${{matrix.runtime}}"
-          $dst = "${{matrix.displayName}}.zip"
-          Compress-Archive -Path "$src\*" -DestinationPath $dst -CompressionLevel Optimal
-
-      - name: Compress publish output (Unix)
-        if: startsWith(matrix.os, 'ubuntu')
+      - name: Create archive
         shell: bash
         run: |
           cd publish/${{matrix.runtime}}
           zip -9 -r ../../${{matrix.displayName}}.zip .
 
-      - name: Upload compressed artifact
-        uses: actions/upload-artifact@v7.0.1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: dotnet-${{matrix.displayName}}
+          name: ${{matrix.displayName}}
           path: ${{matrix.displayName}}.zip
 
   release:
@@ -77,25 +64,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v8.0.1
+      - uses: actions/download-artifact@v4
         with:
           path: ./artifacts
+          merge-multiple: true
 
-      - name: Extract version name
-        id: get_version
-        run: echo "version_name=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+      - name: Extract version
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
-      - name: Create GitHub Release (Draft)
-        uses: softprops/action-gh-release@v3.0.0
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
         with:
-          name: ${{steps.get_version.outputs.version_name}}
+          name: ${{steps.version.outputs.version}}
           tag_name: ${{github.ref_name}}
-          body: "Latest Release."
           draft: true
-          prerelease: false
-          files: |
-            ./artifacts/dotnet-Windows-x64/Windows-x64.zip
-            ./artifacts/dotnet-Linux-x64/Linux-x64.zip
+          files: artifacts/*.zip
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
