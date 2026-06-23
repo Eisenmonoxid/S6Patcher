@@ -959,6 +959,16 @@ S6Patcher.FPSMode.ToggleGameWidgets = function(_show)
 end
 
 if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
+	if S6Patcher.KeyBindings_SaveGame == nil then
+		S6Patcher.KeyBindings_SaveGame = KeyBindings_SaveGame;
+	end
+	KeyBindings_SaveGame = function()
+		if S6Patcher.FPSMode.Enabled then
+			return;
+		end
+
+		S6Patcher.KeyBindings_SaveGame();
+	end
 	if S6Patcher.GameCallback_Escape == nil then
 		S6Patcher.GameCallback_Escape = GameCallback_Escape;
 	end
@@ -969,30 +979,9 @@ if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNet
 
 		S6Patcher.GameCallback_Escape();
 	end
-
-	if S6Patcher.OnBackButtonPressed == nil then
-		S6Patcher.OnBackButtonPressed = OnBackButtonPressed;
-	end
-	OnBackButtonPressed = function()
-		if not S6Patcher.FPSMode.Enabled and S6Patcher.OnBackButtonPressed ~= nil then
-			S6Patcher.OnBackButtonPressed();
-		end
-	end
-	if S6Patcher.OnSkipButtonPressed == nil then
-		S6Patcher.OnSkipButtonPressed = OnSkipButtonPressed;
-	end
-	OnSkipButtonPressed = function()
-		if not S6Patcher.FPSMode.Enabled and S6Patcher.OnSkipButtonPressed ~= nil then
-			S6Patcher.OnSkipButtonPressed();
-		end
-	end
-	if S6Patcher.ThroneRoomLeftClick == nil then
-		S6Patcher.ThroneRoomLeftClick = ThroneRoomLeftClick;
-	end
-	ThroneRoomLeftClick = function()
-		if not S6Patcher.FPSMode.Enabled and S6Patcher.ThroneRoomLeftClick ~= nil then
-			S6Patcher.ThroneRoomLeftClick();
-		end
-	end
+	
+	OnBackButtonPressed = function() end
+	OnSkipButtonPressed = function() end
+	ThroneRoomLeftClick = function() end
 end
 -- #EOF
