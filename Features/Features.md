@@ -35,6 +35,11 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Night_Cycle_Final.jpg?raw=true" width="60%" height="60%" alt="Night"/>
 
+## All Versions: First Person Mode
+- A first person mode that enables you to walk through the game world. Can be enabled/disabled with the Z key.
+
+<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/FPS_Mode_Final.jpg?raw=true" width="60%" height="60%" alt="FPS"/>
+
 ## Original Release: Texture Resolution
 - The S6Patcher can restore the texture slider for entities and set a custom texture resolution for ground textures. The pictures show a comparison between unpatched and highest texture resolution. It is recommended to stay in the interval of 128 - 4096 for ground texture resolution.
 

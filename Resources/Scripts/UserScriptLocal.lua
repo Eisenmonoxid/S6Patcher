@@ -571,12 +571,18 @@ S6Patcher.TranslatedStrings["de"] =
 	["DowngradeTitle"] 		= "Rückbau",
 	["DowngradeText"] 		= "- Baut das Gebäude um eine Stufe zurück",
 	["ReleaseSoldiersText"] = "- Entlässt Soldaten der Reihe nach",
+	["Increase"]			= "Erhöhe",
+	["Decrease"]			= "Verringere",
+	["Exit"]				= "Beenden",
 };
 S6Patcher.TranslatedStrings["en"] =
 {
 	["DowngradeTitle"] 		= "Downgrade",
 	["DowngradeText"] 		= "- Downgrades the building by one level",
 	["ReleaseSoldiersText"] = "- Dismisses soldiers one after another",
+	["Increase"]			= "Increase",
+	["Decrease"]			= "Decrease",
+	["Exit"]				= "Exit",
 };
 S6Patcher.TranslatedStrings["pl"] =
 {
@@ -602,4 +608,391 @@ S6Patcher.TranslatedStrings["ru"] =
 	["DowngradeText"]       = "- Понижает уровень здания на один",
 	["ReleaseSoldiersText"] = "- Увольняет солдат одного за другим",
 };
+
+-- ************************************************************************************************************************************************************* --
+-- FPS Mode																																	 					 --
+-- ************************************************************************************************************************************************************* --
+if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
+	Input.KeyBindDown(Keys.Z,  "S6Patcher.FPSMode.Toggle()", 2); -- Main Binding
+end
+
+S6Patcher.FPSMode = {
+	Enabled = false,
+	IsMoving = false,
+
+	CurrentZ = 0,
+	CurrentLookAt = {0, 0, 0},
+	LastHeight = 0,
+
+	Yaw = 0,
+	Pitch = 0,
+	MouseSensitivity = 0.005,
+	LastMousePosition = {0, 0},
+	LastFrameTime = 0,
+
+	Directions = {
+		Forward = 0,
+		Backward = 1
+	},
+
+	StateModifiers = {
+		MinFOV = 40,
+		FOV = 75,
+		MaxFOV = 120,
+
+		MinViewDistance = 1000,
+		ViewDistance = 15000,
+		MaxViewDistance = 90000,
+	},
+
+	KeyMapping = {
+		Forward = XGUIEng.GetStringTableText("KeyBindings/KeyMenuWeather");
+		Backward = XGUIEng.GetStringTableText("KeyBindings/KeyBuildingStartStop");
+		IncreaseFOV = XGUIEng.GetStringTableText("KeyBindings/KeyBuildingUpgrade");
+		DecreaseFOV = XGUIEng.GetStringTableText("KeyBindings/KeyBuildTrail");
+		IncreaseViewDistance = XGUIEng.GetStringTableText("KeyBindings/KeyBuildStreet");
+		DecreaseViewDistance = XGUIEng.GetStringTableText("KeyBindings/KeyMenuProduction");
+	},
+}
+S6Patcher.FPSMode.CurrentDirection = S6Patcher.FPSMode.Directions.Forward;
+
+S6Patcher.FPSMode.SetKeyBindings = function(_reset)
+	local Key, FuncCall;
+
+	Key = Keys[S6Patcher.FPSMode.KeyMapping.Forward];
+	FuncCall = (_reset and "KeyBindings_MenuWeather()") or "S6Patcher.FPSMode.ToggleMovement(true, S6Patcher.FPSMode.Directions.Forward)";
+	Input.KeyBindDown(Key, FuncCall, 2);
+	Input.KeyBindUp(Key, "S6Patcher.FPSMode.ToggleMovement(false, S6Patcher.FPSMode.Directions.Forward)", 2); -- Returns anyway
+
+	Key = Keys[S6Patcher.FPSMode.KeyMapping.Backward];
+	Input.KeyBindDown(Key, "S6Patcher.FPSMode.ToggleMovement(true, S6Patcher.FPSMode.Directions.Backward)", 2);
+	Input.KeyBindUp(Key, "S6Patcher.FPSMode.ToggleMovement(false, S6Patcher.FPSMode.Directions.Backward)", 2);
+
+	Key = Keys[S6Patcher.FPSMode.KeyMapping.IncreaseFOV];
+	FuncCall = (_reset and "KeyBindings_BuildingUpgrade()") or "S6Patcher.FPSMode.ModifyFieldOfView(false)";
+	Input.KeyBindDown(Key, FuncCall, 2);
+
+	Key = Keys[S6Patcher.FPSMode.KeyMapping.DecreaseFOV];
+	FuncCall = (_reset and "KeyBindings_BuildTrail()") or "S6Patcher.FPSMode.ModifyFieldOfView(true)";
+	Input.KeyBindDown(Key, FuncCall, 2);
+
+	Key = Keys[S6Patcher.FPSMode.KeyMapping.IncreaseViewDistance];
+	FuncCall = (_reset and "KeyBindings_BuildStreet()") or "S6Patcher.FPSMode.ModifyViewDistance(false)";
+	Input.KeyBindDown(Key, FuncCall, 2);
+
+	Key = Keys[S6Patcher.FPSMode.KeyMapping.DecreaseViewDistance];
+	FuncCall = _reset and "KeyBindings_MenuProduction()" or "S6Patcher.FPSMode.ModifyViewDistance(true)";
+	Input.KeyBindDown(Key, FuncCall, 2);
+end
+
+S6Patcher.FPSMode.ToggleMovement = function(_moving, _direction)
+	if not S6Patcher.FPSMode.Enabled then
+		return;
+	end
+
+	S6Patcher.FPSMode.IsMoving = _moving;
+	S6Patcher.FPSMode.CurrentDirection = _direction;
+end
+
+if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
+	if S6Patcher.ThroneRoomCameraControl == nil then
+		S6Patcher.ThroneRoomCameraControl = ThroneRoomCameraControl;
+	end
+	ThroneRoomCameraControl = function()
+		if not S6Patcher.FPSMode.Enabled then
+			S6Patcher.ThroneRoomCameraControl();
+		end
+
+		local PlayerID = GUI.GetPlayerID();
+		local MouseX, MouseY = GUI.GetMousePosition();
+		local CamX, CamY = Camera.ThroneRoom_GetPosition();
+
+		S6Patcher.FPSMode.CameraController(MouseX, MouseY, CamX, CamY);
+		S6Patcher.FPSMode.MovePosition(PlayerID, CamX, CamY);
+	end
+end
+
+S6Patcher.FPSMode.MovePosition = function(_playerID, _posX, _posY)
+    local Time = Framework.GetTimeMs();
+	local LastFrameTime = S6Patcher.FPSMode.LastFrameTime;
+
+    local DeltaTime = 0;
+    if LastFrameTime ~= 0 then
+        DeltaTime = (Time - LastFrameTime) / 1000.0;
+    end
+    S6Patcher.FPSMode.LastFrameTime = Time;
+
+    if not S6Patcher.FPSMode.IsMoving then
+        return;
+    end
+
+    local Yaw = S6Patcher.FPSMode.Yaw;
+    local ForwardX = math.cos(Yaw);
+    local ForwardY = math.sin(Yaw);
+
+    -- Units per Second
+    local MoveSpeed = 600;
+    local Distance = MoveSpeed * DeltaTime;
+    if S6Patcher.FPSMode.CurrentDirection == S6Patcher.FPSMode.Directions.Forward then
+        _posX = _posX + ForwardX * Distance;
+        _posY = _posY + ForwardY * Distance;
+    elseif S6Patcher.FPSMode.CurrentDirection == S6Patcher.FPSMode.Directions.Backward then
+        _posX = _posX - ForwardX * Distance;
+        _posY = _posY - ForwardY * Distance;
+	else
+		return;
+    end
+
+	local Sector = Logic.GetPlayerSectorAtPosition(_playerID, _posX, _posY);
+	if Sector == 0 then
+		return;
+	end
+
+    local TargetHeight = Display.GetTerrainHeight(_posX, _posY);
+    if S6Patcher.FPSMode.LastHeight == 0 then
+        S6Patcher.FPSMode.LastHeight = TargetHeight;
+    end
+
+    -- Smooth vertical Movement
+    local FollowFactor = math.min(1, 8 * DeltaTime);
+    S6Patcher.FPSMode.LastHeight = S6Patcher.FPSMode.LastHeight + (TargetHeight - S6Patcher.FPSMode.LastHeight) * FollowFactor;
+
+    local NewZ = S6Patcher.FPSMode.LastHeight + 200;
+
+    Camera.ThroneRoom_SetPosition(_posX, _posY, NewZ);
+
+    S6Patcher.FPSMode.CurrentZ = NewZ;
+end
+
+S6Patcher.FPSMode.CameraController = function(_mouseX, _mouseY, _camX, _camY)
+    local DeltaX = _mouseX - S6Patcher.FPSMode.LastMousePosition[1];
+    local DeltaY = _mouseY - S6Patcher.FPSMode.LastMousePosition[2];
+
+	S6Patcher.FPSMode.Yaw = S6Patcher.FPSMode.Yaw - DeltaX * S6Patcher.FPSMode.MouseSensitivity;
+    S6Patcher.FPSMode.Pitch = S6Patcher.FPSMode.Pitch - DeltaY * S6Patcher.FPSMode.MouseSensitivity;
+
+    local Limit = math.rad(89);
+    if S6Patcher.FPSMode.Pitch > Limit then
+        S6Patcher.FPSMode.Pitch = Limit;
+    elseif S6Patcher.FPSMode.Pitch < -Limit then
+        S6Patcher.FPSMode.Pitch = -Limit;
+    end
+
+    local CamZ = S6Patcher.FPSMode.CurrentZ;
+    local Yaw = S6Patcher.FPSMode.Yaw;
+    local Pitch = S6Patcher.FPSMode.Pitch;
+
+    local DirectionX = math.cos(Pitch) * math.cos(Yaw);
+    local DirectionY = math.cos(Pitch) * math.sin(Yaw);
+    local DirectionZ = math.sin(Pitch);
+
+    Camera.ThroneRoom_SetLookAt(_camX + DirectionX * 1000, _camY + DirectionY * 1000, CamZ + DirectionZ * 1000);
+
+    S6Patcher.FPSMode.LastMousePosition = {_mouseX, _mouseY};
+end
+
+S6Patcher.FPSMode.Toggle = function()
+	if S6Patcher.DisableFeatures or g_Throneroom ~= nil or Framework.IsNetworkGame() or CameraAnimation.IsRunning() then
+		return;
+	end
+
+	if S6Patcher.FPSMode.Enabled then
+		S6Patcher.FPSMode.Disable();
+	else
+		S6Patcher.FPSMode.Enable();
+	end
+
+	S6Patcher.FPSMode.Enabled = not S6Patcher.FPSMode.Enabled;
+end
+
+S6Patcher.FPSMode.ModifyFieldOfView = function(_decrease)
+	if not S6Patcher.FPSMode.Enabled then
+		return;
+	end
+
+	local Value = S6Patcher.FPSMode.StateModifiers.FOV + ((_decrease and -5) or 5);
+
+	GUI.AddNote("FOV: " .. tostring(Value));
+	if (Value <= S6Patcher.FPSMode.StateModifiers.MinFOV or Value >= S6Patcher.FPSMode.StateModifiers.MaxFOV) then
+		return;
+	end
+
+	S6Patcher.FPSMode.StateModifiers.FOV = Value;
+	Camera.ThroneRoom_SetFOV(S6Patcher.FPSMode.StateModifiers.FOV);
+end
+
+S6Patcher.FPSMode.ModifyViewDistance = function(_decrease)
+	if not S6Patcher.FPSMode.Enabled then
+		return;
+	end
+
+	local Value = S6Patcher.FPSMode.StateModifiers.ViewDistance + ((_decrease and -5000) or 5000);
+
+	GUI.AddNote("Draw Distance: " .. tostring(Value));
+	if (Value <= S6Patcher.FPSMode.StateModifiers.MinViewDistance or Value >= S6Patcher.FPSMode.StateModifiers.MaxViewDistance) then
+		return;
+	end
+
+	S6Patcher.FPSMode.StateModifiers.ViewDistance = Value;
+	Display.SetFarClipPlaneMinAndMax(S6Patcher.FPSMode.StateModifiers.ViewDistance, S6Patcher.FPSMode.StateModifiers.ViewDistance);
+end
+
+if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
+	if S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode == nil then
+		S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode = GameCallback_GUI_SelectionChanged;
+	end
+	GameCallback_GUI_SelectionChanged = function(_Source)
+		if S6Patcher.FPSMode.Enabled then
+			GUI.ClearSelection();
+		end
+
+		S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode(_Source);
+	end
+end
+
+S6Patcher.FPSMode.Disable = function()
+	Display.SetRenderSky(0);
+	Display.SetRenderFogOfWar(1);
+	Display.SetRenderBorderPins(1);
+	Display.SetUserOptionOcclusionEffect(1);
+	Display.SetRenderRoads(0);
+
+	GUI.EnableBattleSignals(true);
+    GUI.SetFeedbackSoundOutputState(1);
+    GUI.PermitContextSensitiveCommandsInSelectionState();
+
+	S6Patcher.FPSMode.ToggleGameWidgets(0);
+	S6Patcher.FPSMode.SetKeyBindings(true);
+	Display.SetFarClipPlaneMinAndMax(0, 0);
+
+	Camera.SwitchCameraBehaviour(0);
+end
+
+S6Patcher.FPSMode.Enable = function()
+	Display.SetRenderSky(1);
+	Display.SetUserOptionOcclusionEffect(0);
+	Display.SetRenderBorderPins(0);
+	Display.SetRenderFogOfWar(0);
+	Display.SetRenderRoads(1); -- Flickering
+
+	Camera.SwitchCameraBehaviour(5);
+
+	local posX, posY = Logic.GetBuildingApproachPosition(Logic.GetMarketplace(GUI.GetPlayerID()));
+	local posZ = Display.GetTerrainHeight(posX, posY);
+
+	S6Patcher.FPSMode.CurrentZ = posZ + 500;
+	S6Patcher.FPSMode.CurrentLookAt = {posX + 5000, posY + 5000, S6Patcher.FPSMode.CurrentZ};
+
+	Camera.ThroneRoom_SetPosition(posX, posY, S6Patcher.FPSMode.CurrentZ);
+	Camera.ThroneRoom_SetLookAt(posX + 5000, posY + 5000, S6Patcher.FPSMode.CurrentZ);
+	Camera.ThroneRoom_SetFOV(S6Patcher.FPSMode.StateModifiers.FOV);
+
+	Display.SetFarClipPlaneMinAndMax(S6Patcher.FPSMode.StateModifiers.ViewDistance, S6Patcher.FPSMode.StateModifiers.ViewDistance);
+
+	S6Patcher.FPSMode.LastFrameTime = Framework.GetTimeMs();
+	S6Patcher.FPSMode.LastHeight = posZ;
+	S6Patcher.FPSMode.Pitch = 0;
+	S6Patcher.FPSMode.Yaw = math.pi / 4;
+
+	S6Patcher.FPSMode.ToggleGameWidgets(1);
+	S6Patcher.FPSMode.SetKeyBindings(false);
+
+	GUI.ClearSelection();
+    GUI.ClearNotes();
+    GUI.ForbidContextSensitiveCommandsInSelectionState();
+    GUI.SetFeedbackSoundOutputState(0);
+    GUI.EnableBattleSignals(false);
+
+	Game.GameTimeSetFactor(GUI.GetPlayerID(), 1);
+
+	local Increase = S6Patcher.GetLocalizedText("Increase");
+	local Decrease = S6Patcher.GetLocalizedText("Decrease");
+	local Exit = S6Patcher.GetLocalizedText("Exit");
+	local Text =
+		"--- First Person Mode ---{cr}{cr}" ..
+		"{@color:255,0,0,255}- " .. Increase .. " FOV: " .. S6Patcher.FPSMode.KeyMapping.IncreaseFOV .. "{cr}" ..
+		"{@color:255,0,0,255}- " .. Decrease .. " FOV: " .. S6Patcher.FPSMode.KeyMapping.DecreaseFOV .. "{cr}" ..
+		"{@color:0,255,0,255}- " .. Increase .. " Draw Distance: " .. S6Patcher.FPSMode.KeyMapping.IncreaseViewDistance .. "{cr}" ..
+		"{@color:0,255,0,255}- " .. Decrease .. " Draw Distance: " .. S6Patcher.FPSMode.KeyMapping.DecreaseViewDistance .. "{cr}" ..
+		"{@color:0,0,255,255}- " .. Exit .. ": Z{cr}";
+	GUI.AddNote(Text);
+end
+
+S6Patcher.FPSMode.ToggleGameWidgets = function(_show)
+	local _showInv = (_show == 0 and 1) or 0;
+
+	XGUIEng.ShowWidget("/InGame/ThroneRoom", _show);
+	XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/updater", _show);
+
+	if _show then
+		XGUIEng.PushPage("/InGame/ThroneRoom", false);
+		XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomLeft/SubTitles", 0);
+	else
+		XGUIEng.PopPage();
+	end
+
+	XGUIEng.ShowAllSubWidgets("/InGame/ThroneRoom/KnightInfo", 0);
+	XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/TitleContainer", 0);
+    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/DialogTopChooseKnight", 0);
+    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/DialogBottomRight3pcs", 0);
+    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/KnightInfoButton", 0);
+    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/Briefing", 0);
+    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/TitleContainer", 0);
+    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/MissionBriefing", 0);
+	XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/Skip", 0);
+    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/StartButton", 0);
+	XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/BackButton", 0);
+
+	XGUIEng.ShowWidget("/InGame/Root/3dOnScreenDisplay", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal", 1);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/TextMessages", 1);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomLeft/Message/MessagePortrait/SpeechStartAgainOrStop", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomRight", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignTopRight", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignTopLeft", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignTopLeft/TopBar", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignTopLeft/TopBar/UpdateFunction", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomLeft/Message/MessagePortrait/Buttons", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignTopLeft/QuestLogButton", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignTopLeft/QuestTimers", _showInv);
+    XGUIEng.ShowWidget("/InGame/Root/Normal/AlignBottomLeft/Message", _showInv);
+end
+
+if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
+	if S6Patcher.GameCallback_Escape == nil then
+		S6Patcher.GameCallback_Escape = GameCallback_Escape;
+	end
+	GameCallback_Escape = function()
+		if S6Patcher.FPSMode.Enabled then
+			S6Patcher.FPSMode.Toggle();
+		end
+
+		S6Patcher.GameCallback_Escape();
+	end
+
+	if S6Patcher.OnBackButtonPressed == nil then
+		S6Patcher.OnBackButtonPressed = OnBackButtonPressed;
+	end
+	OnBackButtonPressed = function()
+		if not S6Patcher.FPSMode.Enabled and S6Patcher.OnBackButtonPressed ~= nil then
+			S6Patcher.OnBackButtonPressed();
+		end
+	end
+	if S6Patcher.OnSkipButtonPressed == nil then
+		S6Patcher.OnSkipButtonPressed = OnSkipButtonPressed;
+	end
+	OnSkipButtonPressed = function()
+		if not S6Patcher.FPSMode.Enabled and S6Patcher.OnSkipButtonPressed ~= nil then
+			S6Patcher.OnSkipButtonPressed();
+		end
+	end
+	if S6Patcher.ThroneRoomLeftClick == nil then
+		S6Patcher.ThroneRoomLeftClick = ThroneRoomLeftClick;
+	end
+	ThroneRoomLeftClick = function()
+		if not S6Patcher.FPSMode.Enabled and S6Patcher.ThroneRoomLeftClick ~= nil then
+			S6Patcher.ThroneRoomLeftClick();
+		end
+	end
+end
 -- #EOF
