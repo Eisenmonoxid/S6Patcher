@@ -620,14 +620,18 @@ S6Patcher.FPSMode = {
 	Enabled = false,
 	IsMoving = false,
 
-	CurrentZ = 0,
-	CurrentLookAt = {0, 0, 0},
-	LastHeight = 0,
+	CurrentPosX = 0,
+	CurrentPosY = 0,
+	CurrentPosZ = 0,
 
 	Yaw = 0,
 	Pitch = 0,
+	Limit = math.rad(89),
 	MouseSensitivity = 0.005,
-	LastMousePosition = {0, 0},
+
+	LastHeight = 0,
+	LastMouseX = 0,
+	LastMouseY = 0,
 	LastFrameTime = 0,
 
 	Directions = {
@@ -653,6 +657,8 @@ S6Patcher.FPSMode = {
 		IncreaseViewDistance = XGUIEng.GetStringTableText("KeyBindings/KeyBuildStreet");
 		DecreaseViewDistance = XGUIEng.GetStringTableText("KeyBindings/KeyMenuProduction");
 	},
+
+	PlayerID = GUI.GetPlayerID(),
 }
 S6Patcher.FPSMode.CurrentDirection = S6Patcher.FPSMode.Directions.Forward;
 
@@ -699,96 +705,93 @@ if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNet
 		S6Patcher.ThroneRoomCameraControl = ThroneRoomCameraControl;
 	end
 	ThroneRoomCameraControl = function()
-		if not S6Patcher.FPSMode.Enabled then
+		local FPS = S6Patcher.FPSMode;
+
+		if not FPS.Enabled then
 			S6Patcher.ThroneRoomCameraControl();
+			return;
 		end
 
-		local PlayerID = GUI.GetPlayerID();
+		local Time = Framework.GetTimeMs();
 		local MouseX, MouseY = GUI.GetMousePosition();
-		local CamX, CamY = Camera.ThroneRoom_GetPosition();
+		local CamX, CamY, CamZ = FPS.CurrentPosX, FPS.CurrentPosY, FPS.CurrentPosZ; -- Camera.ThroneRoom_GetPosition();
 
-		S6Patcher.FPSMode.CameraController(MouseX, MouseY, CamX, CamY);
-		S6Patcher.FPSMode.MovePosition(PlayerID, CamX, CamY);
+		--------------------------------------------------------------------------------------------------------
+		local DeltaX = MouseX - FPS.LastMouseX;
+		local DeltaY = MouseY - FPS.LastMouseY;
+
+		local Sensitivity = FPS.MouseSensitivity;
+		FPS.Yaw = FPS.Yaw - DeltaX * Sensitivity;
+		FPS.Pitch = FPS.Pitch - DeltaY * Sensitivity;
+
+		local Limit = FPS.Limit;
+		if FPS.Pitch > Limit then
+			FPS.Pitch = Limit;
+		elseif FPS.Pitch < -Limit then
+			FPS.Pitch = -Limit;
+		end
+
+		local Yaw = FPS.Yaw;
+		local Pitch = FPS.Pitch;
+
+		local CosPitch = math.cos(Pitch);
+		local CosYaw = math.cos(Yaw);
+		local SinYaw = math.sin(Yaw);
+
+		local DirectionX = CosPitch * CosYaw;
+		local DirectionY = CosPitch * SinYaw;
+		local DirectionZ = math.sin(Pitch);
+
+		Camera.ThroneRoom_SetLookAt(CamX + DirectionX * 1000, CamY + DirectionY * 1000, CamZ + DirectionZ * 1000);
+
+		FPS.LastMouseX = MouseX;
+		FPS.LastMouseY = MouseY;
+		--------------------------------------------------------------------------------------------------------
+		local LastFrameTime = FPS.LastFrameTime;
+		local DeltaTime = 0;
+		if LastFrameTime ~= 0 then
+			DeltaTime = (Time - LastFrameTime) / 1000.0;
+		end
+		FPS.LastFrameTime = Time;
+
+		if not FPS.IsMoving then
+			return;
+		end
+
+		-- Units per Second
+		local MoveSpeed = 600;
+		local Distance = MoveSpeed * DeltaTime;
+		if FPS.CurrentDirection == FPS.Directions.Forward then
+			CamX = CamX + CosYaw * Distance;
+			CamY = CamY + SinYaw * Distance;
+		elseif FPS.CurrentDirection == FPS.Directions.Backward then
+			CamX = CamX - CosYaw * Distance;
+			CamY = CamY - SinYaw * Distance;
+		end
+
+		local Sector = Logic.GetPlayerSectorAtPosition(FPS.PlayerID, CamX, CamY);
+		if Sector == 0 then
+			return;
+		end
+
+		local TargetHeight = Display.GetTerrainHeight(CamX, CamY);
+		if FPS.LastHeight == 0 then
+			FPS.LastHeight = TargetHeight;
+		end
+
+		-- Smooth vertical Movement
+		local FollowFactor = math.min(1, 8 * DeltaTime);
+		FPS.LastHeight = FPS.LastHeight + (TargetHeight - FPS.LastHeight) * FollowFactor;
+
+		local NewZ = FPS.LastHeight + 200;
+
+		FPS.CurrentPosX = CamX
+		FPS.CurrentPosY = CamY
+		FPS.CurrentPosZ = NewZ
+
+		Camera.ThroneRoom_SetPosition(CamX, CamY, NewZ);
+		--------------------------------------------------------------------------------------------------------
 	end
-end
-
-S6Patcher.FPSMode.MovePosition = function(_playerID, _posX, _posY)
-    local Time = Framework.GetTimeMs();
-	local LastFrameTime = S6Patcher.FPSMode.LastFrameTime;
-
-    local DeltaTime = 0;
-    if LastFrameTime ~= 0 then
-        DeltaTime = (Time - LastFrameTime) / 1000.0;
-    end
-    S6Patcher.FPSMode.LastFrameTime = Time;
-
-    if not S6Patcher.FPSMode.IsMoving then
-        return;
-    end
-
-    local Yaw = S6Patcher.FPSMode.Yaw;
-    local ForwardX = math.cos(Yaw);
-    local ForwardY = math.sin(Yaw);
-
-    -- Units per Second
-    local MoveSpeed = 600;
-    local Distance = MoveSpeed * DeltaTime;
-    if S6Patcher.FPSMode.CurrentDirection == S6Patcher.FPSMode.Directions.Forward then
-        _posX = _posX + ForwardX * Distance;
-        _posY = _posY + ForwardY * Distance;
-    elseif S6Patcher.FPSMode.CurrentDirection == S6Patcher.FPSMode.Directions.Backward then
-        _posX = _posX - ForwardX * Distance;
-        _posY = _posY - ForwardY * Distance;
-	else
-		return;
-    end
-
-	local Sector = Logic.GetPlayerSectorAtPosition(_playerID, _posX, _posY);
-	if Sector == 0 then
-		return;
-	end
-
-    local TargetHeight = Display.GetTerrainHeight(_posX, _posY);
-    if S6Patcher.FPSMode.LastHeight == 0 then
-        S6Patcher.FPSMode.LastHeight = TargetHeight;
-    end
-
-    -- Smooth vertical Movement
-    local FollowFactor = math.min(1, 8 * DeltaTime);
-    S6Patcher.FPSMode.LastHeight = S6Patcher.FPSMode.LastHeight + (TargetHeight - S6Patcher.FPSMode.LastHeight) * FollowFactor;
-
-    local NewZ = S6Patcher.FPSMode.LastHeight + 200;
-
-    Camera.ThroneRoom_SetPosition(_posX, _posY, NewZ);
-
-    S6Patcher.FPSMode.CurrentZ = NewZ;
-end
-
-S6Patcher.FPSMode.CameraController = function(_mouseX, _mouseY, _camX, _camY)
-    local DeltaX = _mouseX - S6Patcher.FPSMode.LastMousePosition[1];
-    local DeltaY = _mouseY - S6Patcher.FPSMode.LastMousePosition[2];
-
-	S6Patcher.FPSMode.Yaw = S6Patcher.FPSMode.Yaw - DeltaX * S6Patcher.FPSMode.MouseSensitivity;
-    S6Patcher.FPSMode.Pitch = S6Patcher.FPSMode.Pitch - DeltaY * S6Patcher.FPSMode.MouseSensitivity;
-
-    local Limit = math.rad(89);
-    if S6Patcher.FPSMode.Pitch > Limit then
-        S6Patcher.FPSMode.Pitch = Limit;
-    elseif S6Patcher.FPSMode.Pitch < -Limit then
-        S6Patcher.FPSMode.Pitch = -Limit;
-    end
-
-    local CamZ = S6Patcher.FPSMode.CurrentZ;
-    local Yaw = S6Patcher.FPSMode.Yaw;
-    local Pitch = S6Patcher.FPSMode.Pitch;
-
-    local DirectionX = math.cos(Pitch) * math.cos(Yaw);
-    local DirectionY = math.cos(Pitch) * math.sin(Yaw);
-    local DirectionZ = math.sin(Pitch);
-
-    Camera.ThroneRoom_SetLookAt(_camX + DirectionX * 1000, _camY + DirectionY * 1000, CamZ + DirectionZ * 1000);
-
-    S6Patcher.FPSMode.LastMousePosition = {_mouseX, _mouseY};
 end
 
 S6Patcher.FPSMode.Toggle = function()
@@ -856,6 +859,7 @@ S6Patcher.FPSMode.Disable = function()
 	Display.SetRenderBorderPins(1);
 	Display.SetUserOptionOcclusionEffect(1);
 	Display.SetRenderRoads(0);
+	Display.UseStandardSettings();
 
 	GUI.EnableBattleSignals(true);
     GUI.SetFeedbackSoundOutputState(1);
@@ -869,33 +873,37 @@ S6Patcher.FPSMode.Disable = function()
 end
 
 S6Patcher.FPSMode.Enable = function()
+	local FPS = S6Patcher.FPSMode;
+
 	Display.SetRenderSky(1);
 	Display.SetUserOptionOcclusionEffect(0);
 	Display.SetRenderBorderPins(0);
 	Display.SetRenderFogOfWar(0);
 	Display.SetRenderRoads(1); -- Flickering
+	Display.UseCloseUpSettings();
 
 	Camera.SwitchCameraBehaviour(5);
 
-	local posX, posY = Logic.GetBuildingApproachPosition(Logic.GetMarketplace(GUI.GetPlayerID()));
+	local posX, posY = Logic.GetBuildingApproachPosition(Logic.GetMarketplace(FPS.PlayerID));
 	local posZ = Display.GetTerrainHeight(posX, posY);
 
-	S6Patcher.FPSMode.CurrentZ = posZ + 500;
-	S6Patcher.FPSMode.CurrentLookAt = {posX + 5000, posY + 5000, S6Patcher.FPSMode.CurrentZ};
+	FPS.CurrentPosX = posX;
+	FPS.CurrentPosY = posY;
+	FPS.CurrentPosZ = posZ + 500;
 
-	Camera.ThroneRoom_SetPosition(posX, posY, S6Patcher.FPSMode.CurrentZ);
-	Camera.ThroneRoom_SetLookAt(posX + 5000, posY + 5000, S6Patcher.FPSMode.CurrentZ);
-	Camera.ThroneRoom_SetFOV(S6Patcher.FPSMode.StateModifiers.FOV);
+	Camera.ThroneRoom_SetPosition(posX, posY, FPS.CurrentPosZ);
+	Camera.ThroneRoom_SetLookAt(posX + 1000, posY + 1000, FPS.CurrentPosZ);
+	Camera.ThroneRoom_SetFOV(FPS.StateModifiers.FOV);
 
-	Display.SetFarClipPlaneMinAndMax(S6Patcher.FPSMode.StateModifiers.ViewDistance, S6Patcher.FPSMode.StateModifiers.ViewDistance);
+	Display.SetFarClipPlaneMinAndMax(FPS.StateModifiers.ViewDistance, FPS.StateModifiers.ViewDistance);
 
-	S6Patcher.FPSMode.LastFrameTime = Framework.GetTimeMs();
-	S6Patcher.FPSMode.LastHeight = posZ;
-	S6Patcher.FPSMode.Pitch = 0;
-	S6Patcher.FPSMode.Yaw = math.pi / 4;
+	FPS.LastFrameTime = Framework.GetTimeMs();
+	FPS.LastHeight = posZ;
+	FPS.Pitch = 0;
+	FPS.Yaw = math.pi / 4;
 
-	S6Patcher.FPSMode.ToggleGameWidgets(1);
-	S6Patcher.FPSMode.SetKeyBindings(false);
+	FPS.ToggleGameWidgets(1);
+	FPS.SetKeyBindings(false);
 
 	GUI.ClearSelection();
     GUI.ClearNotes();
@@ -903,17 +911,17 @@ S6Patcher.FPSMode.Enable = function()
     GUI.SetFeedbackSoundOutputState(0);
     GUI.EnableBattleSignals(false);
 
-	Game.GameTimeSetFactor(GUI.GetPlayerID(), 1);
+	Game.GameTimeSetFactor(FPS.PlayerID, 1);
 
 	local Increase = S6Patcher.GetLocalizedText("Increase");
 	local Decrease = S6Patcher.GetLocalizedText("Decrease");
 	local Exit = S6Patcher.GetLocalizedText("Exit");
 	local Text =
 		"--- First Person Mode ---{cr}{cr}" ..
-		"{@color:255,0,0,255}- " .. Increase .. " FOV: " .. S6Patcher.FPSMode.KeyMapping.IncreaseFOV .. "{cr}" ..
-		"{@color:255,0,0,255}- " .. Decrease .. " FOV: " .. S6Patcher.FPSMode.KeyMapping.DecreaseFOV .. "{cr}" ..
-		"{@color:0,255,0,255}- " .. Increase .. " Draw Distance: " .. S6Patcher.FPSMode.KeyMapping.IncreaseViewDistance .. "{cr}" ..
-		"{@color:0,255,0,255}- " .. Decrease .. " Draw Distance: " .. S6Patcher.FPSMode.KeyMapping.DecreaseViewDistance .. "{cr}" ..
+		"{@color:255,0,0,255}- " .. Increase .. " FOV: " .. FPS.KeyMapping.IncreaseFOV .. "{cr}" ..
+		"{@color:255,0,0,255}- " .. Decrease .. " FOV: " .. FPS.KeyMapping.DecreaseFOV .. "{cr}" ..
+		"{@color:0,255,0,255}- " .. Increase .. " Draw Distance: " .. FPS.KeyMapping.IncreaseViewDistance .. "{cr}" ..
+		"{@color:0,255,0,255}- " .. Decrease .. " Draw Distance: " .. FPS.KeyMapping.DecreaseViewDistance .. "{cr}" ..
 		"{@color:0,0,255,255}- " .. Exit .. ": Z{cr}";
 	GUI.AddNote(Text);
 end
@@ -937,7 +945,6 @@ S6Patcher.FPSMode.ToggleGameWidgets = function(_show)
     XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/DialogBottomRight3pcs", 0);
     XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/KnightInfoButton", 0);
     XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/Briefing", 0);
-    XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/TitleContainer", 0);
     XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/MissionBriefing", 0);
 	XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/Skip", 0);
     XGUIEng.ShowWidget("/InGame/ThroneRoom/Main/StartButton", 0);
