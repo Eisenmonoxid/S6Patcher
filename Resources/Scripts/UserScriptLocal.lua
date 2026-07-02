@@ -692,12 +692,14 @@ S6Patcher.FPSMode.SetKeyBindings = function(_reset)
 end
 
 S6Patcher.FPSMode.ToggleMovement = function(_moving, _direction)
-	if not S6Patcher.FPSMode.Enabled then
+	local FPS = S6Patcher.FPSMode;
+
+	if not FPS.Enabled then
 		return;
 	end
 
-	S6Patcher.FPSMode.IsMoving = _moving;
-	S6Patcher.FPSMode.CurrentDirection = _direction;
+	FPS.IsMoving = _moving;
+	FPS.CurrentDirection = _direction;
 end
 
 if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
@@ -858,7 +860,6 @@ S6Patcher.FPSMode.Disable = function()
 	Display.SetRenderFogOfWar(1);
 	Display.SetRenderBorderPins(1);
 	Display.SetUserOptionOcclusionEffect(1);
-	Display.SetRenderRoads(0);
 	Display.UseStandardSettings();
 
 	GUI.EnableBattleSignals(true);
@@ -869,6 +870,7 @@ S6Patcher.FPSMode.Disable = function()
 	S6Patcher.FPSMode.SetKeyBindings(true);
 	Display.SetFarClipPlaneMinAndMax(0, 0);
 
+	Game.GameTimeSetFactor(S6Patcher.FPSMode.PlayerID, 1);
 	Camera.SwitchCameraBehaviour(0);
 end
 
@@ -879,7 +881,6 @@ S6Patcher.FPSMode.Enable = function()
 	Display.SetUserOptionOcclusionEffect(0);
 	Display.SetRenderBorderPins(0);
 	Display.SetRenderFogOfWar(0);
-	Display.SetRenderRoads(1); -- Flickering
 	Display.UseCloseUpSettings();
 
 	Camera.SwitchCameraBehaviour(5);
@@ -911,7 +912,8 @@ S6Patcher.FPSMode.Enable = function()
     GUI.SetFeedbackSoundOutputState(0);
     GUI.EnableBattleSignals(false);
 
-	Game.GameTimeSetFactor(FPS.PlayerID, 1);
+	Game.GameTimeSetFactor(FPS.PlayerID, 0);
+	XGUIEng.ShowWidget("/InGame/Root/Normal/PauseScreen", 0);
 
 	local Increase = S6Patcher.GetLocalizedText("Increase");
 	local Decrease = S6Patcher.GetLocalizedText("Decrease");
@@ -985,6 +987,16 @@ if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNet
 		end
 
 		S6Patcher.GameCallback_Escape();
+	end
+	if S6Patcher.GameCallback_GameSpeedChanged == nil then
+		S6Patcher.GameCallback_GameSpeedChanged = GameCallback_GameSpeedChanged;
+	end
+	GameCallback_GameSpeedChanged = function(_Speed)
+		if S6Patcher.FPSMode.Enabled then
+			return;
+		end
+
+		S6Patcher.GameCallback_GameSpeedChanged(_Speed);
 	end
 	
 	OnBackButtonPressed = function() end
