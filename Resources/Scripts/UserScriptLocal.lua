@@ -644,7 +644,7 @@ S6Patcher.FPSMode = {
 		FOV = 75,
 		MaxFOV = 120,
 
-		MinViewDistance = 1000,
+		MinViewDistance = 5000,
 		ViewDistance = 15000,
 		MaxViewDistance = 90000,
 	},

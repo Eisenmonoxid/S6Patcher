@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 
 namespace S6Patcher.Source.Utilities
@@ -27,6 +29,21 @@ namespace S6Patcher.Source.Utilities
     {
         public static string GetApplicationVersion() => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
         public static Stream GetEmbeddedResourceDefinition(string Name) => Assembly.GetExecutingAssembly().GetManifestResourceStream(Name);
+        public static string SanitizeFilePath(string FilePath) => FilePath.Replace('\\', Path.DirectorySeparatorChar);
+
+        public static string ReadNullTerminatedString(BinaryReader Reader)
+        {
+            Span<byte> Buffer = stackalloc byte[256];
+            int Counter = 0;
+
+            byte CurrentByte;
+            while ((CurrentByte = Reader.ReadByte()) != 0)
+            {
+                Buffer[Counter++] = CurrentByte;
+            }
+
+            return Encoding.UTF8.GetString(Buffer[..Counter]);
+        }
 
         public static readonly Dictionary<string, string> Features = new()
         {

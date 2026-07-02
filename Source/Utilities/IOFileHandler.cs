@@ -143,5 +143,11 @@ namespace S6Patcher.Source.Utilities
             Logger.Instance.Log("Returning Path: " + Info.FullName);
             return Info.FullName;
         }
+
+        public string GetGameDataDirectory(execID ID, string Filepath)
+        {
+            uint Depth = ID == execID.OV ? 2U : 3U;
+            return Path.Combine(GetRootDirectory(Filepath, Depth), "Data", "base", "shr");
+        }
     }
 }

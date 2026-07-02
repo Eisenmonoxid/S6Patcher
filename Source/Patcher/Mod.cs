@@ -1,14 +1,16 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Utilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher
 {
-    internal class Mod(execID GlobalID, string GlobalDestinationDirectoryPath)
+    internal class Mod(execID GlobalID, string GlobalDestinationDirectoryPath, string GlobalGameDataDirectoryPath, List<FileDataEntry> GlobalFileDataMappings)
     {
         private readonly string ArchiveFilePath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
         private readonly string ArchiveFilePathBase = Path.Combine(GlobalDestinationDirectoryPath, "base");
@@ -105,7 +107,8 @@ namespace S6Patcher.Source.Patcher
 
             if (InstallBugfixMod)
             {
-                await DownloadZipArchive(UseDownload);
+                await DownloadZipArchive(UseDownload); // Files from ZipArchive
+                await UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory
             }
         }
 
@@ -133,6 +136,42 @@ namespace S6Patcher.Source.Patcher
                 File.WriteAllBytes(Path.Combine(ArchiveFilePathBase, ArchiveFileName), Resources.mod);
                 File.WriteAllBytes(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
                 Logger.Instance.Log("Written " + ArchiveFileName + " to Paths " + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
+            }
+        }
+
+        public async Task UpdateModLoaderFilesByFileDataMapping()
+        {
+            foreach (var Entry in GlobalFileDataMappings)
+            {
+                string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
+                string CurrentFile = Path.Combine(GlobalGameDataDirectoryPath, SanitizedFilePath);
+
+                if (Entry.IsLineNumber)
+                {
+                    string[] Lines = File.ReadAllLines(CurrentFile);
+                    foreach (var DataEntry in Entry.Data)
+                    {
+                        Lines[DataEntry.Key] = Encoding.UTF8.GetString(DataEntry.Value);
+                    }
+
+                    string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                    string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
+
+                    try
+                    {
+                        Directory.CreateDirectory(DirectoryPath);
+                        File.WriteAllLines(Destination, Lines);
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorTracking.Increment();
+                        Logger.Instance.Log(ex.ToString());
+                        continue;
+                    }
+                }        
+
+                // TODO: Read file entry from base game, update with data, write to mod loader directory
+                Logger.Instance.Log("Updating file: " + Entry.FilePath + " with data from mapping.");
             }
         }
     }

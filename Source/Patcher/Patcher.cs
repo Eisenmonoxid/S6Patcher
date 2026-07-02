@@ -10,7 +10,8 @@ namespace S6Patcher.Source.Patcher
 {
     internal class Patcher
     {
-        private readonly BinaryParser GlobalParser;
+        private readonly BinaryParser GlobalBinaryFileParser;
+        private readonly BinaryParser GlobalFileDataParser;
         private readonly FileStream GlobalStream;
         private readonly Mappings GlobalMappings;
         public readonly Mod GlobalMod;
@@ -48,7 +49,8 @@ namespace S6Patcher.Source.Patcher
 
             try
             {
-                GlobalParser = new BinaryParser("S6Patcher.Definitions.Definitions.bin");
+                GlobalBinaryFileParser = new BinaryParser("S6Patcher.Definitions.Definitions.bin");
+                GlobalFileDataParser = new BinaryParser("S6Patcher.Definitions.FileData.bin");
             }
             catch (Exception)
             {
@@ -56,8 +58,11 @@ namespace S6Patcher.Source.Patcher
                 throw;
             }
 
-            GlobalMappings = new Mappings(GlobalID, GlobalParser);
-            GlobalMod = new Mod(GlobalID, IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStream.Name));
+            GlobalMappings = new Mappings(GlobalID, GlobalBinaryFileParser);
+
+            string ModLoaderDirectory = IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStream.Name);
+            string GameDataDirectory = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStream.Name);
+            GlobalMod = new Mod(GlobalID, ModLoaderDirectory, GameDataDirectory, GlobalFileDataParser.ParseFileData());
 
             Logger.Instance.Log("ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
@@ -234,7 +239,8 @@ namespace S6Patcher.Source.Patcher
                 IOFileHandler.Instance.CloseStream(GlobalStream);
             }
 
-            GlobalParser.Dispose();
+            GlobalBinaryFileParser.Dispose();
+            GlobalFileDataParser.Dispose();
 
             if (FinishWithPEHeader)
             {

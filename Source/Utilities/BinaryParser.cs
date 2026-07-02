@@ -7,6 +7,16 @@ using System.Text;
 
 namespace S6Patcher.Source.Utilities
 {
+    public struct FileDataEntry
+    {
+        public string BBArchiveName;
+        public string FilePath;
+        public bool IsLineNumber;
+        public byte OverrideAddRemove;
+        public UInt32 EntryCount;
+        public Dictionary<UInt32, byte[]> Data;
+    }
+
     public class BinaryParser
     {
         private readonly byte[] Magic = Encoding.UTF8.GetBytes("EMX");
@@ -71,7 +81,7 @@ namespace S6Patcher.Source.Utilities
             return Mapping;
         }
 
-        public bool ParseBinaryFileContent(byte Identifier, out Dictionary<UInt32, byte[]> Result, string ID = "")
+        private bool ParseBinaryFileContent(byte Identifier, out Dictionary<UInt32, byte[]> Result, string ID = "")
         {
             Result = [];
             byte[] IDBytes = (ID == "") ? [0x0, 0x0, 0x0] : Encoding.UTF8.GetBytes(ID);
@@ -115,6 +125,41 @@ namespace S6Patcher.Source.Utilities
             }
 
             return true;
+        }
+
+        public List<FileDataEntry> ParseFileData()
+        {
+            List<FileDataEntry> Result = [];
+            GlobalReader.BaseStream.Position = BlockOffset;
+
+            while (GlobalReader.BaseStream.Position < GlobalReader.BaseStream.Length)
+            {
+                string BBArchiveName = Utility.ReadNullTerminatedString(GlobalReader);
+                string FilePath = Utility.ReadNullTerminatedString(GlobalReader);
+
+                FileDataEntry Entry = new()
+                {
+                    BBArchiveName = BBArchiveName,
+                    FilePath = FilePath,
+                    IsLineNumber = GlobalReader.ReadByte() == 0x0,
+                    OverrideAddRemove = GlobalReader.ReadByte(),
+                    EntryCount = GlobalReader.ReadUInt32(),
+                    Data = []
+                };
+
+                for (int i = 0; i < Entry.EntryCount; i++)
+                {
+                    UInt32 Address = GlobalReader.ReadUInt32();
+                    UInt32 Length = GlobalReader.ReadUInt32();
+
+                    byte[] Data = GlobalReader.ReadBytes((int)Length);
+                    Entry.Data.Add(Address, Data);
+                }
+
+                Result.Add(Entry);
+            }
+
+            return Result;
         }
     }
 }
