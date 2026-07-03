@@ -11,8 +11,6 @@ namespace S6Patcher.Source.Utilities
     {
         public string BBArchiveName;
         public string FilePath;
-        public bool IsLineNumber;
-        public byte OverrideAddRemove;
         public UInt32 EntryCount;
         public Dictionary<UInt32, byte[]> Data;
     }
@@ -134,15 +132,13 @@ namespace S6Patcher.Source.Utilities
 
             while (GlobalReader.BaseStream.Position < GlobalReader.BaseStream.Length)
             {
-                string BBArchiveName = Utility.ReadNullTerminatedString(GlobalReader);
-                string FilePath = Utility.ReadNullTerminatedString(GlobalReader);
+                string BBArchiveName = Encoding.UTF8.GetString(GlobalReader.ReadBytes((int)GlobalReader.ReadUInt32()));
+                string FilePath = Encoding.UTF8.GetString(GlobalReader.ReadBytes((int)GlobalReader.ReadUInt32()));
 
                 FileDataEntry Entry = new()
                 {
                     BBArchiveName = BBArchiveName,
                     FilePath = FilePath,
-                    IsLineNumber = GlobalReader.ReadByte() == 0x0,
-                    OverrideAddRemove = GlobalReader.ReadByte(),
                     EntryCount = GlobalReader.ReadUInt32(),
                     Data = []
                 };

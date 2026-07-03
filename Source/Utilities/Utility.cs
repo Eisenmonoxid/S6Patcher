@@ -31,20 +31,6 @@ namespace S6Patcher.Source.Utilities
         public static Stream GetEmbeddedResourceDefinition(string Name) => Assembly.GetExecutingAssembly().GetManifestResourceStream(Name);
         public static string SanitizeFilePath(string FilePath) => FilePath.Replace('\\', Path.DirectorySeparatorChar);
 
-        public static string ReadNullTerminatedString(BinaryReader Reader)
-        {
-            Span<byte> Buffer = stackalloc byte[256];
-            int Counter = 0;
-
-            byte CurrentByte;
-            while ((CurrentByte = Reader.ReadByte()) != 0)
-            {
-                Buffer[Counter++] = CurrentByte;
-            }
-
-            return Encoding.UTF8.GetString(Buffer[..Counter]);
-        }
-
         public static readonly Dictionary<string, string> Features = new()
         {
             {"cbHighTextures",      "HTS"},

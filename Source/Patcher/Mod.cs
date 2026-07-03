@@ -75,7 +75,7 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("Successfully extracted " + ZipArchiveStream.Length + " bytes to " + GlobalDestinationDirectoryPath);
         }
 
-        private async Task DownloadZipArchive(bool UseDownload)
+        private async Task InstallZIPArchive(bool UseDownload)
         {
             MemoryStream Result;
             if (UseDownload)
@@ -107,7 +107,7 @@ namespace S6Patcher.Source.Patcher
 
             if (InstallBugfixMod)
             {
-                await DownloadZipArchive(UseDownload); // Files from ZipArchive
+                await InstallZIPArchive(UseDownload); // Files from ZipArchive
                 await UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory
             }
         }
@@ -145,33 +145,83 @@ namespace S6Patcher.Source.Patcher
             {
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
                 string CurrentFile = Path.Combine(GlobalGameDataDirectoryPath, SanitizedFilePath);
+                byte[] FileContent = await File.ReadAllBytesAsync(CurrentFile);
+                int UpdatedFileSize = FileContent.Length;
 
-                if (Entry.IsLineNumber)
+                foreach (var DataEntry in Entry.Data)
                 {
-                    string[] Lines = File.ReadAllLines(CurrentFile);
-                    foreach (var DataEntry in Entry.Data)
+                    byte Operation = DataEntry.Value[0];
+                    if (Operation == 0x01) // Insert
                     {
-                        Lines[DataEntry.Key] = Encoding.UTF8.GetString(DataEntry.Value);
+                        UpdatedFileSize += DataEntry.Value.Length - 1;
+                    }
+                    else if (Operation == 0x02) // Delete
+                    {
+                        UpdatedFileSize -= (int)BitConverter.ToUInt32(DataEntry.Value, 1);
+                    }
+                }
+
+                byte[] UpdatedFileContent = new byte[UpdatedFileSize];
+                int SourceIndex = 0;
+                int DestinationIndex = 0;
+
+                foreach (var DataEntry in Entry.Data.OrderBy(E => E.Key))
+                {
+                    int Offset = (int)DataEntry.Key;
+                    int CopyLength = Offset - SourceIndex;
+                    if (CopyLength > 0)
+                    {
+                        Buffer.BlockCopy(FileContent, SourceIndex, UpdatedFileContent, DestinationIndex, CopyLength);
+                        SourceIndex += CopyLength;
+                        DestinationIndex += CopyLength;
                     }
 
-                    string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
-                    string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
-
-                    try
+                    byte Operation = DataEntry.Value[0];
+                    switch (Operation)
                     {
-                        Directory.CreateDirectory(DirectoryPath);
-                        File.WriteAllLines(Destination, Lines);
+                        case 0x00: // Replace (fixed size)
+                        {
+                            var Data = DataEntry.Value.AsSpan(1);
+                            Data.CopyTo(UpdatedFileContent.AsSpan(DestinationIndex));
+                            SourceIndex += Data.Length;
+                            DestinationIndex += Data.Length;
+                            break;
+                        }
+                        case 0x01: // Insert
+                        {
+                            var Data = DataEntry.Value.AsSpan(1);
+                            Data.CopyTo(UpdatedFileContent.AsSpan(DestinationIndex));
+                            DestinationIndex += Data.Length;
+                            break;
+                        }
+                        case 0x02: // Delete
+                        {
+                            int Length = (int)BitConverter.ToUInt32(DataEntry.Value, 1);
+                            SourceIndex += Length;
+                            break;
+                        }
+                        default:
+                        {
+                            ErrorTracking.Increment();
+                            Logger.Instance.Log($"Unknown op in {CurrentFile}");
+                            break;
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        ErrorTracking.Increment();
-                        Logger.Instance.Log(ex.ToString());
-                        continue;
-                    }
-                }        
+                }
 
-                // TODO: Read file entry from base game, update with data, write to mod loader directory
-                Logger.Instance.Log("Updating file: " + Entry.FilePath + " with data from mapping.");
+                int Remaining = FileContent.Length - SourceIndex;
+                if (Remaining > 0)
+                {
+                    Buffer.BlockCopy(FileContent, SourceIndex, UpdatedFileContent, DestinationIndex, Remaining);
+                }
+
+                string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
+
+                Directory.CreateDirectory(DirectoryPath);
+                File.WriteAllBytes(Destination, UpdatedFileContent);
+
+                Logger.Instance.Log("Updating file: " + Entry.FilePath);
             }
         }
     }
