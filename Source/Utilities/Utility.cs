@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -70,6 +71,32 @@ namespace S6Patcher.Source.Utilities
 
             Reader.BaseStream.Position += Offset;
             Reader.BaseStream.Write(Bytes, 0, Bytes.Length);
+        }
+
+        public static string ResolveRealPath(string BaseDirectory, string InputPath)
+        {
+            string[] Parts = InputPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string CurrentPath = BaseDirectory;
+
+            foreach (var Part in Parts)
+            {
+                if (!Directory.Exists(CurrentPath))
+                {
+                    return InputPath;  
+                }
+
+                var Match = Directory.GetFileSystemEntries(CurrentPath).FirstOrDefault(Element =>
+                    string.Equals(Path.GetFileName(Element), Part, StringComparison.OrdinalIgnoreCase));
+
+                if (Match == null)
+                {
+                    return InputPath;
+                }
+                
+                CurrentPath = Match;
+            }
+
+            return CurrentPath;
         }
     }
 }

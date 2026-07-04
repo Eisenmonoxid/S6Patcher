@@ -1,11 +1,11 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Utilities;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Patcher
@@ -114,7 +114,7 @@ namespace S6Patcher.Source.Patcher
 
             if (InstallBugfixMod)
             {
-                await InstallZIPArchive(UseDownload); // Files from ZipArchive
+                // await InstallZIPArchive(UseDownload); // Files from ZipArchive
                 UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory
             }
         }
@@ -167,59 +167,69 @@ namespace S6Patcher.Source.Patcher
 
         private byte[] UpdateFileContent(int UpdatedFileSize, FileDataEntry Entry, byte[] FileContent)
         {
-            byte[] UpdatedFileContent = new byte[UpdatedFileSize];
-            int SourceIndex = 0;
-            int DestinationIndex = 0;
+            using MemoryStream OutputStream = new(UpdatedFileSize);
+            using MemoryStream InputStream = new(FileContent);
 
+            int SourceIndex = 0;
             foreach (var DataEntry in Entry.Data.OrderBy(E => E.Key))
             {
                 int Offset = (int)DataEntry.Key;
                 int CopyLength = Offset - SourceIndex;
-                if (CopyLength > 0)
+                byte[] Buffer = ArrayPool<byte>.Shared.Rent(64 * 1024);
+
+                try
                 {
-                    Buffer.BlockCopy(FileContent, SourceIndex, UpdatedFileContent, DestinationIndex, CopyLength);
-                    SourceIndex += CopyLength;
-                    DestinationIndex += CopyLength;
+                    int Remaining = CopyLength;
+                    while (Remaining > 0)
+                    {
+                        int AmountToRead = Math.Min(Buffer.Length, Remaining);
+                        int ActualAmountRead = InputStream.Read(Buffer, 0, AmountToRead);
+
+                        if (ActualAmountRead <= 0)
+                        {
+                            break;
+                        }
+
+                        OutputStream.Write(Buffer, 0, ActualAmountRead);
+                        Remaining -= ActualAmountRead;
+                        SourceIndex += ActualAmountRead;
+                    }
+                }
+                finally
+                {
+                    ArrayPool<byte>.Shared.Return(Buffer);
                 }
 
                 FileOperation Operation = (FileOperation)DataEntry.Value[0];
                 switch (Operation)
                 {
-                    case FileOperation.Replace: // Replace (fixed size)
+                    case FileOperation.Replace:
                     {
                         var Data = DataEntry.Value.AsSpan(1);
-                        Data.CopyTo(UpdatedFileContent.AsSpan(DestinationIndex));
+                        OutputStream.Write(Data);
+
                         SourceIndex += Data.Length;
-                        DestinationIndex += Data.Length;
+                        InputStream.Position += Data.Length;
                         break;
                     }
-                    case FileOperation.Insert: // Insert
+                    case FileOperation.Insert:
                     {
                         var Data = DataEntry.Value.AsSpan(1);
-                        Data.CopyTo(UpdatedFileContent.AsSpan(DestinationIndex));
-                        DestinationIndex += Data.Length;
+                        OutputStream.Write(Data);
                         break;
                     }
-                    case FileOperation.Delete: // Delete
+                    case FileOperation.Delete:
                     {
                         int Length = (int)BitConverter.ToUInt32(DataEntry.Value, 1);
+                        InputStream.Position += Length;
                         SourceIndex += Length;
-                        break;
-                    }
-                    default:
-                    {
                         break;
                     }
                 }
             }
 
-            int Remaining = FileContent.Length - SourceIndex;
-            if (Remaining > 0)
-            {
-                Buffer.BlockCopy(FileContent, SourceIndex, UpdatedFileContent, DestinationIndex, Remaining);
-            }
-
-            return UpdatedFileContent;
+            InputStream.CopyTo(OutputStream);
+            return OutputStream.ToArray();
         }
 
         private void UpdateModLoaderFilesByFileDataMapping()
@@ -227,7 +237,7 @@ namespace S6Patcher.Source.Patcher
             Parallel.ForEach(GlobalFileDataMappings, Entry =>
             {
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
-                string CurrentFile = Path.Combine(GlobalGameDataDirectoryPath, SanitizedFilePath);
+                string CurrentFile = Utility.ResolveRealPath(GlobalGameDataDirectoryPath, SanitizedFilePath);
                 byte[] FileContent = File.ReadAllBytes(CurrentFile);
                 int UpdatedFileSize = GetUpdatedFileSize(Entry, FileContent.Length);
 
