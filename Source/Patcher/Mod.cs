@@ -27,7 +27,7 @@ namespace S6Patcher.Source.Patcher
         private const string ArchiveFileNameExtra1 = "extra1.bba";
         public event Action<string> ShowMessage;
 
-        private void ExtractHistoryEditionArchiveFiles(ZipArchive Archive)
+        private async Task ExtractHistoryEditionArchiveFiles(ZipArchive Archive)
         {
             var Entries = Archive.Entries
                 .Where(Element => !Element.FullName.Contains(ArchiveFileNameBase) && !Element.FullName.Contains(ArchiveFileNameExtra1))
@@ -41,7 +41,7 @@ namespace S6Patcher.Source.Patcher
                 try
                 {
                     Directory.CreateDirectory(DirectoryPath);
-                    Entry.ExtractToFile(Destination, true);
+                    await Entry.ExtractToFileAsync(Destination, true);
                 }
                 catch (Exception ex)
                 {
@@ -54,21 +54,21 @@ namespace S6Patcher.Source.Patcher
             };
         }
 
-        private void ExtractZipArchive(MemoryStream ZipArchiveStream)
+        private async Task ExtractZipArchive(MemoryStream ZipArchiveStream)
         {
             try
             {
                 using ZipArchive Archive = new(ZipArchiveStream, ZipArchiveMode.Read, true);
                 if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
                 {
-                    ExtractHistoryEditionArchiveFiles(Archive);
+                    await ExtractHistoryEditionArchiveFiles(Archive);
                 }
                 else
                 {
                     ZipArchiveEntry Entry = Archive.GetEntry(ArchiveFileNameBase);
-                    Entry.ExtractToFile(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
+                    await Entry.ExtractToFileAsync(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
                     Entry = Archive.GetEntry(ArchiveFileNameExtra1);
-                    Entry.ExtractToFile(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
+                    await Entry.ExtractToFileAsync(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
                 }
             }
             catch (Exception ex)
@@ -94,15 +94,15 @@ namespace S6Patcher.Source.Patcher
                 Result = new(Resources.Modfiles);
             }
 
-            ExtractZipArchive(Result);
+            await ExtractZipArchive(Result);
             Result.Dispose();
         }
 
-        public async Task CreateModLoader(bool InstallBugfixMod, bool UseDownload)
+        public async Task Create(bool InstallBugfixMod, bool UseDownload)
         {
             try
             {
-                WriteModLoaderFiles();
+                await WriteModLoaderFiles();
             }
             catch (Exception ex)
             {
@@ -115,11 +115,11 @@ namespace S6Patcher.Source.Patcher
             if (InstallBugfixMod)
             {
                 await InstallZIPArchive(UseDownload); // Files from ZipArchive
-                UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory
+                await UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory
             }
         }
 
-        private void WriteModLoaderFiles()
+        private async Task WriteModLoaderFiles()
         {
             if (Directory.Exists(GlobalDestinationDirectoryPath))
             {
@@ -140,8 +140,8 @@ namespace S6Patcher.Source.Patcher
                 Directory.CreateDirectory(ArchiveFilePathBase);
                 Directory.CreateDirectory(ArchiveFilePathExtra1);
                 // Always do this in case the download fails or user cancels
-                File.WriteAllBytes(Path.Combine(ArchiveFilePathBase, ArchiveFileName), Resources.mod);
-                File.WriteAllBytes(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
+                await File.WriteAllBytesAsync(Path.Combine(ArchiveFilePathBase, ArchiveFileName), Resources.mod);
+                await File.WriteAllBytesAsync(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
                 Logger.Instance.Log("Written " + ArchiveFileName + " to Paths " + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
             }
         }
@@ -175,14 +175,14 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        private void UpdateModLoaderFilesByFileDataMapping()
+        private async Task UpdateModLoaderFilesByFileDataMapping()
         {
-            Parallel.ForEach(GlobalFileDataMappings, Entry =>
+            await Parallel.ForEachAsync(GlobalFileDataMappings, async (Entry, CT) =>
             {
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
                 string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalGameDataDirectoryPath, SanitizedFilePath));
 
-                byte[] FileContent = File.ReadAllBytes(CurrentFile);
+                byte[] FileContent = await File.ReadAllBytesAsync(CurrentFile, CT);
 
                 Crc32 CRC = new();
                 CRC.Append(FileContent);
@@ -201,7 +201,7 @@ namespace S6Patcher.Source.Patcher
                 string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
 
                 Directory.CreateDirectory(DirectoryPath);
-                File.WriteAllBytes(Destination, [.. FileContentAsList]);
+                await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
 
                 Logger.Instance.Log($"Updated file: {Path.GetFileName(CurrentFile)}");
             });

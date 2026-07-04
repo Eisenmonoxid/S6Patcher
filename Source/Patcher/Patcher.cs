@@ -146,7 +146,7 @@ namespace S6Patcher.Source.Patcher
             Logger.Instance.Log("Called with " + UseBugfixMod.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugfixMod);
-            await GlobalMod.CreateModLoader(UseBugfixMod, UseDownload);
+            await GlobalMod.Create(UseBugfixMod, UseDownload);
         }
 
         public void SetLargeAddressAwareFlag()
