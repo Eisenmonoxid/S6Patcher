@@ -11,6 +11,7 @@ namespace S6Patcher.Source.Utilities
     {
         public string BBArchiveName;
         public string FilePath;
+        public UInt32 OriginalFileCRC;
         public UInt32 EntryCount;
         public Dictionary<UInt32, byte[]> Data;
     }
@@ -139,6 +140,7 @@ namespace S6Patcher.Source.Utilities
                 {
                     BBArchiveName = BBArchiveName,
                     FilePath = FilePath,
+                    OriginalFileCRC = GlobalReader.ReadUInt32(),
                     EntryCount = GlobalReader.ReadUInt32(),
                     Data = []
                 };

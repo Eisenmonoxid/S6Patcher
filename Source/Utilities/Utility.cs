@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
@@ -73,30 +74,38 @@ namespace S6Patcher.Source.Utilities
             Reader.BaseStream.Write(Bytes, 0, Bytes.Length);
         }
 
-        public static string ResolveRealPath(string BaseDirectory, string InputPath)
+        public static string ResolveCaseInsensitivePath(string InputPath)
         {
-            string[] Parts = InputPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            string CurrentPath = BaseDirectory;
-
-            foreach (var Part in Parts)
+            if (File.Exists(InputPath) || Directory.Exists(InputPath))
             {
-                if (!Directory.Exists(CurrentPath))
-                {
-                    return InputPath;  
-                }
+               return InputPath; 
+            }
 
-                var Match = Directory.GetFileSystemEntries(CurrentPath).FirstOrDefault(Element =>
-                    string.Equals(Path.GetFileName(Element), Part, StringComparison.OrdinalIgnoreCase));
+            string RootPath = Path.GetPathRoot(InputPath)!;
+            string CurrentPath = RootPath;
+
+            foreach (string Part in InputPath[RootPath.Length..]
+                        .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                        .Where(P => !string.IsNullOrEmpty(P)))
+            {
+                var Match = Directory.EnumerateFileSystemEntries(CurrentPath)
+                    .FirstOrDefault(X => string.Equals(Path.GetFileName(X), Part, StringComparison.OrdinalIgnoreCase));
 
                 if (Match == null)
                 {
                     return InputPath;
                 }
-                
+
                 CurrentPath = Match;
             }
 
             return CurrentPath;
+        }
+
+        public static void ReplaceRange<T>(this List<T> List, int Index, int Length, IEnumerable<T> Replacement)
+        {
+            List.RemoveRange(Index, Length);
+            List.InsertRange(Index, Replacement);
         }
     }
 }

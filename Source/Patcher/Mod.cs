@@ -1,12 +1,12 @@
 ﻿using S6Patcher.Properties;
 using S6Patcher.Source.Utilities;
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO.Hashing;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -114,7 +114,7 @@ namespace S6Patcher.Source.Patcher
 
             if (InstallBugfixMod)
             {
-                // await InstallZIPArchive(UseDownload); // Files from ZipArchive
+                await InstallZIPArchive(UseDownload); // Files from ZipArchive
                 UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory
             }
         }
@@ -146,90 +146,33 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        private int GetUpdatedFileSize(FileDataEntry Entry, int Length)
+        private void UpdateFileContent(FileDataEntry Entry, List<byte> FileContent)
         {
-            int UpdatedFileSize = Length;
-            foreach (var DataEntry in Entry.Data)
+            foreach (var DataEntry in Entry.Data.OrderByDescending(E => E.Key))
             {
-                FileOperation Operation = (FileOperation)DataEntry.Value[0];
-                if (Operation == FileOperation.Insert)
-                {
-                    UpdatedFileSize += DataEntry.Value.Length - 1;
-                }
-                else if (Operation == FileOperation.Delete)
-                {
-                    UpdatedFileSize -= (int)BitConverter.ToUInt32(DataEntry.Value, 1);
-                }
-            }
-
-            return UpdatedFileSize;
-        }
-
-        private byte[] UpdateFileContent(int UpdatedFileSize, FileDataEntry Entry, byte[] FileContent)
-        {
-            using MemoryStream OutputStream = new(UpdatedFileSize);
-            using MemoryStream InputStream = new(FileContent);
-
-            int SourceIndex = 0;
-            foreach (var DataEntry in Entry.Data.OrderBy(E => E.Key))
-            {
-                int Offset = (int)DataEntry.Key;
-                int CopyLength = Offset - SourceIndex;
-                byte[] Buffer = ArrayPool<byte>.Shared.Rent(64 * 1024);
-
-                try
-                {
-                    int Remaining = CopyLength;
-                    while (Remaining > 0)
-                    {
-                        int AmountToRead = Math.Min(Buffer.Length, Remaining);
-                        int ActualAmountRead = InputStream.Read(Buffer, 0, AmountToRead);
-
-                        if (ActualAmountRead <= 0)
-                        {
-                            break;
-                        }
-
-                        OutputStream.Write(Buffer, 0, ActualAmountRead);
-                        Remaining -= ActualAmountRead;
-                        SourceIndex += ActualAmountRead;
-                    }
-                }
-                finally
-                {
-                    ArrayPool<byte>.Shared.Return(Buffer);
-                }
-
                 FileOperation Operation = (FileOperation)DataEntry.Value[0];
                 switch (Operation)
                 {
                     case FileOperation.Replace:
                     {
-                        var Data = DataEntry.Value.AsSpan(1);
-                        OutputStream.Write(Data);
-
-                        SourceIndex += Data.Length;
-                        InputStream.Position += Data.Length;
+                        var Data = DataEntry.Value.Skip(1);
+                        Utility.ReplaceRange(FileContent, (int)DataEntry.Key, DataEntry.Value.Length - 1, Data);
                         break;
                     }
                     case FileOperation.Insert:
                     {
-                        var Data = DataEntry.Value.AsSpan(1);
-                        OutputStream.Write(Data);
+                        var Data = DataEntry.Value.Skip(1);
+                        FileContent.InsertRange((int)DataEntry.Key, Data);
                         break;
                     }
                     case FileOperation.Delete:
                     {
                         int Length = (int)BitConverter.ToUInt32(DataEntry.Value, 1);
-                        InputStream.Position += Length;
-                        SourceIndex += Length;
+                        FileContent.RemoveRange((int)DataEntry.Key, Length);
                         break;
                     }
                 }
             }
-
-            InputStream.CopyTo(OutputStream);
-            return OutputStream.ToArray();
         }
 
         private void UpdateModLoaderFilesByFileDataMapping()
@@ -237,17 +180,30 @@ namespace S6Patcher.Source.Patcher
             Parallel.ForEach(GlobalFileDataMappings, Entry =>
             {
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
-                string CurrentFile = Utility.ResolveRealPath(GlobalGameDataDirectoryPath, SanitizedFilePath);
+                string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalGameDataDirectoryPath, SanitizedFilePath));
+
                 byte[] FileContent = File.ReadAllBytes(CurrentFile);
-                int UpdatedFileSize = GetUpdatedFileSize(Entry, FileContent.Length);
+
+                Crc32 CRC = new();
+                CRC.Append(FileContent);
+                
+                if (CRC.GetCurrentHashAsUInt32() != Entry.OriginalFileCRC)
+                {
+                    ErrorTracking.Increment();
+                    Logger.Instance.Log($"File Hash for file {Path.GetFileName(CurrentFile)} not equivalent! Skipping ...");
+                    return;
+                }
+
+                List<byte> FileContentAsList = [.. FileContent];
+                UpdateFileContent(Entry, FileContentAsList);
 
                 string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
                 string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
 
                 Directory.CreateDirectory(DirectoryPath);
-                File.WriteAllBytes(Destination, UpdateFileContent(UpdatedFileSize, Entry, FileContent));
+                File.WriteAllBytes(Destination, [.. FileContentAsList]);
 
-                Logger.Instance.Log("Updating file: " + Entry.FilePath);
+                Logger.Instance.Log($"Updated file: {Path.GetFileName(CurrentFile)}");
             });
         }
     }
