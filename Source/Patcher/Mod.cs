@@ -203,6 +203,15 @@ namespace S6Patcher.Source.Patcher
                 Directory.CreateDirectory(DirectoryPath);
                 await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
 
+                // DEBUG for Hashing
+                /*
+                DirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                Destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), SanitizedFilePath);
+                Directory.CreateDirectory(DirectoryPath);
+                await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
+                */
+                // DEBUG for Hashing
+
                 Logger.Instance.Log($"Updated file: {Path.GetFileName(CurrentFile)}");
             });
         }
