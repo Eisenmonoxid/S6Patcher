@@ -1,18 +1,20 @@
 # S6Patcher
-A simple application that fixes some bugs and adds new features in the various editions of "The Settlers 6 - Rise of an Empire". 
+An unofficial, simple application that fixes bugs and adds new features in the various editions of "The Settlers 6 - Rise of an Empire".
 <p align="center">
-	<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Header.jpg?raw=true" width="80%" height="80%" alt="Header"/>
+	<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Header.jpg?raw=true" width="60%" height="60%" alt="Header"/>
 </p>
 
----
+## Project Philosophy
+S6Patcher is designed to improve the game while preserving its original experience. Its primary purpose is to fix bugs, address technical issues, and introduce small quality-of-life improvements that make the game more enjoyable and convenient to play.
+
+The goal is **not** to fundamentally change or redesign gameplay mechanics or turn the game into something different. Instead, S6Patcher focuses on polishing the existing experience. Any additions should feel natural, unobtrusive, and consistent with the original game design.
+
 ## Features
 Find a comprehensive list of all features in the [Features](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Features.md) file.
 
----
 ## Download
 Find the latest release of the application [here](https://github.com/Eisenmonoxid/S6Patcher/releases/latest).  
 
----
 ## Usage
 1. Make sure that your game has been launched successfully `at least once` before using the S6Patcher.
 2. Check that the latest official patch `1.71.4289` is installed (main menu bottom right corner).
@@ -29,11 +31,9 @@ previously patched .exe file and use the button `Restore Backup`.
 
 **Should there be any questions or errors: [Discord](https://discord.gg/7SGkQtAAET).**
 
----
 ## ModLoader
-The S6Patcher features a simple [ModLoader](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md), which can be used to create mods without having to modify the existing game files.
+The S6Patcher features a simple [Modloader](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md), which can be used to create mods without having to modify the existing game files.
 
----
 ## Tech
 - The S6Patcher modifies bytes in the game/editor executable. A backup of the executable is created beforehand and can be restored from the application.
 - A new folder `Script` in `<Documents>\THE SETTLERS - Rise of an Empire\` and three lua script files `"UserScriptGlobal.lua"`, `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
@@ -41,7 +41,6 @@ The S6Patcher features a simple [ModLoader](https://github.com/Eisenmonoxid/S6Pa
 - When the option "Activate Modloader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
 - The option "Install Bugfix Mod" will extract the zip compressed folder `Modfiles.zip` from the repository directory `/Source/Resources/Gamefiles` into the `modloader` folder. 
 
----
 ## Contribution
 In case you want to contribute your own features and/or fixes to the project, feel free to fork the repository and create a pull request.   
 **Important:** Everything contributed to the project must either be created by yourself or approved by the original author(s).
