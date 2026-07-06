@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Hashing;
 using S6Patcher.Source.Archive;
-using HarfBuzzSharp;
 
 namespace S6Patcher.Source.Patcher
 {
