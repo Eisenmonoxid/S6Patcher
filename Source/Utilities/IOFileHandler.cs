@@ -127,7 +127,7 @@ namespace S6Patcher.Source.Utilities
         public string GetModLoaderDirectory(execID ID, string Filepath)
         {
             uint Depth = ID == execID.OV ? 2U : 3U;
-            return GetRootDirectory(Filepath, Depth) + Path.DirectorySeparatorChar + "modloader";
+            return Path.Combine(GetRootDirectory(Filepath, Depth), "modloader");
         }
 
         private string GetRootDirectory(string Filepath, uint Depth)
@@ -144,10 +144,15 @@ namespace S6Patcher.Source.Utilities
             return Info.FullName;
         }
 
-        public string GetGameDataDirectory(execID ID, string Filepath)
+        public string GetGameDataDirectory(execID ID, string Filepath, bool IsExtra1)
         {
             uint Depth = ID == execID.OV ? 2U : 3U;
-            return Path.Combine(GetRootDirectory(Filepath, Depth), "Data", "base", "shr");
+            if (Depth == 2U)
+            {
+                return Path.Combine(GetRootDirectory(Filepath, Depth), IsExtra1 ? "extra1" : "base", "bba");
+            }
+
+            return Path.Combine(GetRootDirectory(Filepath, Depth), "Data", IsExtra1 ? "extra1" : "base", "shr");
         }
     }
 }

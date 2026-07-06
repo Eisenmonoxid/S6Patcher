@@ -7,6 +7,8 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Hashing;
+using S6Patcher.Source.Archive;
+using HarfBuzzSharp;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -17,6 +19,13 @@ namespace S6Patcher.Source.Patcher
             Replace = 0x00,
             Insert = 0x01,
             Delete = 0x02
+        }
+
+        private struct ModLoaderFile
+        {
+            public string Name;
+            public byte[] Data;
+            public FileDataEntry Entry;
         }
 
         private readonly string ArchiveFilePath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
@@ -115,7 +124,15 @@ namespace S6Patcher.Source.Patcher
             if (InstallBugfixMod)
             {
                 await InstallZIPArchive(UseDownload); // Files from ZipArchive
-                await UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory
+
+                if (GlobalID == execID.OV)
+                {
+                    await GetModLoaderFilesFromArchives(); // Updated Files from game archive files 
+                }
+                else
+                {
+                   await UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory 
+                }
             }
         }
 
@@ -175,6 +192,103 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
+        private async Task GetModLoaderFilesFromArchives()
+        {
+            Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse = [];
+            foreach (var Element in GlobalFileDataMappings)
+            {
+                ModLoaderFile CurrentFile = new()
+                {
+                    Name = Element.FilePath,
+                    Entry = Element
+                };
+
+                if (ArchiveFilesToParse.TryGetValue(Element.BBArchiveName, out List<ModLoaderFile> Value))
+                {
+                    Value.Add(CurrentFile);
+                }
+                else
+                {
+                    List<ModLoaderFile> Files = [CurrentFile];
+                    ArchiveFilesToParse.Add(Element.BBArchiveName, Files);
+                }
+            }
+
+            foreach (var Element in ArchiveFilesToParse)
+            {
+                FileStream ArchiveFileStream;
+                try
+                {
+                    ArchiveFileStream = new(Path.Combine(GlobalGameDataDirectoryPath, Element.Key), FileMode.Open, FileAccess.Read, FileShare.None);
+                }
+                catch (Exception ex)
+                {
+                    ErrorTracking.Increment();
+                    Logger.Instance.Log(ex.ToString());
+                    continue;
+                }
+
+                BBAArchiveFile ArchiveFile = new(ArchiveFileStream, true);
+                for (int i = 0; i < Element.Value.Count; i++)
+                {
+                    ModLoaderFile MLF = Element.Value[i];  
+                    MLF.Data = ArchiveFile.GetFileDataByDataEntryName(MLF.Name);
+                    Element.Value[i] = MLF;
+                }
+
+                ArchiveFileStream.Dispose();
+            }
+
+            foreach (var Element in ArchiveFilesToParse)
+            {
+                foreach (var CurrentFile in Element.Value)
+                {
+                    string SanitizedFilePath = Utility.SanitizeFilePath(CurrentFile.Entry.FilePath);
+
+                    Crc32 CRC = new();
+                    CRC.Append(CurrentFile.Data);
+                    
+                    if (CRC.GetCurrentHashAsUInt32() != CurrentFile.Entry.OriginalFileCRC)
+                    {
+                        ErrorTracking.Increment();
+                        Logger.Instance.Log($"File Hash for file {CurrentFile.Name} not equivalent! Skipping ...");
+                        continue;
+                    }
+
+                    List<byte> FileContentAsList = [.. CurrentFile.Data];
+                    UpdateFileContent(CurrentFile.Entry, FileContentAsList);
+
+                    string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                    string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
+
+                    Directory.CreateDirectory(DirectoryPath);
+                    await File.WriteAllBytesAsync(Destination, [.. FileContentAsList]);
+                }
+            }
+
+            // Create archive file from previously extracted files
+            // TODO: Maybe do all of this in memory instead of writing the files to the disk inbetween?
+
+            string FilePath = Path.Combine(ArchiveFilePathBase, ArchiveFileName);
+            FileStream WrittenArchive;
+            try
+            {
+                WrittenArchive = File.Create(FilePath);
+            }
+            catch (Exception ex)
+            {
+                ErrorTracking.Increment();
+                Logger.Instance.Log(ex.ToString());
+                return;
+            }
+
+            new BBAArchiveFile(WrittenArchive, ArchiveFilePath, true);
+            await WrittenArchive.DisposeAsync();
+
+            Directory.Delete(ArchiveFilePath);
+            Logger.Instance.Log($"Finished creating archive file {FilePath}!");
+        }
+
         private async Task UpdateModLoaderFilesByFileDataMapping()
         {
             await Parallel.ForEachAsync(GlobalFileDataMappings, async (Entry, CT) =>
@@ -202,15 +316,6 @@ namespace S6Patcher.Source.Patcher
 
                 Directory.CreateDirectory(DirectoryPath);
                 await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
-
-                // DEBUG for Hashing
-                /*
-                DirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
-                Destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), SanitizedFilePath);
-                Directory.CreateDirectory(DirectoryPath);
-                await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
-                */
-                // DEBUG for Hashing
 
                 Logger.Instance.Log($"Updated file: {Path.GetFileName(CurrentFile)}");
             });
