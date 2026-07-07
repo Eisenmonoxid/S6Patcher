@@ -284,7 +284,7 @@ namespace S6Patcher.Source.Patcher
             new BBAArchiveFile(WrittenArchive, ArchiveFilePath, true);
             await WrittenArchive.DisposeAsync();
 
-            Directory.Delete(ArchiveFilePath);
+            Directory.Delete(ArchiveFilePath, true);
             Logger.Instance.Log($"Finished creating archive file {FilePath}!");
         }
 
