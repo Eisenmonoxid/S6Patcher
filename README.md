@@ -19,7 +19,7 @@ Find the latest release of the application [here](https://github.com/Eisenmonoxi
 1. Make sure that your game has been launched successfully `at least once` before using the S6Patcher.
 2. Check that the latest official patch `1.71.4289` is installed (main menu bottom right corner).
 3. Download the [latest release](https://github.com/Eisenmonoxid/S6Patcher/releases/latest) and launch the `S6Patcher.exe`.
-4. Click the button `"Choose File"` and select the game executable that you wish to patch (`Settlers6.exe`/`Settlers6R.exe` or `S6MapEditor.exe`/`S6MapEditorR.exe`). These should be located in the installation folder of the game.  
+4. Click the button `"Choose File"` and select the game executable that you wish to patch (`Settlers6.exe`/`Settlers6R.exe` or `S6MapEditor.exe`/`S6MapEditorR.exe`). These should be located in the installation folder of the game. **Do NOT move these files somewhere else before patching! The Patcher depends on the executables to be in the correct folder path!**   
 5. Select the features that you wish to apply.
 6. Click on the button `Patch Game` and wait for the process to finish.
 7. Close the application and start the game/editor as usual.
