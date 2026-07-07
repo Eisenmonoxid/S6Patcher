@@ -243,8 +243,7 @@ namespace S6Patcher.Source.Patcher
                 foreach (var CurrentFile in Element.Value)
                 {
                     string SanitizedFilePath = Utility.SanitizeFilePath(CurrentFile.Entry.FilePath);
-
-                    // Some files seem to differ between HE and OV, in OV just ignore ?
+                    
                     Crc32 CRC = new();
                     CRC.Append(CurrentFile.Data);
                     
