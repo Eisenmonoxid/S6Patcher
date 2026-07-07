@@ -38,6 +38,7 @@ namespace S6Patcher.Source.Patcher
         private const string ArchiveFileNameExtra1 = "extra1.bba";
         public event Action<string> ShowMessage;
 
+        /*
         private async Task ExtractHistoryEditionArchiveFiles(ZipArchive Archive)
         {
             var Entries = Archive.Entries
@@ -108,6 +109,7 @@ namespace S6Patcher.Source.Patcher
             await ExtractZipArchive(Result);
             Result.Dispose();
         }
+        */
 
         public async Task Create(bool InstallBugfixMod, bool UseDownload)
         {
@@ -125,8 +127,7 @@ namespace S6Patcher.Source.Patcher
 
             if (InstallBugfixMod)
             {
-                await InstallZIPArchive(UseDownload); // Files from ZipArchive
-
+                // await InstallZIPArchive(UseDownload); // Files from ZipArchive -> DEPRECATED!
                 if (GlobalID == execID.OV)
                 {
                     await GetModLoaderFilesFromArchives(); // Updated Files from game archive files 

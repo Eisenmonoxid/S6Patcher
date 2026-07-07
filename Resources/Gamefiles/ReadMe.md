@@ -1,1 +1,0 @@
-The zip compressed folder "Modfiles.zip" will be downloaded by the application and extracted into the modloader folder.

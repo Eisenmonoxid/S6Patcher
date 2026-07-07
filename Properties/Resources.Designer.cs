@@ -91,16 +91,6 @@ namespace S6Patcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] Modfiles {
-            get {
-                object obj = ResourceManager.GetObject("Modfiles", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Resources/.
         /// </summary>
         public static string RepoBasePath {
