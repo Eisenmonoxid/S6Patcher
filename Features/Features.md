@@ -71,7 +71,6 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 ### All Versions
 - "Meldungsstau": Caused the feedback message queue to become stuck, resulting in no further messages being displayed.
 - "Entertainercrash": Caused the game to crash when an entertainer was selected and send back.
-- Middle Europe NPC barracks will now correctly spawn soldiers as intended.
 - Salt and Dye slots are added to city storehouses so they can be traded.
 - The big cathedral displays the correct name `Cathedral` instead of `B_Cathedral_Big` when selected.
 - When selecting wooden fences, the `Build Stone Wall` button is no longer displayed.
@@ -126,7 +125,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Reflection_Final.jpg?raw=true" width="40%" height="40%" alt="Reflection"/>
 
 - An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
-- Middle Europe NPC barracks will now correctly spawn soldiers as intended (This is now also directly fixed in the configuration file).
+- Middle Europe NPC barracks will now correctly spawn soldiers as intended.
 - Polar bears are now using the correct "DIE" animation instead of "WALK" when killed.
 - Enables some Lost Features (e.g. the Spicetrader) to be used as models in maps.
 

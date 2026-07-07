@@ -3,27 +3,6 @@
 S6Patcher = S6Patcher or {};
 S6Patcher.BETA = false;
 -- ************************************************************************************************************************************************************* --
--- "B_NPC_Barracks_ME" will now correctly respawn soldiers																					 					 --
--- ************************************************************************************************************************************************************* --
-if S6Patcher.GameCallback_OnBuildingConstructionComplete == nil then
-	S6Patcher.GameCallback_OnBuildingConstructionComplete = GameCallback_OnBuildingConstructionComplete;
-end
-GameCallback_OnBuildingConstructionComplete = function(_PlayerID, _EntityID)
-	S6Patcher.GameCallback_OnBuildingConstructionComplete(_PlayerID, _EntityID);
-
-	local EntityType = Logic.GetEntityType(_EntityID);
-	if EntityType == Entities.B_NPC_Barracks_ME then
-		Logic.RespawnResourceSetMaxSpawn(_EntityID, 0.01);
-		Logic.RespawnResourceSetMinSpawn(_EntityID, 0.01);
-	end
-end
-(function(_entityTypes)
-	for Key, Value in pairs(_entityTypes) do
-		Logic.RespawnResourceSetMaxSpawn(Value, 0.01);
-		Logic.RespawnResourceSetMinSpawn(Value, 0.01);
-	end
-end)(Logic.GetEntitiesOfType(Entities.B_NPC_Barracks_ME));
--- ************************************************************************************************************************************************************* --
 -- Add salt and dye to city storehouse slots																					 								 --
 -- ************************************************************************************************************************************************************* --
 (function()
