@@ -22,6 +22,7 @@ namespace S6Patcher.Source.Patcher
 
         private struct ModLoaderFile
         {
+            public bool IsExtra1File;
             public string Name;
             public byte[] Data;
             public FileDataEntry Entry;
@@ -34,82 +35,7 @@ namespace S6Patcher.Source.Patcher
         private readonly string ArchiveFilePathBase = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "base");
         private readonly string ArchiveFilePathExtra1 = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "extra1");
         private const string ArchiveFileName = "mod.bba";
-        private const string ArchiveFileNameBase = "base.bba";
-        private const string ArchiveFileNameExtra1 = "extra1.bba";
         public event Action<string> ShowMessage;
-
-        /*
-        private async Task ExtractHistoryEditionArchiveFiles(ZipArchive Archive)
-        {
-            var Entries = Archive.Entries
-                .Where(Element => !Element.FullName.Contains(ArchiveFileNameBase) && !Element.FullName.Contains(ArchiveFileNameExtra1))
-                .Where(Element => !string.IsNullOrEmpty(Element.Name));
-
-            foreach (var Entry in Entries)
-            {
-                string DirectoryPath = Path.Combine(GlobalDestinationDirectoryPath, Path.GetDirectoryName(Entry.FullName) ?? string.Empty);
-                string Destination = Path.Combine(GlobalDestinationDirectoryPath, Entry.FullName);
-
-                try
-                {
-                    Directory.CreateDirectory(DirectoryPath);
-                    await Entry.ExtractToFileAsync(Destination, true);
-                }
-                catch (Exception ex)
-                {
-                    ErrorTracking.Increment();
-                    Logger.Instance.Log(ex.ToString());
-                    continue;
-                }
-
-                Logger.Instance.Log("Successfully extracted " + Destination);
-            };
-        }
-
-        private async Task ExtractZipArchive(MemoryStream ZipArchiveStream)
-        {
-            try
-            {
-                using ZipArchive Archive = new(ZipArchiveStream, ZipArchiveMode.Read, true);
-                if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
-                {
-                    await ExtractHistoryEditionArchiveFiles(Archive);
-                }
-                else
-                {
-                    ZipArchiveEntry Entry = Archive.GetEntry(ArchiveFileNameBase);
-                    await Entry.ExtractToFileAsync(Path.Combine(ArchiveFilePathBase, ArchiveFileName), true);
-                    Entry = Archive.GetEntry(ArchiveFileNameExtra1);
-                    await Entry.ExtractToFileAsync(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), true);
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorTracking.Increment();
-                Logger.Instance.Log(ex.ToString());
-                ShowMessage.Invoke(ex.Message);
-                return;
-            }
-
-            Logger.Instance.Log("Successfully extracted " + ZipArchiveStream.Length + " bytes to " + GlobalDestinationDirectoryPath);
-        }
-
-        private async Task InstallZIPArchive(bool UseDownload)
-        {
-            MemoryStream Result;
-            if (UseDownload)
-            {
-                Result = await WebHandler.Instance.DownloadZipArchiveAsync() ?? new(Resources.Modfiles);
-            }
-            else
-            {
-                Result = new(Resources.Modfiles);
-            }
-
-            await ExtractZipArchive(Result);
-            Result.Dispose();
-        }
-        */
 
         public async Task Create(bool InstallBugfixMod, bool UseDownload)
         {
@@ -127,7 +53,6 @@ namespace S6Patcher.Source.Patcher
 
             if (InstallBugfixMod)
             {
-                // await InstallZIPArchive(UseDownload); // Files from ZipArchive -> DEPRECATED!
                 if (GlobalID == execID.OV)
                 {
                     await GetModLoaderFilesFromArchives(); // Updated Files from game archive files 
@@ -222,6 +147,7 @@ namespace S6Patcher.Source.Patcher
                 FileStream ArchiveFileStream;
                 string ArchiveFilePath = Path.Combine(GlobalBaseGameDataDirectoryPath, Element.Key);
 
+                bool IsExtra1ArchiveFile = false;
                 if (!File.Exists(ArchiveFilePath))
                 {
                     // Check if is extra1
@@ -233,6 +159,15 @@ namespace S6Patcher.Source.Patcher
                         Logger.Instance.Log($"Could NOT find archive file {Element.Key}. Skipping ...");
                         continue;
                     }
+
+                    IsExtra1ArchiveFile = true;
+                }
+
+                for (int i = 0; i < Element.Value.Count; i++)
+                {
+                    ModLoaderFile MLF = Element.Value[i];  
+                    MLF.IsExtra1File = IsExtra1ArchiveFile;
+                    Element.Value[i] = MLF;
                 }
 
                 try
@@ -254,7 +189,7 @@ namespace S6Patcher.Source.Patcher
                     Element.Value[i] = MLF;
                 }
 
-                ArchiveFileStream.Dispose();
+                await ArchiveFileStream.DisposeAsync();
             }
 
             foreach (var Element in ArchiveFilesToParse)
@@ -276,22 +211,44 @@ namespace S6Patcher.Source.Patcher
                     List<byte> FileContentAsList = [.. CurrentFile.Data];
                     UpdateFileContent(CurrentFile.Entry, FileContentAsList);
 
-                    string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
-                    string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
+                    string RootPath = CurrentFile.IsExtra1File ? ArchiveFilePathExtra1 : ArchiveFilePathBase;
+                    string DirectoryPath = Path.Combine(RootPath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                    string Destination = Path.Combine(RootPath, SanitizedFilePath);
 
                     Directory.CreateDirectory(DirectoryPath);
                     await File.WriteAllBytesAsync(Destination, [.. FileContentAsList]);
                 }
             }
 
+            await CreateArchiveFileInPath(ArchiveFilePathBase);
+            await CreateArchiveFileInPath(ArchiveFilePathExtra1);
+        }
+
+        private async Task CreateArchiveFileInPath(string RootDirectoryFilePath)
+        {
             // Create archive file from previously extracted files
             // TODO: Maybe do all of this in memory instead of writing the files to the disk inbetween?
 
-            string FilePath = Path.Combine(ArchiveFilePathBase, ArchiveFileName);
+            string FilePath = Path.Combine(RootDirectoryFilePath, ArchiveFileName);
+            if (File.Exists(FilePath))
+            {
+                try
+                {
+                    File.Delete(FilePath);
+                }
+                catch (Exception ex)
+                {
+                    ErrorTracking.Increment();
+                    Logger.Instance.Log(ex.ToString());
+                    return;
+                }
+            }
+
+            string TemporaryFile = Path.Combine(GlobalDestinationDirectoryPath, ArchiveFileName);
             FileStream WrittenArchive;
             try
             {
-                WrittenArchive = File.Create(FilePath);
+                WrittenArchive = File.Create(TemporaryFile);
             }
             catch (Exception ex)
             {
@@ -300,10 +257,22 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            new BBAArchiveFile(WrittenArchive, ArchiveFilePath, true);
+            new BBAArchiveFile(WrittenArchive, RootDirectoryFilePath, true);
             await WrittenArchive.DisposeAsync();
 
-            // Directory.Delete(ArchiveFilePath, true);
+            try
+            {
+                Directory.Delete(RootDirectoryFilePath, true); // Clear all files
+                Directory.CreateDirectory(RootDirectoryFilePath);
+                File.Move(TemporaryFile, Path.Combine(RootDirectoryFilePath, ArchiveFileName), true);
+            }
+            catch (Exception ex)
+            {
+                ErrorTracking.Increment();
+                Logger.Instance.Log(ex.ToString());
+                return;
+            }
+
             Logger.Instance.Log($"Finished creating archive file {FilePath}!");
         }
 
