@@ -59,10 +59,7 @@ namespace S6Patcher.Source.Patcher
             }
 
             GlobalMappings = new Mappings(GlobalID, GlobalBinaryFileParser);
-
-            string ModLoaderDirectory = IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStream.Name);
-            string GameDataDirectory = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStream.Name, false);
-            GlobalMod = new Mod(GlobalID, ModLoaderDirectory, GameDataDirectory, GlobalFileDataParser.ParseFileData());
+            GlobalMod = new Mod(GlobalID, GlobalStream.Name, GlobalFileDataParser.ParseFileData());
 
             Logger.Instance.Log("ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }

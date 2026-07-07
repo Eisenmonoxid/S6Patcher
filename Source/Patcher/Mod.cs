@@ -11,7 +11,7 @@ using S6Patcher.Source.Archive;
 
 namespace S6Patcher.Source.Patcher
 {
-    internal class Mod(execID GlobalID, string GlobalDestinationDirectoryPath, string GlobalGameDataDirectoryPath, List<FileDataEntry> GlobalFileDataMappings)
+    internal class Mod(execID GlobalID, string GlobalStreamName, List<FileDataEntry> GlobalFileDataMappings)
     {
         private enum FileOperation : byte
         {
@@ -27,9 +27,12 @@ namespace S6Patcher.Source.Patcher
             public FileDataEntry Entry;
         }
 
-        private readonly string ArchiveFilePath = Path.Combine(GlobalDestinationDirectoryPath, "shr");
-        private readonly string ArchiveFilePathBase = Path.Combine(GlobalDestinationDirectoryPath, "base");
-        private readonly string ArchiveFilePathExtra1 = Path.Combine(GlobalDestinationDirectoryPath, "extra1");
+        private readonly string GlobalDestinationDirectoryPath = IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName);
+        private readonly string GlobalBaseGameDataDirectoryPath = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStreamName, false);
+        private readonly string GlobalExtra1GameDataDirectoryPath = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStreamName, true);
+        private readonly string ArchiveFilePath = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "shr");
+        private readonly string ArchiveFilePathBase = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "base");
+        private readonly string ArchiveFilePathExtra1 = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "extra1");
         private const string ArchiveFileName = "mod.bba";
         private const string ArchiveFileNameBase = "base.bba";
         private const string ArchiveFileNameExtra1 = "extra1.bba";
@@ -216,9 +219,24 @@ namespace S6Patcher.Source.Patcher
             foreach (var Element in ArchiveFilesToParse)
             {
                 FileStream ArchiveFileStream;
+                string ArchiveFilePath = Path.Combine(GlobalBaseGameDataDirectoryPath, Element.Key);
+
+                if (!File.Exists(ArchiveFilePath))
+                {
+                    // Check if is extra1
+                    ArchiveFilePath = Path.Combine(GlobalExtra1GameDataDirectoryPath, Element.Key);
+
+                    if (!File.Exists(ArchiveFilePath))
+                    {
+                        ErrorTracking.Increment();
+                        Logger.Instance.Log($"Could NOT find archive file {Element.Key}. Skipping ...");
+                        continue;
+                    }
+                }
+
                 try
                 {
-                    ArchiveFileStream = new(Path.Combine(GlobalGameDataDirectoryPath, Element.Key), FileMode.Open, FileAccess.Read, FileShare.None);
+                    ArchiveFileStream = new(ArchiveFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
                 }
                 catch (Exception ex)
                 {
@@ -284,7 +302,7 @@ namespace S6Patcher.Source.Patcher
             new BBAArchiveFile(WrittenArchive, ArchiveFilePath, true);
             await WrittenArchive.DisposeAsync();
 
-            Directory.Delete(ArchiveFilePath, true);
+            // Directory.Delete(ArchiveFilePath, true);
             Logger.Instance.Log($"Finished creating archive file {FilePath}!");
         }
 
@@ -293,7 +311,7 @@ namespace S6Patcher.Source.Patcher
             await Parallel.ForEachAsync(GlobalFileDataMappings, async (Entry, CT) =>
             {
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
-                string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalGameDataDirectoryPath, SanitizedFilePath));
+                string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalBaseGameDataDirectoryPath, SanitizedFilePath));
 
                 byte[] FileContent = await File.ReadAllBytesAsync(CurrentFile, CT);
 

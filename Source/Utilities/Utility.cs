@@ -104,15 +104,12 @@ namespace S6Patcher.Source.Utilities
 
         public static void ReplaceRange<T>(this List<T> List, int Index, int Length, IEnumerable<T> Replacement)
         {
-            if (List.Count > Length)
+            if (Index + Length >= List.Count)
             {
-                List.RemoveRange(Index, Length);
+                Length = List.Count - Index;
             }
-            else
-            {
-                List.Clear();
-            }
-            
+
+            List.RemoveRange(Index, Length);
             List.InsertRange(Index, Replacement);
         }
     }
