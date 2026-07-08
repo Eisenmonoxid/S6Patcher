@@ -20,7 +20,6 @@ namespace S6Patcher.Source.Utilities
             DefaultRequestHeaders = {{"User-Agent", "Other"}},
         };
 
-        private readonly Uri GlobalMod = new(Resources.RepoBasePath + "Gamefiles/Modfiles.zip");
         private readonly Uri GlobalVersion = new(Resources.VersionFileLink);
 
         private async Task<HttpResponseMessage> GetHttpResponse(Uri Path)
@@ -39,31 +38,16 @@ namespace S6Patcher.Source.Utilities
             }
         }
 
-        public async Task<string> GetModfileDownloadSize()
-        {
-            HttpResponseMessage Response = await GetHttpResponse(GlobalMod);
-            if (Response == null)
-            {
-                return string.Empty;
-            }
-
-            long Size = Response.Content.Headers.ContentLength ?? 0;
-            string DownloadSize = (Size / (float)1024).ToString("0.00");
-
-            Logger.Instance.Log("Download size: " + DownloadSize);
-            return DownloadSize;
-        }
-
-        public async Task<List<MemoryStream>> DownloadScriptFilesAsync(Uri[] Paths)
+        public async Task<List<MemoryStream>> DownloadFilesAsync(Uri[] Paths)
         {
             var Tasks = Paths.Select(async Path =>
             {
-                Logger.Instance.Log("Downloading ScriptFile: " + Path.ToString());
+                Logger.Instance.Log("Downloading Repository File: " + Path.ToString());
 
                 HttpResponseMessage Response = await GetHttpResponse(Path);
                 if (Response == null)
                 {
-                    Logger.Instance.Log("Failed to download ScriptFile: " + Path.ToString());
+                    Logger.Instance.Log("Failed to download Repository File: " + Path.ToString());
                     return null;
                 }
 
@@ -76,36 +60,9 @@ namespace S6Patcher.Source.Utilities
 
             var Finished = await Task.WhenAll(Tasks);
             var FinalList = Finished.Where(Element => Element != null).ToList();
-            Logger.Instance.Log("Downloaded ScriptFiles successfully. Size: " + FinalList.Count);
+            Logger.Instance.Log("Downloaded Repository File successfully. Size: " + FinalList.Count);
 
             return FinalList;
-        }
-
-        public async Task<MemoryStream> DownloadZipArchiveAsync()
-        {
-            HttpResponseMessage Response = await GetHttpResponse(GlobalMod);
-            if (Response == null)
-            {
-                return null;
-            }
-
-            var Memory = new MemoryStream();
-            using Stream Stream = await Response.Content.ReadAsStreamAsync();
-            try
-            {
-                await Stream.CopyToAsync(Memory);
-                Memory.Seek(0, SeekOrigin.Begin);
-            }
-            catch (Exception ex)
-            {
-                Memory.Dispose();
-                ErrorTracking.Increment();
-                Logger.Instance.Log(ex.ToString());
-                return null;
-            }
-
-            Logger.Instance.Log("Downloaded ModFiles successfully.");
-            return Memory;
         }
 
         public async Task<string> CheckForUpdatesAsync(bool OnStartup = true)

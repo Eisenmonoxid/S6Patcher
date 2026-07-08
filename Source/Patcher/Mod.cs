@@ -3,15 +3,15 @@ using S6Patcher.Source.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Hashing;
 using S6Patcher.Source.Archive;
+using System.Reflection.Metadata;
 
 namespace S6Patcher.Source.Patcher
 {
-    internal class Mod(execID GlobalID, string GlobalStreamName, List<FileDataEntry> GlobalFileDataMappings)
+    internal class Mod(execID GlobalID, string GlobalStreamName)
     {
         private enum FileOperation : byte
         {
@@ -28,6 +28,7 @@ namespace S6Patcher.Source.Patcher
             public FileDataEntry Entry;
         }
 
+        private readonly List<FileDataEntry> GlobalFileDataMappings = [];
         private readonly string GlobalDestinationDirectoryPath = IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName);
         private readonly string GlobalBaseGameDataDirectoryPath = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStreamName, false);
         private readonly string GlobalExtra1GameDataDirectoryPath = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStreamName, true);
@@ -36,8 +37,9 @@ namespace S6Patcher.Source.Patcher
         private readonly string ArchiveFilePathExtra1 = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "extra1");
         private const string ArchiveFileName = "mod.bba";
         public event Action<string> ShowMessage;
+        private async Task<List<MemoryStream>> DownloadDefinitionFile(string FilePath) => await WebHandler.Instance.DownloadFilesAsync([new Uri(FilePath)]);
 
-        public async Task Create(bool InstallBugfixMod, bool UseDownload)
+        public async Task Create(bool DownloadDefinition, bool InstallMod)
         {
             try
             {
@@ -51,7 +53,32 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            if (InstallBugfixMod)
+            BinaryParser FileDataParser = null;
+            if (DownloadDefinition)
+            {
+                List<MemoryStream> Definition = await DownloadDefinitionFile(Resources.RepoDefinitionBasePath + "FileData.bin");
+                if (Definition.Count == 1)
+                {
+                    try
+                    {
+                        FileDataParser = new BinaryParser(Definition[0]);
+                    }
+                    catch
+                    {
+                        Definition.ForEach(async Element => await Element.DisposeAsync());
+                        FileDataParser = null;
+
+                        Logger.Instance.Log("Downloaded Definition file invalid, falling back to embedded resource ...");
+                    }
+                }
+            }
+
+            FileDataParser ??= new BinaryParser("S6Patcher.Definitions.FileData.bin");
+            List<FileDataEntry> Entries = FileDataParser.ParseFileData();
+            GlobalFileDataMappings.AddRange(Entries);
+            FileDataParser.Dispose();
+
+            if (InstallMod)
             {
                 if (GlobalID == execID.OV)
                 {
@@ -91,6 +118,16 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
+        private async Task GetModLoaderFilesFromArchives()
+        {
+            var ArchiveFilesToParse = GetArchiveFilesToParse();
+            await LoadDataFromArchiveFiles(ArchiveFilesToParse);
+            await WriteAllModFilesToCorrespondingFolder(ArchiveFilesToParse);
+            
+            await CreateArchiveFileInPath(ArchiveFilePathBase);
+            await CreateArchiveFileInPath(ArchiveFilePathExtra1);
+        }
+
         private void UpdateFileContent(FileDataEntry Entry, List<byte> FileContent)
         {
             foreach (var DataEntry in Entry.Data.OrderByDescending(E => E.Key))
@@ -120,28 +157,8 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        private async Task GetModLoaderFilesFromArchives()
+        private async Task LoadDataFromArchiveFiles(Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse)
         {
-            Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse = [];
-            foreach (var Element in GlobalFileDataMappings)
-            {
-                ModLoaderFile CurrentFile = new()
-                {
-                    Name = Element.FilePath,
-                    Entry = Element
-                };
-
-                if (ArchiveFilesToParse.TryGetValue(Element.BBArchiveName, out List<ModLoaderFile> Value))
-                {
-                    Value.Add(CurrentFile);
-                }
-                else
-                {
-                    List<ModLoaderFile> Files = [CurrentFile];
-                    ArchiveFilesToParse.Add(Element.BBArchiveName, Files);
-                }
-            }
-
             foreach (var Element in ArchiveFilesToParse)
             {
                 FileStream ArchiveFileStream;
@@ -191,7 +208,35 @@ namespace S6Patcher.Source.Patcher
 
                 await ArchiveFileStream.DisposeAsync();
             }
+        }
 
+        private Dictionary<string, List<ModLoaderFile>> GetArchiveFilesToParse()
+        {
+            Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse = [];
+            foreach (var Element in GlobalFileDataMappings)
+            {
+                ModLoaderFile CurrentFile = new()
+                {
+                    Name = Element.FilePath,
+                    Entry = Element
+                };
+
+                if (ArchiveFilesToParse.TryGetValue(Element.BBArchiveName, out List<ModLoaderFile> Value))
+                {
+                    Value.Add(CurrentFile);
+                }
+                else
+                {
+                    List<ModLoaderFile> Files = [CurrentFile];
+                    ArchiveFilesToParse.Add(Element.BBArchiveName, Files);
+                }
+            }
+
+            return ArchiveFilesToParse;
+        }
+
+        private async Task WriteAllModFilesToCorrespondingFolder(Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse)
+        {
             foreach (var Element in ArchiveFilesToParse)
             {
                 foreach (var CurrentFile in Element.Value)
@@ -219,9 +264,6 @@ namespace S6Patcher.Source.Patcher
                     await File.WriteAllBytesAsync(Destination, [.. FileContentAsList]);
                 }
             }
-
-            await CreateArchiveFileInPath(ArchiveFilePathBase);
-            await CreateArchiveFileInPath(ArchiveFilePathExtra1);
         }
 
         private async Task CreateArchiveFileInPath(string RootDirectoryFilePath)

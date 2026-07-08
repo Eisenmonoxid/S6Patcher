@@ -1,4 +1,5 @@
-﻿using S6Patcher.Source.Utilities;
+﻿using S6Patcher.Properties;
+using S6Patcher.Source.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,6 @@ namespace S6Patcher.Source.Patcher
     internal class Patcher
     {
         private readonly BinaryParser GlobalBinaryFileParser;
-        private readonly BinaryParser GlobalFileDataParser;
         private readonly FileStream GlobalStream;
         private readonly Mappings GlobalMappings;
         public readonly Mod GlobalMod;
@@ -50,7 +50,6 @@ namespace S6Patcher.Source.Patcher
             try
             {
                 GlobalBinaryFileParser = new BinaryParser("S6Patcher.Definitions.Definitions.bin");
-                GlobalFileDataParser = new BinaryParser("S6Patcher.Definitions.FileData.bin");
             }
             catch (Exception)
             {
@@ -59,7 +58,7 @@ namespace S6Patcher.Source.Patcher
             }
 
             GlobalMappings = new Mappings(GlobalID, GlobalBinaryFileParser);
-            GlobalMod = new Mod(GlobalID, GlobalStream.Name, GlobalFileDataParser.ParseFileData());
+            GlobalMod = new Mod(GlobalID, GlobalStream.Name);
 
             Logger.Instance.Log("ID: " + GlobalID.ToString() + ", Stream: " + GlobalStream.Name);
         }
@@ -140,7 +139,7 @@ namespace S6Patcher.Source.Patcher
 
         public async Task SetModLoader(bool UseBugfixMod, bool UseDownload)
         {
-            Logger.Instance.Log("Called with " + UseBugfixMod.ToString());
+            Logger.Instance.Log("Called with " + UseBugfixMod.ToString() + " and " + UseDownload.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugfixMod);
             await GlobalMod.Create(UseBugfixMod, UseDownload);
@@ -237,7 +236,6 @@ namespace S6Patcher.Source.Patcher
             }
 
             GlobalBinaryFileParser.Dispose();
-            GlobalFileDataParser.Dispose();
 
             if (FinishWithPEHeader)
             {

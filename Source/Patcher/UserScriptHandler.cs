@@ -41,10 +41,10 @@ namespace S6Patcher.Source.Patcher
             Uri[] Scripts = new Uri[Length];
             for (uint i = 0; i < Length; i++)
             {
-                Scripts[i] = new Uri(Resources.RepoBasePath + "Scripts/" + ScriptFiles[i]);
+                Scripts[i] = new Uri(Resources.RepoResourcesBasePath + "Scripts/" + ScriptFiles[i]);
             }
 
-            return await WebHandler.Instance.DownloadScriptFilesAsync(Scripts);
+            return await WebHandler.Instance.DownloadFilesAsync(Scripts);
         }
 
         public async Task CreateUserScriptFiles(bool UseDownload)
@@ -79,6 +79,7 @@ namespace S6Patcher.Source.Patcher
                 catch (Exception ex)
                 {
                     Logger.Instance.Log(ex.ToString());
+                    ErrorTracking.Increment();
                     continue;
                 }
             }

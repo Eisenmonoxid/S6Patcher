@@ -39,7 +39,6 @@ namespace S6Patcher.Source.View
             Backup.ShowMessage += async Message => await ShowMessageBox("Backup", Message);
 
             DisableUI(true);
-            GetModfileInformation();
             ViewHelpers.CheckForUpdates(true);
             
             string AvaloniaVersion = typeof(AvaloniaObject).Assembly.GetName().Version.ToString(3);
@@ -265,21 +264,6 @@ namespace S6Patcher.Source.View
             {
                 await MainPatcher.WriteScriptFilesToFolder(DoNotUseEmbedded);
             }
-        }
-
-        private async void GetModfileInformation()
-        {
-            string Size = await WebHandler.Instance.GetModfileDownloadSize();
-            if (string.IsNullOrEmpty(Size))
-            {
-                Size = "Could not retrieve Data!";
-            }
-            else
-            {
-                Size += " KB.";
-            }
-
-            lblDownloadSize.Content = lblDownloadSize.Content.ToString().Replace("Fetching ...", Size);
         }
 
         private async void GetUserExitOption()

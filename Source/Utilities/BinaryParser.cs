@@ -24,6 +24,24 @@ namespace S6Patcher.Source.Utilities
 
         public void Dispose() => GlobalReader?.Dispose();
 
+        public BinaryParser(Stream BinaryStream)
+        {
+            if (BinaryStream == null || BinaryStream.CanRead == false)
+            {
+                throw new Exception("[ERROR] Invalid binary stream.");
+            }
+
+            BlockOffset = (uint)(Magic.Length + sizeof(byte));
+            GlobalReader = new BinaryReader(GetDecompressedStream(BinaryStream));
+            BinaryStream.Dispose();
+
+            if (!IsValidBinaryFile())
+            {
+                Dispose();
+                throw new Exception("[ERROR] Invalid binary file.");
+            }
+        }
+
         public BinaryParser(string Definition)
         {
             Stream BinaryStream = Utility.GetEmbeddedResourceDefinition(Definition);

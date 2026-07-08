@@ -93,9 +93,18 @@ namespace S6Patcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Resources/.
         /// </summary>
-        public static string RepoBasePath {
+        public static string RepoResourcesBasePath {
             get {
-                return ResourceManager.GetString("RepoBasePath", resourceCulture);
+                return ResourceManager.GetString("RepoResourcesBasePath", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/Eisenmonoxid/S6Patcher/raw/refs/heads/master/Definitions/.
+        /// </summary>
+        public static string RepoDefinitionBasePath {
+            get {
+                return ResourceManager.GetString("RepoDefinitionBasePath", resourceCulture);
             }
         }
         
