@@ -19,7 +19,7 @@ Find the latest release of the application [here](https://github.com/Eisenmonoxi
 1. Make sure that your game has been launched successfully `at least once` before using the S6Patcher.
 2. Check that the latest official patch `1.71.4289` is installed (main menu bottom right corner).
 3. Download the [latest release](https://github.com/Eisenmonoxid/S6Patcher/releases/latest) and launch the `S6Patcher.exe`.
-4. Click the button `"Choose File"` and select the game executable that you wish to patch (`Settlers6.exe`/`Settlers6R.exe` or `S6MapEditor.exe`/`S6MapEditorR.exe`). These should be located in the installation folder of the game. **Do NOT move these files somewhere else before patching! The Patcher depends on the executables to be in the correct folder path!**   
+4. Click the button `"Choose File"` and select the game executable that you wish to patch (`Settlers6.exe`/`Settlers6R.exe` or `S6MapEditor.exe`/`S6MapEditorR.exe`). These should be located in the installation folder of the game. **Do NOT move these files somewhere else before patching!** The Patcher depends on the executables to be in the correct folder path.
 5. Select the features that you wish to apply.
 6. Click on the button `Patch Game` and wait for the process to finish.
 7. Close the application and start the game/editor as usual.
@@ -35,11 +35,10 @@ previously patched .exe file and use the button `Restore Backup`.
 The S6Patcher features a simple [Modloader](https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Modloader.md), which can be used to create mods without having to modify the existing game files.
 
 ## Tech
-- The S6Patcher modifies bytes in the game/editor executable. A backup of the executable is created beforehand and can be restored from the application.
+- The S6Patcher modifies data in the game and/or editor executable. A backup of the executable is created beforehand and can be restored from the application.
 - A new folder `Script` in `<Documents>\THE SETTLERS - Rise of an Empire\` and three lua script files `"UserScriptGlobal.lua"`, `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
 - The configuration file `<Documents>\THE SETTLERS - Rise of an Empire\Config\Options.ini` is extended with a new section `[S6Patcher]`, where some necessary configuration values are stored.
-- When the option "Activate Modloader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
-- The option "Install Bugfix Mod" will extract the zip compressed folder `Modfiles.zip` from the repository directory `/Source/Resources/Gamefiles` into the `modloader` folder. 
+- When the option "Activate ModLoader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
 
 ## Contribution
 In case you want to contribute your own features and/or fixes to the project, feel free to fork the repository and create a pull request.   
