@@ -53,6 +53,11 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
+            if (!InstallMod)
+            {
+                return;
+            }
+
             BinaryParser FileDataParser = null;
             if (DownloadDefinition)
             {
@@ -77,17 +82,14 @@ namespace S6Patcher.Source.Patcher
             List<FileDataEntry> Entries = FileDataParser.ParseFileData();
             GlobalFileDataMappings.AddRange(Entries);
             FileDataParser.Dispose();
-
-            if (InstallMod)
+            
+            if (GlobalID == execID.OV)
             {
-                if (GlobalID == execID.OV)
-                {
-                    await GetModLoaderFilesFromArchives(); // Updated Files from game archive files 
-                }
-                else
-                {
-                   await UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory 
-                }
+                await GetModLoaderFilesFromArchives(); // Updated Files from game archive files 
+            }
+            else
+            {
+                await UpdateModLoaderFilesByFileDataMapping(); // Updated Files from game directory 
             }
         }
 
