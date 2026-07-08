@@ -325,6 +325,20 @@ namespace S6Patcher.Source.Patcher
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
                 string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalBaseGameDataDirectoryPath, SanitizedFilePath));
 
+                bool IsExtra1File = false;
+                if (!File.Exists(CurrentFile))
+                {
+                    CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalExtra1GameDataDirectoryPath, SanitizedFilePath));
+                    if (!File.Exists(CurrentFile))
+                    {
+                        ErrorTracking.Increment();
+                        Logger.Instance.Log($"Could NOT find file {CurrentFile}. Skipping ...");
+                        return;
+                    }
+
+                    IsExtra1File = true;
+                }
+
                 byte[] FileContent = await File.ReadAllBytesAsync(CurrentFile, CT);
 
                 Crc32 CRC = new();
@@ -342,6 +356,13 @@ namespace S6Patcher.Source.Patcher
 
                 string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
                 string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
+
+                if (IsExtra1File)
+                {
+                    string Extra1ModLoaderPath = Path.Combine(ArchiveFilePathExtra1, "shr");
+                    DirectoryPath = Path.Combine(Extra1ModLoaderPath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                    Destination = Path.Combine(Extra1ModLoaderPath, SanitizedFilePath);
+                }
 
                 Directory.CreateDirectory(DirectoryPath);
                 await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
