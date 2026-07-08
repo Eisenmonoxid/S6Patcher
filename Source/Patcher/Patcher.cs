@@ -1,5 +1,4 @@
-﻿using S6Patcher.Properties;
-using S6Patcher.Source.Utilities;
+﻿using S6Patcher.Source.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;

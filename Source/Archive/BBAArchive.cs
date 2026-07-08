@@ -20,7 +20,7 @@ namespace S6Patcher.Source.Archive
 		private readonly Stream ArchiveStream;
 		private readonly BinaryReader GlobalArchiveReader;
 
-		public BBAArchiveFile(Stream Archive, bool ArchiveFileOrMap)
+		public BBAArchiveFile(Stream Archive, bool ArchiveFileOrMap, bool BuildHashTableMapping = true)
 		{
 			ArchiveStream = Archive;
 			GlobalArchiveReader = new(ArchiveStream);
@@ -52,9 +52,13 @@ namespace S6Patcher.Source.Archive
 
 			GlobalHashTable = new BBAFileHashTable(AmountOfHashTableEntries);
 			GlobalHashTable.ParseHashTableFromHeader(HashTableEntriesSpan[4..]);
-			GlobalHashTable.LinkHashTableEntriesToDataEntries(GlobalFileData.AsSpan());
 
-			Console.WriteLine($"[INFO] Loaded BBArchive with {GlobalDirectory.GetDefinition().NumberOfFiles} files.");
+			if (BuildHashTableMapping)
+			{
+				GlobalHashTable.LinkHashTableEntriesToDataEntries(GlobalFileData.AsSpan());
+			}
+
+			// Console.WriteLine($"[INFO] Loaded BBArchive with {GlobalDirectory.GetDefinition().NumberOfFiles} files.");
 		}
 
 		public BBAArchiveFile(Stream Archive, string FolderPath, bool ArchiveFileOrMap)

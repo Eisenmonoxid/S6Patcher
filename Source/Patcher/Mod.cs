@@ -39,7 +39,7 @@ namespace S6Patcher.Source.Patcher
         public event Action<string> ShowMessage;
         private async Task<List<MemoryStream>> DownloadDefinitionFile(string FilePath) => await WebHandler.Instance.DownloadFilesAsync([new Uri(FilePath)]);
 
-        public async Task Create(bool DownloadDefinition, bool InstallMod)
+        public async Task Create(bool InstallMod, bool DownloadDefinition)
         {
             try
             {
@@ -198,7 +198,7 @@ namespace S6Patcher.Source.Patcher
                     continue;
                 }
 
-                BBAArchiveFile ArchiveFile = new(ArchiveFileStream, true);
+                BBAArchiveFile ArchiveFile = new(ArchiveFileStream, true, false);
                 for (int i = 0; i < Element.Value.Count; i++)
                 {
                     ModLoaderFile MLF = Element.Value[i];  
