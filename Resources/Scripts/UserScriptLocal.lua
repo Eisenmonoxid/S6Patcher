@@ -912,8 +912,7 @@ S6Patcher.FPSMode.Enable = function()
     GUI.SetFeedbackSoundOutputState(0);
     GUI.EnableBattleSignals(false);
 
-	Game.GameTimeSetFactor(FPS.PlayerID, 0);
-	XGUIEng.ShowWidget("/InGame/Root/Normal/PauseScreen", 0);
+	Game.GameTimeSetFactor(FPS.PlayerID, 1);
 
 	local Increase = S6Patcher.GetLocalizedText("Increase");
 	local Decrease = S6Patcher.GetLocalizedText("Decrease");
