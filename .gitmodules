@@ -1,0 +1,3 @@
+[submodule "Source/Archive"]
+	path = Source/Archive
+	url = https://github.com/Eisenmonoxid/S6Packer.git
