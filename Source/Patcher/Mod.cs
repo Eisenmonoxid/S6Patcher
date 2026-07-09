@@ -205,6 +205,13 @@ namespace S6Patcher.Source.Patcher
                 {
                     ModLoaderFile MLF = Element.Value[i];  
                     MLF.Data = ArchiveFile.GetFileDataByDataEntryName(MLF.Name);
+                    if (MLF.Data == null)
+                    {
+                        ErrorTracking.Increment();
+                        Logger.Instance.Log($"Could NOT parse data from archive file {Element.Key}. Skipping ...");
+                        continue;
+                    }
+
                     Element.Value[i] = MLF;
                 }
 
@@ -256,14 +263,29 @@ namespace S6Patcher.Source.Patcher
                     }
 
                     List<byte> FileContentAsList = [.. CurrentFile.Data];
+                    if (FileContentAsList.Count == 0)
+                    {
+                        Logger.Instance.Log($"Skipping Empty file: {CurrentFile.Name}");
+                        continue;
+                    }
+
                     UpdateFileContent(CurrentFile.Entry, FileContentAsList);
 
                     string RootPath = CurrentFile.IsExtra1File ? ArchiveFilePathExtra1 : ArchiveFilePathBase;
                     string DirectoryPath = Path.Combine(RootPath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
                     string Destination = Path.Combine(RootPath, SanitizedFilePath);
 
-                    Directory.CreateDirectory(DirectoryPath);
-                    await File.WriteAllBytesAsync(Destination, [.. FileContentAsList]);
+                    try
+                    {
+                        Directory.CreateDirectory(DirectoryPath);
+                        await File.WriteAllBytesAsync(Destination, [.. FileContentAsList]);
+                    }
+                    catch (Exception ex)
+                    { 
+                        ErrorTracking.Increment();
+                        Logger.Instance.Log(ex.ToString());
+                        continue;
+                    }
                 }
             }
         }
@@ -341,7 +363,17 @@ namespace S6Patcher.Source.Patcher
                     IsExtra1File = true;
                 }
 
-                byte[] FileContent = await File.ReadAllBytesAsync(CurrentFile, CT);
+                byte[] FileContent;
+                try
+                {
+                    FileContent = await File.ReadAllBytesAsync(CurrentFile, CT);
+                }
+                catch (Exception ex)
+                {
+                    ErrorTracking.Increment();
+                    Logger.Instance.Log(ex.ToString());
+                    return;
+                }
 
                 Crc32 CRC = new();
                 CRC.Append(FileContent);
@@ -356,18 +388,21 @@ namespace S6Patcher.Source.Patcher
                 List<byte> FileContentAsList = [.. FileContent];
                 UpdateFileContent(Entry, FileContentAsList);
 
-                string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
-                string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
+                string ModLoaderPath = IsExtra1File ? Path.Combine(ArchiveFilePathExtra1, "shr") : ArchiveFilePath;
+                string DirectoryPath = Path.Combine(ModLoaderPath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                string Destination = Path.Combine(ModLoaderPath, SanitizedFilePath);
 
-                if (IsExtra1File)
+                try
                 {
-                    string Extra1ModLoaderPath = Path.Combine(ArchiveFilePathExtra1, "shr");
-                    DirectoryPath = Path.Combine(Extra1ModLoaderPath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
-                    Destination = Path.Combine(Extra1ModLoaderPath, SanitizedFilePath);
+                    Directory.CreateDirectory(DirectoryPath);
+                    await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
                 }
-
-                Directory.CreateDirectory(DirectoryPath);
-                await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
+                catch (Exception ex)
+                { 
+                    ErrorTracking.Increment();
+                    Logger.Instance.Log(ex.ToString());
+                    return;
+                }
 
                 Logger.Instance.Log($"Updated file: {Path.GetFileName(CurrentFile)}");
             });
