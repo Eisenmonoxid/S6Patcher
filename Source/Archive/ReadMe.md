@@ -1,1 +1,0 @@
-This is a complete, from the ground up rewrite of the original [bba6tool](https://github.com/SettlersDev/bba6tool) originally made by yoq. Some bugs of the original tool have been fixed (e.g. the DateTime of files and folders is now preserved). There is also an interface provided to extract files from archives without having to unpack the whole archive file at once.
