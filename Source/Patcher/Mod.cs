@@ -6,8 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Hashing;
-using S6Packer.Source;
 using Utility = S6Patcher.Source.Utilities.Utility;
+using S6Packer.Source;
 
 namespace S6Patcher.Source.Patcher
 {
