@@ -83,8 +83,8 @@ namespace S6Patcher.Source.Utilities
             string CurrentPath = RootPath;
 
             foreach (string Part in InputPath[RootPath.Length..]
-                        .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                        .Where(P => !string.IsNullOrEmpty(P)))
+                    .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    .Where(P => !string.IsNullOrEmpty(P)))
             {
                 var Match = Directory.EnumerateFileSystemEntries(CurrentPath)
                     .FirstOrDefault(X => string.Equals(Path.GetFileName(X), Part, StringComparison.OrdinalIgnoreCase));
