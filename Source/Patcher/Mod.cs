@@ -6,8 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Hashing;
-using S6Patcher.Source.Archive;
-using System.Reflection.Metadata;
+using S6Packer.Source;
+using Utility = S6Patcher.Source.Utilities.Utility;
 
 namespace S6Patcher.Source.Patcher
 {
@@ -200,7 +200,7 @@ namespace S6Patcher.Source.Patcher
                     continue;
                 }
 
-                BBAArchiveFile ArchiveFile = new(ArchiveFileStream, true, false);
+                BBAArchiveFile ArchiveFile = new(ArchiveFileStream, true);
                 for (int i = 0; i < Element.Value.Count; i++)
                 {
                     ModLoaderFile MLF = Element.Value[i];  
@@ -301,7 +301,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            new BBAArchiveFile(WrittenArchive, RootDirectoryFilePath, true);
+            new BBAArchiveFile(WrittenArchive, RootDirectoryFilePath, ".bba");
             await WrittenArchive.DisposeAsync();
 
             try
