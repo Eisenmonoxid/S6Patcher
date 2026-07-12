@@ -594,4 +594,8 @@ S6Patcher.TranslatedStrings["uk"] =
 	["ExtendedKnightSelection"] = "Усі лицарі доступні для вибору",
 	["SpecialKnightsAvailable"] = "Особливі лицари (Сабатт і Принц)",
 };
+S6Patcher.TranslatedStrings.IsUkrainian = XGUIEng.GetStringTableText("Names/B_Baths") == "Лазні";
+if S6Patcher.TranslatedStrings.IsUkrainian then
+	S6Patcher.TranslatedStrings["en"] = S6Patcher.TranslatedStrings["uk"];
+end
 -- #EOF
