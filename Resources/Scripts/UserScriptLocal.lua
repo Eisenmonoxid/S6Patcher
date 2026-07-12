@@ -610,13 +610,17 @@ S6Patcher.TranslatedStrings["ru"] =
 };
 S6Patcher.TranslatedStrings["uk"] =
 {
-    ["DowngradeTitle"]         = "Погіршити",
-    ["DowngradeText"]         = "- погіршити будівлю на один рівень",
-    ["ReleaseSoldiersText"] = "- розпустити солдатів один за одним",
-    ["Increase"]            = "Збільшити",
-    ["Decrease"]            = "Зменшити",
-    ["Exit"]                = "Вихід",
+	["DowngradeTitle"]      = "Погіршити",
+	["DowngradeText"]       = "- погіршити будівлю на один рівень",
+	["ReleaseSoldiersText"] = "- розпустити солдатів один за одним",
+	["Increase"]            = "Збільшити",
+	["Decrease"]            = "Зменшити",
+	["Exit"]                = "Вихід",
 };
+S6Patcher.TranslatedStrings.IsUkrainian = XGUIEng.GetStringTableText("Names/B_Baths") == "Лазні";
+if S6Patcher.TranslatedStrings.IsUkrainian then
+	S6Patcher.TranslatedStrings["en"] = S6Patcher.TranslatedStrings["uk"];
+end
 
 -- ************************************************************************************************************************************************************* --
 -- FPS Mode																																	 					 --
