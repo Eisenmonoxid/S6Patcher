@@ -575,4 +575,23 @@ S6Patcher.TranslatedStrings["ru"] =
 	["ExtendedKnightSelection"] = "Все рыцари в выборе",
 	["SpecialKnightsAvailable"] = "Особые рыцари (Crimson Sabatt и Red Prince)",
 };
+S6Patcher.TranslatedStrings["uk"] =
+{
+	["Toggle"] 	= "{center}Перемкнути функцію",
+	["Options"] = "{center}Налаштування S6Patcher",
+	["Files"]	= "Відсутні ігрові файли!{cr}Для роботи цієї функції потрібно встановити {@color:255,0,255}Bugfix Mod{@color:none}.",
+	["Error"]	= "{center}Помилка",
+	["Hint"]	= "{center}Підказка",
+	["Feature"] = "Увімкнення цієї функції може призвести до некоректної роботи деяких користувацьких мап.",
+	-- Options Menu Texts
+	["FeaturesInUsermaps"]		= "Функції у користувацьких мапах",
+	["Windowed"] 				= "Режим вікна",
+	["UseAlternateBackground"] 	= "Фон головного меню",
+	["UseSingleStop"] 			= "Кнопка зупинки виробництва",
+	["UseDowngrade"] 			= "Кнопка погіршення будівлі",
+	["UseMilitaryRelease"] 		= "Кнопка розпуску військ",
+	["DayNightCycle"] 			= "Цикл дня і ночі",
+	["ExtendedKnightSelection"] = "Усі лицарі доступні для вибору",
+	["SpecialKnightsAvailable"] = "Особливі лицари (Сабатт і Принц)",
+};
 -- #EOF
