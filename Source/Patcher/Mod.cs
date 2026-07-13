@@ -37,7 +37,7 @@ namespace S6Patcher.Source.Patcher
         private readonly string ArchiveFilePathExtra1 = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "extra1");
         private const string ArchiveFileName = "mod.bba";
         public event Action<string> ShowMessage;
-        private async Task<List<MemoryStream>> DownloadDefinitionFile(string FilePath) => await WebHandler.Instance.DownloadFilesAsync([new Uri(FilePath)]);
+        private static async Task<List<MemoryStream>> DownloadDefinitionFile(string FilePath) => await WebHandler.Instance.DownloadFilesAsync([new Uri(FilePath)]);
 
         public async Task Create(bool InstallMod, bool DownloadDefinition)
         {
@@ -227,7 +227,9 @@ namespace S6Patcher.Source.Patcher
                 ModLoaderFile CurrentFile = new()
                 {
                     Name = Element.FilePath,
-                    Entry = Element
+                    Entry = Element,
+                    Data = null,
+                    IsExtra1File = false
                 };
 
                 if (ArchiveFilesToParse.TryGetValue(Element.BBArchiveName, out List<ModLoaderFile> Value))
@@ -250,6 +252,12 @@ namespace S6Patcher.Source.Patcher
             {
                 foreach (var CurrentFile in Element.Value)
                 {
+                    if (CurrentFile.Data == null)
+                    {
+                        Logger.Instance.Log($"Skipping file {CurrentFile.Name} cause Data field is null.");
+                        continue;
+                    }
+
                     string SanitizedFilePath = Utility.SanitizeFilePath(CurrentFile.Entry.FilePath);
                     
                     Crc32 CRC = new();

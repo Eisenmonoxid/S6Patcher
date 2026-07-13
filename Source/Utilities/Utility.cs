@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace S6Patcher.Source.Utilities
 {
-    public enum execID
+    public enum execID : int
     {
         NONE = -1,
         OV = 0,
