@@ -1,10 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Microsoft.VisualBasic;
 using MsBox.Avalonia.Enums;
+using S6Patcher.Source.Patcher;
 using S6Patcher.Source.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -307,6 +310,8 @@ namespace S6Patcher.Source.View
             MainPatcher = null;
         }
 
+        private void btnArchiveUnpack_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => UnpackArchiveFile();
+        private void btnArchivePack_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => PackArchiveFile();
         private void btnPatch_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => MainPatchingTask();
         private void btnBackup_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => RestoreBackup();
         private void btnChoose_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => OpenFilePicker();
@@ -347,6 +352,77 @@ namespace S6Patcher.Source.View
                 txtFolderPath.Text = "...";
                 txtFolderPath.IsEnabled = false;
             }
+        }
+
+        private async void PackArchiveFile()
+        {
+            string FolderPath = await ViewHelpers.GetFolderFromFolderPicker("Choose folder");
+            if (string.IsNullOrEmpty(FolderPath))
+            {
+                return;
+            }
+
+            string FileExtension = rbBBA.IsChecked == true ? ".bba" : (rbS6MAP.IsChecked == true ? ".s6map" : ".s6xmap");
+
+            string Message;
+            DirectoryInfo Info;
+
+            try
+            {
+                Info = new DirectoryInfo(FolderPath);
+            }
+            catch (Exception ex)
+            {
+                Message = $"An error occured trying to pack the folder {Path.GetDirectoryName(FolderPath)}.\n{ex.Message}";
+                await ShowMessageBox("Unpacking Archive File ...", Message);
+                return;
+            }
+
+            string ArchiveFileName = Path.Combine(Path.GetDirectoryName(FolderPath), FileExtension);
+            // TODO
+        }
+
+        private async void UnpackArchiveFile()
+        {
+            string FilePath = await ViewHelpers.GetFileFromFilePicker("Choose archive file", "", ViewHelpers.Archive);
+            if (string.IsNullOrEmpty(FilePath))
+            {
+                return;
+            }
+
+            string Extension = Path.GetExtension(FilePath);
+            bool IsMap = Extension == ".s6map" || Extension == ".s6xmap";
+
+            bool Result;
+            string Message;
+            FileInfo Info;
+
+            try
+            {
+                Info = new(FilePath);
+            }
+            catch (Exception ex)
+            {
+                Message = $"An error occured trying to unpack the archive file {Path.GetFileName(FilePath)}.\n{ex.Message}";
+                await ShowMessageBox("Unpacking Archive File ...", Message);
+                return;
+            }
+
+            string ArchiveOutputDirectoryPath = Path.Combine(Info.DirectoryName, Path.GetFileNameWithoutExtension(Info.Name) + "_Extracted");
+            try
+            {
+                Result = await Archives.ExtractArchiveFileToFolderAsync(FilePath, ArchiveOutputDirectoryPath, IsMap);
+            }
+            catch (Exception ex)
+            {
+                Message = $"An error occured trying to unpack the archive file {Path.GetFileName(FilePath)}.\n{ex.Message}";
+                await ShowMessageBox("Unpacking Archive File ...", Message);
+                return;
+            }
+
+            Message = $"Extracted the archive file {Path.GetFileName(FilePath)} to {ArchiveOutputDirectoryPath}.";
+            Message += "\n\n" + (Result ? "No errors occured!" : "An error occured!");
+            await ShowMessageBox("Unpacking Archive File ...", Message);
         }
     }
 }

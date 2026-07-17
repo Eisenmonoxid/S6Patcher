@@ -18,6 +18,7 @@ namespace S6Patcher.Source.View
     {
         public FilePickerFileType Executable {get;} = new("Executable file | *.exe") {Patterns = ["*.exe"]};
         public FilePickerFileType Configuration {get;} = new("Configuration file | *.ini") {Patterns = ["*.ini"]};
+        public FilePickerFileType Archive {get;} = new("Archive file | *.bba|*.s6map|*.s6xmap") {Patterns = ["*.bba", "*.s6map", "*.s6xmap"]};
 
         public List<string> GetSelectedFeatures() => [.. GetControlsByType<CheckBox>()
             .Where(Box => Box.IsChecked == true)

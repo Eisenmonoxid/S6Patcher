@@ -173,7 +173,7 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        private FileStream OpenArchiveFileStream(string ArchiveFile, List<ModLoaderFile> FilesInArchive, out bool IsExtra1ArchiveFile)
+        private FileStream OpenArchiveFileStream(string ArchiveFile, out bool IsExtra1ArchiveFile)
         {
             FileStream ArchiveFileStream = null;
             string ArchiveFilePath = Path.Combine(GlobalBaseGameDataDirectoryPath, ArchiveFile);
@@ -212,7 +212,7 @@ namespace S6Patcher.Source.Patcher
         {
             foreach (var Element in ArchiveFilesToParse)
             {
-                FileStream ArchiveFileStream = OpenArchiveFileStream(Element.Key, Element.Value, out bool IsExtra1ArchiveFile);
+                FileStream ArchiveFileStream = OpenArchiveFileStream(Element.Key, out bool IsExtra1ArchiveFile);
                 if (ArchiveFileStream == null)
                 {
                     continue;
@@ -407,7 +407,6 @@ namespace S6Patcher.Source.Patcher
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
                 string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalBaseGameDataDirectoryPath, SanitizedFilePath));
 
-                bool IsExtra1File = false;
                 if (!File.Exists(CurrentFile))
                 {
                     CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalExtra1GameDataDirectoryPath, SanitizedFilePath));
@@ -417,8 +416,6 @@ namespace S6Patcher.Source.Patcher
                         Logger.Instance.Log($"Could NOT find file {CurrentFile}. Skipping ...");
                         return;
                     }
-
-                    IsExtra1File = true;
                 }
 
                 byte[] FileContent;

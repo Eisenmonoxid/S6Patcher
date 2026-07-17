@@ -111,6 +111,23 @@
 				</Grid>
 
 			</HeaderedContentControl>
+
+			<HeaderedContentControl Name="hccArchives" Grid.Row="2" Padding="5" VerticalAlignment="Top" 
+				HorizontalAlignment="Left" Header="Archive Files">
+
+				<Grid Name="grdArchives" RowDefinitions="Auto Auto Auto" ColumnDefinitions="Auto Auto Auto">
+					<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="0" Name="btnArchiveUnpack" Click="btnArchiveUnpack_Click">Unpack Archive File</Button>
+					<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="1" Name="btnArchivePack" Click="btnArchivePack_Click">Pack Folder into Archive File</Button>
+
+					<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Name="rbBBA" IsChecked="true" GroupName="ArchiveFileOption" 
+						Content=".bba"/>
+					<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Name="rbS6MAP" GroupName="ArchiveFileOption" 
+						Content=".s6map"/>
+					<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" Name="rbS6XMAP" GroupName="ArchiveFileOption" 
+						Content=".s6xmap"/>
+				</Grid>
+
+			</HeaderedContentControl>
 		</Grid>		
 	</Grid>
 </Window>
