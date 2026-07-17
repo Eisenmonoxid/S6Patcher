@@ -33,6 +33,7 @@ namespace S6Patcher.Source.Patcher
         private readonly string GlobalBaseGameDataDirectoryPath = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStreamName, false);
         private readonly string GlobalExtra1GameDataDirectoryPath = IOFileHandler.Instance.GetGameDataDirectory(GlobalID, GlobalStreamName, true);
         private readonly string ArchiveFilePath = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "shr");
+        private readonly string ArchiveFilePathModloader = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "shr");
         private readonly string ArchiveFilePathBase = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "base");
         private readonly string ArchiveFilePathExtra1 = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "extra1");
         private const string ArchiveFileName = "mod.bba";
@@ -113,10 +114,25 @@ namespace S6Patcher.Source.Patcher
             {
                 Directory.CreateDirectory(ArchiveFilePathBase);
                 Directory.CreateDirectory(ArchiveFilePathExtra1);
-                // Always do this in case the download fails or user cancels
-                await File.WriteAllBytesAsync(Path.Combine(ArchiveFilePathBase, ArchiveFileName), Resources.mod);
-                await File.WriteAllBytesAsync(Path.Combine(ArchiveFilePathExtra1, ArchiveFileName), Resources.mod);
-                Logger.Instance.Log("Written " + ArchiveFileName + " to Paths " + ArchiveFilePathBase + " and " + ArchiveFilePathExtra1);
+                Directory.CreateDirectory(ArchiveFilePathModloader);
+
+                await WriteModLoaderArchiveFileAsync(ArchiveFilePathBase);
+                await WriteModLoaderArchiveFileAsync(ArchiveFilePathExtra1);
+                await WriteModLoaderArchiveFileAsync(ArchiveFilePathModloader);
+            }
+        }
+
+        private async Task WriteModLoaderArchiveFileAsync(string BasePath)
+        {
+            string CurrentPath = Path.Combine(BasePath, ArchiveFileName);
+            if (!File.Exists(CurrentPath))
+            {
+                await File.WriteAllBytesAsync(CurrentPath, Resources.mod);
+                Logger.Instance.Log("Written " + ArchiveFileName + " to " + CurrentPath);
+            }
+            else
+            {
+                Logger.Instance.Log("Archive file already existing at " + CurrentPath);
             }
         }
 
@@ -125,9 +141,7 @@ namespace S6Patcher.Source.Patcher
             var ArchiveFilesToParse = GetArchiveFilesToParse();
             await LoadDataFromArchiveFiles(ArchiveFilesToParse);
             await WriteAllModFilesToCorrespondingFolder(ArchiveFilesToParse);
-            
-            await CreateArchiveFileInPath(ArchiveFilePathBase);
-            await CreateArchiveFileInPath(ArchiveFilePathExtra1);
+            await CreateArchiveFileInPath(ArchiveFilePathModloader);
         }
 
         private void UpdateFileContent(FileDataEntry Entry, List<byte> FileContent)
@@ -159,27 +173,49 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
+        private FileStream OpenArchiveFileStream(string ArchiveFile, List<ModLoaderFile> FilesInArchive, out bool IsExtra1ArchiveFile)
+        {
+            FileStream ArchiveFileStream = null;
+            string ArchiveFilePath = Path.Combine(GlobalBaseGameDataDirectoryPath, ArchiveFile);
+
+            IsExtra1ArchiveFile = false;
+            if (!File.Exists(ArchiveFilePath))
+            {
+                // Check if is extra1
+                ArchiveFilePath = Path.Combine(GlobalExtra1GameDataDirectoryPath, ArchiveFile);
+
+                if (!File.Exists(ArchiveFilePath))
+                {
+                    ErrorTracking.Increment();
+                    Logger.Instance.Log($"Could NOT find archive file {ArchiveFile}. Skipping ...");
+                    return ArchiveFileStream;
+                }
+
+                IsExtra1ArchiveFile = true;
+            }
+
+            try
+            {
+                ArchiveFileStream = new(ArchiveFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (Exception ex)
+            {
+                ArchiveFileStream = null;
+                ErrorTracking.Increment();
+                Logger.Instance.Log(ex.ToString());
+            }
+
+            return ArchiveFileStream;
+        }
+
         private async Task LoadDataFromArchiveFiles(Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse)
         {
             foreach (var Element in ArchiveFilesToParse)
             {
-                FileStream ArchiveFileStream;
-                string ArchiveFilePath = Path.Combine(GlobalBaseGameDataDirectoryPath, Element.Key);
-
-                bool IsExtra1ArchiveFile = false;
-                if (!File.Exists(ArchiveFilePath))
+                FileStream ArchiveFileStream = OpenArchiveFileStream(Element.Key, Element.Value, out bool IsExtra1ArchiveFile);
+                if (ArchiveFileStream == null)
                 {
-                    // Check if is extra1
-                    ArchiveFilePath = Path.Combine(GlobalExtra1GameDataDirectoryPath, Element.Key);
-
-                    if (!File.Exists(ArchiveFilePath))
-                    {
-                        ErrorTracking.Increment();
-                        Logger.Instance.Log($"Could NOT find archive file {Element.Key}. Skipping ...");
-                        continue;
-                    }
-
-                    IsExtra1ArchiveFile = true;
+                    continue;
                 }
 
                 for (int i = 0; i < Element.Value.Count; i++)
@@ -189,18 +225,19 @@ namespace S6Patcher.Source.Patcher
                     Element.Value[i] = MLF;
                 }
 
+                BBAArchiveFile ArchiveFile;
                 try
                 {
-                    ArchiveFileStream = new(ArchiveFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
+                    ArchiveFile = new(ArchiveFileStream, true);
                 }
-                catch (Exception ex)
+                catch
                 {
+                    await ArchiveFileStream.DisposeAsync();
                     ErrorTracking.Increment();
-                    Logger.Instance.Log(ex.ToString());
+                    Logger.Instance.Log($"Could NOT parse archive file {Element.Key}. Skipping ...");
                     continue;
                 }
-
-                BBAArchiveFile ArchiveFile = new(ArchiveFileStream, true);
+                
                 for (int i = 0; i < Element.Value.Count; i++)
                 {
                     ModLoaderFile MLF = Element.Value[i];  
@@ -208,8 +245,7 @@ namespace S6Patcher.Source.Patcher
                     if (MLF.Data == null)
                     {
                         ErrorTracking.Increment();
-                        Logger.Instance.Log($"Could NOT parse data from archive file {Element.Key}. Skipping ...");
-                        continue;
+                        Logger.Instance.Log($"Could NOT parse data from archive file {Element.Key}.");
                     }
 
                     Element.Value[i] = MLF;
@@ -279,9 +315,8 @@ namespace S6Patcher.Source.Patcher
 
                     UpdateFileContent(CurrentFile.Entry, FileContentAsList);
 
-                    string RootPath = CurrentFile.IsExtra1File ? ArchiveFilePathExtra1 : ArchiveFilePathBase;
-                    string DirectoryPath = Path.Combine(RootPath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
-                    string Destination = Path.Combine(RootPath, SanitizedFilePath);
+                    string DirectoryPath = Path.Combine(ArchiveFilePathModloader, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                    string Destination = Path.Combine(ArchiveFilePathModloader, SanitizedFilePath);
 
                     try
                     {
@@ -302,6 +337,18 @@ namespace S6Patcher.Source.Patcher
         {
             // Create archive file from previously extracted files
             // TODO: Maybe do all of this in memory instead of writing the files to the disk inbetween?
+            string TemporaryFile = Path.Combine(GlobalDestinationDirectoryPath, ArchiveFileName);
+            FileStream WrittenArchive;
+            try
+            {
+                WrittenArchive = File.Create(TemporaryFile);
+            }
+            catch (Exception ex)
+            {
+                ErrorTracking.Increment();
+                Logger.Instance.Log(ex.ToString());
+                return;
+            }
 
             string FilePath = Path.Combine(RootDirectoryFilePath, ArchiveFileName);
             if (File.Exists(FilePath))
@@ -318,22 +365,23 @@ namespace S6Patcher.Source.Patcher
                 }
             }
 
-            string TemporaryFile = Path.Combine(GlobalDestinationDirectoryPath, ArchiveFileName);
-            FileStream WrittenArchive;
             try
             {
-                WrittenArchive = File.Create(TemporaryFile);
+                new BBAArchiveFile(WrittenArchive, RootDirectoryFilePath, ".bba");
             }
             catch (Exception ex)
             {
                 ErrorTracking.Increment();
                 Logger.Instance.Log(ex.ToString());
+
+                await WriteModLoaderArchiveFileAsync(ArchiveFilePathModloader);
                 return;
             }
-
-            new BBAArchiveFile(WrittenArchive, RootDirectoryFilePath, ".bba");
-            await WrittenArchive.DisposeAsync();
-
+            finally
+            {
+                await WrittenArchive.DisposeAsync();
+            }
+            
             try
             {
                 Directory.Delete(RootDirectoryFilePath, true); // Clear all files
@@ -344,6 +392,8 @@ namespace S6Patcher.Source.Patcher
             {
                 ErrorTracking.Increment();
                 Logger.Instance.Log(ex.ToString());
+
+                await WriteModLoaderArchiveFileAsync(ArchiveFilePathModloader);
                 return;
             }
 
@@ -396,9 +446,8 @@ namespace S6Patcher.Source.Patcher
                 List<byte> FileContentAsList = [.. FileContent];
                 UpdateFileContent(Entry, FileContentAsList);
 
-                string ModLoaderPath = IsExtra1File ? Path.Combine(ArchiveFilePathExtra1, "shr") : ArchiveFilePath;
-                string DirectoryPath = Path.Combine(ModLoaderPath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
-                string Destination = Path.Combine(ModLoaderPath, SanitizedFilePath);
+                string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
+                string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
 
                 try
                 {
