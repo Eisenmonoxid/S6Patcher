@@ -14,13 +14,14 @@ namespace S6Patcher.Source.Utilities
         private readonly Dictionary<Stream, uint> Streams = [];
         private readonly Dictionary<string, List<string>> OpenOptionFiles = [];
         private uint StreamID = 0;
+        public bool AreStreamsOpen() => Streams.Count != 0;
 
-        public FileStream OpenFileStream(string FilePath, bool WithException = false)
+        public FileStream OpenFileStream(string FilePath, bool WithException = false, FileMode Mode = FileMode.OpenOrCreate, FileAccess Access = FileAccess.ReadWrite)
         {
             FileStream Stream;
             try
             {
-                Stream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                Stream = new FileStream(FilePath, Mode, Access, FileShare.None);
             }
             catch (Exception ex)
             {

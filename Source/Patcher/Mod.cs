@@ -96,11 +96,6 @@ namespace S6Patcher.Source.Patcher
 
         private async Task WriteModLoaderFiles()
         {
-            if (Directory.Exists(GlobalDestinationDirectoryPath))
-            {
-                Directory.Delete(GlobalDestinationDirectoryPath, true);
-            }
-
             Directory.CreateDirectory(GlobalDestinationDirectoryPath);
 
             if (GlobalID == execID.HE_UBISOFT || GlobalID == execID.HE_STEAM)
@@ -175,10 +170,9 @@ namespace S6Patcher.Source.Patcher
 
         private FileStream OpenArchiveFileStream(string ArchiveFile, out bool IsExtra1ArchiveFile)
         {
-            FileStream ArchiveFileStream = null;
-            string ArchiveFilePath = Path.Combine(GlobalBaseGameDataDirectoryPath, ArchiveFile);
-
             IsExtra1ArchiveFile = false;
+
+            string ArchiveFilePath = Path.Combine(GlobalBaseGameDataDirectoryPath, ArchiveFile);
             if (!File.Exists(ArchiveFilePath))
             {
                 // Check if is extra1
@@ -186,26 +180,14 @@ namespace S6Patcher.Source.Patcher
 
                 if (!File.Exists(ArchiveFilePath))
                 {
-                    ErrorTracking.Increment();
                     Logger.Instance.Log($"Could NOT find archive file {ArchiveFile}. Skipping ...");
-                    return ArchiveFileStream;
+                    return null;
                 }
 
                 IsExtra1ArchiveFile = true;
             }
 
-            try
-            {
-                ArchiveFileStream = new(ArchiveFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
-            }
-            catch (Exception ex)
-            {
-                ArchiveFileStream = null;
-                ErrorTracking.Increment();
-                Logger.Instance.Log(ex.ToString());
-            }
-
-            return ArchiveFileStream;
+            return Archives.OpenArchiveFileStream(ArchiveFilePath);
         }
 
         private async Task LoadDataFromArchiveFiles(Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse)
@@ -215,6 +197,7 @@ namespace S6Patcher.Source.Patcher
                 FileStream ArchiveFileStream = OpenArchiveFileStream(Element.Key, out bool IsExtra1ArchiveFile);
                 if (ArchiveFileStream == null)
                 {
+                    ErrorTracking.Increment();
                     continue;
                 }
 

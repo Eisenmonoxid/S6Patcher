@@ -18,6 +18,7 @@ namespace S6Patcher.Source.Patcher
         {
             return true;
         }
+
         public static async Task<bool> ExtractArchiveFileToFolderAsync(string FilePath, string OutputDirectoryPath, bool IsMap)
         {
             FileStream ArchiveFileStream = OpenArchiveFileStream(FilePath);
@@ -42,19 +43,6 @@ namespace S6Patcher.Source.Patcher
             return true;
         }
 
-        private static FileStream OpenArchiveFileStream(string ArchiveFilePath)
-        {
-            FileStream ArchiveFileStream = null;
-            try
-            {
-                ArchiveFileStream = new(ArchiveFilePath, FileMode.Open, FileAccess.Read, FileShare.None);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log(ex.ToString());
-            }
-
-            return ArchiveFileStream;
-        }
+        public static FileStream OpenArchiveFileStream(string ArchiveFilePath) => IOFileHandler.Instance.OpenFileStream(ArchiveFilePath, false, FileMode.Open, FileAccess.Read);
     }
 }

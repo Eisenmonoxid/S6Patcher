@@ -10,12 +10,12 @@
     <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
     <NoWin32Manifest>True</NoWin32Manifest>
     <ImplicitUsings>disable</ImplicitUsings>
-    <AssemblyVersion>8.0.0.0</AssemblyVersion>
-    <FileVersion>8.0.0.0</FileVersion>
+    <AssemblyVersion>8.1.0.0</AssemblyVersion>
+    <FileVersion>8.1.0.0</FileVersion>
     <Company>Eisenmonoxid</Company>
     <Copyright>Eisenmonoxid</Copyright>
     <Title>S6Patcher</Title>
-    <Version>8.0.0.0</Version>
+    <Version>8.1.0.0</Version>
     <Authors>Eisenmonoxid</Authors>
     <Product>github.com/Eisenmonoxid/S6Patcher</Product>
     <Description>A simple application that fixes some bugs and adds new features in the various editions of "The Settlers 6 - Rise of an Empire".</Description>
@@ -74,11 +74,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.0.5" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.5" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.5" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.5" />
+    <PackageReference Include="Avalonia" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
     <PackageReference Include="MessageBox.Avalonia" Version="12.0.0" />
+    <PackageReference Include="System.IO.Hashing" Version="10.0.10" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,8 +107,4 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.IO.Hashing" Version="10.0.9" />
-	</ItemGroup>
 </Project>

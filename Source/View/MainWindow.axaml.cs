@@ -44,7 +44,7 @@ namespace S6Patcher.Source.View
             ViewHelpers.CheckForUpdates(true);
             
             string AvaloniaVersion = typeof(AvaloniaObject).Assembly.GetName().Version.ToString(3);
-            Logger.Instance.Log(Title + "\nAvalonia Version: " + AvaloniaVersion);
+            Logger.Instance.Log(Title + " - Avalonia: " + AvaloniaVersion + " - Runtime: " + RuntimeInformation.FrameworkDescription);
         }
 
         private void EnableUIElements(execID ID)
@@ -290,6 +290,10 @@ namespace S6Patcher.Source.View
             }
 
             ResetPatcher();
+            
+            bool UncollectedStreams = IOFileHandler.Instance.AreStreamsOpen();
+            Logger.Instance.Log("Shutting Down: Streams are still open: " + UncollectedStreams.ToString() + ".");
+
             WebHandler.Instance.Dispose();
             Logger.Instance.Dispose();
             base.OnClosing(e);
@@ -356,16 +360,15 @@ namespace S6Patcher.Source.View
 
         private async void PackArchiveFile()
         {
+            string Message;
+            DirectoryInfo Info;
+
+            string FileExtension = rbBBA.IsChecked == true ? ".bba" : (rbS6MAP.IsChecked == true ? ".s6map" : ".s6xmap");
             string FolderPath = await ViewHelpers.GetFolderFromFolderPicker("Choose folder");
             if (string.IsNullOrEmpty(FolderPath))
             {
                 return;
             }
-
-            string FileExtension = rbBBA.IsChecked == true ? ".bba" : (rbS6MAP.IsChecked == true ? ".s6map" : ".s6xmap");
-
-            string Message;
-            DirectoryInfo Info;
 
             try
             {
