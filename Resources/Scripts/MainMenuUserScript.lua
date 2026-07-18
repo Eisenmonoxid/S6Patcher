@@ -1,8 +1,7 @@
 -- MainMenuUserScript by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.BETA = false;
-g_DisplayScriptErrors = S6Patcher.BETA;
+S6Patcher.Version = Options.GetStringValue("S6Patcher", "Version");
 -- ************************************************************************************************************************************************************* --
 -- Extended Knight Selection and Special Knights 																												 --
 -- ************************************************************************************************************************************************************* --
@@ -179,8 +178,7 @@ if S6Patcher.GetProgramVersion == nil then
 	S6Patcher.GetProgramVersion = Framework.GetProgramVersion;
 end
 Framework.GetProgramVersion = function()
-	local Text = " - S6Patcher v8.0" .. (S6Patcher.BETA and " - BETA" or "");
-	return S6Patcher.GetProgramVersion() .. Text;
+	return S6Patcher.GetProgramVersion() .. S6Patcher.Version;
 end
 -- ************************************************************************************************************************************************************* --
 -- Make 2K (2560x1440) and 4K (3840x2160) resolutions available in the original release																			 --

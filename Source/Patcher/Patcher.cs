@@ -85,8 +85,8 @@ namespace S6Patcher.Source.Patcher
             }
 
             WriteMappingToFile(GlobalMappings.GetTextureResolutionMapping(Resolution));
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "TextureResolution", 3);
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "Terrain", 2);
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "TextureResolution", "3");
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "Terrain", "2");
         }
 
         public void SetAutosaveTimer(string AutosaveText)
@@ -176,7 +176,7 @@ namespace S6Patcher.Source.Patcher
         }
 
         public void SetEntryInOptionsFile(string Entry, bool Checked) => 
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, Checked == true ? 1U : 0U);
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, (Checked ? 1U : 0U).ToString());
         public void SetEasyDebug() => WriteMappingToFile(GlobalMappings.GetEasyDebugMapping());
 
         public async Task WriteScriptFilesToFolder(bool UseDownload)
@@ -187,6 +187,7 @@ namespace S6Patcher.Source.Patcher
                 SetEntryInOptionsFile(Element.Key, Element.Value);
             }
 
+            IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", "Version", " - S6Patcher v" + Utility.GetApplicationVersion()[..3]);
             await UserScriptHandler.Instance.CreateUserScriptFiles(UseDownload);
         }
 

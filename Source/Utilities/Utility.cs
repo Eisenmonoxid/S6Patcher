@@ -27,7 +27,7 @@ namespace S6Patcher.Source.Utilities
 
     public static class Utility
     {
-        public static string GetApplicationVersion() => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
+        public static string GetApplicationVersion() => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
         public static Stream GetEmbeddedResourceDefinition(string Name) => Assembly.GetExecutingAssembly().GetManifestResourceStream(Name);
         public static string SanitizeFilePath(string FilePath) => FilePath.Replace('\\', Path.DirectorySeparatorChar);
 

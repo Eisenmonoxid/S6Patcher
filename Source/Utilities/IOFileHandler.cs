@@ -59,7 +59,7 @@ namespace S6Patcher.Source.Utilities
             return File.Exists(NewPath) ? NewPath : Filepath;
         }
 
-        public void UpdateEntryInOptionsFile(string Section, string Key, uint Entry)
+        public void UpdateEntryInOptionsFile(string Section, string Key, string Entry)
         {
             string Name = "Options.ini";
             foreach (string Element in UserScriptHandler.Instance.GetUserScriptDirectories())
@@ -95,9 +95,9 @@ namespace S6Patcher.Source.Utilities
                 {
                     Lines.Add(Section);
                 }
-                Lines.Insert(Lines.IndexOf(Section) + 1, Key + "=" + Entry.ToString());
+                Lines.Insert(Lines.IndexOf(Section) + 1, Key + "=" + Entry);
 
-                Logger.Instance.Log("Updated Section " + Section + " - Key " + Key);
+                Logger.Instance.Log("Updated Section " + Section + " - Key " + Key + " - Entry: " + Entry);
             }
         }
 
