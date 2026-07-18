@@ -215,7 +215,7 @@ namespace S6Patcher.Source.Patcher
                 }
                 catch
                 {
-                    await ArchiveFileStream.DisposeAsync();
+                    IOFileHandler.Instance.CloseStream(ArchiveFileStream);
                     ErrorTracking.Increment();
                     Logger.Instance.Log($"Could NOT parse archive file {Element.Key}. Skipping ...");
                     continue;
@@ -234,7 +234,7 @@ namespace S6Patcher.Source.Patcher
                     Element.Value[i] = MLF;
                 }
 
-                await ArchiveFileStream.DisposeAsync();
+                IOFileHandler.Instance.CloseStream(ArchiveFileStream);
             }
         }
 

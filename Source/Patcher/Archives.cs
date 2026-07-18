@@ -1,21 +1,40 @@
-using S6Patcher.Properties;
 using S6Patcher.Source.Utilities;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.IO.Hashing;
-using Utility = S6Patcher.Source.Utilities.Utility;
 using S6Packer.Source;
-using Avalonia.Controls.Shapes;
 
 namespace S6Patcher.Source.Patcher
 {
     internal static class Archives
     {
-        public static async Task<bool> PackFolderFilesIntoArchiveFileAsync(string BaseFolderPath)
+        public static async Task<bool> PackFolderFilesIntoArchiveFileAsync(string BaseFolderPath, string ArchiveFilePath)
         {
+            FileStream Archive;
+            try
+            {
+                Archive = File.Create(ArchiveFilePath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                return false;
+            }
+
+            try
+            {
+                new BBAArchiveFile(Archive, BaseFolderPath, Path.GetExtension(ArchiveFilePath));
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                await Archive.DisposeAsync();
+            }
+
             return true;
         }
 
@@ -34,12 +53,13 @@ namespace S6Patcher.Source.Patcher
             }
             catch
             {
-                await ArchiveFileStream.DisposeAsync();
+                IOFileHandler.Instance.CloseStream(ArchiveFileStream);
                 Logger.Instance.Log($"Could NOT parse archive file {FilePath}. Returning ...");
                 return false;
             }
 
             ArchiveFile.UnpackAllDataEntriesFromArchive(OutputDirectoryPath);
+            IOFileHandler.Instance.CloseStream(ArchiveFileStream);
             return true;
         }
 

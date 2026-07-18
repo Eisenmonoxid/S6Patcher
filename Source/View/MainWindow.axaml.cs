@@ -381,8 +381,12 @@ namespace S6Patcher.Source.View
                 return;
             }
 
-            string ArchiveFileName = Path.Combine(Path.GetDirectoryName(FolderPath), FileExtension);
-            // TODO
+            string ArchiveFileName = Path.GetDirectoryName(FolderPath) + FileExtension;
+            bool Result = await Archives.PackFolderFilesIntoArchiveFileAsync(FolderPath, ArchiveFileName);
+
+            Message = $"Packed folder {Path.GetDirectoryName(FolderPath)} into archive file {Path.GetFileName(ArchiveFileName)}.";
+            Message += "\n\n" + (Result ? "No errors occured!" : "An error occured!");
+            await ShowMessageBox("Packing Archive File ...", Message);
         }
 
         private async void UnpackArchiveFile()
@@ -411,7 +415,7 @@ namespace S6Patcher.Source.View
                 return;
             }
 
-            string ArchiveOutputDirectoryPath = Path.Combine(Info.DirectoryName, Path.GetFileNameWithoutExtension(Info.Name) + "_Extracted");
+            string ArchiveOutputDirectoryPath = Path.Combine(Info.DirectoryName, Path.GetFileNameWithoutExtension(Info.Name));
             try
             {
                 Result = await Archives.ExtractArchiveFileToFolderAsync(FilePath, ArchiveOutputDirectoryPath, IsMap);
