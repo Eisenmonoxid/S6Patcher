@@ -6,13 +6,12 @@ The files are, depending on the game edition, placed in a special folder or pack
 
 ## Tech
 ### Original Release
-When the `"Activate Modloader"` - option was checked when patching the game, it will load the files `"modloader\base\mod.bba"` and `"modloader\extra1\mod.bba"` as its first archive files on startup. If the files do not
-exist, the game will display a missing file error message and abort the boot process. When the expansion pack is launched, the `mod.bba` in the `extra1` folder is loaded before the one in the `base` folder.
+When the `"Activate Modloader"` - option was checked when patching the game, it will load the files `"modloader\base\mod.bba"` and `"modloader\extra1\mod.bba"` as its first archive files on startup. If the files do not exist, the game will display a missing file error message and abort the boot process. When the expansion pack is launched, the `mod.bba` in the `extra1` folder is loaded before the one in the `base` folder.    
+**Do not modify the `"modloader\shr\mod.bba"` file as it contains the Bugfix mod files from the Patcher!**
 
 ### History Edition
-Here, the process is a bit different: Since the game does not use archive files, it will add the folder paths `"modloader\shr"`, `"modloader\base\shr"` and `"modloader\extra1\shr"` to its internal directory manager. The files in these
-paths are loaded by the game first before loading anything else. If one or more of the directories do not exist, the game will launch normally without notification. The folder `"modloader\shr"` is always loaded, and the other two are loaded depending 
-on the game version that is launched.
+Here, the process is a bit different: Since the game does not use archive files, it will add the folder paths `"modloader\base\shr"` and `"modloader\extra1\shr"` to its internal directory manager. The files in these paths are loaded by the game first before loading anything else. If one or more of the directories do not exist, the game will launch normally without notification.   
+**Do not modify the files in the `"modloader\shr"` folder as it contains the Bugfix mod files from the Patcher!**
 
 ---
 
@@ -28,8 +27,7 @@ In the History Edition, the path to the modified files should look like this: <P
 ---
 
 ## Small example mod (History Edition)
-We want to change the default player color to yellow. So we locate the file that contains the player color mapping `<Settlers>\Data\base\shr\config\playercolor.xml`. We copy this file to to the modloader path
-(the Patcher should have created the folders, if not, simply create them yourself). We have to rebuild the folder structure of the game in the `modloader\base\shr\` folder, so the game recognizes the modified file.
+We want to change the default player color to yellow. So we locate the file that contains the player color mapping `<Settlers>\Data\base\shr\config\playercolor.xml`. We copy this file to to the modloader path (the Patcher should have created the folders, if not, simply create them yourself). We have to rebuild the folder structure of the game in the `modloader\base\shr\` folder, so the game recognizes the modified file.   
 This should look like this: `<Settlers>\modloader\base\shr\config\playercolor.xml`.
 After that, we can open the .xml file in any editor and replace the second entry with our own custom RGB colors:
 ```xml
@@ -41,10 +39,11 @@ After that, we can open the .xml file in any editor and replace the second entry
 		</Color>
 ```
 Save the file, start the game, and the changes should have been applied.
-<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Playercolor_Final.jpg?raw=true" width="50%" height="50%" alt="Player_Color"/>
+<p align="center">
+	<img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Playercolor_Final.jpg?raw=true" width="50%" height="50%" alt="Player_Color"/>
+</p>
 
-For the Original Release, the process is basically the same, only difference is that the folders and the file must be packed into a .bba - archive with the S6Packer. The resulting .bba file must be named `mod.bba` and
-must be located in the following path: `<Settlers>\modloader\base\mod.bba`.
+For the original release, the process is basically the same, only difference is that the folders and the file must be packed into a .bba - archive with the S6Packer. The resulting .bba file must be named `mod.bba` and has to be located in the following path: `<Settlers>\modloader\base\mod.bba`.
 
 ---
 

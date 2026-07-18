@@ -96,7 +96,6 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 ### All Versions
 - `"Meldungsstau"`: Caused the feedback message queue to become stuck, resulting in no further messages being displayed.
 - `"Entertainercrash"`: Caused the game to crash when an entertainer was selected and send back.
-- Fixed a shader bug causing flickering trails and roads when viewed from a low angle.
 - Salt and Dye slots are now added to city storehouses so they can be traded.
 - The big cathedral displays the correct name `Cathedral` instead of `B_Cathedral_Big` when selected.
 - When selecting wooden fences, the `Build Stone Wall` button is no longer displayed.
@@ -113,6 +112,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - The tutorial marker is now capped at 30 frames preventing flickering.
 - Camera animations are now unlocked in their framerate and are running much smoother than before (e.g. Campaign Mission 01 Tutorial).
 - The default `documents folder path` (where the game stores savegames, options, profiles, etc.) can be changed to another directory.
+- Unpacking and packing archive files (.bba|.s6map|.s6xmap) is possible through the Patcher.
 - Base Game campaign fixes:
   - Mission 16: The allied knights now have their correct names and entity types instead of Marcus.
   - Mission 03: 
@@ -155,6 +155,7 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 - An unused festival music track will now play when the player starts a festival (50% chance for either the original or the new track to play).
 - Middle Europe NPC barracks will now correctly spawn soldiers as intended.
 - Polar bears are now using the correct "DIE" animation instead of "WALK" when killed.
+- Fixed a shader bug causing flickering trails and roads when viewed from a low angle.
 - Enables some Lost Features (e.g. the Spicetrader) to be used as models in maps.
 
 <p align="center">
