@@ -204,6 +204,10 @@ namespace S6Patcher.Source.View
         {
             List<string> Features = ViewHelpers.GetSelectedFeatures();
             Features = [.. Features.Select(Item => Utility.Features.TryGetValue(Item, out string Value) ? Value : Item)];
+
+            Features.Add(Utility.Features.GetValueOrDefault("cbScriptBugFixes")); // Should always be applied
+            Features.Add(Utility.Features.GetValueOrDefault("cbLimitedEdition")); // Same here
+
             Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
             return Features;
         }
@@ -213,7 +217,7 @@ namespace S6Patcher.Source.View
             bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
             bool UseModLoader = cbModLoader.IsChecked == true || UseBugfixMod;
             bool DoNotUseEmbedded = rbDownload.IsChecked == true;
-
+            
             Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
                 PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded));
 

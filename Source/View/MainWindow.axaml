@@ -47,8 +47,6 @@
 							<TextBox Grid.Row="2" Margin="10 0" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Name="txtZoom" 
 								HorizontalAlignment="Center" MaxLength="5">12000</TextBox>
 							<Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Default: 7200</Label>
-							<CheckBox Grid.Row="3" Name="cbLimitedEdition">Activate Limited/Special Edition</CheckBox>
-							<CheckBox Grid.Row="4" Name="cbScriptBugFixes">Activate Script and Code Bugfixes</CheckBox>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiHistory" Header="History Edition">
