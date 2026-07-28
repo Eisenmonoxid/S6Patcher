@@ -146,10 +146,10 @@ namespace S6Patcher.Source.Patcher
             SetDynamicRelocationInImage();
         }
 
-        public void SetLargeAddressAwareFlag() => UpdatePEHeaderValues(0x20, 0x12);
-        private void SetDynamicRelocationInImage() => UpdatePEHeaderValues(0x40, 0x5A);
+        public void SetLargeAddressAwareFlag() => UpdatePEHeaderValues(0x20, 0x12, true);
+        private void SetDynamicRelocationInImage() => UpdatePEHeaderValues(0x40, 0x5A, false);
 
-        private void UpdatePEHeaderValues(short Mask, Int32 Offset)
+        private void UpdatePEHeaderValues(short Mask, Int32 Offset, bool Enable)
         {
             Logger.Instance.Log("Called.");
 
@@ -165,13 +165,13 @@ namespace S6Patcher.Source.Patcher
                 long Saved = Reader.BaseStream.Position;
 
                 short Flag = Reader.ReadInt16();
-                if ((Flag & Mask) != Mask)
+                short Updated = Enable ? (short)(Flag | Mask) : (short)(Flag & ~Mask);
+                if (Updated != Flag)
                 {
-                    Flag |= Mask;
-                    WriteBytes(Saved, BitConverter.GetBytes(Flag));
+                    WriteBytes(Saved, BitConverter.GetBytes(Updated));
                 }
-                    
-                Logger.Instance.Log($"Finished! Characteristics = 0x{Flag:X4}");
+
+                Logger.Instance.Log($"Finished! Characteristics = Previous: 0x{Flag:X4} Updated: 0x{Updated:X4}");
             }
         }
 
