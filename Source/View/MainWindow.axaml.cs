@@ -147,7 +147,6 @@ namespace S6Patcher.Source.View
             }
 
             Path = IOFileHandler.Instance.IsPlayLauncherExecutable(Path);
-            txtPath.Text = Path;
             await InitializePatcher(Path);
         }
 
@@ -164,6 +163,7 @@ namespace S6Patcher.Source.View
                 return;
             }
 
+            txtPath.Text = Filepath;
             MainPatcher.ShowMessage += async Message => await ShowMessageBox("Error", Message);
             MainPatcher.GlobalMod.ShowMessage += async Message => await ShowMessageBox("ModLoader", Message);
             
@@ -203,10 +203,10 @@ namespace S6Patcher.Source.View
         private List<string> GetFeatures()
         {
             List<string> Features = ViewHelpers.GetSelectedFeatures();
-            Features = [.. Features.Select(Item => Utility.Features.TryGetValue(Item, out string Value) ? Value : Item)];
+            Features = [.. Features.Select(Item => Mappings.UIFeatures.TryGetValue(Item, out string Value) ? Value : Item)];
 
-            Features.Add(Utility.Features.GetValueOrDefault("cbScriptBugFixes")); // Should always be applied
-            Features.Add(Utility.Features.GetValueOrDefault("cbLimitedEdition")); // Same here
+            Features.Add(Mappings.UIFeatures.GetValueOrDefault("cbScriptBugFixes")); // Should always be applied
+            Features.Add(Mappings.UIFeatures.GetValueOrDefault("cbLimitedEdition")); // Same here
 
             Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
             return Features;
@@ -296,7 +296,7 @@ namespace S6Patcher.Source.View
             ResetPatcher();
             
             bool UncollectedStreams = IOFileHandler.Instance.AreStreamsOpen();
-            Logger.Instance.Log("Shutting Down: Streams are still open: " + UncollectedStreams.ToString() + ".");
+            Logger.Instance.Log("Shutting Down: Are Streams still open: " + UncollectedStreams.ToString() + ".");
 
             WebHandler.Instance.Dispose();
             Logger.Instance.Dispose();
@@ -318,8 +318,8 @@ namespace S6Patcher.Source.View
             MainPatcher = null;
         }
 
-        private void btnArchiveUnpack_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => UnpackArchiveFile();
-        private void btnArchivePack_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => PackArchiveFile();
+        private void btnArchiveUnpack_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => UnpackArchiveFileWrapper();
+        private void btnArchivePack_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => PackArchiveFileWrapper();
         private void btnPatch_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => MainPatchingTask();
         private void btnBackup_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => RestoreBackup();
         private void btnChoose_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => OpenFilePicker();
@@ -362,7 +362,16 @@ namespace S6Patcher.Source.View
             }
         }
 
-        private async void PackArchiveFile()
+        private async void PackArchiveFileWrapper()
+        {
+            var Panel = this.FindControl<HeaderedContentControl>("hccArchives");
+
+            Panel?.IsEnabled = false;
+            await PackArchiveFile();
+            Panel?.IsEnabled = true;
+        }
+
+        private async Task PackArchiveFile()
         {
             string Message;
             DirectoryInfo Info;
@@ -393,7 +402,16 @@ namespace S6Patcher.Source.View
             await ShowMessageBox("Packing Archive File ...", Message);
         }
 
-        private async void UnpackArchiveFile()
+        private async void UnpackArchiveFileWrapper()
+        {
+            var Panel = this.FindControl<HeaderedContentControl>("hccArchives");
+
+            Panel?.IsEnabled = false;
+            await UnpackArchiveFile();
+            Panel?.IsEnabled = true;
+        }
+
+        private async Task UnpackArchiveFile()
         {
             string FilePath = await ViewHelpers.GetFileFromFilePicker("Choose archive file", "", ViewHelpers.Archive);
             if (string.IsNullOrEmpty(FilePath))

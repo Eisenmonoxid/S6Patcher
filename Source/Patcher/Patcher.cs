@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -142,37 +143,36 @@ namespace S6Patcher.Source.Patcher
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugfixMod);
             await GlobalMod.Create(UseBugfixMod, UseDownload);
+            SetDynamicRelocationInImage();
         }
 
-        public void SetLargeAddressAwareFlag()
+        public void SetLargeAddressAwareFlag() => UpdatePEHeaderValues(0x20, 0x12);
+        private void SetDynamicRelocationInImage() => UpdatePEHeaderValues(0x40, 0x5A);
+
+        private void UpdatePEHeaderValues(short Mask, Int32 Offset)
         {
             Logger.Instance.Log("Called.");
 
-            // Partially adapted from: https://stackoverflow.com/questions/9054469
-            const short IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x20;
-            BinaryReader Reader = new(GlobalStream);
-
-            Reader.BaseStream.Position = 0x3C;
-            Reader.BaseStream.Position = Reader.ReadInt32();
-
-            if (Reader.ReadInt32() != 0x4550)
+            lock (WriteLock)
             {
-                ErrorTracking.Increment();
-                Logger.Instance.Log("PE Header offset not found! Skipping ...");
-                return;
+                BinaryReader Reader = Utility.GetPEHeaderReader(GlobalStream);
+                if (Reader == null)
+                {
+                    return;
+                }
+
+                Reader.BaseStream.Position += Offset;
+                long Saved = Reader.BaseStream.Position;
+
+                short Flag = Reader.ReadInt16();
+                if ((Flag & Mask) != Mask)
+                {
+                    Flag |= Mask;
+                    WriteBytes(Saved, BitConverter.GetBytes(Flag));
+                }
+                    
+                Logger.Instance.Log($"Finished! Characteristics = 0x{Flag:X4}");
             }
-
-            Reader.BaseStream.Position += 0x12;
-            long Saved = Reader.BaseStream.Position;
-
-            short Flag = Reader.ReadInt16();
-            if ((Flag & IMAGE_FILE_LARGE_ADDRESS_AWARE) != IMAGE_FILE_LARGE_ADDRESS_AWARE)
-            {
-                Flag |= IMAGE_FILE_LARGE_ADDRESS_AWARE;
-                WriteBytes(Saved, BitConverter.GetBytes(Flag));
-            }
-
-            Logger.Instance.Log($"Finished! Characteristics = 0x{Flag:X4}");
         }
 
         public void SetEntryInOptionsFile(string Entry, bool Checked) => 

@@ -50,7 +50,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            Utility.WritePEHeaderPosition(Stream, 0x54, BitConverter.GetBytes(CheckSum));
+            Utility.WriteValueAtPEHeaderPosition(Stream, 0x54, BitConverter.GetBytes(CheckSum));
             IOFileHandler.Instance.CloseStream(Stream);
         }
     }

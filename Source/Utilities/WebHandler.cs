@@ -60,7 +60,7 @@ namespace S6Patcher.Source.Utilities
 
             var Finished = await Task.WhenAll(Tasks);
             var FinalList = Finished.Where(Element => Element != null).ToList();
-            Logger.Instance.Log("Downloaded Repository File successfully. Size: " + FinalList.Count);
+            Logger.Instance.Log("Downloaded repository file(s) successfully. Size: " + FinalList.Count);
 
             return FinalList;
         }

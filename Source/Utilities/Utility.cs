@@ -31,17 +31,6 @@ namespace S6Patcher.Source.Utilities
         public static Stream GetEmbeddedResourceDefinition(string Name) => Assembly.GetExecutingAssembly().GetManifestResourceStream(Name);
         public static string SanitizeFilePath(string FilePath) => FilePath.Replace('\\', Path.DirectorySeparatorChar);
 
-        public static readonly Dictionary<string, string> Features = new()
-        {
-            {"cbHighTextures",      "HTS"},
-            {"cbScalingPlacing",    "SCP"},
-            {"cbEntityLimits",      "ENL"},
-            {"cbMapBorder",         "BMB"},
-            {"cbDevMode",           "DVM"},
-            {"cbAllEntities",       "AET"},
-            {"cbScriptBugFixes",    "SBF"},
-            {"cbLimitedEdition",    "LME"},
-        };
         public static readonly Dictionary<string, bool> ScriptFeatures = new()
         {
             {"UseAlternateBackground",      true},
@@ -54,7 +43,7 @@ namespace S6Patcher.Source.Utilities
             {"FeaturesInUsermaps",          false},
         };
 
-        public static void WritePEHeaderPosition(FileStream Stream, long Offset, byte[] Bytes)
+        public static BinaryReader GetPEHeaderReader(FileStream Stream)
         {
             BinaryReader Reader = new(Stream);
 
@@ -65,13 +54,24 @@ namespace S6Patcher.Source.Utilities
             {
                 ErrorTracking.Increment();
                 Logger.Instance.Log("PE Header offset not found! Skipping ...");
+                return null;
+            }
+
+            return Reader;
+        }
+
+        public static void WriteValueAtPEHeaderPosition(FileStream Stream, long Offset, byte[] Bytes)
+        {
+            BinaryReader Reader = GetPEHeaderReader(Stream);
+            if (Reader == null)
+            {
                 return;
             }
 
             Reader.BaseStream.Position += Offset;
             Reader.BaseStream.Write(Bytes, 0, Bytes.Length);
         }
-
+        
         public static string ResolveCaseInsensitivePath(string InputPath)
         {
             if (File.Exists(InputPath) || Directory.Exists(InputPath))
@@ -79,7 +79,7 @@ namespace S6Patcher.Source.Utilities
                return InputPath; 
             }
 
-            string RootPath = Path.GetPathRoot(InputPath)!;
+            string RootPath = Path.GetPathRoot(InputPath);
             string CurrentPath = RootPath;
 
             foreach (string Part in InputPath[RootPath.Length..]

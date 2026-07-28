@@ -8,6 +8,18 @@ namespace S6Patcher.Source.Patcher
 {
     public class Mappings(execID _ID, BinaryParser _Parser)
     {
+        public static readonly Dictionary<string, string> UIFeatures = new()
+        {
+            {"cbHighTextures",      "HTS"},
+            {"cbScalingPlacing",    "SCP"},
+            {"cbEntityLimits",      "ENL"},
+            {"cbMapBorder",         "BMB"},
+            {"cbDevMode",           "DVM"},
+            {"cbAllEntities",       "AET"},
+            {"cbScriptBugFixes",    "SBF"},
+            {"cbLimitedEdition",    "LME"},
+        };
+
         public Dictionary<uint, byte[]> GetMapping(List<string> Features)
         {
             Dictionary<uint, byte[]> Mapping = [];
@@ -36,8 +48,8 @@ namespace S6Patcher.Source.Patcher
         public Dictionary<uint, byte[]> GetAutoSaveMapping(double Time)
         {
             Dictionary<uint, byte[]> Mapping = _Parser.ParseBinaryWrapper(_ID, "ATS");
-            UpdateMappingValueAtIndex(ref Mapping, 0x00, Time == 0.0 ? [0xEB] : [0x76]);
-            UpdateMappingValueAtIndex(ref Mapping, 0x01, BitConverter.GetBytes(Time * 60000));
+            UpdateMappingValueAtIndex(Mapping, 0x00, Time == 0.0 ? [0xEB] : [0x76]);
+            UpdateMappingValueAtIndex(Mapping, 0x01, BitConverter.GetBytes(Time * 60000));
 
             return Mapping;
         }
@@ -46,8 +58,8 @@ namespace S6Patcher.Source.Patcher
         {
             byte[] Level = _ID == execID.OV ? BitConverter.GetBytes(ZoomLevel) : BitConverter.GetBytes(ClutterFarDistance);
             Dictionary<uint, byte[]> Mapping = _Parser.ParseBinaryWrapper(_ID, "ZLM");
-            UpdateMappingValueAtIndex(ref Mapping, 0x00, Level);
-            UpdateMappingValueAtIndex(ref Mapping, 0x01, BitConverter.GetBytes(ClutterFarDistance + 4800f));
+            UpdateMappingValueAtIndex(Mapping, 0x00, Level);
+            UpdateMappingValueAtIndex(Mapping, 0x01, BitConverter.GetBytes(ClutterFarDistance + 4800f));
 
             return Mapping;
         }
@@ -56,7 +68,7 @@ namespace S6Patcher.Source.Patcher
         {
             Dictionary<uint, byte[]> Mapping = _Parser.ParseBinaryWrapper(_ID, "DCP");
             byte[] UnicodePath = Encoding.Unicode.GetBytes(FolderPath + "\0");
-            UpdateMappingValueAtIndex(ref Mapping, 0xCC, UnicodePath);
+            UpdateMappingValueAtIndex(Mapping, 0xCC, UnicodePath);
 
             return Mapping;
         }
@@ -65,7 +77,7 @@ namespace S6Patcher.Source.Patcher
         public Dictionary<uint, byte[]> GetEasyDebugMapping() => _Parser.ParseBinaryWrapper(_ID, "EDG");
         public Dictionary<uint, byte[]> GetModloaderMapping() => _Parser.ParseBinaryWrapper(_ID, "MDL");
 
-        private void UpdateMappingValueAtIndex(ref Dictionary<uint, byte[]> Mapping, byte Value, byte[] Replacement)
+        private void UpdateMappingValueAtIndex(Dictionary<uint, byte[]> Mapping, byte Value, byte[] Replacement)
         {
             uint Key = Mapping.FirstOrDefault(Element => Element.Value[0] == Value).Key;
             Mapping[Key] = Replacement;
