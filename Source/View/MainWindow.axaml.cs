@@ -26,8 +26,7 @@ namespace S6Patcher.Source.View
             {execID.OV,         ["tiGeneral", "tiMod", "tiDev"]},
             {execID.HE_STEAM,   ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
             {execID.HE_UBISOFT, ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
-            {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "cbZoom", "cbLimitedEdition", "cbScriptBugFixes",
-                "cbEasyDebug", "cbFolderPath", "txtResolution", "txtZoom"]}
+            {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "cbZoom", "cbEasyDebug", "cbFolderPath", "txtResolution", "txtZoom"]}
         };
 
         public MainWindow()
@@ -202,11 +201,15 @@ namespace S6Patcher.Source.View
 
         private List<string> GetFeatures()
         {
-            List<string> Features = ViewHelpers.GetSelectedFeatures();
-            Features = [.. Features.Select(Item => Mappings.UIFeatures.TryGetValue(Item, out string Value) ? Value : Item)];
+            List<string> Features = [.. ViewHelpers.GetSelectedFeatures()
+                .Select(Item => Mappings.UIFeatures.TryGetValue(Item, out string Value) ? Value : null)
+                .OfType<string>()];
 
-            Features.Add(Mappings.UIFeatures.GetValueOrDefault("cbScriptBugFixes")); // Should always be applied
-            Features.Add(Mappings.UIFeatures.GetValueOrDefault("cbLimitedEdition")); // Same here
+            if (MainPatcher.GlobalID != execID.ED)
+            {
+                Features.Add(Mappings.UIFeatures.GetValueOrDefault("cbScriptBugFixes")); // Should always be applied
+                Features.Add(Mappings.UIFeatures.GetValueOrDefault("cbLimitedEdition")); // Same here
+            }
 
             Features.ForEach(Element => Logger.Instance.Log("Selected Feature: " + Element));
             return Features;
