@@ -133,15 +133,13 @@ namespace S6Patcher.Source.Utilities
 
         private string GetRootDirectory(string Filepath, uint Depth)
         {
-            Logger.Instance.Log("Called with Depth: " + Depth.ToString() + " and Input: " + Filepath);
-
             DirectoryInfo Info = new(Path.GetDirectoryName(Filepath));
             for (; Depth > 0; Depth--)
             {
                 Info = Info.Parent;
             }
 
-            Logger.Instance.Log("Returning Path: " + Info.FullName);
+            Logger.Instance.Log("Root: " + Info.FullName);
             return Info.FullName;
         }
 

@@ -20,7 +20,7 @@ namespace S6Patcher.Source.Patcher
             Delete = 0x02
         }
 
-        private struct ModLoaderFile
+        private class ModLoaderFile
         {
             public bool IsExtra1File;
             public string Name;
@@ -201,11 +201,9 @@ namespace S6Patcher.Source.Patcher
                     continue;
                 }
 
-                for (int i = 0; i < Element.Value.Count; i++)
+                foreach (ModLoaderFile MLF in Element.Value)
                 {
-                    ModLoaderFile MLF = Element.Value[i];  
                     MLF.IsExtra1File = IsExtra1ArchiveFile;
-                    Element.Value[i] = MLF;
                 }
 
                 BBAArchiveFile ArchiveFile;
@@ -221,17 +219,14 @@ namespace S6Patcher.Source.Patcher
                     continue;
                 }
                 
-                for (int i = 0; i < Element.Value.Count; i++)
+                foreach (ModLoaderFile MLF in Element.Value)
                 {
-                    ModLoaderFile MLF = Element.Value[i];  
                     MLF.Data = ArchiveFile.GetFileDataByDataEntryName(MLF.Name);
                     if (MLF.Data == null)
                     {
                         ErrorTracking.Increment();
                         Logger.Instance.Log($"Could NOT parse data from archive file {Element.Key}.");
                     }
-
-                    Element.Value[i] = MLF;
                 }
 
                 IOFileHandler.Instance.CloseStream(ArchiveFileStream);
