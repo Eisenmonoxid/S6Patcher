@@ -74,12 +74,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.1.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.0" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
     <PackageReference Include="MessageBox.Avalonia" Version="12.0.0" />
-    <PackageReference Include="System.IO.Hashing" Version="10.0.10" />
+    <PackageReference Include="System.IO.Hashing" Version="10.0.11" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,5 +106,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Source\Archive\obj\**"/>
+    <Content Remove="Source\Archive\obj\**"/>
+    <EmbeddedResource Remove="Source\Archive\obj\**"/>
+    <None Remove="Source\Archive\obj\**"/>
   </ItemGroup>
 </Project>

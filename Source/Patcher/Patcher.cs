@@ -143,7 +143,7 @@ namespace S6Patcher.Source.Patcher
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugfixMod);
             await GlobalMod.Create(UseBugfixMod, UseDownload);
-            SetDynamicRelocationInImage();
+            // SetDynamicRelocationInImage();
         }
 
         public void SetLargeAddressAwareFlag() => UpdatePEHeaderValues(0x20, 0x12, true);
