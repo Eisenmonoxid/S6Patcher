@@ -21,12 +21,10 @@ jobs:
           - runtime: win-x64
             displayName: Windows-x64
             os: windows-latest
-            zipExt: zip
 
           - runtime: linux-x64
             displayName: Linux-x64
             os: ubuntu-latest
-            zipExt: zip
 
     steps:
       - uses: actions/checkout@v7.0.1
@@ -59,7 +57,7 @@ jobs:
         run: |
           Compress-Archive `
             -Path "publish/${{ matrix.runtime }}\*" `
-            -DestinationPath "${{ matrix.displayName }}.${{ matrix.zipExt }}" `
+            -DestinationPath "${{ matrix.displayName }}.zip" `
             -CompressionLevel Optimal
 
       - name: Compress (Linux)
@@ -67,13 +65,14 @@ jobs:
         shell: bash
         run: |
           cd publish/${{ matrix.runtime }}
-          zip -9 -r ../../${{ matrix.displayName }}.${{ matrix.zipExt }} .
+          zip -9 -r "../../${{ matrix.displayName }}.zip" .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7.0.1
         with:
           name: ${{ matrix.displayName }}
-          path: ${{ matrix.displayName }}.${{ matrix.zipExt }}
+          path: |
+            ${{ matrix.displayName }}.zip
 
   release:
     name: Create GitHub Release
@@ -81,14 +80,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/download-artifact@v8.0.1
+      - name: Download artifacts
+        uses: actions/download-artifact@v8.0.1
         with:
           path: artifacts
           merge-multiple: true
 
       - name: Extract version
         id: version
-        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
       - name: Create Release
         uses: softprops/action-gh-release@v3.0.2
@@ -96,6 +97,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: ${{ steps.version.outputs.version }}
           draft: true
-          files: artifacts/*.zip
+          files: |
+            artifacts/Windows-x64.zip
+            artifacts/Linux-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
