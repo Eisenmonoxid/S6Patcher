@@ -339,7 +339,6 @@ end
 -- ************************************************************************************************************************************************************* --
 if S6Patcher.UseDowngrade and not S6Patcher.DisableFeatures then
 	GUI_BuildingButtons.GateOpenCloseClicked = function()
-		local PlayerID = GUI.GetPlayerID();
 		local EntityID = GUI.GetSelectedEntity();
 		local Value = Logic.GetEntityHealth(EntityID) - (Logic.GetEntityMaxHealth(EntityID) * 0.5);
 
@@ -385,7 +384,6 @@ if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 		S6Patcher.DismountClicked = GUI_Military.DismountClicked;
 	end
 	GUI_Military.DismountClicked = function()
-		local PlayerID = GUI.GetPlayerID();
 		local EntityID = GUI.GetSelectedEntity();
 		local GuardedEntityID = Logic.GetGuardedEntityID(EntityID);
 
@@ -393,23 +391,13 @@ if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 			Sound.FXPlay2DSound("ui\\menu_click");
 
 			local Soldiers = {Logic.GetSoldiersAttachedToLeader(EntityID)};
-			if Soldiers[1] > 1 then
-				local Soldier = table.remove(Soldiers, (Soldiers[1] + 1));
-				local posX, posY = Logic.GetEntityPosition(Soldier);
-				GUI.SendScriptCommand([[
-					Logic.CreateEffect(EGL_Effects.FXDie, ]] .. tostring(posX) .. [[, ]] .. tostring(posY) .. [[, ]] .. tostring(PlayerID) .. [[);
-					Logic.DestroyEntity(]] .. tostring(Soldier) .. [[);
-				]]);
-			else
-				GUI.ClearSelection();
-				local posX, posY = Logic.GetEntityPosition(EntityID);
-				GUI.SendScriptCommand([[
-					Logic.CreateEffect(EGL_Effects.FXDie, ]] .. tostring(posX) .. [[, ]] .. tostring(posY) .. [[, ]] .. tostring(PlayerID) .. [[);
-					Logic.DestroyGroupByLeader(]] .. tostring(EntityID) .. [[);
-				]]);
+			local Soldier = table.remove(Soldiers, (Soldiers[1] + 1));
 
-				Soldiers = nil;
-			end
+			GUI.SendScriptCommand([[
+				local ID = ]] .. tostring(Soldier) .. [[;
+				local Health = Logic.GetEntityHealth(ID);
+				Logic.HurtEntity(ID, Health);
+			]]);
 		else
 			S6Patcher.DismountClicked();
 		end
@@ -432,12 +420,53 @@ if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 		SetIcon(CurrentWidgetID, {12, 1});
 		S6Patcher.DismountUpdate();
 	end
+
+	if S6Patcher.ThiefDeliverUpdate == nil then
+		S6Patcher.ThiefDeliverUpdate = GUI_Thief.ThiefDeliverUpdate;
+	end
+	GUI_Thief.ThiefDeliverUpdate = function()
+		local CurrentWidgetID = XGUIEng.GetCurrentWidgetID();
+		local ThiefID = GUI.GetSelectedEntity();
+		local CanDeliver = Logic.CanThiefDeliverToCastle(ThiefID);
+
+		if not CanDeliver then
+			SetIcon(CurrentWidgetID, {14, 12});
+			XGUIEng.DisableButton(CurrentWidgetID, 0);
+			return;
+		end
+
+		SetIcon(CurrentWidgetID, {5, 8});
+		S6Patcher.ThiefDeliverUpdate();
+	end
+
+	if S6Patcher.ThiefDeliverClicked == nil then
+		S6Patcher.ThiefDeliverClicked = GUI_Thief.ThiefDeliverClicked;
+	end
+	GUI_Thief.ThiefDeliverClicked = function()
+		Sound.FXPlay2DSound("ui\\menu_click");
+
+		local ThiefID = GUI.GetSelectedEntity();
+		local CanDeliver = Logic.CanThiefDeliverToCastle(ThiefID);
+
+		if not CanDeliver then
+			GUI.SendScriptCommand([[
+				local ID = ]] .. tostring(ThiefID) .. [[;
+				local Health = Logic.GetEntityHealth(ID);
+				Logic.HurtEntity(ID, Health);
+			]]);
+
+			return;
+		end
+
+		S6Patcher.ThiefDeliverClicked();
+	end
 end
 
 S6Patcher.CanDisplayDismissButton = function()
 	local EntityID = GUI.GetSelectedEntity();
 	return (EntityID ~= 0) and (Logic.GetGuardedEntityID(EntityID) == 0) and (Logic.GetEntityType(EntityID) == Entities.U_MilitaryLeader);
 end
+S6Patcher.CanDisplayDismissButtonThief = function() return not Logic.CanThiefDeliverToCastle(GUI.GetSelectedEntity()); end
 
 if S6Patcher.GameCallback_GUI_SelectionChanged == nil then
 	S6Patcher.GameCallback_GUI_SelectionChanged = GameCallback_GUI_SelectionChanged;
@@ -491,21 +520,32 @@ end
 -- Some Helpers																																 					 --
 -- ************************************************************************************************************************************************************* --
 S6Patcher.DismountID = nil;
+S6Patcher.ThiefSendBackID = nil;
 if S6Patcher.SetNameAndDescription == nil then
 	S6Patcher.SetNameAndDescription = GUI_Tooltip.SetNameAndDescription;
 end
 GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescriptionWidget, _OptionalTextKeyName, _OptionalDisabledTextKeyName, _OptionalMissionTextFileBoolean)
 	if not S6Patcher.DisableFeatures then
+		local WidgetID = XGUIEng.GetCurrentWidgetID();
+
 		if S6Patcher.DismountID == nil then
 			S6Patcher.DismountID = XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Military/Dismount");
 		end
+		if S6Patcher.ThiefSendBackID == nil then
+			S6Patcher.ThiefSendBackID = XGUIEng.GetWidgetID("/InGame/Root/Normal/AlignBottomRight/DialogButtons/Thief/ThiefDeliver");
+		end
+
 		if S6Patcher.UseDowngrade and _OptionalTextKeyName == "DowngradeButton" then
 			S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText("DowngradeTitle"), S6Patcher.GetLocalizedText("DowngradeText"));
 			return;
-		elseif S6Patcher.UseMilitaryRelease and XGUIEng.GetCurrentWidgetID() == S6Patcher.DismountID then
+		elseif S6Patcher.UseMilitaryRelease and (WidgetID == S6Patcher.DismountID or WidgetID == S6Patcher.ThiefSendBackID) then
 			if S6Patcher.CanDisplayDismissButton() then
 				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center");
 				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText("ReleaseSoldiersText"));
+				return;
+			elseif S6Patcher.CanDisplayDismissButtonThief() then
+				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center");
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText("ReleaseThiefText"));
 				return;
 			end
 		end
@@ -571,6 +611,7 @@ S6Patcher.TranslatedStrings["de"] =
 	["DowngradeTitle"] 		= "Rückbau",
 	["DowngradeText"] 		= "- Baut das Gebäude um eine Stufe zurück",
 	["ReleaseSoldiersText"] = "- Entlässt Soldaten der Reihe nach",
+	["ReleaseThiefText"] 	= "- Entlässt den Dieb",
 	["Increase"]			= "Erhöhe",
 	["Decrease"]			= "Verringere",
 	["Exit"]				= "Beenden",
@@ -580,6 +621,7 @@ S6Patcher.TranslatedStrings["en"] =
 	["DowngradeTitle"] 		= "Downgrade",
 	["DowngradeText"] 		= "- Downgrades the building by one level",
 	["ReleaseSoldiersText"] = "- Dismisses soldiers one after another",
+	["ReleaseThiefText"] 	= "- Dismisses the thief",
 	["Increase"]			= "Increase",
 	["Decrease"]			= "Decrease",
 	["Exit"]				= "Exit",
