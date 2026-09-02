@@ -435,7 +435,7 @@ if S6Patcher.UseMilitaryRelease and not S6Patcher.DisableFeatures then
 			return;
 		end
 
-		SetIcon(CurrentWidgetID, {5, 8});
+		SetIcon(CurrentWidgetID, {12, 12});
 		S6Patcher.ThiefDeliverUpdate();
 	end
 
@@ -631,30 +631,35 @@ S6Patcher.TranslatedStrings["pl"] =
 	["DowngradeTitle"]      = "Obniż poziom",
 	["DowngradeText"]       = "- Obniża poziom budynku o jeden",
 	["ReleaseSoldiersText"] = "- Zwalnia żołnierzy jeden po drugim",
+	["ReleaseThiefText"]    = "- Zwalnia złodzieja",
 };
 S6Patcher.TranslatedStrings["fr"] =
 {
 	["DowngradeTitle"]      = "Rétrograder",
 	["DowngradeText"]       = "- Rétrograde le bâtiment d’un niveau",
 	["ReleaseSoldiersText"] = "- Renvoye les soldats un par un",
+	["ReleaseThiefText"]    = "- Renvoie le voleur",
 };
 S6Patcher.TranslatedStrings["nl"] =
 {
 	["DowngradeTitle"]      = "Degraderen",
 	["DowngradeText"]       = "- Degradeert het gebouw met één niveau",
 	["ReleaseSoldiersText"] = "- Ontslaat soldaten één voor één",
+	["ReleaseThiefText"]    = "- Ontslaat de dief",
 };
 S6Patcher.TranslatedStrings["ru"] =
 {
 	["DowngradeTitle"]      = "Понизить уровень",
 	["DowngradeText"]       = "- Понижает уровень здания на один",
 	["ReleaseSoldiersText"] = "- Увольняет солдат одного за другим",
+	["ReleaseThiefText"]    = "- Увольняет вора",
 };
 S6Patcher.TranslatedStrings["uk"] =
 {
 	["DowngradeTitle"]      = "Погіршити",
 	["DowngradeText"]       = "- погіршити будівлю на один рівень",
 	["ReleaseSoldiersText"] = "- розпустити солдатів один за одним",
+	["ReleaseThiefText"]    = "- звільнити злодія",
 	["Increase"]            = "Збільшити",
 	["Decrease"]            = "Зменшити",
 	["Exit"]                = "Вихід",
@@ -667,10 +672,6 @@ end
 -- ************************************************************************************************************************************************************* --
 -- FPS Mode																																	 					 --
 -- ************************************************************************************************************************************************************* --
-if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
-	Input.KeyBindDown(Keys.Z,  "S6Patcher.FPSMode.Toggle()", 2); -- Main Binding
-end
-
 S6Patcher.FPSMode = {
 	Enabled = false,
 	IsMoving = false,
@@ -757,7 +758,7 @@ S6Patcher.FPSMode.ToggleMovement = function(_moving, _direction)
 	FPS.CurrentDirection = _direction;
 end
 
-if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
+S6Patcher.FPSMode.OverrideGameFuncs = function()
 	if S6Patcher.ThroneRoomCameraControl == nil then
 		S6Patcher.ThroneRoomCameraControl = ThroneRoomCameraControl;
 	end
@@ -849,6 +850,43 @@ if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNet
 		Camera.ThroneRoom_SetPosition(CamX, CamY, NewZ);
 		--------------------------------------------------------------------------------------------------------
 	end
+
+	if S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode == nil then
+		S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode = GameCallback_GUI_SelectionChanged;
+	end
+	GameCallback_GUI_SelectionChanged = function(_Source)
+		if S6Patcher.FPSMode.Enabled then
+			GUI.ClearSelection();
+		end
+
+		S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode(_Source);
+	end
+
+	if S6Patcher.KeyBindings_SaveGame == nil then
+		S6Patcher.KeyBindings_SaveGame = KeyBindings_SaveGame;
+	end
+	KeyBindings_SaveGame = function()
+		if S6Patcher.FPSMode.Enabled then
+			return;
+		end
+
+		S6Patcher.KeyBindings_SaveGame();
+	end
+
+	if S6Patcher.GameCallback_Escape == nil then
+		S6Patcher.GameCallback_Escape = GameCallback_Escape;
+	end
+	GameCallback_Escape = function()
+		if S6Patcher.FPSMode.Enabled then
+			S6Patcher.FPSMode.Toggle();
+		end
+
+		S6Patcher.GameCallback_Escape();
+	end
+	
+	OnBackButtonPressed = function() end
+	OnSkipButtonPressed = function() end
+	ThroneRoomLeftClick = function() end
 end
 
 S6Patcher.FPSMode.Toggle = function()
@@ -895,19 +933,6 @@ S6Patcher.FPSMode.ModifyViewDistance = function(_decrease)
 
 	S6Patcher.FPSMode.StateModifiers.ViewDistance = Value;
 	Display.SetFarClipPlaneMinAndMax(S6Patcher.FPSMode.StateModifiers.ViewDistance, S6Patcher.FPSMode.StateModifiers.ViewDistance);
-end
-
-if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
-	if S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode == nil then
-		S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode = GameCallback_GUI_SelectionChanged;
-	end
-	GameCallback_GUI_SelectionChanged = function(_Source)
-		if S6Patcher.FPSMode.Enabled then
-			GUI.ClearSelection();
-		end
-
-		S6Patcher.GameCallback_GUI_SelectionChanged_FPSMode(_Source);
-	end
 end
 
 S6Patcher.FPSMode.Disable = function()
@@ -1022,39 +1047,7 @@ S6Patcher.FPSMode.ToggleGameWidgets = function(_show)
 end
 
 if not S6Patcher.DisableFeatures and g_Throneroom == nil and not Framework.IsNetworkGame() then
-	if S6Patcher.KeyBindings_SaveGame == nil then
-		S6Patcher.KeyBindings_SaveGame = KeyBindings_SaveGame;
-	end
-	KeyBindings_SaveGame = function()
-		if S6Patcher.FPSMode.Enabled then
-			return;
-		end
-
-		S6Patcher.KeyBindings_SaveGame();
-	end
-	if S6Patcher.GameCallback_Escape == nil then
-		S6Patcher.GameCallback_Escape = GameCallback_Escape;
-	end
-	GameCallback_Escape = function()
-		if S6Patcher.FPSMode.Enabled then
-			S6Patcher.FPSMode.Toggle();
-		end
-
-		S6Patcher.GameCallback_Escape();
-	end
-	if S6Patcher.GameCallback_GameSpeedChanged == nil then
-		S6Patcher.GameCallback_GameSpeedChanged = GameCallback_GameSpeedChanged;
-	end
-	GameCallback_GameSpeedChanged = function(_Speed)
-		if S6Patcher.FPSMode.Enabled then
-			return;
-		end
-
-		S6Patcher.GameCallback_GameSpeedChanged(_Speed);
-	end
-	
-	OnBackButtonPressed = function() end
-	OnSkipButtonPressed = function() end
-	ThroneRoomLeftClick = function() end
+	S6Patcher.FPSMode.OverrideGameFuncs();
+	Input.KeyBindDown(Keys.Z,  "S6Patcher.FPSMode.Toggle()", 2); -- Main Binding
 end
 -- #EOF
