@@ -540,12 +540,10 @@ GUI_Tooltip.SetNameAndDescription = function(_TooltipNameWidget, _TooltipDescrip
 			return;
 		elseif S6Patcher.UseMilitaryRelease and (WidgetID == S6Patcher.DismountID or WidgetID == S6Patcher.ThiefSendBackID) then
 			if S6Patcher.CanDisplayDismissButton() then
-				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center");
-				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText("ReleaseSoldiersText"));
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText("Dismiss"), S6Patcher.GetLocalizedText("ReleaseSoldiersText"));
 				return;
 			elseif S6Patcher.CanDisplayDismissButtonThief() then
-				local Title = XGUIEng.GetStringTableText("UI_Texts/MainMenuMultiTeamKickUser_center");
-				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, Title, S6Patcher.GetLocalizedText("ReleaseThiefText"));
+				S6Patcher.SetTooltip(_TooltipNameWidget, _TooltipDescriptionWidget, S6Patcher.GetLocalizedText("Dismiss"), S6Patcher.GetLocalizedText("ReleaseThiefText"));
 				return;
 			end
 		end
@@ -610,6 +608,7 @@ S6Patcher.TranslatedStrings["de"] =
 {
 	["DowngradeTitle"] 		= "Rückbau",
 	["DowngradeText"] 		= "- Baut das Gebäude um eine Stufe zurück",
+	["Dismiss"]				= "Entlassen",
 	["ReleaseSoldiersText"] = "- Entlässt Soldaten der Reihe nach",
 	["ReleaseThiefText"] 	= "- Entlässt den Dieb",
 	["Increase"]			= "Erhöhe",
@@ -620,6 +619,7 @@ S6Patcher.TranslatedStrings["en"] =
 {
 	["DowngradeTitle"] 		= "Downgrade",
 	["DowngradeText"] 		= "- Downgrades the building by one level",
+	["Dismiss"]				= "Dismiss",
 	["ReleaseSoldiersText"] = "- Dismisses soldiers one after another",
 	["ReleaseThiefText"] 	= "- Dismisses the thief",
 	["Increase"]			= "Increase",
@@ -630,6 +630,7 @@ S6Patcher.TranslatedStrings["pl"] =
 {
 	["DowngradeTitle"]      = "Obniż poziom",
 	["DowngradeText"]       = "- Obniża poziom budynku o jeden",
+	["Dismiss"]             = "Zwolnij",
 	["ReleaseSoldiersText"] = "- Zwalnia żołnierzy jeden po drugim",
 	["ReleaseThiefText"]    = "- Zwalnia złodzieja",
 };
@@ -637,6 +638,7 @@ S6Patcher.TranslatedStrings["fr"] =
 {
 	["DowngradeTitle"]      = "Rétrograder",
 	["DowngradeText"]       = "- Rétrograde le bâtiment d’un niveau",
+	["Dismiss"]             = "Renvoyer",
 	["ReleaseSoldiersText"] = "- Renvoye les soldats un par un",
 	["ReleaseThiefText"]    = "- Renvoie le voleur",
 };
@@ -644,6 +646,7 @@ S6Patcher.TranslatedStrings["nl"] =
 {
 	["DowngradeTitle"]      = "Degraderen",
 	["DowngradeText"]       = "- Degradeert het gebouw met één niveau",
+	["Dismiss"]             = "Ontslaan",
 	["ReleaseSoldiersText"] = "- Ontslaat soldaten één voor één",
 	["ReleaseThiefText"]    = "- Ontslaat de dief",
 };
@@ -651,6 +654,7 @@ S6Patcher.TranslatedStrings["ru"] =
 {
 	["DowngradeTitle"]      = "Понизить уровень",
 	["DowngradeText"]       = "- Понижает уровень здания на один",
+	["Dismiss"]             = "Уволить",
 	["ReleaseSoldiersText"] = "- Увольняет солдат одного за другим",
 	["ReleaseThiefText"]    = "- Увольняет вора",
 };
@@ -658,6 +662,7 @@ S6Patcher.TranslatedStrings["uk"] =
 {
 	["DowngradeTitle"]      = "Погіршити",
 	["DowngradeText"]       = "- погіршити будівлю на один рівень",
+	["Dismiss"]             = "Звільнити",
 	["ReleaseSoldiersText"] = "- розпустити солдатів один за одним",
 	["ReleaseThiefText"]    = "- звільнити злодія",
 	["Increase"]            = "Збільшити",
