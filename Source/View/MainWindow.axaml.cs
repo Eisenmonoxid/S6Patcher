@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Microsoft.VisualBasic;
 using MsBox.Avalonia.Enums;
 using S6Patcher.Source.Patcher;
 using S6Patcher.Source.Utilities;
@@ -23,10 +22,10 @@ namespace S6Patcher.Source.View
         private readonly bool UseCheckSumCalculation = true;
         private readonly Dictionary<execID, string[]> Mapping = new()
         {
-            {execID.OV,         ["tiGeneral", "tiMod", "tiDev"]},
-            {execID.HE_STEAM,   ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
-            {execID.HE_UBISOFT, ["tiGeneral", "tiHistory", "tiMod", "tiDev"]},
-            {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "cbZoom", "cbEasyDebug", "cbFolderPath", "txtResolution", "txtZoom"]}
+            {execID.OV,         ["tiGeneral", "tiDev", "tiArchive"]},
+            {execID.HE_STEAM,   ["tiGeneral", "tiHistory", "tiDev", "tiArchive"]},
+            {execID.HE_UBISOFT, ["tiGeneral", "tiHistory", "tiDev", "tiArchive"]},
+            {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "tiArchive", "cbModDownload", "cbZoom", "cbEasyDebug", "cbFolderPath", "txtResolution", "txtZoom"]}
         };
 
         public MainWindow()
@@ -57,8 +56,6 @@ namespace S6Patcher.Source.View
                 Panel?.IsEnabled = true;
 
                 ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Result => Result.IsEnabled = true);
-                cbModDownload.IsEnabled = false;
-                
                 if (ID == execID.ED)
                 {
                     cbUpdater.IsEnabled = false;
@@ -218,7 +215,7 @@ namespace S6Patcher.Source.View
         private async Task PatchByFeatures()
         {
             bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
-            bool UseModLoader = cbModLoader.IsChecked == true || UseBugfixMod;
+            bool UseModLoader = MainPatcher.GlobalID != execID.ED;
             bool DoNotUseEmbedded = rbDownload.IsChecked == true;
             
             Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
@@ -329,14 +326,6 @@ namespace S6Patcher.Source.View
         private void btnUpdate_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => ViewHelpers.CheckForUpdates(false);
         private void btnExit_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
         private void cbUpdater_Checked(object sender, Avalonia.Interactivity.RoutedEventArgs e) => tcMain.IsEnabled = cbUpdater.IsChecked == false;
-        private void cbModLoader_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            cbModDownload.IsEnabled = (bool)cbModLoader.IsChecked;
-            if (cbModLoader.IsChecked == false)
-            {
-                cbModDownload.IsChecked = false;
-            }
-        }
         private void rbDownload_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             cbUpdater.IsEnabled = rbDownload.IsChecked == true;
@@ -367,7 +356,7 @@ namespace S6Patcher.Source.View
 
         private async void PackArchiveFileWrapper()
         {
-            var Panel = this.FindControl<HeaderedContentControl>("hccArchives");
+            var Panel = this.FindControl<TabItem>("tiArchive");
 
             Panel?.IsEnabled = false;
             await PackArchiveFile();
@@ -407,7 +396,7 @@ namespace S6Patcher.Source.View
 
         private async void UnpackArchiveFileWrapper()
         {
-            var Panel = this.FindControl<HeaderedContentControl>("hccArchives");
+            var Panel = this.FindControl<TabItem>("tiArchive");
 
             Panel?.IsEnabled = false;
             await UnpackArchiveFile();

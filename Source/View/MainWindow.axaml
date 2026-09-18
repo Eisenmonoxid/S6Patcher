@@ -36,7 +36,7 @@
 			<HeaderedContentControl Grid.Row="1" Name="hccMain" Header="Choose Features">
 				<TabControl Name="tcMain">
 					<TabItem Name="tiGeneral" Header="General">
-						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto" RowDefinitions="Auto Auto Auto Auto Auto">
+						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto" RowDefinitions="Auto Auto Auto Auto">
 							<CheckBox Grid.Row="0" Grid.Column="0" IsCheckedChanged="cbHighTextures_IsCheckedChanged" 
 								Name="cbHighTextures">High Resolution Textures:</CheckBox>
 							<TextBox Grid.Row="0" Margin="10 0" VerticalAlignment="Center" Grid.Column="1" Name="txtResolution" 
@@ -47,6 +47,7 @@
 							<TextBox Grid.Row="2" Margin="10 0" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Name="txtZoom" 
 								HorizontalAlignment="Center" MaxLength="5">12000</TextBox>
 							<Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Default: 7200</Label>
+							<CheckBox Grid.Row="3" Name="cbModDownload">Install Bugfix Mod</CheckBox>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiHistory" Header="History Edition">
@@ -54,12 +55,6 @@
 							<CheckBox Grid.Column="0" Name="cbAutosave" IsCheckedChanged="cbAutosave_IsCheckedChanged">Autosave Time (min):</CheckBox>
 							<TextBox Margin="10 0" Name="txtAutosave" IsEnabled="False" Grid.Column="1" MaxLength="4">30</TextBox>
 							<Label VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Default: 15</Label>
-						</Grid>
-					</TabItem>
-					<TabItem Name="tiMod" Header="ModLoader">
-						<Grid Margin="15" RowDefinitions="Auto Auto" ColumnDefinitions="Auto Auto">
-							<CheckBox IsCheckedChanged="cbModLoader_IsCheckedChanged" Grid.Row="0" Name="cbModLoader">Activate ModLoader</CheckBox>
-							<CheckBox IsEnabled="False" Grid.Row="1" Name="cbModDownload">Install Bugfix Mod</CheckBox>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiDev" Header="Development">
@@ -76,6 +71,19 @@
 							<CheckBox Grid.Row="1" Name="cbEntityLimits">Higher Entity Limits</CheckBox>
 							<CheckBox Grid.Row="2" Name="cbScalingPlacing">Free Scaling and Placing of Entities</CheckBox>
 							<CheckBox Grid.Row="3" Name="cbMapBorder">Usable Black Map Border</CheckBox>
+						</Grid>
+					</TabItem>
+					<TabItem Name="tiArchive" Header="Archives">
+						<Grid Margin="15" RowDefinitions="Auto Auto Auto" ColumnDefinitions="Auto Auto Auto" HorizontalAlignment="Center">
+							<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="0" Name="btnArchiveUnpack" Click="btnArchiveUnpack_Click">Unpack Archive File</Button>
+							<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="1" Name="btnArchivePack" Click="btnArchivePack_Click">Pack Folder into Archive File</Button>
+
+							<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Name="rbBBA" IsChecked="true" GroupName="ArchiveFileOption" 
+								Content=".bba"/>
+							<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Name="rbS6MAP" GroupName="ArchiveFileOption" 
+								Content=".s6map"/>
+							<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" Name="rbS6XMAP" GroupName="ArchiveFileOption" 
+								Content=".s6xmap"/>
 						</Grid>
 					</TabItem>
 				</TabControl>
@@ -106,23 +114,6 @@
 						Content="Use local embedded Resources"/>
 					<CheckBox Grid.Row="2" IsCheckedChanged="cbUpdater_Checked" Margin="20 5"
 							Name="cbUpdater" IsEnabled="False">Only update Script and Mod files</CheckBox>
-				</Grid>
-
-			</HeaderedContentControl>
-
-			<HeaderedContentControl Name="hccArchives" Grid.Row="2" Padding="5" VerticalAlignment="Top" 
-				HorizontalAlignment="Left" Header="Archive Files">
-
-				<Grid Name="grdArchives" RowDefinitions="Auto Auto Auto" ColumnDefinitions="Auto Auto Auto">
-					<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="0" Name="btnArchiveUnpack" Click="btnArchiveUnpack_Click">Unpack Archive File</Button>
-					<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="1" Name="btnArchivePack" Click="btnArchivePack_Click">Pack Folder into Archive File</Button>
-
-					<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Name="rbBBA" IsChecked="true" GroupName="ArchiveFileOption" 
-						Content=".bba"/>
-					<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Name="rbS6MAP" GroupName="ArchiveFileOption" 
-						Content=".s6map"/>
-					<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" Name="rbS6XMAP" GroupName="ArchiveFileOption" 
-						Content=".s6xmap"/>
 				</Grid>
 
 			</HeaderedContentControl>
