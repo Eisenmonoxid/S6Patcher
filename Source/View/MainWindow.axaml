@@ -65,7 +65,7 @@
 							<TextBox Name="txtFolderPath" Grid.Row="2" MaxLength="90" Grid.Column="1" Margin="10 0" IsEnabled="False" Text="..."></TextBox>
 						</Grid>
 					</TabItem>
-					<TabItem Name="tiEditor" Header="Mapeditor">
+					<TabItem Name="tiEditor" Header="Map Editor">
 						<Grid Margin="15" RowDefinitions="Auto Auto Auto Auto">
 							<CheckBox Grid.Row="0" Name="cbAllEntities">Show All Entities and Textures in Editor</CheckBox>
 							<CheckBox Grid.Row="1" Name="cbEntityLimits">Higher Entity Limits</CheckBox>
@@ -73,17 +73,21 @@
 							<CheckBox Grid.Row="3" Name="cbMapBorder">Usable Black Map Border</CheckBox>
 						</Grid>
 					</TabItem>
-					<TabItem Name="tiArchive" Header="Archives">
-						<Grid Margin="15" RowDefinitions="Auto Auto Auto" ColumnDefinitions="Auto Auto Auto" HorizontalAlignment="Center">
-							<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="0" Name="btnArchiveUnpack" Click="btnArchiveUnpack_Click">Unpack Archive File</Button>
-							<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="1" Name="btnArchivePack" Click="btnArchivePack_Click">Pack Folder into Archive File</Button>
+					<TabItem Name="tiArchive" Header="Archive Files">
+						<Grid Margin="15" HorizontalAlignment="Center">
+							<!-- <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" BorderThickness="1" CornerRadius="4" Margin="0,10,0,0"> -->
+								<Grid RowDefinitions="Auto Auto Auto" ColumnDefinitions="Auto Auto Auto">
+								<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="0" Name="btnArchiveUnpack" Click="btnArchiveUnpack_Click">Unpack Archive File</Button>
+								<Button Margin="5 5" Grid.ColumnSpan="3" Grid.Row="1" Name="btnArchivePack" Click="btnArchivePack_Click">Pack Folder into Archive File</Button>
 
-							<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Name="rbBBA" IsChecked="true" GroupName="ArchiveFileOption" 
-								Content=".bba"/>
-							<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Name="rbS6MAP" GroupName="ArchiveFileOption" 
-								Content=".s6map"/>
-							<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" Name="rbS6XMAP" GroupName="ArchiveFileOption" 
-								Content=".s6xmap"/>
+								<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Name="rbBBA" IsChecked="true" GroupName="ArchiveFileOption" 
+									Content=".bba"/>
+								<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Name="rbS6MAP" GroupName="ArchiveFileOption" 
+									Content=".s6map"/>
+								<RadioButton Margin="5" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" Name="rbS6XMAP" GroupName="ArchiveFileOption" 
+									Content=".s6xmap"/>
+								</Grid>
+							<!-- </Border> -->
 						</Grid>
 					</TabItem>
 				</TabControl>
