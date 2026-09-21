@@ -92,6 +92,11 @@
 					</TabItem>
 				</TabControl>
 			</HeaderedContentControl>
+
+			<HeaderedContentControl Name="hccModdingOptions" Grid.Row="2" Padding="5" VerticalAlignment="Top" 
+				HorizontalAlignment="Left" Header="Modding/Customization Options">
+				<Button Margin="5 5" Name="btnCustomizationWindow" Click="btnCustomizationWindow_Click">Open Customization Window</Button>
+			</HeaderedContentControl>
 			
 			<Grid Grid.Row="2" Margin="10" Name="grdButtons" VerticalAlignment="Bottom" 
 				  HorizontalAlignment="Center" RowDefinitions="Auto Auto Auto Auto">

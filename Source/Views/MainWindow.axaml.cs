@@ -325,6 +325,7 @@ namespace S6Patcher.Source.View
         private void btnChoose_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => OpenFilePicker();
         private void btnUpdate_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => ViewHelpers.CheckForUpdates(false);
         private void btnExit_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
+        private void btnCustomizationWindow_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => new GameCustomization().ShowDialog(this);
         private void cbUpdater_Checked(object sender, Avalonia.Interactivity.RoutedEventArgs e) => tcMain.IsEnabled = cbUpdater.IsChecked == false;
         private void rbDownload_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
