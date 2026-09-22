@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls.Primitives;
 
 namespace S6Patcher.Source.Views
 {
@@ -45,6 +46,16 @@ namespace S6Patcher.Source.Views
             });
         }
         
+        public void TogglePanelVisibility(bool Enable)
+        {
+            string[] Panels = ["hccMain", "hccUpdater", "hccModdingOptions"];
+            foreach (var Name in Panels)
+            {
+                var Panel = Owner.FindControl<HeaderedContentControl>(Name);
+                Panel?.IsEnabled = Enable;
+            }
+        }
+
         public List<Control> GetControlsByNames(string[] Names) => [.. Names
                 .Select(Owner.FindControl<Control>)
                 .Where(Control => Control != null)];

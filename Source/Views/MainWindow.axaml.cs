@@ -17,6 +17,7 @@ namespace S6Patcher.Source.Views
     {
         private bool PatchingInProgress = false;
         private Patcher.Patcher MainPatcher = null;
+        private readonly GameCustomization GameCustomizer = new();
 
         private readonly ViewHelpers ViewHelpers;
         private readonly bool UseCheckSumCalculation = true;
@@ -49,13 +50,9 @@ namespace S6Patcher.Source.Views
         {
             ViewHelpers.ViewAccessorWrapper(() =>
             {
-                var Panel = this.FindControl<HeaderedContentControl>("hccMain");
-                Panel?.IsEnabled = true;
-
-                Panel = this.FindControl<HeaderedContentControl>("hccUpdater");
-                Panel?.IsEnabled = true;
-
+                ViewHelpers.TogglePanelVisibility(true);
                 ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Result => Result.IsEnabled = true);
+
                 if (ID == execID.ED)
                 {
                     cbUpdater.IsEnabled = false;
@@ -106,12 +103,8 @@ namespace S6Patcher.Source.Views
                 btnPatch.IsEnabled = false;
                 btnBackup.IsEnabled = false;
                 txtPath.Text = "...";
-
-                var Panel = this.FindControl<HeaderedContentControl>("hccMain");
-                Panel?.IsEnabled = false;
-
-                Panel = this.FindControl<HeaderedContentControl>("hccUpdater");
-                Panel?.IsEnabled = false;
+                
+                ViewHelpers.TogglePanelVisibility(false);
             });
         }
         
@@ -300,6 +293,8 @@ namespace S6Patcher.Source.Views
 
             WebHandler.Instance.Dispose();
             Logger.Instance.Dispose();
+
+            GameCustomizer.CloseForApplicationShutdown();
             base.OnClosing(e);
         }
 
@@ -325,7 +320,7 @@ namespace S6Patcher.Source.Views
         private void btnChoose_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => OpenFilePicker();
         private void btnUpdate_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => ViewHelpers.CheckForUpdates(false);
         private void btnExit_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
-        private void btnCustomizationWindow_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => new GameCustomization().ShowDialog(this);
+        private void btnCustomizationWindow_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => GameCustomizer.ShowDialog(this);
         private void cbUpdater_Checked(object sender, Avalonia.Interactivity.RoutedEventArgs e) => tcMain.IsEnabled = cbUpdater.IsChecked == false;
         private void rbDownload_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
