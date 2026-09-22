@@ -4,6 +4,7 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.Styles>
+		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
         <FluentTheme />
 		<Style Selector="HeaderedContentControl">
 			<Setter Property="Template">
@@ -19,29 +20,14 @@
 						</Grid.ColumnDefinitions>
 
 						<!-- Header -->
-						<Border
-							ZIndex="1"
-							Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-							Padding="5,0,5,0"
-							Margin="5,0,0,0">
-							<TextBlock
-								Text="{TemplateBinding Header}"
-								FontWeight="Bold"/>
+						<Border ZIndex="1" Padding="5,0,5,0" Margin="5,0,0,0" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+							<TextBlock Text="{TemplateBinding Header}" FontWeight="Bold"/>
 						</Border>
 
 						<!-- Content Area -->
-						<Border
-							Grid.RowSpan="2"
-							Padding="0,5,0,0"
-							Grid.ColumnSpan="2"
-							CornerRadius="4"
-							Margin="0,10,0,0"
-							BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-							BorderThickness="1">
-							<ContentPresenter
-								Name="PART_ContentPresenter"
-								Padding="8"
-								Content="{TemplateBinding Content}"/>
+						<Border Grid.RowSpan="2" Padding="0,5,0,0" Grid.ColumnSpan="2" CornerRadius="4" Margin="0,10,0,0"
+							BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" BorderThickness="1">
+							<ContentPresenter Name="PART_ContentPresenter" Padding="8" Content="{TemplateBinding Content}"/>
 						</Border>
 					</Grid>
 				</ControlTemplate>

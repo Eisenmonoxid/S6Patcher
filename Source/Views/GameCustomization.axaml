@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
-		x:Class="S6Patcher.Source.View.GameCustomization"
+		x:Class="S6Patcher.Source.Views.GameCustomization"
 		Title="S6Patcher"
 		SizeToContent="WidthAndHeight"
 		Icon="/Resources/favicon.ico"
@@ -14,11 +14,21 @@
 
 	<Grid Name="grdMain">
 		<HeaderedContentControl Header="Player Customization" Margin="10">
-			<Grid RowDefinitions="Auto Auto" ColumnDefinitions="Auto *" Margin="10">
-				<CheckBox Grid.Row="0" Grid.ColumnSpan="2" Name="cbPickPlayerColor">Pick Player Color</CheckBox>
+			<Grid RowDefinitions="Auto Auto Auto Auto Auto" ColumnDefinitions="Auto *" Margin="10">
+				<CheckBox Grid.Row="0" Grid.ColumnSpan="2" Name="cbPickPlayerColor">Player Color</CheckBox>
 				<colorPicker:ColorPicker Grid.Row="1" Grid.Column="1" Margin="10 5 0 0"
 					Name="cpPlayerColor" Color="#4CAF50"
 					IsEnabled="{Binding #cbPickPlayerColor.IsChecked}" />
+				<CheckBox Grid.Row="2" Grid.Column="0" Margin="0 10 0 0" Name="cbSettlerLimit">Settler Limit</CheckBox>
+				<TextBox Grid.Row="2" Grid.Column="1" Margin="10 10 0 0" Name="txtSettlerLimit"
+					Text="200" IsEnabled="{Binding #cbSettlerLimit.IsChecked}" />
+				<CheckBox Grid.Row="3" Grid.Column="0" Margin="0 5 0 0" Name="cbSoldierLimit">Soldier Limit</CheckBox>
+				<TextBox Grid.Row="3" Grid.Column="1" Margin="10 5 0 0" Name="txtSoldierLimit"
+					Text="200" IsEnabled="{Binding #cbSoldierLimit.IsChecked}" />
+				<StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">
+					<Button Name="btnSave" Click="btnSave_Click" Margin="0 0 5 0">Save</Button>
+					<Button Name="btnClose" Click="btnClose_Click">Close</Button>
+				</StackPanel>
 			</Grid>
 		</HeaderedContentControl>
 	</Grid>

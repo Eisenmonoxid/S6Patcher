@@ -11,7 +11,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace S6Patcher.Source.View
+namespace S6Patcher.Source.Views
 {
     public partial class GameCustomization : Window
     {
@@ -19,5 +19,12 @@ namespace S6Patcher.Source.View
         {
             InitializeComponent();
         }
+
+        private void btnSave_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnClose_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
     }
 }

@@ -12,7 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace S6Patcher.Source.View
+namespace S6Patcher.Source.Views
 {
     public class ViewHelpers(Window Owner)
     {
@@ -133,7 +133,7 @@ namespace S6Patcher.Source.View
             }
         }
 
-        public Task<T> ViewAccessorWrapper<T>(Func<Task<T>> Action)
+        public static Task<T> ViewAccessorWrapper<T>(Func<Task<T>> Action)
         {
             if (!Dispatcher.CurrentDispatcher.CheckAccess())
             {
@@ -143,7 +143,7 @@ namespace S6Patcher.Source.View
             return Action();
         }
 
-        public void ViewAccessorWrapper(Action Action)
+        public static void ViewAccessorWrapper(Action Action)
         {
             if (!Dispatcher.CurrentDispatcher.CheckAccess())
             {

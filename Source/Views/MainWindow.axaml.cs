@@ -11,7 +11,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace S6Patcher.Source.View
+namespace S6Patcher.Source.Views
 {
     public partial class MainWindow : Window
     {
@@ -335,11 +335,7 @@ namespace S6Patcher.Source.View
                 cbUpdater.IsChecked = false;
             }
         }
-
-        private void cbAutosave_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) => 
-            txtAutosave.IsEnabled = cbAutosave.IsChecked == true;
-        private void cbZoom_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
-            txtZoom.IsEnabled = cbZoom.IsChecked == true;
+        
         private void cbHighTextures_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
             txtResolution.IsEnabled = cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED;
         private void cbFolderPath_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)

@@ -11,7 +11,7 @@ namespace S6Patcher.Source
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new View.MainWindow();
+                desktop.MainWindow = new Views.MainWindow();
             }
 
             base.OnFrameworkInitializationCompleted();

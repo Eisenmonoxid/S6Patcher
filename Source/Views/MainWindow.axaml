@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
-		x:Class="S6Patcher.Source.View.MainWindow"
+		x:Class="S6Patcher.Source.Views.MainWindow"
 		Title="S6Patcher"
 		SizeToContent="WidthAndHeight"
 		Icon="/Resources/favicon.ico"
@@ -43,17 +43,17 @@
 									 HorizontalAlignment="Center" MaxLength="4" IsEnabled="False">4096</TextBox>
 							<Label Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Default: 512</Label>
 							<CheckBox Grid.Row="1" Name="cbLAAFlag">Activate Large-Address-Aware Flag</CheckBox>
-							<CheckBox Grid.Row="2" Name="cbZoom" IsCheckedChanged="cbZoom_IsCheckedChanged">Max. Zoom Level:</CheckBox>
-							<TextBox Grid.Row="2" Margin="10 0" IsEnabled="False" VerticalAlignment="Center" Grid.Column="1" Name="txtZoom" 
-								HorizontalAlignment="Center" MaxLength="5">12000</TextBox>
+							<CheckBox Grid.Row="2" Name="cbZoom">Max. Zoom Level:</CheckBox>
+							<TextBox Grid.Row="2" Margin="10 0" VerticalAlignment="Center" Grid.Column="1" Name="txtZoom" 
+								HorizontalAlignment="Center" MaxLength="5" IsEnabled="{Binding #cbZoom.IsChecked}">12000</TextBox>
 							<Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Default: 7200</Label>
 							<CheckBox Grid.Row="3" Name="cbModDownload">Install Bugfix Mod</CheckBox>
 						</Grid>
 					</TabItem>
 					<TabItem Name="tiHistory" Header="History Edition">
 						<Grid Margin="15" ColumnDefinitions="Auto Auto Auto">
-							<CheckBox Grid.Column="0" Name="cbAutosave" IsCheckedChanged="cbAutosave_IsCheckedChanged">Autosave Time (min):</CheckBox>
-							<TextBox Margin="10 0" Name="txtAutosave" IsEnabled="False" Grid.Column="1" MaxLength="4">30</TextBox>
+							<CheckBox Grid.Column="0" Name="cbAutosave">Autosave Time (min):</CheckBox>
+							<TextBox Margin="10 0" Name="txtAutosave" Grid.Column="1" MaxLength="4" IsEnabled="{Binding #cbAutosave.IsChecked}">30</TextBox>
 							<Label VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2">Default: 15</Label>
 						</Grid>
 					</TabItem>
