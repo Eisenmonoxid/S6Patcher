@@ -303,10 +303,11 @@ namespace S6Patcher.Source.Views
         private async void RestoreBackup()
         {
             execID GlobalID = (execID)(MainPatcher?.GlobalID);
+            string BackupPath = txtPath.Text;
             
             ResetPatcher();
-            await Backup.Restore(txtPath.Text, GlobalID);
             DisableUI(true);
+            await Backup.Restore(BackupPath, GlobalID);
         }
 
         private async Task<bool> ShowPromptMessageBoxWrapper(string Title, string Message) => await ViewHelpers.ShowPromptMessageBox(Title, Message) == ButtonResult.Yes;
