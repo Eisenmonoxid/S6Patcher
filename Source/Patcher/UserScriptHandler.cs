@@ -31,7 +31,7 @@ namespace S6Patcher.Source.Patcher
 
         public List<string> GetUserScriptDirectories() => !string.IsNullOrEmpty(GlobalDocuments) ? SelectUserScriptDirectories(GlobalDocuments) : [];
 
-        private List<string> SelectUserScriptDirectories(string Documents) => [.. Directory.GetDirectories(Documents)
+        private static List<string> SelectUserScriptDirectories(string Documents) => [.. Directory.GetDirectories(Documents)
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})];
 

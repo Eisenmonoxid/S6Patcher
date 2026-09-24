@@ -37,7 +37,9 @@ namespace S6Patcher.Source.Views
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
 
             ViewHelpers = new ViewHelpers(this);
+
             Backup.ShowMessage += async Message => await ShowMessageBox("Backup", Message);
+            Backup.ShowMessagePrompt += async Message => await ShowPromptMessageBoxWrapper("Backup", Message);
 
             DisableUI(true);
             ViewHelpers.CheckForUpdates(true);
@@ -298,13 +300,16 @@ namespace S6Patcher.Source.Views
             base.OnClosing(e);
         }
 
-        private void RestoreBackup()
+        private async void RestoreBackup()
         {
+            execID GlobalID = (execID)(MainPatcher?.GlobalID);
+            
             ResetPatcher();
-            Backup.Restore(txtPath.Text);
+            await Backup.Restore(txtPath.Text, GlobalID);
             DisableUI(true);
         }
 
+        private async Task<bool> ShowPromptMessageBoxWrapper(string Title, string Message) => await ViewHelpers.ShowPromptMessageBox(Title, Message) == ButtonResult.Yes;
         private async Task ShowMessageBox(string Title, string Message) => await ViewHelpers.ShowMessageBox(Title, Message);
 
         private void ResetPatcher(bool FinishWithPEHeader = false)

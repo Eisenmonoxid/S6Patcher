@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace S6Patcher.Source.Utilities
 {
     internal static class Backup
     {
         public static event Action<string> ShowMessage;
+        public static event Func<string, Task<bool>> ShowMessagePrompt;
 
         public static bool Create(string Path)
         {
@@ -27,7 +29,7 @@ namespace S6Patcher.Source.Utilities
             return true;
         }
 
-        public static void Restore(string Path)
+        public static async Task Restore(string Path, execID GlobalID)
         {
             string Backup = GetBackupPath(Path, true);
             if (!File.Exists(Backup))
@@ -54,10 +56,29 @@ namespace S6Patcher.Source.Utilities
                 return;
             }
 
+            bool KeepModFiles = await AskForModDeletion();
+            if (!KeepModFiles && GlobalID != execID.NONE)
+            {
+                string ModLoaderPath = IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, Path);
+                if (Directory.Exists(ModLoaderPath))
+                {
+                    try
+                    {
+                        Directory.Delete(ModLoaderPath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Log(ex.ToString());
+                        ShowMessage.Invoke("Could not delete Mod folder: " + ex.Message);
+                    }
+                }
+            }
+
             Logger.Instance.Log("File " + Path + " successfully restored!");
             ShowMessage.Invoke("Backup successfully restored!");
         }
 
+        private static async Task<bool> AskForModDeletion() => await ShowMessagePrompt.Invoke("Keep Mod files? (Recommended)");
         private static string GetBackupPath(string Filepath, bool Old) =>
             Path.Combine(Path.GetDirectoryName(Filepath), 
                 Path.GetFileNameWithoutExtension(Filepath) + (Old ? "_BACKUP.exe" : ".backup"));
