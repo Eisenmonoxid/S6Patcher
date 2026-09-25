@@ -22,6 +22,7 @@ namespace S6Patcher.Source.Patcher
 
         private class ModLoaderFile
         {
+            public bool IsDataFile;
             public bool IsExtra1File;
             public string Name;
             public byte[] Data;
@@ -80,8 +81,8 @@ namespace S6Patcher.Source.Patcher
             }
 
             FileDataParser ??= new BinaryParser("S6Patcher.Definitions.FileData.bin");
-            List<FileDataEntry> Entries = FileDataParser.ParseFileData();
-            GlobalFileDataMappings.AddRange(Entries);
+            GlobalFileDataMappings.AddRange(FileDataParser.ParseFileData());
+            GlobalFileDataMappings.AddRange(GameplayModification.ModifiableFileData);
             FileDataParser.Dispose();
             
             if (GlobalID == execID.OV)
@@ -117,7 +118,7 @@ namespace S6Patcher.Source.Patcher
             }
         }
 
-        private async Task WriteModLoaderArchiveFileAsync(string BasePath)
+        private static async Task WriteModLoaderArchiveFileAsync(string BasePath)
         {
             string CurrentPath = Path.Combine(BasePath, ArchiveFileName);
             if (!File.Exists(CurrentPath))
@@ -139,8 +140,14 @@ namespace S6Patcher.Source.Patcher
             await CreateArchiveFileInPath(ArchiveFilePathModloader);
         }
 
-        private void UpdateFileContent(FileDataEntry Entry, List<byte> FileContent)
+        private static byte[] UpdateFileContent(FileDataEntry Entry, byte[] FileContent)
         {
+            List<byte> FileContentAsList = [.. FileContent];
+            if (FileContentAsList.Count == 0)
+            {
+                return null;
+            }
+
             foreach (var DataEntry in Entry.Data.OrderByDescending(E => E.Key))
             {
                 FileOperation Operation = (FileOperation)DataEntry.Value[0];
@@ -149,23 +156,25 @@ namespace S6Patcher.Source.Patcher
                     case FileOperation.Replace:
                     {
                         var Data = DataEntry.Value.Skip(1);
-                        Utility.ReplaceRange(FileContent, (int)DataEntry.Key, DataEntry.Value.Length - 1, Data);
+                        Utility.ReplaceRange(FileContentAsList, (int)DataEntry.Key, DataEntry.Value.Length - 1, Data);
                         break;
                     }
                     case FileOperation.Insert:
                     {
                         var Data = DataEntry.Value.Skip(1);
-                        FileContent.InsertRange((int)DataEntry.Key, Data);
+                        FileContentAsList.InsertRange((int)DataEntry.Key, Data);
                         break;
                     }
                     case FileOperation.Delete:
                     {
                         int Length = (int)BitConverter.ToUInt32(DataEntry.Value, 1);
-                        FileContent.RemoveRange((int)DataEntry.Key, Length);
+                        FileContentAsList.RemoveRange((int)DataEntry.Key, Length);
                         break;
                     }
                 }
             }
+            
+            return [.. FileContentAsList];
         }
 
         private FileStream OpenArchiveFileStream(string ArchiveFile, out bool IsExtra1ArchiveFile)
@@ -243,7 +252,8 @@ namespace S6Patcher.Source.Patcher
                     Name = Element.FilePath,
                     Entry = Element,
                     Data = null,
-                    IsExtra1File = false
+                    IsExtra1File = false,
+                    IsDataFile = Element.IsDataFile
                 };
 
                 if (ArchiveFilesToParse.TryGetValue(Element.BBArchiveName, out List<ModLoaderFile> Value))
@@ -266,6 +276,7 @@ namespace S6Patcher.Source.Patcher
             {
                 foreach (var CurrentFile in Element.Value)
                 {
+                    byte[] FinalContent;
                     if (CurrentFile.Data == null)
                     {
                         Logger.Instance.Log($"Skipping file {CurrentFile.Name} cause Data field is null.");
@@ -273,25 +284,31 @@ namespace S6Patcher.Source.Patcher
                     }
 
                     string SanitizedFilePath = Utility.SanitizeFilePath(CurrentFile.Entry.FilePath);
-                    
-                    Crc32 CRC = new();
-                    CRC.Append(CurrentFile.Data);
-                    
-                    if (CRC.GetCurrentHashAsUInt32() != CurrentFile.Entry.OriginalFileCRC)
+                    if (CurrentFile.IsDataFile)
+                    {
+                        Crc32 CRC = new();
+                        CRC.Append(CurrentFile.Data);
+                        
+                        if (CRC.GetCurrentHashAsUInt32() != CurrentFile.Entry.OriginalFileCRC)
+                        {
+                            ErrorTracking.Increment();
+                            Logger.Instance.Log($"File Hash for file {CurrentFile.Name} not equivalent! Skipping ...");
+                            continue;
+                        }
+
+                        FinalContent = UpdateFileContent(CurrentFile.Entry, CurrentFile.Data);
+                    }
+                    else
+                    {
+                        FinalContent = GameplayModification.UpdateFileContent(CurrentFile.Entry, CurrentFile.Data);
+                    }
+
+                    if (FinalContent == null)
                     {
                         ErrorTracking.Increment();
-                        Logger.Instance.Log($"File Hash for file {CurrentFile.Name} not equivalent! Skipping ...");
+                        Logger.Instance.Log($"File {CurrentFile.Name} could not be updated! Skipping ...");
                         continue;
                     }
-
-                    List<byte> FileContentAsList = [.. CurrentFile.Data];
-                    if (FileContentAsList.Count == 0)
-                    {
-                        Logger.Instance.Log($"Skipping Empty file: {CurrentFile.Name}");
-                        continue;
-                    }
-
-                    UpdateFileContent(CurrentFile.Entry, FileContentAsList);
 
                     string DirectoryPath = Path.Combine(ArchiveFilePathModloader, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
                     string Destination = Path.Combine(ArchiveFilePathModloader, SanitizedFilePath);
@@ -299,7 +316,7 @@ namespace S6Patcher.Source.Patcher
                     try
                     {
                         Directory.CreateDirectory(DirectoryPath);
-                        await File.WriteAllBytesAsync(Destination, [.. FileContentAsList]);
+                        await File.WriteAllBytesAsync(Destination, FinalContent);
                     }
                     catch (Exception ex)
                     { 
@@ -408,18 +425,31 @@ namespace S6Patcher.Source.Patcher
                     return;
                 }
 
-                Crc32 CRC = new();
-                CRC.Append(FileContent);
-                
-                if (CRC.GetCurrentHashAsUInt32() != Entry.OriginalFileCRC)
+                if (Entry.IsDataFile)
                 {
-                    ErrorTracking.Increment();
-                    Logger.Instance.Log($"File Hash for file {Path.GetFileName(CurrentFile)} not equivalent! Skipping ...");
-                    return;
+                    Crc32 CRC = new();
+                    CRC.Append(FileContent);
+                    
+                    if (CRC.GetCurrentHashAsUInt32() != Entry.OriginalFileCRC)
+                    {
+                        ErrorTracking.Increment();
+                        Logger.Instance.Log($"File Hash for file {Path.GetFileName(CurrentFile)} not equivalent! Skipping ...");
+                        return;
+                    }
+
+                    FileContent = UpdateFileContent(Entry, FileContent);
+                }
+                else
+                {
+                    FileContent = GameplayModification.UpdateFileContent(Entry, FileContent);
                 }
 
-                List<byte> FileContentAsList = [.. FileContent];
-                UpdateFileContent(Entry, FileContentAsList);
+                if (FileContent == null)
+                {
+                    ErrorTracking.Increment();
+                    Logger.Instance.Log($"File {Path.GetFileName(CurrentFile)} could not be updated! Skipping ...");
+                    return;
+                }
 
                 string DirectoryPath = Path.Combine(ArchiveFilePath, Path.GetDirectoryName(SanitizedFilePath) ?? string.Empty);
                 string Destination = Path.Combine(ArchiveFilePath, SanitizedFilePath);
@@ -427,7 +457,7 @@ namespace S6Patcher.Source.Patcher
                 try
                 {
                     Directory.CreateDirectory(DirectoryPath);
-                    await File.WriteAllBytesAsync(Destination, [.. FileContentAsList], CT);
+                    await File.WriteAllBytesAsync(Destination, FileContent, CT);
                 }
                 catch (Exception ex)
                 { 

@@ -7,8 +7,9 @@ using System.Text;
 
 namespace S6Patcher.Source.Utilities
 {
-    public struct FileDataEntry
+    public class FileDataEntry
     {
+        public bool IsDataFile;
         public string BBArchiveName;
         public string FilePath;
         public UInt32 OriginalFileCRC;
@@ -156,6 +157,7 @@ namespace S6Patcher.Source.Utilities
 
                 FileDataEntry Entry = new()
                 {
+                    IsDataFile = true,
                     BBArchiveName = BBArchiveName,
                     FilePath = FilePath,
                     OriginalFileCRC = GlobalReader.ReadUInt32(),

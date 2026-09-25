@@ -1,7 +1,6 @@
 -- UserScriptGlobal by Eisenmonoxid - S6Patcher --
 -- Find latest S6Patcher version here: https://github.com/Eisenmonoxid/S6Patcher
 S6Patcher = S6Patcher or {};
-S6Patcher.BETA = false;
 -- ************************************************************************************************************************************************************* --
 -- Add salt and dye to city storehouse slots																					 								 --
 -- ************************************************************************************************************************************************************* --

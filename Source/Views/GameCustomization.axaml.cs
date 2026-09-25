@@ -22,7 +22,9 @@ namespace S6Patcher.Source.Views
 
         private void btnSave_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-
+            uint[] Values = [(uint)nudSettlerLimit1.Value, (uint)nudSettlerLimit2.Value, (uint)nudSettlerLimit3.Value, (uint)nudSettlerLimit4.Value];
+            GameplayModification.ModifySettlerLimits(Values);
+            // TODO: Remove previous entries if already in List
         }
 
         private void btnReset_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
