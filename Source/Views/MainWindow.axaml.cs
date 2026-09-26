@@ -212,9 +212,10 @@ namespace S6Patcher.Source.Views
             bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
             bool UseModLoader = MainPatcher.GlobalID != execID.ED;
             bool DoNotUseEmbedded = rbDownload.IsChecked == true;
-            
+            bool UseGameplayModification = cbModding.IsChecked == true;
+
             Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
-                PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded));
+                PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded, UseGameplayModification));
 
             if (cbUpdater.IsChecked == true)
             {
@@ -251,11 +252,11 @@ namespace S6Patcher.Source.Views
             await Completed;
         }
 
-        private async Task PatcherModLoaderWrapper(bool ModInstallation, bool UseModLoader, bool DoNotUseEmbedded)
+        private async Task PatcherModLoaderWrapper(bool ModInstallation, bool UseModLoader, bool DoNotUseEmbedded, bool UseGamelayModification)
         {
             if (MainPatcher.GlobalID != execID.ED && (UseModLoader || ModInstallation))
             {
-                await MainPatcher.SetModLoader(ModInstallation, DoNotUseEmbedded);
+                await MainPatcher.SetModLoader(ModInstallation, DoNotUseEmbedded, UseGamelayModification);
             }
         }
 

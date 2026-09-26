@@ -48,7 +48,7 @@ namespace S6Patcher.Source.Views
         
         public void TogglePanelVisibility(bool Enable)
         {
-            string[] Panels = ["hccMain", "hccUpdater", "hccModdingOptions"];
+            string[] Panels = ["hccMain", "hccUpdater"];
             foreach (var Name in Panels)
             {
                 var Panel = Owner.FindControl<HeaderedContentControl>(Name);

@@ -137,18 +137,15 @@ namespace S6Patcher.Source.Patcher
             WriteMappingToFile(GlobalMappings.GetDocumentsFolderMapping(FolderPath));
         }
 
-        public async Task SetModLoader(bool UseBugfixMod, bool UseDownload)
+        public async Task SetModLoader(bool UseBugfixMod, bool UseDownload, bool UseGameplayModification)
         {
             Logger.Instance.Log("Called with " + UseBugfixMod.ToString() + " and " + UseDownload.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugfixMod);
-            await GlobalMod.Create(UseBugfixMod, UseDownload);
-            // SetDynamicRelocationInImage();
+            await GlobalMod.Create(UseBugfixMod, UseDownload, UseGameplayModification);
         }
 
         public void SetLargeAddressAwareFlag() => UpdatePEHeaderValues(0x20, 0x12, true);
-        private void SetDynamicRelocationInImage() => UpdatePEHeaderValues(0x40, 0x5A, false);
-
         private void UpdatePEHeaderValues(short Mask, Int32 Offset, bool Enable)
         {
             Logger.Instance.Log("Called.");

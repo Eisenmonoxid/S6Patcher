@@ -122,7 +122,29 @@ namespace S6Patcher.Source.Patcher
             Entry.Data.Add((uint)(Entry.Data.Count + 1), Data);
         }
 
+        public static void ModifyPlayerColor(Avalonia.Media.Color Color)
+        {
+            // First file entry is always zero
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Red", "0");
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Green", "0");
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Blue", "0");
+
+            // Custom player color
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Red", Color.R.ToString());
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Green", Color.G.ToString());
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Blue", Color.B.ToString());
+        }
+
         public static void ModifySettlerLimits(uint[] Values)
+        {
+            AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", "SettlerLimit", "50"); // No cathedral
+            foreach (uint Value in Values)
+            {
+                AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", "SettlerLimit", Value.ToString());
+            }
+        }
+
+        public static void ModifySoldierLimits(uint[] Values)
         {
             AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", "SettlerLimit", "50"); // No cathedral
             foreach (uint Value in Values)

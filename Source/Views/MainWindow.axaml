@@ -94,7 +94,7 @@
 			</HeaderedContentControl>
 
 			<HeaderedContentControl Name="hccModdingOptions" Grid.Row="2" Padding="5" VerticalAlignment="Top" 
-				HorizontalAlignment="Left" Header="Gameplay Modifications">
+				HorizontalAlignment="Left" IsEnabled="{Binding #cbModDownload.IsChecked}" Header="Gameplay Modifications">
 				<StackPanel>
 					<CheckBox Name="cbModding">Enable Gameplay Modifications</CheckBox>
 					<Button Margin="5 5" Name="btnCustomizationWindow" Click="btnCustomizationWindow_Click" IsEnabled="{Binding #cbModding.IsChecked}">Show Modification Options</Button>

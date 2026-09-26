@@ -22,16 +22,18 @@ namespace S6Patcher.Source.Views
 
         private void btnSave_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            uint[] Values = [(uint)nudSettlerLimit1.Value, (uint)nudSettlerLimit2.Value, (uint)nudSettlerLimit3.Value, (uint)nudSettlerLimit4.Value];
-            GameplayModification.ModifySettlerLimits(Values);
-            // TODO: Remove previous entries if already in List
+            GameplayModification.ModifiableFileData.Clear();
+            if (cbPickPlayerColor.IsChecked == true)
+            {
+                GameplayModification.ModifyPlayerColor(cpPlayerColor.Color);
+            }
+            if (cbSettlerLimit.IsChecked == true)
+            {
+                uint[] SettlerLimits = [(uint)nudSettlerLimit1.Value, (uint)nudSettlerLimit2.Value, (uint)nudSettlerLimit3.Value, (uint)nudSettlerLimit4.Value];
+                GameplayModification.ModifySettlerLimits(SettlerLimits);
+            }
         }
-
-        private void btnReset_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-
-        }
-
+        
         public void CloseForApplicationShutdown()
         {
             IsApplicationClosing = true;
