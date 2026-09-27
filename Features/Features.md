@@ -162,6 +162,11 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
   <img src="https://github.com/Eisenmonoxid/S6Patcher/blob/master/Features/Spicetrader_Final.jpg?raw=true" width="50%" height="50%" alt="Spicetrader"/>
 </p>
 
+- The following gameplay modifications are possible through the Patcher:
+- - Settler Limit: The 4 default values can be set to arbitrary numbers.
+- - Soldier Limit: The 4 default values can be set to arbitrary numbers.
+- - Player Color: The player color can be freely customized.
+
 ---
 # Recommendation: DXVK
 Download the latest DXVK release from the [GitHub](https://github.com/doitsujin/dxvk/releases/latest) repository and unpack the **d3d9.dll** and **dxgi.dll** files into the game directory, where the "Settlers6.exe" or "Settlers6R.exe" can be found. 
