@@ -182,7 +182,8 @@ namespace S6Patcher.Source.Patcher
 
             foreach (uint Value in Values)
             {
-                AddModifiableFileData("shrgcfg0.bba", BasePath + "as.xml", ["SoldierLimits", "Limit"], Value.ToString());
+                // TODO!
+                AddModifiableFileData("shrgcfge11.bba", BasePath + "as.xml", ["SoldierLimits", "Limit"], Value.ToString());
             }
         }
     }

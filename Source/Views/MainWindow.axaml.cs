@@ -212,7 +212,7 @@ namespace S6Patcher.Source.Views
             bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
             bool UseModLoader = MainPatcher.GlobalID != execID.ED;
             bool DoNotUseEmbedded = rbDownload.IsChecked == true;
-            bool UseGameplayModification = cbModding.IsChecked == true;
+            bool UseGameplayModification = cbModding.IsChecked == true && cbModding.IsEnabled == true;
 
             Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
                 PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded, UseGameplayModification));

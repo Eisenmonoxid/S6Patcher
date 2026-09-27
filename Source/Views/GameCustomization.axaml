@@ -23,32 +23,32 @@
 				<UniformGrid Grid.Row="2" Grid.Column="1" Columns="4" Margin="10 10 0 0"
 					IsEnabled="{Binding #cbSettlerLimit.IsChecked}">
 					<StackPanel Margin="0 0 5 0">
-						<NumericUpDown Name="nudSettlerLimit1" Value="50" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSettlerLimit1" MaxWidth="60" Value="50" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 					<StackPanel Margin="0 0 5 0">
-						<NumericUpDown Name="nudSettlerLimit2" Value="100" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSettlerLimit2" MaxWidth="60" Value="100" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 					<StackPanel Margin="0 0 5 0">
-						<NumericUpDown Name="nudSettlerLimit3" Value="150" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSettlerLimit3" MaxWidth="60" Value="150" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 					<StackPanel>
-						<NumericUpDown Name="nudSettlerLimit4" Value="200" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSettlerLimit4" MaxWidth="60" Value="200" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 				</UniformGrid>
 				<CheckBox Grid.Row="3" Grid.Column="0" Margin="0 5 0 0" Name="cbSoldierLimit">Soldier Limits:</CheckBox>
 				<UniformGrid Grid.Row="3" Grid.Column="1" Columns="4" Margin="10 5 0 0"
 					IsEnabled="{Binding #cbSoldierLimit.IsChecked}">
 					<StackPanel Margin="0 0 5 0">
-						<NumericUpDown Name="nudSoldierLimit1" Value="200" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSoldierLimit1" MaxWidth="60" Value="25" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 					<StackPanel Margin="0 0 5 0">
-						<NumericUpDown Name="nudSoldierLimit2" Value="200" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSoldierLimit2" MaxWidth="60" Value="43" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 					<StackPanel Margin="0 0 5 0">
-						<NumericUpDown Name="nudSoldierLimit3" Value="200" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSoldierLimit3" MaxWidth="60" Value="61" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 					<StackPanel>
-						<NumericUpDown Name="nudSoldierLimit4" Value="200" Minimum="0" ShowButtonSpinner="False" />
+						<NumericUpDown Name="nudSoldierLimit4" MaxWidth="60" Value="91" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 				</UniformGrid>
 				<StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">

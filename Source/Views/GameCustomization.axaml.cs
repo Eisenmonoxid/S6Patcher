@@ -37,6 +37,8 @@ namespace S6Patcher.Source.Views
                 uint[] SoldierLimits = [(uint)nudSoldierLimit1.Value, (uint)nudSoldierLimit2.Value, (uint)nudSoldierLimit3.Value, (uint)nudSoldierLimit4.Value];
                 GameplayModification.ModifySoldierLimits(SoldierLimits);
             }
+
+            Hide();
         }
         
         public void CloseForApplicationShutdown()
