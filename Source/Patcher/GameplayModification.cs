@@ -2,17 +2,27 @@ using S6Patcher.Source.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using S6Packer.Source;
 using System.Xml;
-using System.Buffers.Binary;
 
 namespace S6Patcher.Source.Patcher
 {
     public static class GameplayModification
     {
+        private sealed record XmlModification(string[] Tags, string Value);
+
         public static readonly List<FileDataEntry> ModifiableFileData = [];
+        private static readonly List<XmlModification> XmlModifications = [];
+
+        public static void ClearModifiableFileData()
+        {
+            ModifiableFileData.Clear();
+            XmlModifications.Clear();
+        }
+
         public static byte[] UpdateFileContent(FileDataEntry Entry, byte[] FileContent)
         {
             using MemoryStream Stream = new(FileContent, writable: false);
@@ -23,20 +33,41 @@ namespace S6Patcher.Source.Patcher
         private static byte[] UpdateTags(XmlDocument Document, Dictionary<UInt32, byte[]> Data)
         {
             Dictionary<string, int> TagOccurrences = [];
-            foreach (var Entry in Data)
+            foreach (uint Index in Data.Keys.OrderBy(Index => Index))
             {
-                byte[] Value = Entry.Value;
-                ushort TagLength = BinaryPrimitives.ReadUInt16LittleEndian(Value);
-                string Tag = Encoding.UTF8.GetString(Value, sizeof(ushort), TagLength);
-                string NewValue = Encoding.UTF8.GetString(Value, sizeof(ushort) + TagLength, Value.Length - sizeof(ushort) - TagLength);
+                XmlModification Modification = XmlModifications[(int)Index];
+                string[] Tags = Modification.Tags;
+                string TagPath = string.Join('\0', Tags);
 
-                XmlNodeList Nodes = Document.GetElementsByTagName(Tag);
-                TagOccurrences.TryGetValue(Tag, out int Occurrence);
-                TagOccurrences[Tag] = Occurrence + 1;
+                List<XmlNode> Nodes = [];
+                foreach (XmlNode Node in Document.GetElementsByTagName(Tags[0]))
+                {
+                    Nodes.Add(Node);
+                }
+
+                for (int TagIndex = 1; TagIndex < Tags.Length; TagIndex++)
+                {
+                    List<XmlNode> ChildNodes = [];
+                    foreach (XmlNode Node in Nodes)
+                    {
+                        foreach (XmlNode ChildNode in Node.ChildNodes)
+                        {
+                            if (ChildNode.NodeType == XmlNodeType.Element && ChildNode.Name == Tags[TagIndex])
+                            {
+                                ChildNodes.Add(ChildNode);
+                            }
+                        }
+                    }
+
+                    Nodes = ChildNodes;
+                }
+
+                TagOccurrences.TryGetValue(TagPath, out int Occurrence);
+                TagOccurrences[TagPath] = Occurrence + 1;
 
                 if (Occurrence < Nodes.Count)
                 {
-                    Nodes[Occurrence].InnerText = NewValue;
+                    Nodes[Occurrence].InnerText = Modification.Value;
                 }
             }
 
@@ -91,7 +122,7 @@ namespace S6Patcher.Source.Patcher
             return null;
         }
 
-        private static void AddModifiableFileData(string Archive, string Path, string XMLTag, string Value)
+        private static void AddModifiableFileData(string Archive, string Path, string[] XMLTags, string Value)
         {
             FileDataEntry Entry = GetModifiableFileData(Archive, Path);
             if (Entry == null)
@@ -110,46 +141,39 @@ namespace S6Patcher.Source.Patcher
                 ModifiableFileData.Add(Entry);
             }
 
-            byte[] TagBytes = Encoding.UTF8.GetBytes(XMLTag);
-            byte[] ValueBytes = Encoding.UTF8.GetBytes(Value);
-            ushort TagLength = (ushort)TagBytes.Length;
-            byte[] Data = new byte[sizeof(ushort) + TagBytes.Length + ValueBytes.Length];
-
-            BinaryPrimitives.WriteUInt16LittleEndian(Data, TagLength);
-            Buffer.BlockCopy(TagBytes, 0, Data, sizeof(ushort), TagBytes.Length);
-            Buffer.BlockCopy(ValueBytes, 0, Data, sizeof(ushort) + TagBytes.Length, ValueBytes.Length);
-
-            Entry.Data.Add((uint)(Entry.Data.Count + 1), Data);
+            uint Index = (uint)XmlModifications.Count;
+            XmlModifications.Add(new(XMLTags, Value));
+            Entry.Data.Add(Index, []);
         }
 
         public static void ModifyPlayerColor(Avalonia.Media.Color Color)
         {
             // First file entry is always zero
-            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Red", "0");
-            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Green", "0");
-            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Blue", "0");
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", ["Red"], "0");
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", ["Green"], "0");
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", ["Blue"], "0");
 
             // Custom player color
-            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Red", Color.R.ToString());
-            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Green", Color.G.ToString());
-            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", "Blue", Color.B.ToString());
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", ["Red"], Color.R.ToString());
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", ["Green"], Color.G.ToString());
+            AddModifiableFileData("shrgcfg0.bba", "config\\playercolor.xml", ["Blue"], Color.B.ToString());
         }
 
         public static void ModifySettlerLimits(uint[] Values)
         {
-            AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", "SettlerLimit", "50"); // No cathedral
+            AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], "50"); // No cathedral
             foreach (uint Value in Values)
             {
-                AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", "SettlerLimit", Value.ToString());
+                AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], Value.ToString());
             }
         }
 
         public static void ModifySoldierLimits(uint[] Values)
         {
-            AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", "SettlerLimit", "50"); // No cathedral
+            AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], "50"); // No cathedral
             foreach (uint Value in Values)
             {
-                AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", "SettlerLimit", Value.ToString());
+                AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], Value.ToString());
             }
         }
     }

@@ -22,7 +22,7 @@ namespace S6Patcher.Source.Views
 
         private void btnSave_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            GameplayModification.ModifiableFileData.Clear();
+            GameplayModification.ClearModifiableFileData();
             if (cbPickPlayerColor.IsChecked == true)
             {
                 GameplayModification.ModifyPlayerColor(cpPlayerColor.Color);
