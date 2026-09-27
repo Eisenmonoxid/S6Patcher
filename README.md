@@ -5,7 +5,7 @@ An unofficial, simple application that fixes bugs and adds new features in the v
 </p>
 
 ## Project Philosophy
-S6Patcher is designed to improve the game while preserving its original experience. Its primary purpose is to fix bugs, address technical issues, and introduce small quality-of-life improvements that make the game more enjoyable and convenient to play.
+The Patcher is designed to improve the game while preserving its original experience. Its primary purpose is to fix bugs and introduce small quality-of-life improvements that make the game more enjoyable and convenient to play.
 
 The goal is **not** to fundamentally change or redesign gameplay mechanics or turn the game into something different. Instead, S6Patcher focuses on polishing the existing experience. Any additions should feel natural, unobtrusive, and consistent with the original game design.
 
@@ -38,7 +38,7 @@ The S6Patcher features a simple [Modloader](https://github.com/Eisenmonoxid/S6Pa
 - The S6Patcher modifies data in the game and/or editor executable. A backup of the executable is created beforehand and can be restored from the application.
 - A new folder `Script` in `<Documents>\THE SETTLERS - Rise of an Empire\` and three lua script files `"UserScriptGlobal.lua"`, `"UserScriptLocal.lua"` and `"EMXBinData.s6patcher"` in said folder are created.  
 - The configuration file `<Documents>\THE SETTLERS - Rise of an Empire\Config\Options.ini` is extended with a new section `[S6Patcher]`, where some necessary configuration values are stored.
-- When the option "Activate ModLoader" is checked when patching, the application creates a new folder `modloader` in the game installation path where modded files can be stored.  
+- The application creates a new folder `modloader` in the game installation path where modded files can be stored.  
 
 ## Contribution
 In case you want to contribute your own features and/or fixes to the project, feel free to fork the repository and create a pull request.   
