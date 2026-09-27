@@ -170,10 +170,19 @@ namespace S6Patcher.Source.Patcher
 
         public static void ModifySoldierLimits(uint[] Values)
         {
-            AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], "50"); // No cathedral
+            string BasePath = "config\\entities\\b_castle_";
+            foreach (string DefinitionFile in new string[] {"me.xml", "na.xml", "ne.xml", "se.xml"})
+            {
+                string FullPath = BasePath + DefinitionFile;
+                foreach (uint Value in Values)
+                {
+                    AddModifiableFileData("shrgcfg0.bba", FullPath, ["SoldierLimits", "Limit"], Value.ToString());
+                }
+            }
+
             foreach (uint Value in Values)
             {
-                AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], Value.ToString());
+                AddModifiableFileData("shrgcfg0.bba", BasePath + "as.xml", ["SoldierLimits", "Limit"], Value.ToString());
             }
         }
     }

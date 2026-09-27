@@ -32,6 +32,11 @@ namespace S6Patcher.Source.Views
                 uint[] SettlerLimits = [(uint)nudSettlerLimit1.Value, (uint)nudSettlerLimit2.Value, (uint)nudSettlerLimit3.Value, (uint)nudSettlerLimit4.Value];
                 GameplayModification.ModifySettlerLimits(SettlerLimits);
             }
+            if (cbSoldierLimit.IsChecked == true)
+            {
+                uint[] SoldierLimits = [(uint)nudSoldierLimit1.Value, (uint)nudSoldierLimit2.Value, (uint)nudSoldierLimit3.Value, (uint)nudSoldierLimit4.Value];
+                GameplayModification.ModifySoldierLimits(SoldierLimits);
+            }
         }
         
         public void CloseForApplicationShutdown()
