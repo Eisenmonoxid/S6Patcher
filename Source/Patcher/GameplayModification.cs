@@ -161,10 +161,10 @@ namespace S6Patcher.Source.Patcher
 
         public static void ModifySettlerLimits(uint[] Values)
         {
-            AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], "50"); // No cathedral
+            AddModifiableFileData("shrgcfg1.bba", "config\\logic.xml", ["SettlerLimit"], "50"); // No cathedral
             foreach (uint Value in Values)
             {
-                AddModifiableFileData("shrgcfg0.bba", "config\\logic.xml", ["SettlerLimit"], Value.ToString());
+                AddModifiableFileData("shrgcfg1.bba", "config\\logic.xml", ["SettlerLimit"], Value.ToString());
             }
         }
 
@@ -182,8 +182,7 @@ namespace S6Patcher.Source.Patcher
 
             foreach (uint Value in Values)
             {
-                // TODO!
-                AddModifiableFileData("shrgcfge11.bba", BasePath + "as.xml", ["SoldierLimits", "Limit"], Value.ToString());
+                AddModifiableFileData("shrgcfge10.bba", BasePath + "as.xml", ["SoldierLimits", "Limit"], Value.ToString());
             }
         }
     }
