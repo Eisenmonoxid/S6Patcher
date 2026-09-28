@@ -35,17 +35,49 @@ namespace S6Patcher.Source.Views
 
             UseCheckSumCalculation &= !Program.CommandLineArguments.Any(arg => arg.Contains("-skipchecksum"));
             Title = "S6Patcher v" + Utility.GetApplicationVersion() + " - Made by Eisenmonoxid";
-
             ViewHelpers = new ViewHelpers(this);
+
+            Opened += MainWindow_Opened;
+        }
+
+        private async void MainWindow_Opened(object sender, EventArgs e)
+        {
+            Opened -= MainWindow_Opened;
 
             Backup.ShowMessage += async Message => await ShowMessageBox("Backup", Message);
             Backup.ShowMessagePrompt += async Message => await ShowPromptMessageBoxWrapper("Backup", Message);
 
             DisableUI(true);
-            ViewHelpers.CheckForUpdates(true);
-            
+
             string AvaloniaVersion = typeof(AvaloniaObject).Assembly.GetName().Version.ToString(3);
             Logger.Instance.Log(Title + " - Avalonia: " + AvaloniaVersion + " - Runtime: " + RuntimeInformation.FrameworkDescription);
+
+            string RegistryPath = Utility.ReadPathFromWindowsRegistry();
+            if (!string.IsNullOrEmpty(RegistryPath))
+            {
+                await ShouldUseRegistryPath(RegistryPath);
+            }
+
+            ViewHelpers.CheckForUpdates(true);
+        }
+
+        private async Task ShouldUseRegistryPath(string RegistryPath)
+        {
+            Logger.Instance.Log("Found registry path: " + RegistryPath);
+
+            RegistryPath = Path.Combine(RegistryPath, "base", "bin", "Settlers6.exe");
+            if (!File.Exists(RegistryPath))
+            {
+                Logger.Instance.Log("Registry path is invalid: " + RegistryPath);
+                return;
+            }
+
+            bool Result = await ShowPromptMessageBoxWrapper("Game Installation Found", 
+                "Found Game Installation in Path:\n" + RegistryPath + "\n\nUse this Path?");
+            if (Result)
+            {
+                await InitializePatcher(IOFileHandler.Instance.IsPlayLauncherExecutable(RegistryPath));
+            }
         }
 
         private void EnableUIElements(execID ID)
@@ -212,7 +244,7 @@ namespace S6Patcher.Source.Views
             bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
             bool UseModLoader = MainPatcher.GlobalID != execID.ED;
             bool DoNotUseEmbedded = rbDownload.IsChecked == true;
-            bool UseGameplayModification = cbModding.IsChecked == true && cbModding.IsEnabled == true;
+            bool UseGameplayModification = cbModding.IsChecked == true;
 
             Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
                 PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded, UseGameplayModification));
@@ -335,6 +367,14 @@ namespace S6Patcher.Source.Views
             if (rbDownload.IsChecked == false)
             {
                 cbUpdater.IsChecked = false;
+            }
+        }
+
+        private void cbModDownload_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (cbModDownload.IsChecked == false)
+            {
+                cbModding.IsChecked = false;
             }
         }
         

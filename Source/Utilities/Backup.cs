@@ -78,7 +78,7 @@ namespace S6Patcher.Source.Utilities
             ShowMessage.Invoke("Backup successfully restored!");
         }
 
-        private static async Task<bool> AskForModDeletion() => await ShowMessagePrompt.Invoke("Keep Mod files? (Recommended)");
+        private static async Task<bool> AskForModDeletion() => await ShowMessagePrompt.Invoke("Keep Mod files in separate folder? (Recommended)");
         private static string GetBackupPath(string Filepath, bool Old) =>
             Path.Combine(Path.GetDirectoryName(Filepath), 
                 Path.GetFileNameWithoutExtension(Filepath) + (Old ? "_BACKUP.exe" : ".backup"));

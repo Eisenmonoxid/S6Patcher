@@ -37,6 +37,11 @@ namespace S6Patcher.Source.Views
                 uint[] SoldierLimits = [(uint)nudSoldierLimit1.Value, (uint)nudSoldierLimit2.Value, (uint)nudSoldierLimit3.Value, (uint)nudSoldierLimit4.Value];
                 GameplayModification.ModifySoldierLimits(SoldierLimits);
             }
+            if (cbStorehouseLimit.IsChecked == true)
+            {
+                uint[] StorehouseLimits = [(uint)nudStorehouseLimit1.Value, (uint)nudStorehouseLimit2.Value, (uint)nudStorehouseLimit3.Value, (uint)nudStorehouseLimit4.Value];
+                GameplayModification.ModifyStorehouseLimits(StorehouseLimits);
+            }
 
             Hide();
         }

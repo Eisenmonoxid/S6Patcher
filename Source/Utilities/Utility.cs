@@ -30,6 +30,32 @@ namespace S6Patcher.Source.Utilities
         public static string GetApplicationVersion() => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
         public static Stream GetEmbeddedResourceDefinition(string Name) => Assembly.GetExecutingAssembly().GetManifestResourceStream(Name);
         public static string SanitizeFilePath(string FilePath) => FilePath.Replace('\\', Path.DirectorySeparatorChar);
+        public static string ReadPathFromWindowsRegistry()
+        {
+            if (!OperatingSystem.IsWindows())
+            {
+                return string.Empty;
+            }
+
+            string RegPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\Ubisoft\The Settlers 6\GameUpdate";
+            string RegNodePath = @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Ubisoft\The Settlers 6\GameUpdate";
+            string Value;
+
+            try
+            {
+                Value = Microsoft.Win32.Registry.GetValue(RegPath, "InstallDir", null) as string;
+                if (string.IsNullOrEmpty(Value))
+                {
+                    Value = Microsoft.Win32.Registry.GetValue(RegNodePath, "InstallDir", null) as string;
+                }
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+            return Value ?? string.Empty;
+        }
 
         public static readonly Dictionary<string, bool> ScriptFeatures = new()
         {

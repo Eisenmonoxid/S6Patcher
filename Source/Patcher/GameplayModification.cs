@@ -185,5 +185,17 @@ namespace S6Patcher.Source.Patcher
                 AddModifiableFileData("shrgcfge10.bba", BasePath + "as.xml", ["SoldierLimits", "Limit"], Value.ToString());
             }
         }
+
+        public static void ModifyStorehouseLimits(uint[] Values)
+        {
+            string StorePath = "config\\entities\\b_storehouse.xml";
+            foreach (uint Value in Values)
+            {
+                AddModifiableFileData("shrgcfge10.bba", StorePath, ["OutStockCapacities", "OutStockCapacity"], Value.ToString());
+            }
+
+            // The following is necessary for the extra1 storehouse to be loaded in the base game, otherwise the game crashes
+            AddModifiableFileData("shrgcfge10.bba", "config\\goodsex.xml", ["Worth"], "0"); 
+        }
     }
 }

@@ -277,6 +277,18 @@ namespace S6Patcher.Source.Patcher
 
         private async Task WriteAllModFilesToCorrespondingFolder(Dictionary<string, List<ModLoaderFile>> ArchiveFilesToParse)
         {
+            try
+            {
+                Directory.Delete(ArchiveFilePathModloader, true); // Clear everything before writing a new directory
+                Directory.CreateDirectory(ArchiveFilePathModloader);
+            }
+            catch (Exception ex)
+            {
+                ErrorTracking.Increment();
+                Logger.Instance.Log(ex.ToString());
+                return;
+            }
+
             foreach (var Element in ArchiveFilesToParse)
             {
                 foreach (var CurrentFile in Element.Value)
@@ -375,11 +387,11 @@ namespace S6Patcher.Source.Patcher
             await Parallel.ForEachAsync(GlobalFileDataMappings, async (Entry, CT) =>
             {
                 string SanitizedFilePath = Utility.SanitizeFilePath(Entry.FilePath);
-                string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalBaseGameDataDirectoryPath, SanitizedFilePath));
+                string CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalExtra1GameDataDirectoryPath, SanitizedFilePath));
 
                 if (!File.Exists(CurrentFile))
                 {
-                    CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalExtra1GameDataDirectoryPath, SanitizedFilePath));
+                    CurrentFile = Utility.ResolveCaseInsensitivePath(Path.Combine(GlobalBaseGameDataDirectoryPath, SanitizedFilePath));
                     if (!File.Exists(CurrentFile))
                     {
                         ErrorTracking.Increment();

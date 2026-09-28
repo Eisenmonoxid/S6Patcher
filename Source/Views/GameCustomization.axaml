@@ -14,7 +14,7 @@
 
 	<Grid Name="grdMain">
 		<HeaderedContentControl Header="Player Customization" Margin="10">
-			<Grid RowDefinitions="Auto Auto Auto Auto Auto" ColumnDefinitions="Auto *" Margin="10">
+			<Grid RowDefinitions="Auto Auto Auto Auto Auto Auto" ColumnDefinitions="Auto *" Margin="10">
 				<CheckBox Grid.Row="0" Grid.ColumnSpan="2" Name="cbPickPlayerColor">Player Color:</CheckBox>
 				<colorPicker:ColorPicker Grid.Row="0" Grid.Column="1" Margin="10 5 0 0"
 					Name="cpPlayerColor" Color="#1107D8"
@@ -51,7 +51,23 @@
 						<NumericUpDown Name="nudSoldierLimit4" MaxWidth="60" Value="91" Maximum="9999" Minimum="0" ShowButtonSpinner="False" />
 					</StackPanel>
 				</UniformGrid>
-				<StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">
+				<CheckBox Grid.Row="4" Grid.Column="0" Margin="0 5 0 0" Name="cbStorehouseLimit">Storehouse Limits:</CheckBox>
+				<UniformGrid Grid.Row="4" Grid.Column="1" Columns="4" Margin="10 5 0 0"
+					IsEnabled="{Binding #cbStorehouseLimit.IsChecked}">
+					<StackPanel Margin="0 0 5 0">
+						<NumericUpDown Name="nudStorehouseLimit1" MaxWidth="60" Value="250" Maximum="99999" Minimum="0" ShowButtonSpinner="False" />
+					</StackPanel>
+					<StackPanel Margin="0 0 5 0">
+						<NumericUpDown Name="nudStorehouseLimit2" MaxWidth="60" Value="500" Maximum="99999" Minimum="0" ShowButtonSpinner="False" />
+					</StackPanel>
+					<StackPanel Margin="0 0 5 0">
+						<NumericUpDown Name="nudStorehouseLimit3" MaxWidth="60" Value="1000" Maximum="99999" Minimum="0" ShowButtonSpinner="False" />
+					</StackPanel>
+					<StackPanel>
+						<NumericUpDown Name="nudStorehouseLimit4" MaxWidth="60" Value="2000" Maximum="99999" Minimum="0" ShowButtonSpinner="False" />
+					</StackPanel>
+				</UniformGrid>
+				<StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15 0 0">
 					<Button Name="btnSave" Click="btnSave_Click" Margin="0 0 5 0">Save</Button>
 					<Button Name="btnClose" Click="btnClose_Click">Close</Button>
 				</StackPanel>
