@@ -137,12 +137,12 @@ namespace S6Patcher.Source.Patcher
             WriteMappingToFile(GlobalMappings.GetDocumentsFolderMapping(FolderPath));
         }
 
-        public async Task SetModLoader(bool UseBugfixMod, bool UseDownload, bool UseGameplayModification)
+        public async Task SetModLoader(bool UseBugfixMod, bool UseGameplayModification)
         {
-            Logger.Instance.Log("Called with " + UseBugfixMod.ToString() + " and " + UseDownload.ToString());
+            Logger.Instance.Log("Called with UseBugfixMod: " + UseBugfixMod.ToString());
             WriteMappingToFile(GlobalMappings.GetModloaderMapping());
             SetEntryInOptionsFile("SpecialKnightsAvailable", UseBugfixMod);
-            await GlobalMod.Create(UseBugfixMod, UseDownload, UseGameplayModification);
+            await GlobalMod.Create(UseBugfixMod, UseGameplayModification);
         }
 
         public void SetLargeAddressAwareFlag() => UpdatePEHeaderValues(0x20, 0x12, true);
@@ -176,7 +176,7 @@ namespace S6Patcher.Source.Patcher
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", Entry, (Checked ? 1U : 0U).ToString());
         public void SetEasyDebug() => WriteMappingToFile(GlobalMappings.GetEasyDebugMapping());
 
-        public async Task WriteScriptFilesToFolder(bool UseDownload)
+        public async Task WriteScriptFilesToFolder()
         {
             WriteMappingToFile(GlobalMappings.GetScriptFileMapping());
             foreach (var Element in Utility.ScriptFeatures)
@@ -185,7 +185,7 @@ namespace S6Patcher.Source.Patcher
             }
 
             IOFileHandler.Instance.UpdateEntryInOptionsFile("[S6Patcher]", "Version", " - S6Patcher v" + Utility.GetApplicationVersion()[..3]);
-            await UserScriptHandler.Instance.CreateUserScriptFiles(UseDownload);
+            await UserScriptHandler.Instance.CreateUserScriptFiles();
         }
 
         private void WriteMappingToFile(Dictionary<UInt32, byte[]> Mapping)

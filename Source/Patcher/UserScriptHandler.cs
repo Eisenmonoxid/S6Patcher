@@ -35,22 +35,8 @@ namespace S6Patcher.Source.Patcher
                 .Where(Element => Element.Contains("Aufstieg eines") || Element.Contains("Rise of an"))
                 .Select(Element => {Element = Path.Combine(Documents, Element); return Element;})];
 
-        private async Task<List<MemoryStream>> DownloadScriptFiles()
+        public async Task CreateUserScriptFiles()
         {
-            int Length = ScriptFiles.Length;
-            Uri[] Scripts = new Uri[Length];
-            for (uint i = 0; i < Length; i++)
-            {
-                Scripts[i] = new Uri(Resources.RepoResourcesBasePath + "Scripts/" + ScriptFiles[i]);
-            }
-
-            return await WebHandler.Instance.DownloadFilesAsync(Scripts);
-        }
-
-        public async Task CreateUserScriptFiles(bool UseDownload)
-        {
-            // If download fails, write local files from embedded resources as fallback
-            var Files = UseDownload ? await DownloadScriptFiles() : null;
             foreach (string Element in GetUserScriptDirectories())
             {
                 string CurrentPath = Path.Combine(Element, "Script");
@@ -60,19 +46,7 @@ namespace S6Patcher.Source.Patcher
                     for (int i = 0; i < ScriptFiles.Length; i++)
                     {
                         string FilePath = Path.Combine(CurrentPath, ScriptFiles[i]);
-                        if (Files != null && Files.Count == ScriptFiles.Length)
-                        {
-                            using FileStream Stream = IOFileHandler.Instance.OpenFileStream(FilePath);
-                            await Files[i].CopyToAsync(Stream);
-                            Stream.SetLength(Stream.Position);
-                            IOFileHandler.Instance.CloseStream(Stream);
-                            Files[i].Seek(0, SeekOrigin.Begin);
-                        }
-                        else
-                        {
-                            File.WriteAllBytes(FilePath, ScriptResources[i]);
-                        }
-
+                        await File.WriteAllBytesAsync(FilePath, ScriptResources[i]);
                         Logger.Instance.Log("Finished writing ScriptFile named " + ScriptFiles[i] + " to " + CurrentPath);
                     }
                 }
@@ -83,8 +57,6 @@ namespace S6Patcher.Source.Patcher
                     continue;
                 }
             }
-
-            Files?.ForEach(Element => Element?.Dispose());
         }
     }
 }

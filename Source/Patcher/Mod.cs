@@ -39,9 +39,8 @@ namespace S6Patcher.Source.Patcher
         private readonly string ArchiveFilePathExtra1 = Path.Combine(IOFileHandler.Instance.GetModLoaderDirectory(GlobalID, GlobalStreamName), "extra1");
         private const string ArchiveFileName = "mod.bba";
         public event Action<string> ShowMessage;
-        private static async Task<List<MemoryStream>> DownloadDefinitionFile(string FilePath) => await WebHandler.Instance.DownloadFilesAsync([new Uri(FilePath)]);
 
-        public async Task Create(bool InstallMod, bool DownloadDefinition, bool UseGameplayModification)
+        public async Task Create(bool InstallMod, bool UseGameplayModification)
         {
             try
             {
@@ -60,27 +59,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            BinaryParser FileDataParser = null;
-            if (DownloadDefinition)
-            {
-                List<MemoryStream> Definition = await DownloadDefinitionFile(Resources.RepoDefinitionBasePath + "FileData.bin");
-                if (Definition.Count == 1)
-                {
-                    try
-                    {
-                        FileDataParser = new BinaryParser(Definition[0]);
-                    }
-                    catch
-                    {
-                        Definition.ForEach(async Element => await Element.DisposeAsync());
-                        FileDataParser = null;
-
-                        Logger.Instance.Log("Downloaded Definition file invalid, falling back to embedded resource ...");
-                    }
-                }
-            }
-
-            FileDataParser ??= new BinaryParser("S6Patcher.Definitions.FileData.bin");
+            BinaryParser FileDataParser = new("S6Patcher.Definitions.FileData.bin");
             GlobalFileDataMappings.AddRange(FileDataParser.ParseFileData());
 
             if (UseGameplayModification)

@@ -19,7 +19,6 @@ namespace S6Patcher.Source.Utilities
     public static class ErrorTracking
     {
         private static uint ErrorCount = 0;
-
         public static void Increment() => Interlocked.Increment(ref ErrorCount);
         public static void Reset() => Interlocked.Exchange(ref ErrorCount, 0);
         public static uint Count => ErrorCount;

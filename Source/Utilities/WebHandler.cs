@@ -1,8 +1,5 @@
 ﻿using S6Patcher.Properties;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,51 +16,7 @@ namespace S6Patcher.Source.Utilities
             Timeout = TimeSpan.FromMilliseconds(8000),
             DefaultRequestHeaders = {{"User-Agent", "Other"}},
         };
-
         private readonly Uri GlobalVersion = new(Resources.VersionFileLink);
-
-        private async Task<HttpResponseMessage> GetHttpResponse(Uri Path)
-        {
-            try
-            {
-                var Response = await GlobalClient.GetAsync(Path, HttpCompletionOption.ResponseHeadersRead);
-                Response.EnsureSuccessStatusCode();
-                return Response;
-            }
-            catch (Exception ex)
-            {
-                ErrorTracking.Increment();
-                Logger.Instance.Log(ex.ToString());
-                return null;
-            }
-        }
-
-        public async Task<List<MemoryStream>> DownloadFilesAsync(Uri[] Paths)
-        {
-            var Tasks = Paths.Select(async Path =>
-            {
-                Logger.Instance.Log("Downloading Repository File: " + Path.ToString());
-
-                HttpResponseMessage Response = await GetHttpResponse(Path);
-                if (Response == null)
-                {
-                    Logger.Instance.Log("Failed to download Repository File: " + Path.ToString());
-                    return null;
-                }
-
-                await using var Stream = await Response.Content.ReadAsStreamAsync();
-                var Memory = new MemoryStream();
-                await Stream.CopyToAsync(Memory);
-                Memory.Seek(0, SeekOrigin.Begin);
-                return Memory;
-            });
-
-            var Finished = await Task.WhenAll(Tasks);
-            var FinalList = Finished.Where(Element => Element != null).ToList();
-            Logger.Instance.Log("Downloaded repository file(s) successfully. Size: " + FinalList.Count);
-
-            return FinalList;
-        }
 
         public async Task<string> CheckForUpdatesAsync(bool OnStartup = true)
         {

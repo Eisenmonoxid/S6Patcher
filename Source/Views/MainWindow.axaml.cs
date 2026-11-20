@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using MsBox.Avalonia.Enums;
 using S6Patcher.Source.Patcher;
 using S6Patcher.Source.Utilities;
@@ -86,11 +85,6 @@ namespace S6Patcher.Source.Views
             {
                 ViewHelpers.TogglePanelVisibility(true);
                 ViewHelpers.GetControlsByType<CheckBox>().ToList().ForEach(Result => Result.IsEnabled = true);
-
-                if (ID == execID.ED)
-                {
-                    cbUpdater.IsEnabled = false;
-                }
 
                 if (Mapping.TryGetValue(ID, out string[] Value))
                 {
@@ -241,19 +235,10 @@ namespace S6Patcher.Source.Views
 
         private async Task PatchByFeatures()
         {
-            bool UseBugfixMod = cbModDownload.IsChecked == true || cbUpdater.IsChecked == true;
+            bool UseBugfixMod = cbBugfixModInstallation.IsChecked == true;
             bool UseModLoader = MainPatcher.GlobalID != execID.ED;
-            bool DoNotUseEmbedded = rbDownload.IsChecked == true;
             bool UseGameplayModification = cbModding.IsChecked == true;
-
-            Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(DoNotUseEmbedded), 
-                PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, DoNotUseEmbedded, UseGameplayModification));
-
-            if (cbUpdater.IsChecked == true)
-            {
-                await Completed;
-                return;
-            }
+            Task Completed = Task.WhenAll(PatcherScriptFilesWrapper(), PatcherModLoaderWrapper(UseBugfixMod, UseModLoader, UseGameplayModification));
 
             MainPatcher.PatchByControlFeatures(GetFeatures());
             if (cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED)
@@ -284,19 +269,19 @@ namespace S6Patcher.Source.Views
             await Completed;
         }
 
-        private async Task PatcherModLoaderWrapper(bool ModInstallation, bool UseModLoader, bool DoNotUseEmbedded, bool UseGamelayModification)
+        private async Task PatcherModLoaderWrapper(bool ModInstallation, bool UseModLoader, bool UseGamelayModification)
         {
             if (MainPatcher.GlobalID != execID.ED && (UseModLoader || ModInstallation))
             {
-                await MainPatcher.SetModLoader(ModInstallation, DoNotUseEmbedded, UseGamelayModification);
+                await MainPatcher.SetModLoader(ModInstallation, UseGamelayModification);
             }
         }
 
-        private async Task PatcherScriptFilesWrapper(bool DoNotUseEmbedded)
+        private async Task PatcherScriptFilesWrapper()
         {
             if (MainPatcher.GlobalID != execID.ED)
             {
-                await MainPatcher.WriteScriptFilesToFolder(DoNotUseEmbedded);
+                await MainPatcher.WriteScriptFilesToFolder();
             }
         }
 
@@ -360,19 +345,10 @@ namespace S6Patcher.Source.Views
         private void btnUpdate_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => ViewHelpers.CheckForUpdates(false);
         private void btnExit_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
         private void btnCustomizationWindow_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e) => GameCustomizer.ShowDialog(this);
-        private void cbUpdater_Checked(object sender, Avalonia.Interactivity.RoutedEventArgs e) => tcMain.IsEnabled = cbUpdater.IsChecked == false;
-        private void rbDownload_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            cbUpdater.IsEnabled = rbDownload.IsChecked == true;
-            if (rbDownload.IsChecked == false)
-            {
-                cbUpdater.IsChecked = false;
-            }
-        }
 
-        private void cbModDownload_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void cbBugfixModInstallation_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (cbModDownload.IsChecked == false)
+            if (cbBugfixModInstallation.IsChecked == false)
             {
                 cbModding.IsChecked = false;
             }
