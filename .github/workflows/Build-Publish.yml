@@ -41,7 +41,7 @@ jobs:
           dotnet publish S6Patcher.csproj
           -c Release
           -r ${{ matrix.runtime }}
-          -o publish/${{ matrix.runtime }}
+          -o publish/${{ matrix.displayName }}
           -p:DebugType=None
           -p:DebugSymbols=false
           -p:StripSymbols=true
@@ -50,7 +50,7 @@ jobs:
       - name: Remove PDB files
         shell: bash
         run: |
-          find publish/${{ matrix.runtime }} -name "*.pdb" -delete || true
+          find publish/${{ matrix.displayName }} -name "*.pdb" -delete || true
 
       - name: Install UPX (Windows)
         if: matrix.os == 'windows-latest'
@@ -64,34 +64,43 @@ jobs:
 
       - name: Compress executable with UPX (Windows)
         if: matrix.os == 'windows-latest'
-        run: upx --best "publish/${{ matrix.runtime }}/S6Patcher.exe"
+        run: upx --best "publish/${{ matrix.displayName }}/S6Patcher.exe"
 
       - name: Compress executable with UPX (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: upx-ucl --best "publish/${{ matrix.runtime }}/S6Patcher"
+        run: upx-ucl --best "publish/${{ matrix.displayName }}/S6Patcher"
 
-      - name: Compress (Windows)
+      - name: Include licenses
+        shell: bash
+        run: |
+          mkdir -p "publish/${{ matrix.displayName }}/Licenses"
+          cp Licenses/. "publish/${{ matrix.displayName }}/Licenses/"
+          cp LICENSE.txt "publish/${{ matrix.displayName }}/Licenses/S6Patcher.txt"
+
+      - name: Create ZIP (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          Compress-Archive `
-            -Path "publish/${{ matrix.runtime }}\*" `
-            -DestinationPath "${{ matrix.displayName }}.zip" `
-            -CompressionLevel Optimal
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          [System.IO.Compression.ZipFile]::CreateFromDirectory(
+            "publish/${{ matrix.displayName }}",
+            "${{ matrix.displayName }}.zip",
+            [System.IO.Compression.CompressionLevel]::Optimal,
+            $true
+          )
 
-      - name: Compress (Linux)
+      - name: Create ZIP (Linux)
         if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
-          cd publish/${{ matrix.runtime }}
-          zip -9 -r "../../${{ matrix.displayName }}.zip" .
+          cd publish
+          zip -9 -r "../${{ matrix.displayName }}.zip" "${{ matrix.displayName }}"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7.0.2
         with:
           name: ${{ matrix.displayName }}
-          path: |
-            ${{ matrix.displayName }}.zip
+          path: ${{ matrix.displayName }}.zip
 
   release:
     name: Create GitHub Release
