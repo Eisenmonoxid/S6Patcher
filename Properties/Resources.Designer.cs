@@ -59,6 +59,20 @@ namespace S6Patcher.Properties {
                 resourceCulture = value;
             }
         }
+
+        public static byte[] Definitions {
+            get {
+                object obj = ResourceManager.GetObject("Definitions", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+
+        public static byte[] FileData {
+            get {
+                object obj = ResourceManager.GetObject("FileData", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].

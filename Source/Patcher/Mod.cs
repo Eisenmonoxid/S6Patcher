@@ -59,7 +59,7 @@ namespace S6Patcher.Source.Patcher
                 return;
             }
 
-            BinaryParser FileDataParser = new("S6Patcher.Definitions.FileData.bin");
+            BinaryParser FileDataParser = new(Resources.FileData);
             GlobalFileDataMappings.AddRange(FileDataParser.ParseFileData());
 
             if (UseGameplayModification)

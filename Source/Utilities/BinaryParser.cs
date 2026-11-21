@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using S6Patcher.Properties;
 
 namespace S6Patcher.Source.Utilities
 {
@@ -43,9 +44,9 @@ namespace S6Patcher.Source.Utilities
             }
         }
 
-        public BinaryParser(string Definition)
+        public BinaryParser(byte[] BinaryFile)
         {
-            Stream BinaryStream = Utility.GetEmbeddedResourceDefinition(Definition);
+            MemoryStream BinaryStream = new(BinaryFile);
             if (BinaryStream == null || BinaryStream.CanRead == false)
             {
                 throw new Exception("[ERROR] Invalid binary stream.");

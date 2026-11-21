@@ -59,13 +59,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Definitions\Definitions.bin" />
-    <None Remove="Definitions\FileData.bin" />
+    <None Remove="Resources\Definitions\Definitions.bin" />
+    <None Remove="Resources\Definitions\FileData.bin" />
     <None Remove="Resources\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Definitions\Definitions.bin" />
-    <EmbeddedResource Include="Definitions\FileData.bin" />
+    <EmbeddedResource Include="Resources\Definitions\Definitions.bin" />
+    <EmbeddedResource Include="Resources\Definitions\FileData.bin" />
     <EmbeddedResource Include="Resources\Scripts\EMXBinData.s6patcher" />
     <EmbeddedResource Include="Resources\Scripts\MainMenuUserScript.lua" />
     <EmbeddedResource Include="Resources\Mod\mod.bba" />
