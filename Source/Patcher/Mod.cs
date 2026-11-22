@@ -214,12 +214,14 @@ namespace S6Patcher.Source.Patcher
                 
                 foreach (ModLoaderFile MLF in Element.Value)
                 {
-                    MLF.Data = ArchiveFile.GetFileDataByDataEntryName(MLF.Name);
-                    if (MLF.Data == null)
+                    ReadOnlySpan<byte> Data = ArchiveFile.GetFileDataByDataEntryName(MLF.Name);
+                    if (Data.IsEmpty)
                     {
                         ErrorTracking.Increment();
                         Logger.Instance.Log($"Could NOT parse data from archive file {Element.Key}.");
                     }
+
+                    MLF.Data = Data.ToArray();
                 }
 
                 IOFileHandler.Instance.CloseStream(ArchiveFileStream);
