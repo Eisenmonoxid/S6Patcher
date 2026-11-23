@@ -76,21 +76,6 @@ namespace S6Patcher.Source.Patcher
 
         public void PatchByControlFeatures(List<string> Features) => WriteMappingToFile(GlobalMappings.GetMapping(Features));
 
-        public void SetTextureResolution(string ResolutionText)
-        {
-            Logger.Instance.Log("Called with " + ResolutionText);
-
-            if (!uint.TryParse(ResolutionText, out uint Resolution))
-            {
-                HandleError("Invalid texture resolution value: " + ResolutionText);
-                return;
-            }
-
-            WriteMappingToFile(GlobalMappings.GetTextureResolutionMapping(Resolution));
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "TextureResolution", "3");
-            IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "Terrain", "2");
-        }
-
         public void SetAutosaveTimer(string AutosaveText)
         {
             Logger.Instance.Log("Called with " + AutosaveText);

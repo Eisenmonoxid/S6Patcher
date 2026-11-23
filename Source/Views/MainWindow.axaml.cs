@@ -25,7 +25,7 @@ namespace S6Patcher.Source.Views
             {execID.OV,         ["tiGeneral", "tiDev", "tiArchive"]},
             {execID.HE_STEAM,   ["tiGeneral", "tiHistory", "tiDev", "tiArchive"]},
             {execID.HE_UBISOFT, ["tiGeneral", "tiHistory", "tiDev", "tiArchive"]},
-            {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "tiArchive", "cbModDownload", "cbZoom", "cbEasyDebug", "cbFolderPath", "txtResolution", "txtZoom"]}
+            {execID.ED,         ["tiGeneral", "tiEditor", "tiDev", "tiArchive", "cbModDownload", "cbZoom", "cbEasyDebug", "cbFolderPath", "txtZoom"]}
         };
 
         public MainWindow()
@@ -243,7 +243,8 @@ namespace S6Patcher.Source.Views
             MainPatcher.PatchByControlFeatures(GetFeatures());
             if (cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED)
             {
-                MainPatcher.SetTextureResolution(txtResolution.Text);
+                IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "TextureResolution", "3");
+                IOFileHandler.Instance.UpdateEntryInOptionsFile("[Display]", "Terrain", "2");
             }
             if (cbZoom.IsChecked == true)
             {
@@ -353,9 +354,7 @@ namespace S6Patcher.Source.Views
                 cbModding.IsChecked = false;
             }
         }
-        
-        private void cbHighTextures_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
-            txtResolution.IsEnabled = cbHighTextures.IsChecked == true && MainPatcher.GlobalID != execID.ED;
+
         private void cbFolderPath_IsCheckedChanged(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             if (cbFolderPath.IsChecked == true)

@@ -30,21 +30,7 @@ namespace S6Patcher.Source.Patcher
 
             return Mapping;
         }
-
-        public Dictionary<uint, byte[]> GetTextureResolutionMapping(uint Resolution)
-        {
-            Dictionary<uint, byte[]> Mapping = _Parser.ParseBinaryWrapper(_ID, "GTS");
-
-            uint Index = 0;
-            foreach (var Element in Mapping)
-            {
-                uint Key = Mapping.FirstOrDefault(Element => Element.Value[0] == (byte)Index).Key;
-                Mapping[Key] = BitConverter.GetBytes(Resolution / Convert.ToUInt32(Math.Pow(2, Index++)));
-            }
-
-            return Mapping;
-        }
-
+        
         public Dictionary<uint, byte[]> GetAutoSaveMapping(double Time)
         {
             Dictionary<uint, byte[]> Mapping = _Parser.ParseBinaryWrapper(_ID, "ATS");
