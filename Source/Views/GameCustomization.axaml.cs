@@ -42,6 +42,10 @@ namespace S6Patcher.Source.Views
                 uint[] StorehouseLimits = [(uint)nudStorehouseLimit1.Value, (uint)nudStorehouseLimit2.Value, (uint)nudStorehouseLimit3.Value, (uint)nudStorehouseLimit4.Value];
                 GameplayModification.ModifyStorehouseLimits(StorehouseLimits);
             }
+            if (cbFogOfWarColor.IsChecked == true)
+            {
+                GameplayModification.ModifyFogOfWarColors(cpFogOfWarColor.Color);
+            }
 
             Hide();
         }

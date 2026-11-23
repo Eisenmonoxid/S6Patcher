@@ -6,7 +6,7 @@ The files are, depending on the game edition, placed in a special folder or pack
 
 ## Tech
 ### Original Release
-When the `"Activate Modloader"` - option was checked when patching the game, it will load the files `"modloader\base\mod.bba"` and `"modloader\extra1\mod.bba"` as its first archive files on startup. If the files do not exist, the game will display a missing file error message and abort the boot process. When the expansion pack is launched, the `mod.bba` in the `extra1` folder is loaded before the one in the `base` folder.    
+After patching, the game will load the files `"modloader\base\mod.bba"` and `"modloader\extra1\mod.bba"` as its first archive files on startup. If the files do not exist, the game will display a missing file error message and abort the boot process. When the expansion pack is launched, the `mod.bba` in the `extra1` folder is loaded before the one in the `base` folder.    
 **Do not modify the `"modloader\shr\mod.bba"` file as it contains the Bugfix mod files from the Patcher!**
 
 ### History Edition

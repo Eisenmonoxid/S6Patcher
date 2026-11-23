@@ -23,7 +23,7 @@ namespace S6Patcher.Source.Patcher
 
         public Patcher(string FilePath)
         {
-            if (FilePath == null)
+            if (FilePath == null || FilePath == string.Empty)
             {
                 throw new ArgumentException("No file chosen or file does not exist!\nAborting ...");
             }

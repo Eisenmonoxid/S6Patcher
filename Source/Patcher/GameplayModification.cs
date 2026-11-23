@@ -195,5 +195,20 @@ namespace S6Patcher.Source.Patcher
             // The following is necessary for the extra1 storehouse to be loaded in the base game, otherwise the game crashes
             AddModifiableFileData("shrgcfge10.bba", "config\\goodsex.xml", ["Worth"], "0"); 
         }
+
+        public static void ModifyFogOfWarColors(Avalonia.Media.Color Color)
+        {
+            string BasePath = "config\\environmentsettings\\colorsets\\";
+            foreach (string DefinitionFile in new string[] {"ME_FOW.xml", "NA_FOW.xml", "NE_FOW.xml", "SE_FOW.xml"})
+            {
+                string FullPath = BasePath + DefinitionFile.ToLowerInvariant();
+                foreach (string XMLEntry in new string[] {"SpringColor", "SummerColor", "FallColor", "WinterColor"})
+                {
+                    AddModifiableFileData("shrgcfg0.bba", FullPath, [XMLEntry, "R"], Color.R.ToString());
+                    AddModifiableFileData("shrgcfg0.bba", FullPath, [XMLEntry, "G"], Color.G.ToString());
+                    AddModifiableFileData("shrgcfg0.bba", FullPath, [XMLEntry, "B"], Color.B.ToString());
+                }
+            }
+        }
     }
 }

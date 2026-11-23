@@ -163,9 +163,11 @@ This excerpt should highlight some of the key features of the S6Patcher. Find a 
 </p>
 
 - The following gameplay modifications are possible through the Patcher:
-- - Settler Limit: The 4 default values can be set to arbitrary numbers.
-- - Soldier Limit: The 4 default values can be set to arbitrary numbers.
+- - Settler Limits: The 4 default values can be set to arbitrary numbers.
+- - Soldier Limits: The 4 default values can be set to arbitrary numbers.
+- - Storehouse Limits: The 4 default values can be set to arbitrary numbers.
 - - Player Color: The player color can be freely customized.
+- - Fog of War Color: The FoW color can be freely customized.
 
 ---
 # Recommendation: DXVK
