@@ -45,7 +45,6 @@ jobs:
           -p:DebugType=None
           -p:DebugSymbols=false
           -p:StripSymbols=true
-          -p:UseNet11=true
 
       - name: Remove PDB files
         shell: bash
